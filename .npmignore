@@ -1,0 +1,9 @@
+.idea
+build-conf
+client
+node_modules
+server
+test-project
+.babelrc
+.npmignore
+redux-builder.impl
