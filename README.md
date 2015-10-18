@@ -10,7 +10,7 @@ But it is better to read the following description and Wiki docs here because th
 
 First of all, I need to mention that Structor is a visual development environment for node.js Web applications.
 
-The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js Web application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where Structor can download boilerplates, plase visit Structor Market [http://helmetrex.com](http://helmetrex.com).
+The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js Web application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can download boilerplates, plase visit Structor Market [http://helmetrex.com](http://helmetrex.com).
 
 It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
 
@@ -21,7 +21,7 @@ So, the builder can be used as an HTTP server with all hot reloading capabilitie
 
 Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. Of course, the source code you can edit in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
 
-Apparently, we can admit that this tool having such capabilities can be used not only at starter prototyping phase of development process, but used during all development process instead of HTTP backend server of Web app.
+Apparently, we can admit that this tool having such features can be used not only in starter prototyping phase of development process, but used during all development process instead of HTTP backend server for Web app.
 
 ### Getting started
 
