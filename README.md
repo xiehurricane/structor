@@ -2,5 +2,58 @@ Structor - an interface builder for React
 ----------
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
+
+### Description
+Structor is a former React UI Builder, but dramatically changed. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
+
+But it is better to read the following description and Wiki docs here because the builder has absolutely redesigned look and feel and has a lot of new features.
+
+First of all, I need to mention that Structor is a visual development environment for node.js Web applications, and to use it you have to install it through npm:
+
+```
+npm install structor -g
+```
+
+The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js Web application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where Structor can download boilerplates, plase visit Structor Market [http://helmetrex.com](http://helmetrex.com).
+
+It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
+
+More about the structure of prepack and how it is used by Structor please read the description of the sample tutorial project here []();
+
+The builder runs as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
+So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
+
+Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. Of course, the source code you can edit in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
+
+Apparently, we can admit that this tool having such capabilities can be used not only at starter prototyping phase of development process, but used during all development process instead of HTTP backend server of Web app.
+
+### Getting started
+
+Install Structor in global scope:
+```
+npm install structor -g
+```
+
+Then you have two ways to start working in the builder.
+
+The first way:
+* Create empty folder on local machine.
+* Enter in this folder and run command: ```structor```
+* Choose suitable prepack (the only one so far) and click clone option.
+* Start composing UI...
+
+The second way:
+* Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable boilerplate (the only one so far is there).
+* Download package on localhost and unpack it in some empty folder.
+* Enter into this folder and run ```npm install``` command.
+* Once installation is finished run ```structor```.
+* Start composing UI...
+
+### Documentation
+
+Please read Wiki docs here in order to get familiar with Structor interface and its features. 
+
+Also, if you find any mistake in the text please kindly fix it. Thank you.
+
 #### License
 GNU GENERAL PUBLIC LICENSE Version 3
