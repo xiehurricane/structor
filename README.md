@@ -33,7 +33,7 @@ npm install structor -g
 Then you have two ways to start working in the builder.
 
 The first way:
-* Create empty folder on local machine.
+* Create an empty folder on local machine.
 * Enter in this folder and run command: ```structor```.
 * Open the browser and enter the address: ```http://localhost:2222/structor```.
 * Choose suitable prepack (the only one so far) and click clone option.

@@ -44,7 +44,7 @@ class ProjectThumbnail extends Component {
                                 </h4>
                             </div>
                             <div style={{display: 'table-cell', width: '50%', verticalAlign: 'top', textAlign: "right", paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em'} }>
-                                <a href={'http://localhost/details/' + projectInfo.id}
+                                <a href={'http://helmetrex.com/details/' + projectInfo.id}
                                    target="blank"
                                    style={{marginLeft: '1em'}}>
                                     <span className='fa fa-external-link fa-fw'></span>&nbsp;Details
