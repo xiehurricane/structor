@@ -62,22 +62,22 @@ class DeskPageFrame extends Component {
 
                     // available callbacks from PageForDesk
                     this.contentWindow.onPageDidMount = () => {
-                        console.log('Page was mounted: ' + this.props.currentPagePath);
+                        //console.log('Page was mounted: ' + this.props.currentPagePath);
                     };
                     this.contentWindow.onPageWillUnmount = () => {
-                        console.log('Page will unmount: ' + this.props.currentPagePath);
+                        //console.log('Page will unmount: ' + this.props.currentPagePath);
                         if(this.props.isEditMode){
                             this.clearDomNodes();
                         }
                     };
                     this.contentWindow.onPageDidUpdate = () => {
-                        console.log('Page did update: ' + this.props.currentPagePath);
+                        //console.log('Page did update: ' + this.props.currentPagePath);
                         if(this.props.isEditMode){
                             this.mapDomNodes();
                         }
                     };
                     this.contentWindow.onPageWillUpdate = () => {
-                        console.log('Page will update: ' + this.props.currentPagePath);
+                        //console.log('Page will update: ' + this.props.currentPagePath);
                         if(this.props.isEditMode){
                             this.clearDomNodes();
                         }
@@ -91,7 +91,7 @@ class DeskPageFrame extends Component {
     }
 
     componentWillUpdate(nextProps, nextState){
-        console.log('DeskPageFrame will update');
+        //console.log('DeskPageFrame will update');
 
         if(this.props.reloadPageCounter < nextProps.reloadPageCounter){
 
@@ -135,15 +135,15 @@ class DeskPageFrame extends Component {
     }
 
     componentDidUpdate(){
-        console.log('DeskPageFrame did update');
+        //console.log('DeskPageFrame did update');
         if(this.contentWindow && this.contentWindow.Page){
             if(this.hasToUpdatePreviewModel){
-                console.log('Has to update preview model');
+                //console.log('Has to update preview model');
                 this.contentWindow.Page.updatePreviewModel(this.props.previewModel);
                 this.hasToUpdatePreviewModel = false;
             }
             if(this.hasToUpdateModel){
-                console.log('Has to update page model');
+                //console.log('Has to update page model');
                 this.contentWindow.Page.updateModel(this.props.model);
                 this.hasToUpdateModel = false;
             }

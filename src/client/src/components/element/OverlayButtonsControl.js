@@ -110,7 +110,7 @@ class OverlayButtonsControl extends Component {
                             );
                         }
                     } else {
-                        console.log('Create component global overlay...');
+                        //console.log('Create component global overlay...');
                         plugin = createComponentOverlay(
                             {
                                 menu: [
@@ -148,7 +148,7 @@ class OverlayButtonsControl extends Component {
                 UtilStore.destroyCurrentOverlayPlugin();
             }
             if(this.props.selectedUmyIdToCopy){
-                console.log('Try to add border copy');
+                //console.log('Try to add border copy');
                 const DOMNode = UtilStore.getPageDomNode(this.props.selectedUmyIdToCopy);
                 if(DOMNode){
                     console.log('DOMNode was found for border copy for: %o %o', this.props.selectedUmyIdToCopy, DOMNode);
@@ -156,10 +156,10 @@ class OverlayButtonsControl extends Component {
                 }
             }
             if(this.props.selectedUmyIdToCut){
-                console.log('Try to add border cut');
+                //console.log('Try to add border cut');
                 const DOMNode = UtilStore.getPageDomNode(this.props.selectedUmyIdToCut);
                 if(DOMNode){
-                    console.log('DOMNode was found for border cut for: %o %o', this.props.selectedUmyIdToCut, DOMNode);
+                    //console.log('DOMNode was found for border cut for: %o %o', this.props.selectedUmyIdToCut, DOMNode);
                     $(DOMNode).addClass('umy-grid-basic-border-cut');
                 }
             }
@@ -173,7 +173,7 @@ class OverlayButtonsControl extends Component {
         if(isGlobalOverlay) {
             UtilStore.destroyCurrentOverlayPlugin();
         }
-        console.log('OverlayButtonsControl will unmount');
+        //console.log('OverlayButtonsControl will unmount');
     }
 
     render(){

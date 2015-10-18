@@ -147,7 +147,7 @@ class Desk extends Component {
             "padding" : "0",
             "border" : "1px solid #000000"
         };
-        console.log('IFrame style: ' + JSON.stringify(iframeStyle));
+        //console.log('IFrame style: ' + JSON.stringify(iframeStyle));
 
         let pageFrame = (<DeskPageFrame frameBorder="0" style={iframeStyle} />);
 

@@ -76,7 +76,7 @@ class Api {
                 this.socket = this.systemEnv.io(this.server);
                 this.socket.on('connection', socket => {
                     this.socketClient = socket;
-                    this.socketClient.emit('invitation', 'Hello from builder server.');
+                    this.socketClient.emit('invitation', 'Hello from server.');
                 });
             }
         });
@@ -146,7 +146,7 @@ class Api {
     setProjectProxy(options){
         return this.storageManager.loadProxyURL(options)
             .then( proxyURL => {
-                console.log(proxyURL);
+                //console.log(proxyURL);
                 this.proxyURL = proxyURL;
 
                 if(!this.proxy){

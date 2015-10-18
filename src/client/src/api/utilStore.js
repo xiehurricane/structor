@@ -105,7 +105,7 @@ export function destroyCurrentOverlayPlugin(){
     if($currentOverlayPlugin){
         $currentOverlayPlugin.destroy();
         $currentOverlayPlugin = null;
-        console.log('Current overlay plugin is destroyed');
+        //console.log('Current overlay plugin is destroyed');
     }
 }
 

@@ -119,7 +119,7 @@ class OptionInput extends Component {
         };
         if(this.state.propertyType === 'checkbox') {
             style.width = '1em';
-            console.log('[OptionInput] checkbox get value: ' + this.getValueFromObject());
+            //console.log('[OptionInput] checkbox get value: ' + this.getValueFromObject());
             element = (
                 <div style={{position: 'relative'}}>
                 <input ref="inputElement"

@@ -1,16 +1,16 @@
-Structor - an interface builder for React
+Structor - a user interface builder for React
 ----------
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
 
 ### Description
-Structor is dramatically changed React UI Builder. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
+Structor is former React UI Builder. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
 
-But it is better to read the following description and Wiki docs here because the builder has absolutely redesigned look and feel and has a lot of new features.
+But, it is better to read the following description and Wiki docs here because the builder has absolutely redesigned look and feel and has a lot of new features.
 
-First of all, I need to mention that Structor is a visual development environment for node.js Web applications.
+First of all, I need to mention that Structor is a visual development environment for node.js Web applications with React UI.
 
-The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js Web application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
+The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
 
 It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
 

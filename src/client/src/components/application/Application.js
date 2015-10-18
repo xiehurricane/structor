@@ -63,12 +63,9 @@ class Application extends Component {
                         <div style={{display: 'table'}}>
                             <div style={{display: 'table-row'}}>
                                 <div style={{display: 'table-cell', verticalAlign: 'middle', paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em'} }>
-                                    <p style={{ margin: '0px', color: '#000'}} className='text-left'>
-                                        <span>Helmet</span>
-                                    </p>
-                                    <p style={{margin: '0px', whiteSpace: 'nowrap'}} className={'text-left text-info'}>
-                                        <small>BuilderRX</small>
-                                        <small className='text-muted' ref='brandTitle' style={{marginLeft: '0.2em'}}>{packageVersion}</small>
+                                    <p style={{whiteSpace: 'nowrap'}} className={'text-left'}>
+                                        <span>Structor</span>
+                                        <span className='text-muted' style={{marginLeft: '0.2em'}}>{packageVersion}</span>
                                     </p>
                                 </div>
                                 <div style={{display: 'table-cell', verticalAlign: 'middle', paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em', width: '10%'} }></div>
@@ -76,8 +73,8 @@ class Application extends Component {
                         </div>
                     </Nav>
                     <Nav navbar right={true}>
-                        <NavItem href="https://groups.google.com/forum/#!forum/react-ui-builder" target="_blank">
-                            <span className="fa fa-comments-o fa-fw"></span>&nbsp;Help
+                        <NavItem href="https://groups.google.com/forum/#!forum/structor-forum" target="_blank">
+                            <span className="fa fa-comments-o fa-fw"></span>&nbsp;Forum
                         </NavItem>
                         <NavItem href="https://www.facebook.com/groups/1668757740011916/" target="_blank">
                             <span className='fa fa-facebook-square fa-fw'></span>&nbsp;Group

@@ -20,7 +20,7 @@ class ClientManager {
     }
 
     getAllProjects(options){
-        return this.client.post('/getProjectGalleryList', options);
+        return this.client.get('/getProjectGalleryList');
     }
 
     loadUserProfile(){

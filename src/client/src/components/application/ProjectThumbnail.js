@@ -44,10 +44,10 @@ class ProjectThumbnail extends Component {
                                 </h4>
                             </div>
                             <div style={{display: 'table-cell', width: '50%', verticalAlign: 'top', textAlign: "right", paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em'} }>
-                                <a href={'http://helmetrex.com/Preview.html?projectId=' + projectInfo.id}
+                                <a href={'http://localhost/details/' + projectInfo.id}
                                    target="blank"
                                    style={{marginLeft: '1em'}}>
-                                    <span className='fa fa-external-link fa-fw'></span>&nbsp;Preview
+                                    <span className='fa fa-external-link fa-fw'></span>&nbsp;Details
                                 </a>
                                 <a href='#' style={{marginLeft: '1em'}} onClick={this.handleClone}>
                                     <span >Clone</span>

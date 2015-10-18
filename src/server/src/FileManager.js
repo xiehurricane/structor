@@ -10,7 +10,7 @@ class FileManager {
 
     traverse(entity){
         _.forOwn(entity, (value, prop) => {
-            console.log('Prop: ' + prop + 'Value: ' + value);
+            //console.log('Prop: ' + prop + 'Value: ' + value);
         });
     }
 

@@ -57,7 +57,7 @@ export function transferDataToAction(type, options = null, data = null){
 }
 
 export function invoke(method, options, transferActions = [], transferOptions = null, isSoftErrorIgnored = false){
-    console.log('Server invokes method: ' + method);
+    //console.log('Server invokes method: ' + method);
     return dispatch => {
 
         dispatch(waitServerResponse(method));
@@ -106,7 +106,7 @@ export function invoke(method, options, transferActions = [], transferOptions = 
                     dispatch(receiveServerResponseSuccess(method));
                 }
             }).catch( error => {
-                console.log('request failed', error);
+                //console.log('request failed', error);
                 dispatch(receiveServerResponseFailure(method, error));
             })
 
@@ -114,7 +114,7 @@ export function invoke(method, options, transferActions = [], transferOptions = 
 }
 
 export function invokeSilently(method, options, transferActions = [], transferOptions = null){
-    console.log('Server silently invokes method: ' + method);
+    //console.log('Server silently invokes method: ' + method);
     return dispatch => {
 
         fetch('/invoke', {

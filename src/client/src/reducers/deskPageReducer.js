@@ -32,7 +32,7 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                     state.isDomNodeInCurrentPage = UtilStore.hasPageDomNode(state.selectedUmyId);
                 }
                 state.selectComponentCounter++;
-                console.log('Component refresh selection: ' + state.selectedUmyId);
+                //console.log('Component refresh selection: ' + state.selectedUmyId);
                 return state;
             })();
 

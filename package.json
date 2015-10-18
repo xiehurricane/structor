@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node structor.js",
     "start-dev": "node structor.js -d test-project",
+    "start-empty": "node structor.js -d empty",
     "start-project": "node structor.js -d /Volumes/Development/projects/umyproto/reference-projects-v4/structor-market",
     "build-server": "gulp --gulpfile ./build-conf/gulpfile.js build-server",
     "build-server-dev": "gulp --gulpfile ./build-conf/gulpfile.js build-server-dev",

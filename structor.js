@@ -33,8 +33,8 @@ if(argv['d']){
         workingDir = path.resolve(workingDir, argv['d']);
     }
 }
-console.log('Working dir: ' + workingDir);
-console.log('Current dir: ' + __dirname);
-console.log('Port number: ' + portNumber);
+//console.log('Working dir: ' + workingDir);
+//console.log('Current dir: ' + __dirname);
+//console.log('Port number: ' + portNumber);
 
 api.initServer({ dirname: __dirname, workingDirname: workingDir, portNumber: portNumber, io: io });

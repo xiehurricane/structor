@@ -6,7 +6,7 @@ import * as UtilStore from '../api/utilStore.js';
 import * as Utils from '../api/utils.js';
 
 export default store => next => action => {
-    console.log(action);
+    //console.log(action);
     const { type } = action;
 
     if( type === DeskPageActions.CHANGE_MODEL_NODE_OPTIONS
@@ -41,7 +41,7 @@ export default store => next => action => {
             const DOMNode = UtilStore.getPageDomNode(umyIdToCopy);
             if(DOMNode){
                 $(DOMNode).removeClass('umy-grid-basic-border-copy');
-                console.log('[Middleware] removed copy border: %o %o', umyIdToCopy, DOMNode);
+                //console.log('[Middleware] removed copy border: %o %o', umyIdToCopy, DOMNode);
             }
         }
 
