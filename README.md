@@ -8,11 +8,7 @@ Structor is dramatically changed React UI Builder. If you are not familiar with 
 
 But it is better to read the following description and Wiki docs here because the builder has absolutely redesigned look and feel and has a lot of new features.
 
-First of all, I need to mention that Structor is a visual development environment for node.js Web applications, and to use it you have to install it through npm:
-
-```
-npm install structor -g
-```
+First of all, I need to mention that Structor is a visual development environment for node.js Web applications.
 
 The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js Web application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where Structor can download boilerplates, plase visit Structor Market [http://helmetrex.com](http://helmetrex.com).
 
