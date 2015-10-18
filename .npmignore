@@ -1,9 +1,9 @@
 .idea
 build-conf
-client
+images
 node_modules
-server
+src
 test-project
 .babelrc
 .npmignore
-redux-builder.impl
+structor.iml
