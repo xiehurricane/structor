@@ -19,7 +19,7 @@ More about the structure of prepack and how it is used by Structor please read t
 The builder runs as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
-Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. Of course, the source code you can edit in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
+Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. And of course, you can edit the source code in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
 
 Apparently, we can admit that this tool having such features can be used not only in starter prototyping phase of development process, but used during all development process instead of HTTP backend server for Web app.
 
@@ -50,8 +50,7 @@ The second way:
 The next time you want to open project in Structor, just go to the folder where project is and run ```structor```.
 
 ##### Tips
-To run with different port: ```structor -p <port>```
-
+To run with different port: ```structor -p <port>```<br/>
 To specify different project's working directory: ```structor -d <path_to_project_dir>```
 
 ### Documentation
