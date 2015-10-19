@@ -49,6 +49,9 @@ The second way:
  
 The next time you want to open project in Structor, just go to the folder where project is and run ```structor```.
 
+##### Tips
+To run with different port: ```structor -p <port>```
+To specify different project's working directory: ```structor -d <path_to_project_dir>```
 
 ### Documentation
 
