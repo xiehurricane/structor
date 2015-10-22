@@ -3,6 +3,9 @@ Structor - a user interface builder for React
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
 
+### Short presentation
+Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
+
 ### Description
 Structor is former React UI Builder. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
 
