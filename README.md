@@ -56,11 +56,5 @@ The next time you want to open project in Structor, just go to the folder where 
 To run with different port: ```structor -p <port>```<br/>
 To specify different project's working directory: ```structor -d <path_to_project_dir>```
 
-### Documentation
-
-Please read Wiki docs here in order to get familiar with Structor interface and its features. 
-
-Also, if you find any mistake in the text please kindly fix it. Thank you.
-
 #### License
 GNU GENERAL PUBLIC LICENSE Version 3
