@@ -1,5 +1,10 @@
 Structor - a user interface builder for React
 ----------
+
+[![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
+[![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
+[![structor channel on discord](https://img.shields.io/badge/discord-%23structor-0077dd.svg?style=flat)](https://discord.gg/0ZcbPKXt5bWioOhk)
+
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
 
@@ -55,6 +60,10 @@ The next time you want to open project in Structor, just go to the folder where 
 ##### Tips
 To run with different port: ```structor -p <port>```<br/>
 To specify different project's working directory: ```structor -d <path_to_project_dir>```
+
+### Discussion
+
+You are welcome to join Discord channel: [#structor](https://discord.gg/0ZcbPKXt5bWioOhk)
 
 #### License
 GNU GENERAL PUBLIC LICENSE Version 3
