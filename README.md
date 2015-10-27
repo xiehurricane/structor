@@ -1,7 +1,16 @@
 Structor - a user interface builder for React
 ----------
+
+[![Join the chat at https://gitter.im/ipselon/structor](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ipselon/structor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
+[![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
+[![structor channel on discord](https://img.shields.io/badge/discord-%23structor-0077dd.svg?style=flat)](https://discord.gg/0ZcbPKXt5bWioOhk)
+
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
+
+### Short presentation
+Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
 
 ### Description
 Structor is former React UI Builder. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
@@ -14,12 +23,12 @@ The essential part of the builder is a project boilerplate. The boilerplate is a
 
 It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
 
-More about the structure of prepack and how it is used by Structor please read the description of the sample tutorial project here []();
+More about the structure of prepack and how it is used by Structor please read the description of the sample tutorial project here [http://helmetrex.com/details/1567](http://helmetrex.com/details/1567);
 
 The builder runs as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
-Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. Of course, the source code you can edit in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
+Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. And of course, you can edit the source code in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
 
 Apparently, we can admit that this tool having such features can be used not only in starter prototyping phase of development process, but used during all development process instead of HTTP backend server for Web app.
 
@@ -49,12 +58,13 @@ The second way:
  
 The next time you want to open project in Structor, just go to the folder where project is and run ```structor```.
 
+##### Tips
+To run with different port: ```structor -p <port>```<br/>
+To specify different project's working directory: ```structor -d <path_to_project_dir>```
 
-### Documentation
+### Discussion
 
-Please read Wiki docs here in order to get familiar with Structor interface and its features. 
-
-Also, if you find any mistake in the text please kindly fix it. Thank you.
+You are welcome to join Discord channel: [#structor](https://discord.gg/0ZcbPKXt5bWioOhk)
 
 #### License
 GNU GENERAL PUBLIC LICENSE Version 3
