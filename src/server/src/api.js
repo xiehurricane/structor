@@ -152,7 +152,10 @@ class Api {
                 if(!this.proxy){
                     this.proxy = httpProxy.createProxyServer({});
                     this.proxy.on('error', (err, req, res) => {
-                        console.log('Proxy server error connecting to ' + this.proxyURL + req.url);
+                        let statusText = 'Proxy server error connecting to ' + this.proxyURL + req.url + " " + JSON.stringify(err);
+                        res.writeHead(500, statusText);
+                        res.end(statusText);
+                        console.log(statusText);
                     });
                     //
                     this.app.all('/*', (req, res, next) => {
