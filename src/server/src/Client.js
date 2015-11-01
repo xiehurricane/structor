@@ -29,11 +29,11 @@ class Client {
         return this.configModel.user;
     }
 
-    post (methodName, body, isAuth = false) {
+    post (url, body, isAuth = false) {
         return new Promise( (resolve, reject) => {
-            const url = this.sm.getIn('client.serviceURL') + '/' + methodName;
             var requestOptions = {
                 uri: url,
+                headers: {'Content-type': 'application/json'},
                 method: 'POST',
                 json: true,
                 body: body
@@ -86,9 +86,8 @@ class Client {
         });
     }
 
-    get (query, isAuth = false) {
+    get (url, isAuth = false) {
         return new Promise( (resolve, reject) => {
-            const url = this.sm.getIn('client.serviceURL') + '/' + query;
             var requestOptions = {
                 uri: url,
                 method: 'GET',
@@ -142,15 +141,13 @@ class Client {
         });
     }
 
-    download(methodName, body, isAuth = false) {
+    download(url, body, isAuth = false) {
         return new Promise( (resolve, reject) => {
-            const requestBody = body;
-            const url = this.sm.getIn('client.serviceURL') + methodName;
             let requestOptions = {
                 uri: url,
                 headers: {'Content-type': 'application/json'},
                 method: 'POST',
-                body: JSON.stringify(requestBody),
+                body: JSON.stringify(body),
                 encoding: null
             };
             if (isAuth) {
@@ -192,12 +189,15 @@ class Client {
 
     }
 
-    downloadGet(methodName, isAuth = false) {
+    downloadGet(url, isAuth = false) {
         return new Promise( (resolve, reject) => {
-            const url = this.sm.getIn('client.serviceURL') + methodName;
             let requestOptions = {
                 uri: url,
                 method: 'GET',
+                strictSSL: false,
+                headers: {
+                    'User-Agent': 'request'
+                },
                 encoding: null
             };
             if (isAuth) {
@@ -241,7 +241,7 @@ class Client {
 
     upload(option, isAuth = false) {
         return new Promise( (resolve, reject) => {
-            const url = this.sm.getIn('client.serviceURL') + option.url;
+            const url = option.url;
             let requestOptions = {
                 uri: url,
                 method: 'POST'

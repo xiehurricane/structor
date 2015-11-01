@@ -197,9 +197,9 @@ class Api {
      * @returns {Promise.<T>}
      */
     downloadProject(options) {
-        return this.validator.validateOptions(options, ['projectId'])
+        return this.validator.validateOptions(options, ['downloadUrl'])
             .then( () => {
-                return this.clientManager.downloadGalleryFile(options.projectId, appPackFileName);
+                return this.clientManager.downloadGalleryFile(options.downloadUrl);
             })
             .then( fileBody => {
                 return this.storageManager.writeProjectBinaryFile(appPackFileName, fileBody);
@@ -258,90 +258,90 @@ class Api {
         return this.storageManager.readProjectDir();
     }
 
-    checkCreateProject(options){
-        return this.validator.validateOptions(options, ['projectName'])
-            .then( () => {
-                return this.clientManager.checkCreateProject({ projectName: options.projectName });
-            });
-    }
+    //checkCreateProject(options){
+    //    return this.validator.validateOptions(options, ['projectName'])
+    //        .then( () => {
+    //            return this.clientManager.checkCreateProject({ projectName: options.projectName });
+    //        });
+    //}
 
-    createProject(options){
-        return this.validator.validateOptions(options,
-            ['projectName', 'projectDescription', 'projectLicense', 'files', 'pageContents', 'projectModel'])
-            .then( () => {
-                let projectGallery = {
-                    projectName: options.projectName,
-                    description: options.projectDescription,
-                    license: options.projectLicense
-                };
-                let entries = [];
-                if(options.files && options.files.length > 0){
-                    options.files.map(file => {
-                        if(file.checked === true){
-                            entries.push(file.name);
-                        }
-                    });
-                }
-
-                const staticContentDirName = '__static_preview_content';
-                const appDestFileName = '__app.tar.gz';
-                const staticDestFileName = '__preview.tar.gz';
-                let projectData = null;
-                let applicationPackageFilePath = null;
-                let previewPackageFilePath = null;
-
-                return this.clientManager.createProject(projectGallery)
-                    .then( projectObj => {
-                        projectData = projectObj;
-                        return this.indexManager.initIndex()
-                            .then( indexObj => {
-                                return this.staticSiteManager.doGeneration(
-                                    options.projectModel, staticContentDirName, indexObj, options.pageContents)
-                                    .then( generatedObj => {
-                                        return this.staticSiteManager.commitGeneration(generatedObj);
-                                    });
-                            })
-                    })
-                    .then( () => {
-                        return this.storageManager.copyProjectDocsToStaticContent(staticContentDirName);
-                    })
-                    .then( () => {
-                        return this.storageManager.packProjectFiles(entries, appDestFileName);
-                    })
-                    .then( filePath => {
-                        applicationPackageFilePath = filePath;
-                        return this.storageManager.packProjectFiles([staticContentDirName], staticDestFileName);
-                    })
-                    .then( filePath => {
-                        previewPackageFilePath = filePath;
-                        return this.clientManager.uploadProjectFiles({
-                            projectId: projectData.id,
-                            filePaths: [applicationPackageFilePath, previewPackageFilePath]
-                        });
-                    })
-                    .then( () => {
-                        return this.storageManager.removeProjectFile(staticContentDirName)
-                            .then( () => {
-                                return this.storageManager.removeProjectFile(appDestFileName);
-                            })
-                            .then( () => {
-                                return this.storageManager.removeProjectFile(staticDestFileName);
-                            });
-                    })
-                    .catch( err => {
-                        return this.storageManager.removeProjectFile(staticContentDirName)
-                            .then( () => {
-                                return this.storageManager.removeProjectFile(appDestFileName);
-                            })
-                            .then( () => {
-                                return this.storageManager.removeProjectFile(staticDestFileName);
-                            })
-                            .then( () => {
-                                throw Error(err);
-                            });
-                    });
-            });
-    }
+    //createProject(options){
+    //    return this.validator.validateOptions(options,
+    //        ['projectName', 'projectDescription', 'projectLicense', 'files', 'pageContents', 'projectModel'])
+    //        .then( () => {
+    //            let projectGallery = {
+    //                projectName: options.projectName,
+    //                description: options.projectDescription,
+    //                license: options.projectLicense
+    //            };
+    //            let entries = [];
+    //            if(options.files && options.files.length > 0){
+    //                options.files.map(file => {
+    //                    if(file.checked === true){
+    //                        entries.push(file.name);
+    //                    }
+    //                });
+    //            }
+    //
+    //            const staticContentDirName = '__static_preview_content';
+    //            const appDestFileName = '__app.tar.gz';
+    //            const staticDestFileName = '__preview.tar.gz';
+    //            let projectData = null;
+    //            let applicationPackageFilePath = null;
+    //            let previewPackageFilePath = null;
+    //
+    //            return this.clientManager.createProject(projectGallery)
+    //                .then( projectObj => {
+    //                    projectData = projectObj;
+    //                    return this.indexManager.initIndex()
+    //                        .then( indexObj => {
+    //                            return this.staticSiteManager.doGeneration(
+    //                                options.projectModel, staticContentDirName, indexObj, options.pageContents)
+    //                                .then( generatedObj => {
+    //                                    return this.staticSiteManager.commitGeneration(generatedObj);
+    //                                });
+    //                        })
+    //                })
+    //                .then( () => {
+    //                    return this.storageManager.copyProjectDocsToStaticContent(staticContentDirName);
+    //                })
+    //                .then( () => {
+    //                    return this.storageManager.packProjectFiles(entries, appDestFileName);
+    //                })
+    //                .then( filePath => {
+    //                    applicationPackageFilePath = filePath;
+    //                    return this.storageManager.packProjectFiles([staticContentDirName], staticDestFileName);
+    //                })
+    //                .then( filePath => {
+    //                    previewPackageFilePath = filePath;
+    //                    return this.clientManager.uploadProjectFiles({
+    //                        projectId: projectData.id,
+    //                        filePaths: [applicationPackageFilePath, previewPackageFilePath]
+    //                    });
+    //                })
+    //                .then( () => {
+    //                    return this.storageManager.removeProjectFile(staticContentDirName)
+    //                        .then( () => {
+    //                            return this.storageManager.removeProjectFile(appDestFileName);
+    //                        })
+    //                        .then( () => {
+    //                            return this.storageManager.removeProjectFile(staticDestFileName);
+    //                        });
+    //                })
+    //                .catch( err => {
+    //                    return this.storageManager.removeProjectFile(staticContentDirName)
+    //                        .then( () => {
+    //                            return this.storageManager.removeProjectFile(appDestFileName);
+    //                        })
+    //                        .then( () => {
+    //                            return this.storageManager.removeProjectFile(staticDestFileName);
+    //                        })
+    //                        .then( () => {
+    //                            throw Error(err);
+    //                        });
+    //                });
+    //        });
+    //}
 
     saveProjectModel(options){
         return this.storageManager.writeProjectJsonModel(options.model);

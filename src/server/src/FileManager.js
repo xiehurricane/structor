@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import zlib from 'zlib';
 import tar from 'tar-fs';
+import tarStream from 'tar-stream';
 import * as formatter from './FileFormatter.js';
 
 class FileManager {
@@ -307,6 +308,52 @@ class FileManager {
                 .pipe(tar.extract(destDirPath, { dmode: '0666', fmode: '0666' })
                     .on('finish', () => { resolve(); }))
                     .on('error', err => { reject(err); });
+        });
+    }
+
+    unpackTar(srcFilePath, destDirPath){
+        return new Promise( (resolve, reject) => {
+            fs.createReadStream(srcFilePath)
+                .pipe(tar.extract(destDirPath, { dmode: '0666', fmode: '0666' })
+                    .on('finish', () => { resolve(); }))
+                    .on('error', err => { reject(err); });
+        });
+    }
+
+    repackTarGzOmitRootDir(srcFilePath){
+        return new Promise( (resolve, reject) => {
+            let destFilePathTemp = srcFilePath + '_tmp';
+
+            let pack = tarStream.pack();
+            let extract = tarStream.extract();
+
+            extract.on('entry', function(header, stream, callback) {
+                header.name = header.name.substr(header.name.indexOf('/') + 1);
+                if(header.name.length > 0){
+                    stream.pipe(pack.entry(header, callback));
+                } else {
+                    stream.resume();
+                    return callback();
+                }
+            });
+
+            extract.on('finish', () => {
+                pack.finalize();
+                resolve(destFilePathTemp);
+            });
+
+            extract.on('error', err => {
+                reject(err);
+            });
+
+            fs.createReadStream(srcFilePath)
+                .pipe(zlib.createGunzip())
+                .pipe(extract);
+
+            let destFile = fs.createWriteStream(destFilePathTemp);
+            pack.pipe(destFile);
+
+
         });
     }
 

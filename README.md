@@ -19,7 +19,7 @@ But, it is better to read the following description and Wiki docs here because t
 
 First of all, I need to mention that Structor is a visual development environment for node.js Web applications with React UI.
 
-The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
+The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can find and download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
 
 It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
 
@@ -67,4 +67,4 @@ To specify different project's working directory: ```structor -d <path_to_projec
 You are welcome to join Discord channel: [#structor](https://discord.gg/0ZcbPKXt5bWioOhk)
 
 #### License
-GNU GENERAL PUBLIC LICENSE Version 3
+GNU GENERAL PUBLIC LICENSE Version 3 (GPL-3.0)

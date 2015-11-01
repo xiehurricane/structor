@@ -14,7 +14,7 @@ class ProjectThumbnail extends Component {
         e.stopPropagation();
         e.preventDefault();
         if(this.props.onCloneProject){
-            this.props.onCloneProject(this.props.projectInfo.id);
+            this.props.onCloneProject(this.props.projectInfo.downloadUrl);
         }
     }
 
@@ -27,11 +27,11 @@ class ProjectThumbnail extends Component {
                 <div></div>
             );
         } else {
-            let projectName = projectInfo.projectName;
+            let projectName = projectInfo.name;
             if(projectName && projectName.length > 50){
                 projectName = projectName.substr(0, 50) + '...';
             }
-            let innerHtml = marked(projectInfo.description);
+            let innerHtml = projectInfo.description;
             return (
                 <Panel>
                     <div style={{display: 'table', width: '100%'}}>
@@ -44,7 +44,7 @@ class ProjectThumbnail extends Component {
                                 </h4>
                             </div>
                             <div style={{display: 'table-cell', width: '50%', verticalAlign: 'top', textAlign: "right", paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em'} }>
-                                <a href={'http://helmetrex.com/details/' + projectInfo.id}
+                                <a href={projectInfo.htmlUrl}
                                    target="blank"
                                    style={{marginLeft: '1em'}}>
                                     <span className='fa fa-external-link fa-fw'></span>&nbsp;Details
@@ -56,14 +56,18 @@ class ProjectThumbnail extends Component {
                         </div>
                     </div>
                     <p>
-                        <span>{projectInfo.countDownload}</span>
-                        <small style={{ marginLeft: '0.5em' }} className={ 'text-muted'}>downloads</small>
-                        <small className='text-muted'>{'  |  Author: ' + projectInfo.userProfile.login}</small>
-                        <small className='text-muted'>{'  |  License: ' + projectInfo.license}</small>
+                        <span className="fa fa-star fa-fw"></span>
+                        <small style={{ marginLeft: '0.5em' }}>{projectInfo.starsCount}</small>
                     </p>
-                    <hr style={{marginTop: '5px',    marginBottom: '5px'}}></hr>
-                    <div style={{height: '20em', overflow: 'auto'}}>
-                        <p dangerouslySetInnerHTML={ { __html: innerHtml}}></p>
+                    <hr style={{marginTop: '5px', marginBottom: '5px'}}></hr>
+                    <div style={{height: '17em', overflow: 'auto'}}>
+                        { !!projectInfo.screenshotUrl ?
+                            <img style={{width: '100%'}} src={projectInfo.screenshotUrl}></img> :
+                            <p>File 'screenshot.png' is missing, please add one into the root folder on GitHub</p>
+                        }
+                    </div>
+                    <div style={{height: '4em', overflow: 'hidden', marginTop: '0.5em'}}>
+                        <p>{innerHtml}</p>
                     </div>
                 </Panel>
 

@@ -28,3 +28,4 @@ let m1 = m.withMutations(map => { changeId(map) });
 console.log(m);
 
 console.log(m1);
+

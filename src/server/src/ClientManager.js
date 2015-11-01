@@ -20,14 +20,14 @@ class ClientManager {
     }
 
     getAllProjects(options){
-        return this.client.get('/getProjectGalleryList');
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/structor/invoke', { methodName: 'getProjectGallery' });
     }
 
     loadUserProfile(){
         var userProfile = {
             login: this.sm.getIn('client.user')
         };
-        return this.client.post("/secure/getUserProfile", userProfile, true)
+        return this.client.post(this.sm.getIn('client.serviceURL') + "/api/structor/secure/getUserProfile", userProfile, true)
             .then( () => {
                 return { userName: this.sm.getIn('client.user') };
             });
@@ -39,28 +39,28 @@ class ClientManager {
             pwd: options.pass,
             email: options.email
         };
-        return this.client.post("/addUser", userProfile);
+        return this.client.post(this.sm.getIn('client.serviceURL') + "/api/structor/addUser", userProfile);
     }
 
-    downloadGalleryFile(id, packageFileName){
-        return this.client.downloadGet( '/downloadGalleryFile?id=' + id + '&packageFileName=' + packageFileName);
+    downloadGalleryFile(downloadUrl){
+        return this.client.downloadGet(downloadUrl);
     }
 
-    createProject(options){
-        return this.client.post('/secure/createProject', options, true);
-    }
-
-    checkCreateProject(options){
-        return this.client.post('/secure/checkCreateProject', options, true);
-    }
-
-    uploadProjectFiles(options){
-        var uploadConfig = {
-            url: '/secure/uploadProject/' + options.projectId,
-            filePaths: options.filePaths
-        };
-        return this.client.upload(uploadConfig, true);
-    }
+    //createProject(options){
+    //    return this.client.post('/secure/createProject', options, true);
+    //}
+    //
+    //checkCreateProject(options){
+    //    return this.client.post('/secure/checkCreateProject', options, true);
+    //}
+    //
+    //uploadProjectFiles(options){
+    //    var uploadConfig = {
+    //        url: '/secure/uploadProject/' + options.projectId,
+    //        filePaths: options.filePaths
+    //    };
+    //    return this.client.upload(uploadConfig, true);
+    //}
 
 }
 

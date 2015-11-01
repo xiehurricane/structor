@@ -114,9 +114,16 @@ class StorageManager {
 
     unpackProjectFile(filePath){
         let srcFilePath = path.join(this.sm.getProject('dirPath'), filePath);
-        return this.fileManager.unpackTarGz(srcFilePath, this.sm.getProject('dirPath')).then( () => {
-            return this.fileManager.removeFile(srcFilePath);
-        });
+        return this.fileManager.repackTarGzOmitRootDir(srcFilePath)
+            .then( (tarFilePathTemp) => {
+                return this.fileManager.unpackTar(tarFilePathTemp, this.sm.getProject('dirPath'))
+                    .then( () => {
+                        return this.fileManager.removeFile(tarFilePathTemp);
+                    })
+                    .then( () => {
+                        return this.fileManager.removeFile(srcFilePath);
+                    });
+            });
     }
 
     readProjectJsonModel(){
