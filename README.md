@@ -23,7 +23,7 @@ The essential part of the builder is a project boilerplate. The boilerplate is a
 
 It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
 
-More about the structure of prepack and how it is used by Structor please read the description of the sample tutorial project here [http://helmetrex.com/details/1567](http://helmetrex.com/details/1567);
+More about the structure of prepack and how it is used by Structor please read the description of the sample tutorial project here [https://github.com/ipselon/structor-market-site](https://github.com/ipselon/structor-market-site);
 
 The builder runs as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
