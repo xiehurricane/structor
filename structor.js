@@ -7,7 +7,7 @@ var api = require('./server/api.js');
 process.on('uncaughtException',
     function(err){
         if(err.code === 'EADDRINUSE'){
-            console.error('Port is already in use.');
+            console.error('Port is already in use, you can precise one with -p YOUR_PORT.');
         } else {
             console.log(err);
         }
