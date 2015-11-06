@@ -15,7 +15,7 @@ Watch the presentation about how Structor works. This presentation shows all cap
 ### Description
 Structor is former React UI Builder. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
 
-But, it is better to read the following description and Wiki docs here because the builder has absolutely redesigned look and feel and has a lot of new features.
+But, it is better to read the following text because the builder has absolutely redesigned look and feel and has a lot of new features.
 
 First of all, I need to mention that Structor is a visual development environment for node.js Web applications with React UI.
 
