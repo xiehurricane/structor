@@ -43,15 +43,15 @@ Then you have two ways to start working in the builder.
 
 The first way:
 * Create an empty folder on local machine.
-* Enter in this folder and run command: ```structor```.
+* cd to this folder and run command: ```structor```.
 * Open the browser and enter the address: ```http://localhost:2222/structor```.
-* Choose suitable prepack (the only one so far) and click clone option.
+* Choose suitable prepack and click clone option.
 * Start composing UI...
 
 The second way:
-* Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable boilerplate (the only one so far is there).
+* Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable boilerplate.
 * Download package on localhost and unpack it in some empty folder.
-* Enter into this folder and run ```npm install``` command.
+* cd to this folder and run ```npm install``` command.
 * Once installation is finished run ```structor```.
 * Open the browser and enter the address: ```http://localhost:2222/structor```.
 * Start composing UI...
