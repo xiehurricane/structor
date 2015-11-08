@@ -13,7 +13,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import storeManager from './store/storeManager.js';
 import initialState from './store/initialState.js';
-import { setApplicationState } from './actions/applicationActions.js';
+import { saveProject } from './actions/applicationActions.js';
 import { handleCompilerMessage } from './actions/webSocketActions.js';
 import { Provider } from 'react-redux';
 import Application from './components/application/Application.js';
@@ -26,13 +26,6 @@ const pass = docCookie.getItem("helmet-react-ui-builder-pass");
 
 init();
 
-//Server.init({io: window.io, serverHost: window.location.hostname});
-
-//window.onbeforeunload = function(e) {
-//    ApplicationActions.stopAutosaveProjectModel();
-//
-//};
-
 const store = storeManager(initialState);
 
 const { protocol, hostname, port } = window.location;
@@ -42,11 +35,9 @@ socket.on( 'compiler.message', stats => {
     store.dispatch(handleCompilerMessage(stats));
 });
 
-//const socket = io(`${location.protocol}//${location.hostname}:8090`);
-//socket.on('state', state =>
-//        store.dispatch({type: 'SET_STATE', state})
-//);
-
+window.onbeforeunload = function(e) {
+    store.dispatch(saveProject());
+};
 
 ReactDOM.render(
     <Provider store={store}>

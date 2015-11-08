@@ -25,35 +25,37 @@ export default store => next => action => {
 
         const { deskPage: { model } } = store.getState();
 
-        UtilStore.pushUndoState(model);
+        let projectModel = UtilStore.removeMarksFromModel(Utils.fulex(model));
 
-        store.dispatch(ServerActions.invokeSilently('saveProjectModel', { model: model }));
+        UtilStore.pushUndoState(projectModel);
 
-    }
-
-    if( type === DeskPageActions.DISCARD_CLIPBOARD
-        || type === DeskPageActions.PASTE_DELETE_IN_MODEL_FROM_CLIPBOARD
-        || type === DeskPageActions.SELECT_AVAILABLE_COMPONENT
-        || type === DeskPageActions.SWITCH_PAGE_TO_INDEX ){
-
-        const umyIdToCopy = store.getState()['deskPage']['selectedUmyIdToCopy'];
-        if(umyIdToCopy){
-            const DOMNode = UtilStore.getPageDomNode(umyIdToCopy);
-            if(DOMNode){
-                $(DOMNode).removeClass('umy-grid-basic-border-copy');
-                //console.log('[Middleware] removed copy border: %o %o', umyIdToCopy, DOMNode);
-            }
-        }
-
-        const umyIdToCut = store.getState()['deskPage']['selectedUmyIdToCut'];
-        if(umyIdToCut){
-            const DOMNode = UtilStore.getPageDomNode(umyIdToCut);
-            if(DOMNode){
-                $(DOMNode).removeClass('umy-grid-basic-border-cut');
-            }
-        }
+        store.dispatch(ServerActions.invokeSilently('saveProjectModel', { model: projectModel }));
 
     }
+
+    //if( type === DeskPageActions.DISCARD_CLIPBOARD
+    //    || type === DeskPageActions.PASTE_DELETE_IN_MODEL_FROM_CLIPBOARD
+    //    || type === DeskPageActions.SELECT_AVAILABLE_COMPONENT
+    //    || type === DeskPageActions.SWITCH_PAGE_TO_INDEX ){
+    //
+    //    const umyIdToCopy = store.getState()['deskPage']['selectedUmyIdToCopy'];
+    //    if(umyIdToCopy){
+    //        const DOMNode = UtilStore.getPageDomNode(umyIdToCopy);
+    //        if(DOMNode){
+    //            $(DOMNode).removeClass('umy-grid-basic-border-copy');
+    //            //console.log('[Middleware] removed copy border: %o %o', umyIdToCopy, DOMNode);
+    //        }
+    //    }
+    //
+    //    const umyIdToCut = store.getState()['deskPage']['selectedUmyIdToCut'];
+    //    if(umyIdToCut){
+    //        const DOMNode = UtilStore.getPageDomNode(umyIdToCut);
+    //        if(DOMNode){
+    //            $(DOMNode).removeClass('umy-grid-basic-border-cut');
+    //        }
+    //    }
+    //
+    //}
 
 
     //if(action.type === DeskPageActions.COMPONENT_WAS_CLICKED

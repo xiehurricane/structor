@@ -51,9 +51,7 @@ export const templatePreviewPageModel = {
             props: {
                 style: {
                     padding: '0.5em',
-                    overflow: 'auto',
-                    width: '100%',
-                    height: '100%'
+                    width: '100%'
                 }
             },
             children:[
@@ -109,12 +107,21 @@ export function destroyCurrentOverlayPlugin(){
     }
 }
 
+export function removeMarksFromModel(model){
+    if(model && model.pages){
+        _.each(model.pages, function(page){
+            Utils.removeClassNamesFromModel(['umy-grid-basic-border-copy', 'umy-grid-basic-border-cut'], page);
+        });
+    }
+    return model;
+}
+
 export function pushUndoState(model){
     if(undoPool.length >= 50){
         undoPool = _.rest(undoPool, 50);
     }
     undoPool.push({
-        projectModel: Utils.fulex(model)
+        projectModel: model
     });
 }
 

@@ -54,6 +54,37 @@ class SearchComponentName extends Component {
     handleOnKeyDown(e) {
         if (e.keyCode == 27) {
             this.handleClose(e);
+        } else if( (e.metaKey || e.ctrlKey) && this.props.onChangeMethod){
+            switch (e.keyCode) {
+                case 65: // A key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    this.props.onChangeMethod('addBefore');
+                    break;
+                case 73: // I key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    this.props.onChangeMethod('insertFirst');
+                    break;
+                case 84: // T key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    this.props.onChangeMethod('replace');
+                    break;
+                case 86: // V key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    this.props.onChangeMethod('addAfter');
+                    break;
+                case 87: // W key
+                    e.stopPropagation();
+                    e.preventDefault();
+                    this.props.onChangeMethod('wrap');
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 

@@ -66,7 +66,6 @@ class PanelOptions extends Component {
                                     style={{marginTop: '0.5em', padding: '0 1em 0 1em'}}
                                     valueObject={valueObject}
                                     path={pathTo}
-                                    focused={pathTo === this.props.focusedPathInProps}
                                     onDeleteValue={this.props.deleteModelNodeOptionByPath}
                                     onSetFocus={this.props.setFocusedQuickOptionPath}
                                     onChangeValue={this.props.changeModelNodeOptions}/>
@@ -83,7 +82,6 @@ class PanelOptions extends Component {
                             style={{marginTop: '0.5em', padding: '0 1em 0 1em'}}
                             valueObject={valueObject}
                             path={pathTo}
-                            focused={pathTo === this.props.focusedPathInProps}
                             onDeleteValue={this.props.deleteModelNodeOptionByPath}
                             onSetFocus={this.props.setFocusedQuickOptionPath}
                             onChangeValue={this.props.changeModelNodeOptions}/>

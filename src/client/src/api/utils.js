@@ -590,6 +590,7 @@ export function moveDownInModel(projectModel, umyId) {
 
 export function deleteFromModel(projectModel, umyId) {
     let searchResult = null;
+    let resultUmyId = umyId;
     for (let i = 0; i < projectModel.pages.length; i++) {
         if (!searchResult) {
             searchResult = findByUmyId(projectModel.pages[i], umyId);
@@ -599,16 +600,32 @@ export function deleteFromModel(projectModel, umyId) {
                 && searchResult.parent.children.length == 1) {
                 //
                 console.error("Can't delete the last component on the page");
-                return projectModel;
+                return {
+                    projectModel: projectModel,
+                    selectedUmyId: resultUmyId
+                };
             }
         }
     }
+
     if (searchResult && searchResult.parent && searchResult.index >= 0) {
+        let newIndex = 0;
+        if(searchResult.index > 0){
+            newIndex = searchResult.index - 1;
+        }
         if (searchResult.foundProp && searchResult.foundProp === '/!#child') {
             searchResult.parent.children.splice(searchResult.index, 1);
         }
+        if(searchResult.parent.children.length > 0){
+            resultUmyId = searchResult.parent.children[newIndex].props['data-umyid'];
+        } else {
+            resultUmyId = searchResult.parent.props['data-umyid'];
+        }
     }
-    return projectModel;
+    return {
+        projectModel: projectModel,
+        selectedUmyId: resultUmyId
+    };
 }
 
 export function mergeNodeOptionsIntoModel(options, projectModel, umyId){
@@ -618,5 +635,59 @@ export function mergeNodeOptionsIntoModel(options, projectModel, umyId){
         searchResult.found.props = _.merge({}, searchResult.found.props, options);
     }
     return projectModel;
+}
+
+export function addClassNameToNode(className, projectModel, umyId){
+    let searchResult = findByUmyId(projectModel, umyId);
+    if(searchResult && searchResult.found){
+        if(searchResult.found.props){
+            if(searchResult.found.props.className){
+                if(searchResult.found.props.className.indexOf(className) < 0){
+                    searchResult.found.props.className += ' ' + className;
+                }
+            } else {
+                searchResult.found.props.className = className;
+            }
+        } else {
+            searchResult.found.props = {
+                className: className
+            }
+        }
+    }
+    return projectModel;
+}
+
+export function removeClassNameFromNode(className, projectModel, umyId){
+    let searchResult = findByUmyId(projectModel, umyId);
+    if(searchResult && searchResult.found){
+        if(searchResult.found.props){
+            if(searchResult.found.props.className){
+                if(searchResult.found.props.className.indexOf(className) >= 0){
+                    searchResult.found.props.className = searchResult.found.props.className.replace(className, '');
+                }
+            }
+        }
+    }
+    return projectModel;
+}
+
+
+export function removeClassNamesFromModel(classNames, model) {
+    if(model.props){
+        if(model.props.className){
+            if(_.isArray(classNames) && classNames.length > 0){
+                classNames.forEach( className => {
+                    if(model.props.className.indexOf(className) >= 0){
+                        model.props.className = model.props.className.replace(className, '');
+                    }
+                });
+            }
+        }
+    }
+    if (model.children && model.children.length > 0) {
+        for (let i = 0; i < model.children.length; i++) {
+            removeClassNamesFromModel(classNames, model.children[i]);
+        }
+    }
 }
 

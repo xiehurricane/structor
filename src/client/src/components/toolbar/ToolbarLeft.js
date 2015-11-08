@@ -26,14 +26,14 @@ class ToolbarLeft extends Component {
         this.props.showModalProxySetup();
     }
 
-    recreateTooltips(){
-        let thisDOMNode = ReactDOM.findDOMNode(this);
-        $(thisDOMNode).find('[data-toggle="tooltip"]').tooltip('destroy');
-        $(thisDOMNode).find('[data-toggle="tooltip"]').tooltip({delay: { "show": 1300, "hide": 100 }, container: 'body'});
-    }
+    //recreateTooltips(){
+    //    let thisDOMNode = ReactDOM.findDOMNode(this);
+    //    $(thisDOMNode).find('[data-toggle="tooltip"]').tooltip('destroy');
+    //    $(thisDOMNode).find('[data-toggle="tooltip"]').tooltip({delay: { "show": 1300, "hide": 100 }, container: 'body'});
+    //}
 
     componentDidMount(){
-        this.recreateTooltips();
+        //this.recreateTooltips();
     }
 
     render(){

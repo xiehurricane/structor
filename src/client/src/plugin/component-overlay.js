@@ -74,7 +74,7 @@ let ComponentOverlay = {
                         let menuItem = $("<a href='#' class='umyproto-text-bold' >" + this._options.buttons[i].menu[x].label + "</a>");
                         menuItem.on("click.umyOverlayMenuItem", (function (callback) {
                             return function (e) {
-                                //e.preventDefault();
+                                e.preventDefault();
                                 //e.stopPropagation();
                                 if (callback) {
                                     callback(e);
@@ -97,7 +97,7 @@ let ComponentOverlay = {
             }
             if(this._options.buttons[i].tooltip){
                 item.attr({
-                    'data-umyproto-tooltip': '{delay: 1500}',
+                    //'data-umyproto-tooltip': '{delay: 1500}',
                     'title': this._options.buttons[i].tooltip
                 });
             }

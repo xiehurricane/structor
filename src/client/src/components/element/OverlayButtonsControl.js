@@ -27,6 +27,7 @@ class OverlayButtonsControl extends Component {
             || this.props.clipboardMode !== nextProps.clipboardMode
             || this.props.selectedUmyIdToCopy !== nextProps.selectedUmyIdToCopy
             || this.props.selectedUmyIdToCut !== nextProps.selectedUmyIdToCut
+            || this.props.quickPasteModeInModelByName !== nextProps.quickPasteModeInModelByName
         );
     }
 
@@ -147,22 +148,6 @@ class OverlayButtonsControl extends Component {
             } else {
                 UtilStore.destroyCurrentOverlayPlugin();
             }
-            if(this.props.selectedUmyIdToCopy){
-                //console.log('Try to add border copy');
-                const DOMNode = UtilStore.getPageDomNode(this.props.selectedUmyIdToCopy);
-                if(DOMNode){
-                    console.log('DOMNode was found for border copy for: %o %o', this.props.selectedUmyIdToCopy, DOMNode);
-                    $(DOMNode).addClass('umy-grid-basic-border-copy');
-                }
-            }
-            if(this.props.selectedUmyIdToCut){
-                //console.log('Try to add border cut');
-                const DOMNode = UtilStore.getPageDomNode(this.props.selectedUmyIdToCut);
-                if(DOMNode){
-                    //console.log('DOMNode was found for border cut for: %o %o', this.props.selectedUmyIdToCut, DOMNode);
-                    $(DOMNode).addClass('umy-grid-basic-border-cut');
-                }
-            }
         }
         //let thisDOMNode = React.findDOMNode(this);
         //$(thisDOMNode).find('[data-toggle="tooltip"]').tooltip({delay: { "show": 500, "hide": 100 }, container: 'body'});
@@ -220,6 +205,7 @@ class OverlayButtonsControl extends Component {
                 return (<OverlayTreeviewItem
                     selectedUmyId={selectedUmyId}
                     searchResult={searchResult}
+                    quickPasteModeInModelByName={this.props.quickPasteModeInModelByName}
                     isFullFledged={this.props.isFullFledged}
                     onClose={this.props.discardComponentSelection}
                     onMoveUp={ () => { this.props.moveInModelSelected('UP'); } }
@@ -229,6 +215,8 @@ class OverlayButtonsControl extends Component {
                     onDuplicate={ () => { this.props.duplicateInModelSelected(); } }
                     onOptions={ () => { this.props.showModalComponentEditor() } }
                     onDelete={this.props.deleteInModelSelected}
+                    onStartQuickPaste={ pasteMode => this.props.startQuickPasteInModelByName(pasteMode) }
+                    onStopQuickPaste={ () => this.props.stopQuickPasteInModelByName() }
                     onQuickPaste={ (componentName, pasteMode) => { this.props.quickPasteInModelByName(componentName, pasteMode); } } />);
             }
         } else {
@@ -252,7 +240,8 @@ function mapStateToProps(state) {
         isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage,
         clipboardMode: deskPage.clipboardMode,
         selectedUmyIdToCopy: deskPage.selectedUmyIdToCopy,
-        selectedUmyIdToCut: deskPage.selectedUmyIdToCut
+        selectedUmyIdToCut: deskPage.selectedUmyIdToCut,
+        quickPasteModeInModelByName: deskPage.quickPasteModeInModelByName
     };
 }
 

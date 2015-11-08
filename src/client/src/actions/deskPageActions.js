@@ -27,6 +27,8 @@ export const COPY_SELECTED_IN_CLIPBOARD = 'COPY_SELECTED_IN_CLIPBOARD';
 export const CUT_SELECTED_IN_CLIPBOARD = 'CUT_SELECTED_IN_CLIPBOARD';
 export const PASTE_DELETE_IN_MODEL_FROM_CLIPBOARD = 'PASTE_DELETE_IN_MODEL_FROM_CLIPBOARD';
 export const DUPLICATE_IN_MODEL_SELECTED = 'DUPLICATE_IN_MODEL_SELECTED';
+export const START_QUICK_PASTE_IN_MODEL_BY_NAME = 'START_QUICK_PASTE_IN_MODEL_BY_NAME';
+export const STOP_QUICK_PASTE_IN_MODEL_BY_NAME = 'STOP_QUICK_PASTE_IN_MODEL_BY_NAME';
 export const QUICK_PASTE_IN_MODEL_BY_NAME = 'QUICK_PASTE_IN_MODEL_BY_NAME';
 
 export const ADD_NEW_PAGE = 'ADD_NEW_PAGE';
@@ -217,6 +219,19 @@ export function duplicateInModelSelected(){
     return {
         type: DUPLICATE_IN_MODEL_SELECTED
     }
+}
+
+export function startQuickPasteInModelByName(pasteMode){
+    return {
+        type: START_QUICK_PASTE_IN_MODEL_BY_NAME,
+        payload: { pasteMode: pasteMode }
+    };
+}
+
+export function stopQuickPasteInModelByName(){
+    return {
+        type: STOP_QUICK_PASTE_IN_MODEL_BY_NAME
+    };
 }
 
 export function quickPasteInModelByName(componentName, pasteMode){

@@ -12,40 +12,40 @@ class OverlayTreeviewItem extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            quickAppend: false
-        };
         this.handleCloseQuickAppend = this.handleCloseQuickAppend.bind(this);
+        this.handleStartQuickAppend = this.handleStartQuickAppend.bind(this);
         this.handleSubmitQuickAppend = this.handleSubmitQuickAppend.bind(this);
     }
 
     handleCloseQuickAppend() {
-        this.setState({
-            quickAppend: false,
-            command: null,
-            umyid: null
-        });
+        if(this.props.onStopQuickPaste){
+            this.props.onStopQuickPaste();
+        }
+    }
+
+    handleStartQuickAppend(appendMode) {
+        if(this.props.onStartQuickPaste){
+            this.props.onStartQuickPaste(appendMode);
+        }
     }
 
     handleSubmitQuickAppend(value) {
         if(this.props.onQuickPaste){
-            this.props.onQuickPaste(value, this.state.command);
+            this.props.onQuickPaste(value, this.props.quickPasteModeInModelByName);
         }
-        //PanelAvailableComponentsActions.quickAppend(
-        //    { componentId: value }, this.state.command, this.state.umyid
-        //);
     }
 
     render() {
-        if (this.state.quickAppend) {
+        if (this.props.quickPasteModeInModelByName) {
             return (
                 <div style={{display: 'table', width: '100%'}}>
                     <div style={{display: 'table-row', width: '100%'}}>
                         <div style={{ display: 'table-cell', width: '33%'}}></div>
                         <div style={{display: 'table-cell', width: '34%'}}>
                             <SearchComponentName
-                                method={this.state.command}
+                                method={this.props.quickPasteModeInModelByName}
                                 style={{textAlign: 'left', width: '300'}}
+                                onChangeMethod={ mode => this.handleStartQuickAppend(mode) }
                                 onClose={ this.handleCloseQuickAppend }
                                 onChangeValue={ this.handleSubmitQuickAppend }/>
                         </div>
@@ -56,9 +56,7 @@ class OverlayTreeviewItem extends Component {
 
         } else {
 
-            //var domNodeId = this.props.selectedUmyId;
-            //var searchResult = this.props.searchResult;
-            const { selectedUmyId, searchResult } = this.props;
+            const { searchResult } = this.props;
 
             var overlayModel = {
                 buttons: []
@@ -71,102 +69,42 @@ class OverlayTreeviewItem extends Component {
                         {
                             label: 'Before',
                             btnClass: 'btn-default',
-                            onClick: (function (_nodeId, _this) {
-                                return function (e) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    _this.setState({
-                                        quickAppend: true,
-                                        umyid: _nodeId,
-                                        command: 'addBefore'
-                                    });
-                                }
-                            })(selectedUmyId, this),
+                            onClick: () => this.handleStartQuickAppend('addBefore'),
                             tooltip: 'Append quickly before selected'
                         });
                     overlayModel.buttons.push(
                         {
                             label: 'First',
                             btnClass: 'btn-default',
-                            onClick: (function (_nodeId, _this) {
-                                return function (e) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    _this.setState({
-                                        quickAppend: true,
-                                        umyid: _nodeId,
-                                        command: 'insertFirst'
-                                    });
-                                }
-                            })(selectedUmyId, this),
+                            onClick: () => this.handleStartQuickAppend('insertFirst'),
                             tooltip: 'Insert quickly as first in selected'
                         });
                     overlayModel.buttons.push(
                         {
                             label: 'Replace',
                             btnClass: 'btn-default',
-                            onClick: (function (_nodeId, _this) {
-                                return function (e) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    _this.setState({
-                                        quickAppend: true,
-                                        umyid: _nodeId,
-                                        command: 'replace'
-                                    });
-                                }
-                            })(selectedUmyId, this),
+                            onClick: () => this.handleStartQuickAppend('replace'),
                             tooltip: 'Replace quickly selected'
                         });
                     overlayModel.buttons.push(
                         {
                             label: 'Wrap',
                             btnClass: 'btn-default',
-                            onClick: (function (_nodeId, _this) {
-                                return function (e) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    _this.setState({
-                                        quickAppend: true,
-                                        umyid: _nodeId,
-                                        command: 'wrap'
-                                    });
-                                }
-                            })(selectedUmyId, this),
+                            onClick: () => this.handleStartQuickAppend('wrap'),
                             tooltip: 'Wrap quickly selected'
                         });
                     overlayModel.buttons.push(
                         {
                             label: 'Last',
                             btnClass: 'btn-default',
-                            onClick: (function (_nodeId, _this) {
-                                return function (e) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    _this.setState({
-                                        quickAppend: true,
-                                        umyid: _nodeId,
-                                        command: 'insertLast'
-                                    });
-                                }
-                            })(selectedUmyId, this),
+                            onClick: () => this.handleStartQuickAppend('insertLast'),
                             tooltip: 'Insert quickly as last in selected'
                         });
                     overlayModel.buttons.push(
                         {
                             label: 'After',
                             btnClass: 'btn-default',
-                            onClick: (function (_nodeId, _this) {
-                                return function (e) {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    _this.setState({
-                                        quickAppend: true,
-                                        umyid: _nodeId,
-                                        command: 'addAfter'
-                                    });
-                                }
-                            })(selectedUmyId, this),
+                            onClick: () => this.handleStartQuickAppend('addAfter'),
                             tooltip: 'Append quickly after selected'
                         });
                 }
@@ -235,7 +173,8 @@ OverlayTreeviewItem.defaultProps = {
     onCopy: null,
     onDuplicate: null,
     onDelete: null,
-    onOptions: null
+    onOptions: null,
+    quickPasteModeInModelByName: null
 };
 
 export default OverlayTreeviewItem;

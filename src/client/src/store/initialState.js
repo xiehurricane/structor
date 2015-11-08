@@ -60,7 +60,8 @@ const initialState = {
         currentPageIndex: 0,
         reloadPageCounter: 0,
         reloadPageModelCounter: 0,
-        currentPageDomNodes:{}
+        currentPageDomNodes:{},
+        quickPasteModeInModelByName: null
     },
     modalComponentEditor: {
         isOpen: false,

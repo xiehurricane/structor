@@ -11,9 +11,24 @@ function discardClipboard(state) {
     state.clipboardMode = 'EMPTY_MODE';
     state.selectedAvailableComponentName = null;
     state.selectedAvailableComponentDefaults = null;
-    state.selectedUmyIdToCopy = null;
-    state.selectedUmyIdToCut = null;
+    if(state.selectedUmyIdToCopy){
+        state.model = Utils.removeClassNameFromNode('umy-grid-basic-border-copy', state.model, state.selectedUmyIdToCopy);
+        state.selectedUmyIdToCopy = null;
+        state.modelChangeCounter++;
+    }
+    if(state.selectedUmyIdToCut){
+        state.model = Utils.removeClassNameFromNode('umy-grid-basic-border-cut', state.model, state.selectedUmyIdToCut);
+        state.selectedUmyIdToCut = null;
+        state.modelChangeCounter++;
+    }
     return state;
+}
+
+function isClipboardEmpty(state){
+    const { clipboard, inClipboard, clipboardMode, selectedAvailableComponentName,
+        selectedAvailableComponentDefaults, selectedUmyIdToCopy, selectedUmyIdToCut } = state;
+    return ( !clipboard && !inClipboard && clipboardMode === 'EMPTY_MODE' & selectedAvailableComponentName &
+            selectedAvailableComponentDefaults & selectedUmyIdToCopy & selectedUmyIdToCut );
 }
 
 export default function (state = {}, action = {type: 'UNKNOWN'}) {
@@ -199,6 +214,7 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                         state.reloadPageCounter++;
                     }
                     state.model = model;
+                    state = discardClipboard(state);
                     state.modelChangeCounter++;
                     state.selectedUmyId = null;
                     state.searchResult = null;
@@ -249,92 +265,118 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
         case Actions.PASTE_IN_MODEL_FROM_CLIPBOARD: //------------------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                let result = Utils.pasteInModelFromClipboard(
-                    state.clipboard, state.selectedUmyId, state.model, payload.pasteMode
-                );
-                state.selectedUmyId = result.selectedUmyId;
-                state.selectComponentCounter++;
-                state.model = result.projectModel;
-                state.modelChangeCounter++;
+                if(state.selectedUmyId && !isClipboardEmpty(state)){
+                    state = Utils.fulex(state);
+                    let result = Utils.pasteInModelFromClipboard(
+                        state.clipboard, state.selectedUmyId, state.model, payload.pasteMode
+                    );
+                    state.selectedUmyId = result.selectedUmyId;
+                    state.selectComponentCounter++;
+                    state.model = result.projectModel;
+                    state.modelChangeCounter++;
+                    console.log('Current Id for copy: ' + state.selectedUmyIdToCopy + ' & current selected id: ' + state.selectedUmyId);
+                }
                 return state;
             })();
 
         case Actions.DELETE_IN_MODEL_SELECTED: //-----------------------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                let projectModel = Utils.deleteFromModel(state.model, state.selectedUmyId);
-                state.selectedUmyId = null;
-                state.selectComponentCounter++;
-                state.model = projectModel;
-                state.modelChangeCounter++;
+                if(state.selectedUmyId){
+                    state = Utils.fulex(state);
+                    const resultObj = Utils.deleteFromModel(state.model, state.selectedUmyId);
+                    state.selectedUmyId = resultObj.selectedUmyId;
+                    state.selectComponentCounter++;
+                    state.model = resultObj.projectModel;
+                    state.modelChangeCounter++;
+                }
                 return state;
             })();
 
         case Actions.MOVE_IN_MODEL_SELECTED: //-------------------------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                if (payload.direction === 'UP') {
-                    state.model = Utils.moveUpInModel(state.model, state.selectedUmyId);
-                } else if (payload.direction === 'DOWN') {
-                    state.model = Utils.moveDownInModel(state.model, state.selectedUmyId);
+                if(state.selectedUmyId){
+                    state = Utils.fulex(state);
+                    if (payload.direction === 'UP') {
+                        state.model = Utils.moveUpInModel(state.model, state.selectedUmyId);
+                    } else if (payload.direction === 'DOWN') {
+                        state.model = Utils.moveDownInModel(state.model, state.selectedUmyId);
+                    }
+                    state.selectComponentCounter++;
+                    state.modelChangeCounter++;
                 }
-                state.selectComponentCounter++;
-                state.modelChangeCounter++;
                 return state;
             })();
 
         case Actions.COPY_SELECTED_IN_CLIPBOARD: //---------------------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                state.clipboard = state.searchResult.found;
-                state.inClipboard = state.searchResult.found.type;
-                state.clipboardMode = 'COPY_MODE';
-                state.selectedUmyIdToCopy = state.selectedUmyId;
+                if(state.selectedUmyId){
+                    state = Utils.fulex(state);
+                    state = discardClipboard(state);
+                    const buffer = Utils.fulex(state.searchResult.found);
+                    state.clipboard = buffer;
+                    state.inClipboard = buffer.type;
+                    state.clipboardMode = 'COPY_MODE';
+                    state.selectedUmyIdToCopy = state.selectedUmyId;
+                    state.model = Utils.addClassNameToNode('umy-grid-basic-border-copy', state.model, state.selectedUmyIdToCopy);
+                    state.modelChangeCounter++;
+                }
                 return state;
             })();
 
         case Actions.CUT_SELECTED_IN_CLIPBOARD: //----------------------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                state.clipboard = state.searchResult.found;
-                state.inClipboard = state.searchResult.found.type;
-                state.clipboardMode = 'CUT_MODE';
-                state.selectedUmyIdToCut = state.selectedUmyId;
+                if(state.selectedUmyId){
+                    state = Utils.fulex(state);
+                    state = discardClipboard(state);
+                    const buffer = Utils.fulex(state.searchResult.found);
+                    state.clipboard = buffer;
+                    state.inClipboard = buffer.type;
+                    state.clipboardMode = 'CUT_MODE';
+                    state.selectedUmyIdToCut = state.selectedUmyId;
+                    state.model = Utils.addClassNameToNode('umy-grid-basic-border-cut', state.model, state.selectedUmyIdToCut);
+                    state.modelChangeCounter++;
+
+                }
                 return state;
             })();
 
         case Actions.PASTE_DELETE_IN_MODEL_FROM_CLIPBOARD: //-----------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                let result = Utils.pasteInModelFromClipboard(
-                    state.clipboard, state.selectedUmyId, state.model, payload.pasteMode
-                );
-                let projectModel = Utils.deleteFromModel(result.projectModel, state.selectedUmyIdToCut);
-                state = discardClipboard(state);
-                state.selectedUmyId = result.selectedUmyId;
-                state.selectComponentCounter++;
-                state.model = projectModel;
-                state.modelChangeCounter++;
+                if (state.selectedUmyId && !isClipboardEmpty(state)) {
+                    state = Utils.fulex(state);
+                    let result = Utils.pasteInModelFromClipboard(
+                        state.clipboard, state.selectedUmyId, state.model, payload.pasteMode
+                    );
+                    let resultObj = Utils.deleteFromModel(result.projectModel, state.selectedUmyIdToCut);
+                    state.selectedUmyIdToCut = null;
+                    state = discardClipboard(state);
+                    state.selectedUmyId = result.selectedUmyId;
+                    state.selectComponentCounter++;
+                    state.model = resultObj.projectModel;
+                    state.modelChangeCounter++;
+                }
                 return state;
             })();
 
         case Actions.DUPLICATE_IN_MODEL_SELECTED: //--------------------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                let result = Utils.pasteInModelFromUmyId(
-                    state.selectedUmyId, state.selectedUmyId, state.model, 'addAfter'
-                );
-                state.selectedUmyId = result.selectedUmyId;
-                state.selectComponentCounter++;
-                state.model = result.projectModel;
-                state.modelChangeCounter++;
+                if (state.selectedUmyId) {
+                    state = Utils.fulex(state);
+                    state = discardClipboard(state);
+                    let result = Utils.pasteInModelFromUmyId(
+                        state.selectedUmyId, state.selectedUmyId, state.model, 'addAfter'
+                    );
+                    state.selectedUmyId = result.selectedUmyId;
+                    state.selectComponentCounter++;
+                    state.model = result.projectModel;
+                    state.modelChangeCounter++;
+                }
                 return state;
             })();
 
@@ -549,6 +591,19 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 return state;
             })();
 
+        case Actions.START_QUICK_PASTE_IN_MODEL_BY_NAME: //-------------------------------------------------------------
+            return (() => {
+                state = Utils.fulex(state);
+                state.quickPasteModeInModelByName = payload.pasteMode;
+                return state;
+            })();
+
+        case Actions.STOP_QUICK_PASTE_IN_MODEL_BY_NAME: //--------------------------------------------------------------
+            return (() => {
+                state = Utils.fulex(state);
+                state.quickPasteModeInModelByName = null;
+                return state;
+            })();
 
         case Actions.QUICK_PASTE_IN_MODEL_BY_NAME: //-------------------------------------------------------------------
 

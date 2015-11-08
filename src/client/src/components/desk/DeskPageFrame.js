@@ -13,6 +13,7 @@ class DeskPageFrame extends Component {
     constructor(props) {
         super(props);
         this.waitingCounter = 0;
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         //this.reloadPage = this.reloadPage.bind(this);
         //this.handleRecheckClick = this.handleRecheckClick.bind(this);
         //this.handleLogout = this.handleLogout.bind(this);
@@ -172,6 +173,10 @@ class DeskPageFrame extends Component {
                 $(node).off("mousedown.umy");
             }
         });
+        if(this.contentWindow) {
+            this.contentWindow.removeEventListener('keydown', this.handleKeyDown, false);
+        }
+        window.removeEventListener('keydown', this.handleKeyDown, false);
         UtilStore.resetPageDomNode();
         UtilStore.resetFrameWindow();
 
@@ -185,7 +190,7 @@ class DeskPageFrame extends Component {
             _.forOwn(instanceMap, (DOMNode, key) => {
                 UtilStore.setPageDomNode(key, DOMNode);
                 $(DOMNode).on("mousedown.umy", ((_dataumyid, cb) => {
-                    return function(e){
+                    return (e) => {
                         if(!e.metaKey && !e.ctrlKey){
                             e.stopPropagation();
                             e.preventDefault();
@@ -196,8 +201,111 @@ class DeskPageFrame extends Component {
             });
 
             this.props.setComponentSelection();
+            this.contentWindow.addEventListener('keydown', this.handleKeyDown, false);
+            window.addEventListener('keydown', this.handleKeyDown, false);
+
         }
     }
+
+    handleKeyDown(e){
+        if(document.activeElement.tagName.toUpperCase() !== 'INPUT'
+            && document.activeElement.tagName.toUpperCase() !== 'SPAN'){
+            //console.log('Key is down ->');
+            if (e.which === 8 || e.which === 46) { // Del or Backspace key
+                e.stopPropagation();
+                e.preventDefault();
+                this.props.deleteInModelSelected();
+            } else if(e.which === 27){ // Esc key
+                e.stopPropagation();
+                e.preventDefault();
+                this.props.discardClipboard();
+                this.props.stopQuickPasteInModelByName();
+            } else if (e.metaKey || e.ctrlKey) {
+                //console.log('Meta key is down ->');
+                const { selectedUmyIdToCopy, selectedUmyIdToCut } = this.props;
+                switch (e.which) {
+                    case 68: // D key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        this.props.duplicateInModelSelected();
+                        break;
+                    case 67: // C key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        this.props.copySelectedInClipboard();
+                        break;
+                    case 65: // A key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if( selectedUmyIdToCopy ){
+                            this.props.pasteInModelFromClipboard('addBefore');
+                        } else if( selectedUmyIdToCut ){
+                            this.props.pasteDeleteInModelFromClipboard('addBefore');
+                        } else {
+                            this.props.startQuickPasteInModelByName('addBefore');
+                        }
+                        break;
+                    case 73: // I key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if( selectedUmyIdToCopy ){
+                            this.props.pasteInModelFromClipboard('insertFirst');
+                        } else if( selectedUmyIdToCut ) {
+                            this.props.pasteDeleteInModelFromClipboard('insertFirst');
+                        } else {
+                            this.props.startQuickPasteInModelByName('insertFirst');
+                        }
+                        break;
+                    case 84: // T key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if( selectedUmyIdToCopy ){
+                            this.props.pasteInModelFromClipboard('replace');
+                        } else if( selectedUmyIdToCut ) {
+                            this.props.pasteDeleteInModelFromClipboard('replace');
+                        } else {
+                            this.props.startQuickPasteInModelByName('replace');
+                        }
+                        break;
+                    case 86: // V key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if( selectedUmyIdToCopy ) {
+                            this.props.pasteInModelFromClipboard('addAfter');
+                        } else if( selectedUmyIdToCut ) {
+                            this.props.pasteDeleteInModelFromClipboard('addAfter');
+                        } else {
+                            this.props.startQuickPasteInModelByName('addAfter');
+                        }
+                        break;
+                    case 87: // W key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if( selectedUmyIdToCopy ) {
+                            this.props.pasteInModelFromClipboard('wrap');
+                        } else if( selectedUmyIdToCut ) {
+                            this.props.pasteDeleteInModelFromClipboard('wrap');
+                        } else {
+                            this.props.startQuickPasteInModelByName('wrap');
+                        }
+                        break;
+                    case 88: // X key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        this.props.cutSelectedInClipboard();
+                        break;
+                    case 90: // Z key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        this.props.undoModel();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
 
     render(){
         return (<iframe {...this.props} src="/deskpage/" />);
@@ -216,7 +324,9 @@ function mapStateToProps(state) {
         editModeCounter: desk.editModeCounter,
         previewModel: deskPage.previewModel,
         previewComponentCounter: deskPage.previewComponentCounter,
-        reloadPageModelCounter: deskPage.reloadPageModelCounter
+        reloadPageModelCounter: deskPage.reloadPageModelCounter,
+        selectedUmyIdToCopy: deskPage.selectedUmyIdToCopy,
+        selectedUmyIdToCut: deskPage.selectedUmyIdToCut
     };
 }
 
@@ -229,7 +339,20 @@ export default connect(
         setComponentSelection: DeskPageActions.setComponentSelection,
         discardComponentSelection: DeskPageActions.discardComponentSelection,
         hideAvailableComponentPreview: DeskPageActions.hideAvailableComponentPreview,
-        deleteAvailableComponentPreviewIndex: DeskPageActions.deleteAvailableComponentPreviewIndex
+        deleteAvailableComponentPreviewIndex: DeskPageActions.deleteAvailableComponentPreviewIndex,
+
+        cutSelectedInClipboard: DeskPageActions.cutSelectedInClipboard,
+        copySelectedInClipboard: DeskPageActions.copySelectedInClipboard,
+        pasteInModelFromClipboard: DeskPageActions.pasteInModelFromClipboard,
+        pasteDeleteInModelFromClipboard: DeskPageActions.pasteDeleteInModelFromClipboard,
+        undoModel: DeskPageActions.undoModel,
+        duplicateInModelSelected: DeskPageActions.duplicateInModelSelected,
+        discardClipboard: DeskPageActions.discardClipboard,
+        deleteInModelSelected: DeskPageActions.deleteInModelSelected,
+
+        startQuickPasteInModelByName: DeskPageActions.startQuickPasteInModelByName,
+        stopQuickPasteInModelByName: DeskPageActions.stopQuickPasteInModelByName
+
     }
 )(DeskPageFrame);
 
