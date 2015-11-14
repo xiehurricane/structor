@@ -21,7 +21,7 @@ First of all, I need to mention that Structor is a visual development environmen
 
 The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can find and download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
 
-It absolutely doesn't mean that you has to follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was prescripted. 
+It absolutely doesn't mean that you has to follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metainfo of the project and acts as it was guided. 
 
 More about the structure of prepack and how it is used by Structor please read the description of the sample tutorial project here [https://github.com/ipselon/structor-market-site](https://github.com/ipselon/structor-market-site);
 
