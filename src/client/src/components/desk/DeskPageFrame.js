@@ -142,22 +142,25 @@ class DeskPageFrame extends Component {
                 //console.log('Has to update preview model');
                 this.contentWindow.Page.updatePreviewModel(this.props.previewModel);
                 this.hasToUpdatePreviewModel = false;
-            }
-            if(this.hasToUpdateModel){
+                this.clearDomNodes();
+            } else if(this.hasToUpdateModel){
                 //console.log('Has to update page model');
                 this.contentWindow.Page.updateModel(this.props.model);
                 this.hasToUpdateModel = false;
+                if(this.props.isEditMode){
+                    this.mapDomNodes();
+                } else {
+                    this.clearDomNodes();
+                }
+            } else if(this.isEditModeSwitched){
+                if(this.props.isEditMode){
+                    this.mapDomNodes();
+                } else {
+                    this.clearDomNodes();
+                }
+                this.isEditModeSwitched = false;
             }
         }
-        if(this.isEditModeSwitched){
-            if(this.props.isEditMode){
-                this.mapDomNodes();
-            } else {
-                this.clearDomNodes();
-            }
-            this.isEditModeSwitched = false;
-        }
-
     }
 
     reloadPage(pagePath){
@@ -208,9 +211,12 @@ class DeskPageFrame extends Component {
     }
 
     handleKeyDown(e){
-        if(document.activeElement.tagName.toUpperCase() !== 'INPUT'
-            && document.activeElement.tagName.toUpperCase() !== 'SPAN'){
-            //console.log('Key is down ->');
+        //console.log('Key is down');
+        //console.log(document.activeElement);
+        if(document.activeElement.tagName.toUpperCase() === 'BODY'
+            || document.activeElement.tagName.toUpperCase() === 'A'
+            || (document.activeElement.tagName.toUpperCase() === 'IFRAME'
+            && document.activeElement.contentDocument === this.contentDocument)){
             if (e.which === 8 || e.which === 46) { // Del or Backspace key
                 e.stopPropagation();
                 e.preventDefault();

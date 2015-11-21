@@ -32,7 +32,8 @@ class FormPageName extends Component {
         return {
             pageName: this.state.pageName,
             pagePath: this.state.pagePath,
-            pageTitle: this.state.pageTitle
+            pageTitle: this.state.pageTitle,
+            makeIndexRoute: this.refs.pageIndexCheckbox.checked
         };
     }
 
@@ -92,6 +93,15 @@ class FormPageName extends Component {
                                    onChange={this.handlePagePathChange}
                                 />
                         </div>
+                        <div className="form-group text-left">
+                            <label htmlFor='pageIndexCheckbox'>
+                                <input id='pageIndexCheckbox'
+                                       ref='pageIndexCheckbox'
+                                       style={{ display: 'inline-block' }}
+                                       type="checkbox" />
+                                <span>&nbsp;&nbsp;make index route</span>
+                            </label>
+                        </div>
                         <div className={'form-group ' + this.validatePageName()}>
                             <label htmlFor='pageNameElement'>Component name:</label>
                             <input id='pageNameElement'
@@ -103,7 +113,7 @@ class FormPageName extends Component {
                                    onChange={this.handlePageNameChange}
                                 />
                         </div>
-                        <div className={'form-group'}>
+                        {/*<div className={'form-group'}>
                             <label htmlFor='pageTitleElement'>Page title:</label>
                             <input id='pageTitleElement'
                                    ref='pageTitleInput'
@@ -113,7 +123,7 @@ class FormPageName extends Component {
                                    value={this.state.pageTitle}
                                    onChange={this.handlePageTitleChange}
                                 />
-                        </div>
+                        </div>*/}
                         <Panel>
                             <p>Route path possible values:</p>
                             <p><strong>/hello </strong><small>// matches /hello</small></p>

@@ -35,7 +35,7 @@ export function hideModalPageInfo(){
     }
 }
 
-export function saveModalPageInfo(pageName, pagePath, pageTitle, pagePropsString, pageScript){
+export function saveModalPageInfo(pageName, pagePath, pageTitle, makeIndexRoute, pagePropsString, pageScript){
 
     return (dispatch, getState) => {
 
@@ -76,7 +76,7 @@ export function saveModalPageInfo(pageName, pagePath, pageTitle, pagePropsString
             // Component name must start from char in upper case
             var firstChar = pageName.charAt(0).toUpperCase();
             pageName = firstChar + pageName.substr(1);
-            dispatch(DeskPageActions.changeCurrentPageInfo(pageName, pagePath, pageTitle, pageProps, pageScript));
+            dispatch(DeskPageActions.changeCurrentPageInfo(pageName, pagePath, pageTitle, makeIndexRoute, pageProps, pageScript));
             dispatch(hideModalPageInfo());
         }
 

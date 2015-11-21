@@ -30,7 +30,7 @@ class ModalComponentGenerator extends Component {
         let wizardElement = this.props.isOpen ? <WizardGenerateComponent /> : null;
         return (
             <Modal show={this.props.isOpen}
-                   onHide={this.props.hideModalComponentGenerator}
+                   onHide={() => {}}
                    dialogClassName='umy-modal-overlay'
                    backdrop={true}
                    keyboard={true}

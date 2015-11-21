@@ -35,9 +35,9 @@ socket.on( 'compiler.message', stats => {
     store.dispatch(handleCompilerMessage(stats));
 });
 
-window.onbeforeunload = function(e) {
-    store.dispatch(saveProject());
-};
+//window.onbeforeunload = function(e) {
+//    store.dispatch(saveProject());
+//};
 
 ReactDOM.render(
     <Provider store={store}>

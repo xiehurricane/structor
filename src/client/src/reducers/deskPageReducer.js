@@ -274,7 +274,6 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                     state.selectComponentCounter++;
                     state.model = result.projectModel;
                     state.modelChangeCounter++;
-                    console.log('Current Id for copy: ' + state.selectedUmyIdToCopy + ' & current selected id: ' + state.selectedUmyId);
                 }
                 return state;
             })();
@@ -439,6 +438,14 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 state.model.pages[state.currentPageIndex].pageTitle = payload.pageTitle;
                 state.model.pages[state.currentPageIndex].pageProps = payload.pageProps;
                 state.model.pages[state.currentPageIndex].pageScript = payload.pageScript;
+                console.log('Moving page into index route position: ' + payload.makeIndexRoute);
+                if(payload.makeIndexRoute && state.model.pages.length > 1){
+                    const tempModel = state.model.pages.splice(state.currentPageIndex, 1)[0];
+                    if(tempModel){
+                        state.model.pages.splice(0, 0, tempModel);
+                        state.currentPageIndex = 0;
+                    }
+                }
                 state.currentPageName = payload.pageName;
                 state.currentPagePath = payload.pagePath;
                 state.reloadPageCounter++;
@@ -644,6 +651,7 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 state.selectComponentCounter++;
                 state.model = result.projectModel;
                 state.modelChangeCounter++;
+                state.quickPasteModeInModelByName = null;
                 return state;
             })();
 

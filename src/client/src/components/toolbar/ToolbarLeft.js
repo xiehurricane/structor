@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { saveProject, exportApplication } from '../../actions/applicationActions.js';
 import * as DeskActions from '../../actions/deskActions.js';
+import { commandReloadPage } from '../../actions/deskPageActions.js';
 import { showModalProxySetup } from '../../actions/modalProxySetupActions.js';
 
 class ToolbarLeft extends Component {
@@ -138,6 +139,16 @@ class ToolbarLeft extends Component {
                         title="Switch to view page mode">
                         <span className="fa fa-hand-pointer-o" />
                     </Button>
+
+                    <Button
+                        bsStyle="default"
+                        style={{marginTop: '1em', width: '100%'}}
+                        onClick={this.props.commandReloadPage}
+                        data-toggle="tooltip"
+                        data-placement="right"
+                        title="Reload current page. State will be lost.">
+                        <span className="fa fa-refresh" />
+                    </Button>
                     {/*
                     <Button
                         bsStyle={this.props.isDocumentMode ? 'primary' : 'default'}
@@ -174,7 +185,8 @@ let mappedActions = Object.assign({}, DeskActions,
     {
         showModalProxySetup,
         saveProject,
-        exportApplication
+        exportApplication,
+        commandReloadPage
     }
 );
 

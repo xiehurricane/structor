@@ -5,6 +5,7 @@ import * as ModalComponentGeneratorActions from '../../actions/modalComponentGen
 
 import FormComponentName from './FormComponentName.js';
 import FormGeneratorList from './FormGeneratorList.js';
+import FormGeneratorMetaInfo from './FormGeneratorMetaInfo.js';
 import FormGeneratedSourceCode from './FormGeneratedSourceCode.js';
 
 class WizardGenerateComponent extends Component {
@@ -41,11 +42,21 @@ class WizardGenerateComponent extends Component {
                 break;
             case 2:
                 stepComponent = (
+                    <FormGeneratorMetaInfo
+                        formStyle={formStyle}
+                        metaModel={this.props.metaModel}
+                        metaHelp={this.props.metaHelp}
+                        onBackStep={this.props.startStep1}
+                        onSubmitStep={this.props.submitStep2}/>
+                );
+                break;
+            case 3:
+                stepComponent = (
                     <FormGeneratedSourceCode
                         formStyle={formStyle}
                         componentSourceDataObject={this.props.componentSourceDataObject}
-                        onBackStep={this.props.startStep1}
-                        onSubmitStep={this.props.submitStep2}/>
+                        onBackStep={this.props.startStep2}
+                        onSubmitStep={this.props.submitStep3}/>
                 );
                 break;
             default:

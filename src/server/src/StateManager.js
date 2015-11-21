@@ -7,8 +7,8 @@ class StateManager {
         this.state = fromJS({
             projectState: 'unknown',
             client: {
-                //serviceURL: 'http://helmetrex.com',
-                serviceURL: 'http://localhost',
+                serviceURL: 'http://helmetrex.com',
+                //serviceURL: 'http://localhost',
                 user: null,
                 pass: null
             },
@@ -39,6 +39,9 @@ class StateManager {
                 project:{
                     config: {
                         fileName: 'config.json'
+                    },
+                    webpackConfig: {
+                        fileName: 'webpack.config.js'
                     },
                     templates: {
                         dirName: 'templates'
@@ -146,6 +149,7 @@ class StateManager {
         const docsComponentsDirPath = path.join(docsDirPath, this.getIn('storage.project.docsComponents.dirName'));
         const defaultsDirPath = path.join(builderDirPath, this.getIn('storage.project.defaults.dirName'));
         const configFilePath = path.join(builderDirPath, this.getIn('storage.project.config.fileName'));
+        const webpackConfigFilePath = path.join(builderDirPath, this.getIn('storage.project.webpackConfig.fileName'));
         const proxyConfigFilePath = path.join(builderDirPath, this.getIn('storage.project.proxyConfig.fileName'));
         const pageForDeskFilePath = path.join(sourceDirPath, this.getIn('storage.project.pageForDesk.fileName'));
         const projectEntryPointFilePath = path.join(sourceDirPath, this.getIn('storage.project.projectEntryPoint.fileName'));
@@ -167,6 +171,7 @@ class StateManager {
         this.setIn('storage.project.docsComponents.dirPath', docsComponentsDirPath);
         this.setIn('storage.project.defaults.dirPath', defaultsDirPath);
         this.setIn('storage.project.config.filePath', configFilePath);
+        this.setIn('storage.project.webpackConfig.filePath', webpackConfigFilePath);
         this.setIn('storage.project.proxyConfig.filePath', proxyConfigFilePath);
         this.setIn('storage.project.pageForDesk.filePath', pageForDeskFilePath);
         this.setIn('storage.project.projectEntryPoint.filePath', projectEntryPointFilePath);

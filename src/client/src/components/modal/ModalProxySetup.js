@@ -38,7 +38,7 @@ class ModalProxySetup extends Component {
                    dialogClassName='umy-modal-overlay'
                    backdrop={true}
                    keyboard={true}
-                   bsSize='medium'
+                   bsSize='small'
                    ref='dialog'
                    animation={true}>
                 <Modal.Header closeButton={true} aria-labelledby='contained-modal-title'>

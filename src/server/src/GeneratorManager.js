@@ -1,3 +1,4 @@
+require('babel-core/register');
 
 import _ from 'lodash';
 import path from 'path';
@@ -28,7 +29,7 @@ class GeneratorManager {
         return this.fileManager.readDirectory(this.sm.getProject('generators.dirPath'), ['generator.json'])
             .then( found => {
                 if(!found.files || found.files.length <= 0){
-                    throw Error('Current project does not have a generator, please add a generator.');
+                    throw Error('Current project does not have generators.');
                 }
                 return found.files.reduce(
                     (sequence, filePath) => {
@@ -62,7 +63,7 @@ class GeneratorManager {
         return this.fileManager.readDirectory(this.sm.getProject('generators.dirPath'), ['generator.json'])
             .then( found => {
                 if(!found.files || found.files.length <= 0){
-                    throw Error('Current project does not have a generator, please add a generator.');
+                    throw Error('Current project does not have generators.');
                 }
                 let generatorList = [];
                 let chain = found.files.reduce(
@@ -110,6 +111,9 @@ class GeneratorManager {
                 componentName: userInputObj.componentName,
                 groupName: userInputObj.groupName,
                 indexFilePath: this.sm.getProject('index.filePath')
+            },
+            generator: {
+                name: generatorName
             }
         };
 
@@ -142,6 +146,8 @@ class GeneratorManager {
                     if(!generatorObj.config.component){
                         throw Error('Generator ' + generatorObj.filePath + ' configuration does not have component section.');
                     }
+                    dataObj.generator.filePath = generatorObj.filePath;
+                    dataObj.generator.dirPath = generatorObj.dirPath;
                     dataObj.component.outputFilePath =
                         path.join(
                             this.sm.getProject('dirPath'),
@@ -165,7 +171,7 @@ class GeneratorManager {
                                 outputFilePath: path.join(
                                     this.sm.getProject('dirPath'),
                                     pathResolver.replaceInPath( module.destDirPath, replaceInfoObj ),
-                                    pathResolver.replaceInPath( module.name, replaceInfoObj ) + '.js'
+                                    pathResolver.replaceInPath( module.name, replaceInfoObj )
                                 ),
                                 name: pathResolver.replaceInPath( module.name, replaceInfoObj ),
                                 generatorScriptPath: path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), module.script),
@@ -180,7 +186,14 @@ class GeneratorManager {
             });
     }
 
-    doGeneration(componentModel, generatorName, userInputObj){
+    doPreGeneration(componentModel, generatorName, userInputObj){
+        return this.createDataObject(componentModel, generatorName, userInputObj)
+            .then( dataObj => {
+                return this.preGenerateText(dataObj.component.generatorScriptPath, dataObj) ;
+            });
+    }
+
+    doGeneration(componentModel, generatorName, userInputObj, meta){
         return this.createDataObject(componentModel, generatorName, userInputObj)
             .then( dataObj => {
 
@@ -192,9 +205,9 @@ class GeneratorManager {
 
                 sequence = sequence.then( () => {
                     let componentData = pathResolver.resolveFromComponentPerspective(dataObj);
-                    return this.generateText(componentData.component.generatorScriptPath, componentData)
+                    componentData.meta = meta;
+                    return this.generateText(componentData.component.generatorScriptPath, componentData, false)
                         .then( sourceCode => {
-
                             generatedObj.component.sourceCode = sourceCode;
                             generatedObj.component.outputFilePath = componentData.component.outputFilePath;
                             generatedObj.component.relativeFilePathInIndex = componentData.component.relativeFilePathInIndex;
@@ -203,17 +216,18 @@ class GeneratorManager {
                         });
                 });
 
-
                 _.forOwn(dataObj.modules, (value, prop) => {
                     sequence = sequence.then( () => {
                         try{
                             let moduleData = pathResolver.resolveFromModulePerspective(dataObj, prop);
-                            return this.generateText(value.generatorScriptPath, moduleData)
+                            moduleData.meta = meta;
+                            return this.generateText(value.generatorScriptPath, moduleData, false)
                                 .then(sourceCode => {
                                     generatedObj.modules[prop] = {
                                         sourceCode: sourceCode,
                                         outputFilePath: moduleData.modules[prop].outputFilePath,
-                                        name: moduleData.modules[prop].name
+                                        name: moduleData.modules[prop].name,
+                                        id: prop
                                     };
                                 });
                         } catch (e){
@@ -237,16 +251,18 @@ class GeneratorManager {
         let sequence = Promise.resolve();
 
         _.forOwn(generatedObj.modules, (value, prop) => {
-            sequence = sequence.then(() => {
-                return this.fileManager.ensureFilePath(value.outputFilePath)
-                    .then(() => {
-                        return this.fileManager.writeFile(
-                            value.outputFilePath,
-                            value.sourceCode,
-                            true
-                        )
-                    });
-            });
+            if(value.sourceCode && value.sourceCode.length > 0){
+                sequence = sequence.then(() => {
+                    return this.fileManager.ensureFilePath(value.outputFilePath)
+                        .then(() => {
+                            return this.fileManager.writeFile(
+                                value.outputFilePath,
+                                value.sourceCode,
+                                false
+                            )
+                        });
+                });
+            }
         });
 
         sequence = sequence.then( () => {
@@ -255,7 +271,7 @@ class GeneratorManager {
                     return this.fileManager.writeFile(
                         generatedObj.component.outputFilePath,
                         generatedObj.component.sourceCode,
-                        true
+                        false
                     )
                         .then(() => {
                             return this.indexManager.addComponent(
@@ -269,44 +285,40 @@ class GeneratorManager {
         return sequence;
     }
 
+    preGenerateText(scriptFilePath, dataObj){
+
+        let module = require(scriptFilePath);
+        return module.preProcess(dataObj).catch( err => {
+            throw Error('Generator script failed. ' + err + '. File path: ' + scriptFilePath);
+        });
+
+    }
+
     generateText(scriptFilePath, dataObj, formatJS = true){
-        return new Promise( (resolve, reject) => {
-            try{
-                let scriptRealPath = require.resolve(scriptFilePath);
-                if(scriptRealPath && require.cache[scriptRealPath]){
-                    delete require.cache[scriptRealPath];
+
+        let module = require(scriptFilePath);
+        return module.process(dataObj).then( sourceCode => {
+            if (formatJS) {
+                let prevSourceCode = sourceCode;
+                try {
+                    return formatter.formatJsFile(sourceCode);
+                } catch (e) {
+                    let errorFilePath = path.join(this.sm.getProject('dirPath'), '.errors', 'generators', path.basename(scriptFilePath));
+                    this.fileManager.ensureFilePath(errorFilePath)
+                        .then(() => {
+                            this.fileManager.writeFile(errorFilePath, prevSourceCode);
+                        })
+                        .catch(err => {
+                            console.error('Writing bad file. ' + err);
+                        });
+                    throw e;
                 }
-                let module = require(scriptFilePath);
-                module(
-                    dataObj,
-                    sourceCode => {
-                        if (formatJS) {
-                            let prevResult = sourceCode;
-                            try {
-                                let result = formatter.formatJsFile(sourceCode);
-                                resolve(result);
-                            } catch (e) {
-                                let errorFilePath = path.join(this.sm.getProject('dirPath'), '.errors', 'generators', path.basename(scriptFilePath));
-                                this.fileManager.ensureFilePath(errorFilePath)
-                                    .then(() => {
-                                        this.fileManager.writeFile(errorFilePath, prevResult)
-                                    })
-                                    .catch(err => {
-                                        console.error('Writing bad file. Error: ' + err);
-                                    });
-                                reject('Validation failed. ' + e + '. Generator script file path: ' + scriptFilePath);
-                            }
-                        } else {
-                            resolve(sourceCode);
-                        }
-                    },
-                    err => {
-                        reject('Processing generator\'s method is failed. Error: ' + err + '. File path: ' + scriptFilePath);
-                    }
-                );
-            } catch(e){
-                reject('Loading generator\'s script is failed. Error: ' + e + '. File path: ' + scriptFilePath);
+            } else {
+                return sourceCode;
             }
+        })
+        .catch( err => {
+            throw Error('Generator script failed. ' + err + '. File path: ' + scriptFilePath);
         });
 
     }

@@ -21,10 +21,8 @@ class OptionInput extends Component {
 
         this.handleChangeInputValue = this.handleChangeInputValue.bind(this);
         this.handleChangeCheckboxValue = this.handleChangeCheckboxValue.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
-        this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
     }
 
     getValueFromObject(){
@@ -46,6 +44,8 @@ class OptionInput extends Component {
         this.setState({
             valueObject: valueObject
         });
+        e.persist();
+        this.delayedChangeInputValue(e);
     }
 
     handleChangeCheckboxValue(e) {
@@ -65,12 +65,6 @@ class OptionInput extends Component {
 
     }
 
-    handleChange(){
-        if(this.props.onChangeValue){
-            this.props.onChangeValue(this.state.valueObject);
-        }
-    }
-
     handleDelete(e){
         if(this.props.onDeleteValue){
             this.props.onDeleteValue(this.props.path);
@@ -83,12 +77,6 @@ class OptionInput extends Component {
         }
     }
 
-    handleOnKeyDown(e){
-        if(e.keyCode == 13 || e.keyCode == 27){
-            this.handleChange();
-        }
-    }
-
     getTypeOfProperty(propertyValue){
         if(_.isString(propertyValue)) {
             return 'text';
@@ -97,6 +85,14 @@ class OptionInput extends Component {
         } else if(_.isBoolean(propertyValue)){
             return 'checkbox';
         }
+    }
+
+    componentWillMount(){
+        this.delayedChangeInputValue = _.debounce((e) => {
+            if(this.props.onChangeValue){
+                this.props.onChangeValue(this.state.valueObject);
+            }
+        }, 1000);
     }
 
     componentDidMount(){
@@ -119,7 +115,6 @@ class OptionInput extends Component {
         };
         if(this.state.propertyType === 'checkbox') {
             style.width = '1em';
-            //console.log('[OptionInput] checkbox get value: ' + this.getValueFromObject());
             element = (
                 <div style={{position: 'relative'}}>
                 <input ref="inputElement"
@@ -145,8 +140,7 @@ class OptionInput extends Component {
                            value={this.getValueFromObject()}
                            style={style}
                            onFocus={this.handleFocus}
-                           onChange={this.handleChangeInputValue}
-                           onKeyDown={this.handleOnKeyDown}/>
+                           onChange={this.handleChangeInputValue}/>
                     <span
                         style={{position: 'absolute', top: '0.5em', left: '-1em', cursor: 'pointer'}}
                         className="fa fa-trash-o"

@@ -50,7 +50,7 @@ class ProjectThumbnail extends Component {
                                     <span className='fa fa-external-link fa-fw'></span>&nbsp;Details
                                 </a>
                                 <a href='#' style={{marginLeft: '1em'}} onClick={this.handleClone}>
-                                    <span >Clone</span>
+                                    <span className='fa fa-cloud-download fa-fw'></span>&nbsp;<span >Clone</span>
                                 </a>
                             </div>
                         </div>
@@ -59,15 +59,15 @@ class ProjectThumbnail extends Component {
                         <span className="fa fa-star fa-fw"></span>
                         <small style={{ marginLeft: '0.5em' }}>{projectInfo.starsCount}</small>
                     </p>
-                    <hr style={{marginTop: '5px', marginBottom: '5px'}}></hr>
-                    <div style={{height: '17em', overflow: 'auto'}}>
+                    {/*<hr style={{marginTop: '5px', marginBottom: '5px'}}></hr>*/}
+                    <div style={{height: '17em', overflow: 'hidden'}}>
                         { !!projectInfo.screenshotUrl ?
                             <img style={{width: '100%'}} src={projectInfo.screenshotUrl}></img> :
                             <p>File 'screenshot.png' is missing, please add one into the root folder on GitHub</p>
                         }
                     </div>
-                    <div style={{height: '4em', overflow: 'hidden', marginTop: '0.5em'}}>
-                        <p>{innerHtml}</p>
+                    <div style={{height: '6em', overflow: 'hidden', marginTop: '1em'}}>
+                        <h5>{innerHtml}</h5>
                     </div>
                 </Panel>
 

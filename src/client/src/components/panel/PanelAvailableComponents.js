@@ -91,11 +91,9 @@ class PanelAvailableComponents extends Component {
                     libGroups.push(
                         <div className="panel panel-default" key={key}>
                             <div className="panel-heading" role="tab" id="headingOne">
-                                <h4 className="panel-title">
-                                    <a role="button" data-toggle="collapse" href={'#' + id} aria-expanded="true" aria-controls={id}>
-                                        {groupName}
-                                    </a>
-                                </h4>
+                                <a style={{outline: '0'}} role="button" data-toggle="collapse" href={'#' + id} aria-expanded="true" aria-controls={id}>
+                                    {groupName}
+                                </a>
                             </div>
                             <div id={id} className={"panel-collapse collapse " + collapsed} role="tabpanel" aria-labelledby={id}>
                                 <div className="list-group">

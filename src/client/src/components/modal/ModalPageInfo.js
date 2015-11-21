@@ -43,7 +43,7 @@ class ModalPageInfo extends Component {
         const opts = this.refs.formPageName.getOptions();
         const pageScript = this.refs.pageScriptEditor.getSourceCode();
         const pageProps = this.refs.pagePropsEditor.getSourceCode();
-        this.props.saveModalPageInfo(opts.pageName, opts.pagePath, opts.pageTitle,  pageProps, pageScript);
+        this.props.saveModalPageInfo(opts.pageName, opts.pagePath, opts.pageTitle, opts.makeIndexRoute, pageProps, pageScript);
     }
 
     render(){
@@ -114,7 +114,7 @@ class ModalPageInfo extends Component {
                    dialogClassName='umy-modal-overlay'
                    backdrop={true}
                    keyboard={true}
-                   bsSize='medium'
+                   bsSize='large'
                    ref='dialog'
                    animation={true}>
                 {/*<Modal.Header closeButton={false} aria-labelledby='contained-modal-title'>

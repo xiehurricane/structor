@@ -438,12 +438,36 @@ class Api {
         return this.generatorManager.getGeneratorList();
     }
 
-    generateComponentCode(options){
+    getGenerationMetaInf(options){
         return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorName'])
             .then( () => {
+                const { componentModel, generatorName, componentName, componentGroup: groupName, meta } = options;
+                return this.generatorManager.doPreGeneration(
+                    componentModel,
+                    generatorName,
+                    {
+                        componentName,
+                        groupName
+                    }
+                )
+                    .then( metaInfoObj => {
+                        return metaInfoObj;
+                    });
+            });
+    }
+
+    generateComponentCode(options){
+        return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorName', 'meta'])
+            .then( () => {
+                const { componentModel, generatorName, componentName, componentGroup: groupName, meta } = options;
                 return this.generatorManager.doGeneration(
-                    options.componentModel, options.generatorName,
-                    { componentName: options.componentName, groupName: options.componentGroup }
+                    componentModel,
+                    generatorName,
+                    {
+                        componentName,
+                        groupName
+                    },
+                    meta
                 )
                     .then( generatedObj => {
                         return generatedObj;

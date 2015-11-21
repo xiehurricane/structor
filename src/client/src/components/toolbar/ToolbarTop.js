@@ -85,6 +85,7 @@ class ToolbarTop extends Component {
         return (
             this.props.currentPagePath !== nextProps.currentPagePath
             || this.props.modelChangeCounter < nextProps.modelChangeCounter
+            || this.props.reloadPageCounter < nextProps.reloadPageCounter
             || this.props.iframeWidth !== nextProps.iframeWidth
             || this.props.inClipboard !== nextProps.inClipboard
             || this.props.isAvailableComponentsButtonActive !== nextProps.isAvailableComponentsButtonActive
@@ -151,28 +152,17 @@ class ToolbarTop extends Component {
             );
         } else {
             let pageActionsGroup = [];
-            pageActionsGroup.push(
-                    <button
-                        key="reloadPageButton"
-                        className="btn btn-default btn-xs"
-                        onClick={this.handleReloadPage}
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Reload current page">
-                        <span className="fa fa-refresh"></span>
-                    </button>
-            );
-            pageActionsGroup.push(
-                    <button
-                        key="copyPageButton"
-                        className="btn btn-default btn-xs"
-                        onClick={this.handleCopyPage}
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="Make copy of current page">
-                        <span className="fa fa-copy"></span>
-                    </button>
-            );
+            //pageActionsGroup.push(
+            //        <button
+            //            key="reloadPageButton"
+            //            className="btn btn-default btn-xs"
+            //            onClick={this.handleReloadPage}
+            //            data-toggle="tooltip"
+            //            data-placement="bottom"
+            //            title="Reload current page">
+            //            <span className="fa fa-refresh"></span>
+            //        </button>
+            //);
             pageActionsGroup.push(
                     <button
                         key="addPageButton"
@@ -180,9 +170,20 @@ class ToolbarTop extends Component {
                         onClick={this.handleAddNewPage}
                         data-toggle="tooltip"
                         data-placement="bottom"
-                        title="Create new blank page">
+                        title="Create new page">
                         <span className="fa fa-plus"></span>
                     </button>
+            );
+            pageActionsGroup.push(
+                <button
+                    key="copyPageButton"
+                    className="btn btn-default btn-xs"
+                    onClick={this.handleCopyPage}
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title="Duplicate current page">
+                    <span className="fa fa-copy"></span>
+                </button>
             );
             pageActionsGroup.push(
                     <div key="pageWidthButton" className="btn-group" role="group">
@@ -336,6 +337,7 @@ function mapStateToProps(state) {
         model: deskPage.model,
         modelChangeCounter: deskPage.modelChangeCounter,
         currentPagePath: deskPage.currentPagePath,
+        reloadPageCounter: deskPage.reloadPageCounter,
         inClipboard: deskPage.inClipboard,
         clipboardMode: deskPage.clipboardMode
     };

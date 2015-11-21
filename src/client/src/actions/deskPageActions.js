@@ -269,9 +269,9 @@ export function deleteCurrentPage(){
     }
 }
 
-export function changeCurrentPageInfo(pageName, pagePath, pageTitle, pageProps, pageScript){
+export function changeCurrentPageInfo(pageName, pagePath, pageTitle, makeIndexRoute, pageProps, pageScript){
     return {
         type: CHANGE_CURRENT_PAGE_INFO,
-        payload: { pageName, pagePath, pageTitle, pageProps, pageScript }
+        payload: { pageName, pagePath, pageTitle, makeIndexRoute, pageProps, pageScript }
     }
 }

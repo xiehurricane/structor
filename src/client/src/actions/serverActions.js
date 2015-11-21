@@ -151,7 +151,7 @@ export function invokeSilently(method, options, transferActions = [], transferOp
                     });
                 }
             }).catch( error => {
-                console.log('request failed', error);
+                console.error('request failed', error);
             })
 
     }

@@ -80,6 +80,9 @@ const initialState = {
         groupName: null,
         componentName: null,
         generatorList: [],
+        selectedGeneratorName: null,
+        metaModel: null,
+        metaHelp: null,
         componentSourceDataObject: null,
         generatedComponentsCounter: 0
     },

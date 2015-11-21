@@ -14,6 +14,8 @@ export const COMPONENT_GENERATOR_START_STEP_1 = 'COMPONENT_GENERATOR_START_STEP_
 export const COMPONENT_GENERATOR_SUBMIT_STEP_1 = 'COMPONENT_GENERATOR_SUBMIT_STEP_1';
 export const COMPONENT_GENERATOR_START_STEP_2 = 'COMPONENT_GENERATOR_START_STEP_2';
 export const COMPONENT_GENERATOR_SUBMIT_STEP_2 = 'COMPONENT_GENERATOR_SUBMIT_STEP_2';
+export const COMPONENT_GENERATOR_START_STEP_3 = 'COMPONENT_GENERATOR_START_STEP_3';
+export const COMPONENT_GENERATOR_SUBMIT_STEP_3 = 'COMPONENT_GENERATOR_SUBMIT_STEP_3';
 export const COMPONENT_GENERATOR_RESET_GENERATED_COUNTER = 'COMPONENT_GENERATOR_RESET_GENERATED_COUNTER';
 
 export function showModalComponentGenerator(){
@@ -100,26 +102,25 @@ export function startStep1(){
 export function submitStep1(options){
 
     return (dispatch, getState) => {
+
+        const { generatorName } = options;
+
         const state = getState();
         const { deskPage: { searchResult }, modalComponentGenerator: { groupName, componentName } } = state;
-        const { generatorName } = options;
         let model = Utils.fulex(searchResult.found);
         Utils.cleanPropsUmyId(model);
-
         dispatch(
-            ServerActions.invoke('generateComponentCode',
+            ServerActions.invoke('getGenerationMetaInf',
                 {
                     componentGroup: groupName,
                     componentName: componentName,
                     componentModel: model,
                     generatorName: generatorName
                 },
-                [COMPONENT_GENERATOR_START_STEP_2]
+                [COMPONENT_GENERATOR_START_STEP_2],
+                { generatorName }
             )
         );
-
-        //dispatch({type: COMPONENT_GENERATOR_SUBMIT_STEP_1});
-
     }
 
 }
@@ -127,12 +128,55 @@ export function submitStep1(options){
 export function startStep2(options){
 
     return {
-        type: COMPONENT_GENERATOR_START_STEP_2
+        type: COMPONENT_GENERATOR_START_STEP_2,
+        payload: {
+        }
     }
 
 }
 
 export function submitStep2(options){
+
+    return (dispatch, getState) => {
+        try{
+            const state = getState();
+            const { deskPage: { searchResult }, modalComponentGenerator: { groupName, componentName, selectedGeneratorName } } = state;
+            const metaModel = JSON.parse(options.metaModel);
+            let model = Utils.fulex(searchResult.found);
+            Utils.cleanPropsUmyId(model);
+
+            dispatch(
+                ServerActions.invoke('generateComponentCode',
+                    {
+                        componentGroup: groupName,
+                        componentName: componentName,
+                        componentModel: model,
+                        generatorName: selectedGeneratorName,
+                        meta: metaModel
+                    },
+                    [COMPONENT_GENERATOR_START_STEP_3],
+                    {metaModel: options.metaModel}
+                )
+            );
+        } catch(e){
+            dispatch(ServerActions.setServerMessage('Error in parsing meta model: ' + e.message));
+        }
+
+
+        //dispatch({type: COMPONENT_GENERATOR_SUBMIT_STEP_2});
+
+    }
+}
+
+export function startStep3(options){
+
+    return {
+        type: COMPONENT_GENERATOR_START_STEP_3
+    }
+
+}
+
+export function submitStep3(options){
 
     return (dispatch, getState) => {
 
@@ -147,7 +191,7 @@ export function submitStep2(options){
                 [
                     DeskPageActions.REWRITE_MODEL_NODE,
                     HIDE_MODAL_COMPONENT_GENERATOR,
-                    COMPONENT_GENERATOR_SUBMIT_STEP_2
+                    COMPONENT_GENERATOR_SUBMIT_STEP_3
                 ],
                 {
                     type: componentName,

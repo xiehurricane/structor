@@ -50,29 +50,25 @@ class Application extends Component {
 
     render() {
 
-        const { userName, stage, packageVersion, projectDirectoryStatus } = this.props;
+        const { stage, packageVersion, projectDirectoryStatus } = this.props;
 
         // -- Navigation Bar -------------------------------------------------------------------------------------------
         var navBar = (
             <Navbar
                 staticTop={true}
-                fixedTop={true} toggleNavKey={0}>
-                <div className='umy-logo' style={{position: 'absolute', left: 'calc(50% - 20px)', top: '0'}}></div>
-                <CollapsibleNav eventKey={0}>
-                    <Nav navbar>
-                        <div style={{display: 'table'}}>
-                            <div style={{display: 'table-row'}}>
-                                <div style={{display: 'table-cell', verticalAlign: 'middle', paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em'} }>
-                                    <p style={{whiteSpace: 'nowrap'}} className={'text-left'}>
-                                        <span>Structor</span>
-                                        <span className='text-muted' style={{marginLeft: '0.2em'}}>{packageVersion}</span>
-                                    </p>
-                                </div>
-                                <div style={{display: 'table-cell', verticalAlign: 'middle', paddingLeft: '0.5em', paddingRight: '0.5em', paddingTop: '0.5em', paddingBottom: '0.5em', width: '10%'} }></div>
-                            </div>
-                        </div>
-                    </Nav>
-                    <Nav navbar right={true}>
+                fixedTop={true}>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <div className='umy-logo' style={{position: 'absolute', left: 'calc(50% - 20px)', top: '0'}}></div>
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                <Navbar.Collapse>
+                    <Navbar.Text>
+                        <span>Structor</span>
+                        <span className='text-muted' style={{marginLeft: '0.2em'}}>{packageVersion}</span>
+                    </Navbar.Text>
+                    <Nav pullRight={true}>
                         <NavItem href="https://groups.google.com/forum/#!forum/structor-forum" target="_blank">
                             <span className="fa fa-comments-o fa-fw"></span>&nbsp;Forum
                         </NavItem>
@@ -80,7 +76,7 @@ class Application extends Component {
                             <span className='fa fa-facebook-square fa-fw'></span>&nbsp;Group
                         </NavItem>
                     </Nav>
-                </CollapsibleNav>
+                </Navbar.Collapse>
             </Navbar>
         );
 

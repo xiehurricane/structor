@@ -69,7 +69,7 @@ class FormGeneratedSourceCode extends Component {
             filePath = component.outputFilePath;
         } else {
             let selectedModule = modules[this.state.selected];
-            sourceCode = selectedModule.sourceCode;
+            sourceCode = selectedModule.sourceCode || '// Empty';
             filePath = selectedModule.outputFilePath;
         }
 
@@ -121,7 +121,7 @@ class FormGeneratedSourceCode extends Component {
                                 sourceName={this.state.selected}
                                 mode='ace/mode/jsx'
                                 isReadOnly={true}
-                                style={{ height: '400px', width: '690px'}}
+                                style={{ height: '400px', width: '100%'}}
                                 sourceCode={sourceCode}/>
                         </td>
                     </tr>

@@ -5,6 +5,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import webpackBuilderMiddleware from './webpackBuilderMiddleware.js';
 
+
 class MiddlewareCompilerManager {
 
     constructor(sm){
@@ -17,7 +18,10 @@ class MiddlewareCompilerManager {
 
     getDevMiddlewareCompiler(){
         if(this.compiler === null){
-            this.compiler = webpack({
+
+            let configPart = require(this.sm.getProject('webpackConfig.filePath')) || {};
+            //console.log(JSON.stringify(configPart, null, 4));
+            const webpackConfig = _.merge({
                 name: "browser",
                 entry: [
                     'webpack-hot-middleware/client?path=/' + this.sm.getProject('desk.dirName') + '/a&overlay=false',
@@ -52,9 +56,7 @@ class MiddlewareCompilerManager {
                                     }
                                 }
                             }
-                        },
-                        { test: /\.css$/, exclude: /node_modules/, loader: "style-loader!css-loader" },
-                        { test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)([\?]?.*)$/, exclude: /node_modules/, loader: 'url-loader' }
+                        }
                     ]
                 },
                 resolve: {
@@ -66,7 +68,17 @@ class MiddlewareCompilerManager {
                 externals: {
                     "jquery": "jQuery"
                 }
+            },
+            configPart,
+            (a, b) => {
+                if (_.isArray(a)) {
+                    return a.concat(b);
+                }
             });
+            //console.log(JSON.stringify(webpackConfig, null, 4));
+
+            this.compiler = webpack(webpackConfig);
+
         }
         return this.compiler;
     }

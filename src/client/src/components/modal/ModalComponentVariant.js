@@ -34,7 +34,7 @@ class ModalComponentVariant extends Component {
                    dialogClassName='umy-modal-overlay'
                    backdrop={true}
                    keyboard={true}
-                   bsSize='medium'
+                   bsSize='small'
                    ref='dialog'
                    animation={true}>
                 {/*<Modal.Header closeButton={false} aria-labelledby='contained-modal-title'>

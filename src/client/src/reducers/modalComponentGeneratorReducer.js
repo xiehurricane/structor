@@ -52,7 +52,7 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
 
         case Actions.COMPONENT_GENERATOR_SUBMIT_STEP_1: //--------------------------------------------------------------
             return (() => {
-                state = Utils.fulex(state);
+                //state = Utils.fulex(state);
                 return state;
             })();
 
@@ -60,11 +60,30 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
             return (() => {
                 state = Utils.fulex(state);
                 state.step = 2;
-                state.componentSourceDataObject = payload.data;
+                if(payload.data && payload.options){
+                    state.metaModel = JSON.stringify(payload.data.metaModel, null, 4);
+                    state.metaHelp = payload.data.metaHelp;
+                    state.selectedGeneratorName = payload.options.generatorName;
+                }
                 return state;
             })();
 
         case Actions.COMPONENT_GENERATOR_SUBMIT_STEP_2: //--------------------------------------------------------------
+            return (() => {
+                //state = Utils.fulex(state);
+                return state;
+            })();
+
+        case Actions.COMPONENT_GENERATOR_START_STEP_3: //---------------------------------------------------------------
+            return (() => {
+                state = Utils.fulex(state);
+                state.step = 3;
+                state.metaModel = payload.options.metaModel;
+                state.componentSourceDataObject = payload.data;
+                return state;
+            })();
+
+        case Actions.COMPONENT_GENERATOR_SUBMIT_STEP_3: //--------------------------------------------------------------
             return (() => {
                 state = Utils.fulex(state);
                 state.generatedComponentsCounter++;
