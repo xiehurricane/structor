@@ -242,12 +242,14 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 if(searchResult){
                     searchResult.found.type = payload.options.type || searchResult.found.type;
                     searchResult.found.children = payload.options.children || searchResult.found.children;
+
                     searchResult.found.props = payload.options.props || searchResult.found.props;
                     _.forOwn(searchResult.found.props, (value, prop) => {
                         if(value && _.isObject(value) && value.type){
                             Utils.setupPropsUmyId(value);
                         }
                     });
+
                     searchResult.found.text = payload.options.text || searchResult.found.text;
                     searchResult.found.props['data-umyid'] = state.selectedUmyId;
                 }
