@@ -37,6 +37,11 @@ Apparently, we can admit that this tool having such features can be used not onl
 * [Wiki](https://github.com/ipselon/structor/wiki)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
 
+### Tutorials
+
+* [Fetch data from GitHub (part 1)](https://github.com/ipselon/structor/wiki/Structor-tutorial:-%22Fetch-data-from-GitHub%22-(part-1))
+* [Fetch data from GitHub (part 2)](https://github.com/ipselon/structor/wiki/Structor-tutorial:-%22Fetch-data-from-GitHub%22-(part-2))
+
 ### Getting started
 
 Install Structor in global scope:
