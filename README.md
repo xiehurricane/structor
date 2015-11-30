@@ -16,11 +16,8 @@ Watch the presentation about how Structor works. This presentation shows all cap
 * Video tutorials: [Fetch data from GitHub](https://www.youtube.com/watch?v=AY65e6Ry_rY&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1)
 
 ### Description
-Structor is former React UI Builder. If you are not familiar with React UI Builder you can watch the video here: [https://www.youtube.com/watch?v=5nqOFSjXKPI](https://www.youtube.com/watch?v=5nqOFSjXKPI).
 
-But, it is better to read the following text because the builder has absolutely redesigned look and feel and has a lot of new features.
-
-First of all, Structor is a visual development environment for node.js Web applications with React UI.
+Structor is a visual development environment for node.js Web applications with React UI.
 
 The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can find and download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
 
