@@ -1,6 +1,6 @@
 {
   "name": "structor",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "A user interface builder for node.js Web applications with React UI",
   "main": "structor.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "url": "git+https://github.com/ipselon/structor.git"
   },
   "author": "Alexander Pustovalov",
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ipselon/structor/issues"
   },
@@ -35,8 +35,8 @@
     "babel-plugin-react-transform": "1.1.1",
     "body-parser": "1.14.0",
     "escodegen": "1.7.0",
-    "esformatter": "0.7.3",
-    "esformatter-jsx": "2.3.6",
+    "esformatter": "0.8.1",
+    "esformatter-jsx": "4.0.6",
     "esprima": "2.6.0",
     "esprima-fb": "15001.1001.0-dev-harmony-fb",
     "express": "4.13.3",

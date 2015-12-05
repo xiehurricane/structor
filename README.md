@@ -8,9 +8,6 @@ Structor - a user interface builder for React
 
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
-### Short presentation
-Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
-
 ### Video
 
 * Video tutorials: [Fetch data from GitHub](https://www.youtube.com/watch?v=AY65e6Ry_rY&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1)
@@ -19,7 +16,9 @@ Watch the presentation about how Structor works. This presentation shows all cap
 
 Structor is a visual development environment for node.js Web applications with React UI.
 
-The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can find and download boilerplates - a Structor Market [http://helmetrex.com](http://helmetrex.com).
+The essential part of the builder is a project boilerplate. The boilerplate is a prepacked source code of node.js application in which metainfo included. Using this info Structor knows how to use components included into the package. There is a place where you can find and download boilerplates: 
+
+Structor Market [http://helmetrex.com](http://helmetrex.com).
 
 It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metadata of the project to provide UI building. 
 
@@ -28,9 +27,7 @@ More about the structure of pre-pack and how it is used by Structor please read 
 The builder runs as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
-Switching between two modes: edit mode and live-preview mode gives a feeling as if you are creating the Web app right in the browser. And of course, you can edit the source code in your favorite IDE or text editor and don't worry about page reloading (maybe in rear cases).
-
-Apparently, we can admit that this tool having such features can be used not only in starter prototyping phase of development process, but used during all development process instead of HTTP backend server for Web app.
+Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
 
 ### Documentation
 
@@ -84,4 +81,4 @@ Or if you know repositoires of Structor compatible repos not presented on the ma
 You are welcome to join Discord channel: [#structor](https://discord.gg/0ZcbPKXt5bWioOhk)
 
 #### License
-GNU GENERAL PUBLIC LICENSE Version 3 (GPL-3.0)
+Apache License, Version 2.0 (Apache-2.0)
