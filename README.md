@@ -20,7 +20,7 @@ The essential part of the builder is a project boilerplate. The boilerplate is a
 
 Structor Market [http://helmetrex.com](http://helmetrex.com).
 
-It absolutely doesn't mean that you has to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metadata of the project to provide UI building. 
+It absolutely doesn't mean that you have to strictly follow the rules by which the boilerplate was designed and change the development process you used to follow. Each project is completely hackable and you can change almost everything. For example, if you don't want to use Redux or React Bootstrap in the project you may remove them from the source code. The builder is only the environment which uses metadata of the project to provide UI building. 
 
 More about the structure of pre-pack and how it is used by Structor please read Wiki of the project [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack).
 
