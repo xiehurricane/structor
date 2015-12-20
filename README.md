@@ -2,10 +2,11 @@ Structor - a user interface builder for React
 ----------
 
 [![Structor team](https://img.shields.io/badge/slack-Structor%20team-blue.svg?style=flat)](https://structor.slack.com)
-[![Join the chat at https://gitter.im/ipselon/structor](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ipselon/structor?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![structor channel on discord](https://img.shields.io/badge/discord-structor%40reactiflux-0077dd.svg?style=flat)](https://discord.gg/0ZcbPKXt5bWioOhk)
+
 [![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
 [![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
-[![structor channel on discord](https://img.shields.io/badge/discord-structor%40reactiflux-0077dd.svg?style=flat)](https://discord.gg/0ZcbPKXt5bWioOhk)
+
 
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
