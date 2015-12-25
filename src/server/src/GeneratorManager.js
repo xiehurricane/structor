@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-require('babel-core/register');
-
 import _ from 'lodash';
 import path from 'path';
 import FileManager from './FileManager.js';

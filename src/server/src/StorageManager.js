@@ -356,7 +356,7 @@ class StorageManager {
                                     || file.name === 'src'
                                     || file.name === 'templates'));
                                 });
-                                if(requiredFiles.length === 5){
+                                if(requiredFiles.length >= 5){
                                     return 'ready-to-go';
                                 } else {
                                     throw Error('Directory ' + this.sm.getProject('builder.dirPath') + ' has corrupted structure.');
