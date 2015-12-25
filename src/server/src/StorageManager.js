@@ -170,14 +170,14 @@ class StorageManager {
     }
 
     compileProjectResources() {
-        return this.installPackages()
-            .then( () => {
-                let pageForDeskFilePath = this.sm.getProject('pageForDesk.filePath');
-                var nodeModulesPath = this.sm.getProject('nodeModules.dirPath');
-                return this.compiler.stopWatchCompiler().then( () => {
-                    return this.compiler.compile(pageForDeskFilePath, this.sm.getProject('desk.dirPath'), 'bundle.js', nodeModulesPath);
-                });
-            });
+        return this.installPackages();
+            //.then( () => {
+            //    let pageForDeskFilePath = this.sm.getProject('pageForDesk.filePath');
+            //    var nodeModulesPath = this.sm.getProject('nodeModules.dirPath');
+            //    return this.compiler.stopWatchCompiler().then( () => {
+            //        return this.compiler.compile(pageForDeskFilePath, this.sm.getProject('desk.dirPath'), 'bundle.js', nodeModulesPath);
+            //    });
+            //});
     }
 
     watchProjectResources(callback){
