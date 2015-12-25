@@ -1,7 +1,6 @@
 Structor - a user interface builder for React
 ----------
 
-[![Structor team](https://img.shields.io/badge/slack-Structor%20team-blue.svg?style=flat)](https://structor.slack.com)
 [![structor channel on discord](https://img.shields.io/badge/discord-structor%40reactiflux-0077dd.svg?style=flat)](https://discord.gg/0ZcbPKXt5bWioOhk)
 
 [![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
@@ -86,8 +85,8 @@ The second way:
 The next time you want to open project in Structor, just go to the folder where project is and run ```structor```.
 
 ##### Tips
-To run with different port: ```structor -p <port>```<br/>
-To specify different project's working directory: ```structor -d <path_to_project_dir>```
+* To run with different port: ```structor -p <port>```<br/>
+* To specify different project's working directory: ```structor -d <path_to_project_dir>```
 
 ### How to add own boilerplate to Structor Market
 The source code of all boilerplates which are presented on Structor Market are located on GitHub. Consequently, you can add a reference of your own Structor compatible boilerplate to the market which exists on GitHub. To do that you have to visit [Structor Market](http://helmetrex.com) and enter the name of repository into add form.
