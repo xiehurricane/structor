@@ -10,10 +10,6 @@
     "build-client": "webpack --config ./build-conf/webpack.config.js --progress --colors",
     "build-client-dev": "webpack --config ./build-conf/webpack-dev.config.js --progress --colors --watch"
   },
-  "babel": {
-    "stage": 0,
-    "plugins": []
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ipselon/structor.git"
