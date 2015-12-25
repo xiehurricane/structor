@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import _ from 'lodash';
 import path from 'path';
 import webpack from 'webpack';
@@ -33,6 +32,7 @@ class MiddlewareCompilerManager {
     }
 
     getDevMiddlewareCompiler(){
+        //console.log("inside getDevMiddlewareCompliler");
         if(this.compiler === null){
 
             let configPart = require(this.sm.getProject('webpackConfig.filePath')) || {};
@@ -60,17 +60,19 @@ class MiddlewareCompilerManager {
                         {
                             test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel',
                             query: {
-                                stage: 0,
-                                plugins: [path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-plugin-react-transform')],
-                                extra: {
-                                    "react-transform": {
+                                cacheDirectory: false,
+                                presets: ['react', 'es2015', 'stage-0'],
+                                plugins: [
+                                    [path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-plugin-react-transform'), {
                                         transforms: [{
                                             transform: path.join(this.sm.getServer('nodeModules.dirPath'), 'react-transform-hmr'),
                                             imports: ["react"],
                                             locals: ["module"]
                                         }]
-                                    }
-                                }
+                                    }],
+                                    [path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-plugin-transform-runtime')],
+                                    [path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-plugin-add-module-exports')]
+                                ]
                             }
                         }
                     ]

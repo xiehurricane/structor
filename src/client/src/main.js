@@ -24,7 +24,7 @@ import '../lib/react-widgets/css/react-widgets.css';
 // umyproto libs
 import '../css/umyproto.deskpage.css';
 
-import 'babel-core/polyfill';
+import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import storeManager from './store/storeManager.js';

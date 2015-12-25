@@ -239,14 +239,20 @@ class Api {
                 response.model = jsonModel;
             })
             .then( () => {
+                console.log('Get components tree: ');
                 return this.indexManager.getComponentsTree()
                     .then( componentsTree => {
                         response.componentsTree = componentsTree;
+                        //console.log(JSON.stringify(componentsTree, null, 4));
                     });
             })
             .then( () => {
+                //console.log("Starting compilers: ");
+                //console.log("Starting dev middleware: ");
                 this.app.use(this.middlewareCompilerManager.getDevMiddleware());
+                //console.log("Starting hot middleware: ");
                 this.app.use(this.middlewareCompilerManager.getHotMiddleware());
+                //console.log("Starting builder middleware: ");
                 this.app.use(this.middlewareCompilerManager.getBuilderMiddleware({
                     callback: stats => {
                         this.socketClient.emit('compiler.message', stats);
@@ -257,6 +263,7 @@ class Api {
                 return this.setProjectProxy({});
             })
             .then( () => {
+                //console.log("End opening: ");
                 return response;
             });
     }
