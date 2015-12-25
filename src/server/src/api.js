@@ -239,7 +239,7 @@ class Api {
                 response.model = jsonModel;
             })
             .then( () => {
-                console.log('Get components tree: ');
+                //console.log('Get components tree: ');
                 return this.indexManager.getComponentsTree()
                     .then( componentsTree => {
                         response.componentsTree = componentsTree;
