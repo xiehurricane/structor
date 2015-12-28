@@ -1,7 +1,7 @@
 {
   "name": "structor",
   "version": "0.2.5",
-  "description": "A user interface builder for node.js Web applications with React UI",
+  "description": "A user interface builder for Web applications with React UI",
   "main": "structor.js",
   "scripts": {
     "build-server": "gulp --gulpfile ./build-conf/gulpfile.js build-server",
