@@ -24,33 +24,41 @@ const HtmlComponents = {
             placeholder: 'Enter value'
         }
     },
+    'label': {
+        text: 'Label Text'
+    },
+    'fieldset': {
+        children: [
+            {type: 'span', text: 'Empty fieldset'},
+        ]
+    },
     'button': {
         children: [
             {type: 'span', text: 'Button'}
         ]
     },
     'h1':  {
-        children:[
+        children: [
             {type: 'span', text: 'Empty h1'}
         ]
     },
     'h2': {
-        children:[
+        children: [
             {type: 'span', text: 'Empty h2'}
         ]
     },
     'h3': {
-        children:[
+        children: [
             {type: 'span', text: 'Empty h3'}
         ]
     },
     'h4': {
-        children:[
+        children: [
             {type: 'span', text: 'Empty h4'}
         ]
     },
     'h5': {
-        children:[
+        children: [
             {type: 'span', text: 'Empty h5'}
         ]
     },
@@ -62,6 +70,12 @@ const HtmlComponents = {
     },
     'small': {
         text: 'Small text'
+    },
+    'em': {
+        text: 'Text with emphasis'
+    },
+    'i': {
+        text: 'Alternate text'
     },
     'div': {
         children: [
@@ -80,7 +94,7 @@ const HtmlComponents = {
     },
     'blockquote': {
         children: [
-            {type: 'p', children:[
+            {type: 'p', children: [
                 {type: 'span', text: 'This is a quotation'}
             ]}
         ]
@@ -90,7 +104,7 @@ const HtmlComponents = {
         props: {
             href: "#"
         },
-        children:[
+        children: [
             {type: 'span', text: 'Link text'}
         ]
     },
@@ -112,12 +126,12 @@ const HtmlComponents = {
         }
     },
     'form': {
-        children:[
+        children: [
             {type: 'span', text: 'Empty form'}
         ]
     },
     'table': {
-        children:[
+        children: [
             {type: 'thead',
                 children: [
                     {
@@ -291,23 +305,23 @@ const HtmlComponents = {
             ]}
         ]
     },
-    'li':{
-        children:[
+    'li': {
+        children: [
             {type: 'span', text: 'List Item'}
         ]
     },
     'dl': {
-        children:[
-            {type: 'dt', children:[
+        children: [
+            {type: 'dt', children: [
                 {type: 'span', text: 'Main text'}
             ]},
-            {type: 'dd', children:[
+            {type: 'dd', children: [
                 {type: 'span', text: 'Description text line'}
             ]},
-            {type: 'dt', children:[
+            {type: 'dt', children: [
                 {type: 'span', text: 'Main text'}
             ]},
-            {type: 'dd', children:[
+            {type: 'dd', children: [
                 {type: 'span', text: 'Description text line'}
             ]}
         ]
