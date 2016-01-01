@@ -158,7 +158,7 @@ class SearchComponentName extends Component {
                                 minLength={1}
                                 value={this.state.value}
                                 onChange={this.handleChange}
-                                filter={'startsWith'}
+                                filter={'contains'}
                                 onSelect={this.handleSelect}/>
                         </div>
 
