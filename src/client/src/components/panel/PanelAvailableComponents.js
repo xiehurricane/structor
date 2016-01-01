@@ -82,7 +82,7 @@ class PanelAvailableComponents extends Component {
                 let components = [];
                 _.forOwn(group, (componentTypeValue, componentName) => {
                     if(_filter){
-                        if(componentName.toUpperCase().startsWith(_filter)){
+                        if(componentName.toUpperCase().includes(_filter)){
                             components.push(
                                 <PanelAvailableComponentItem
                                     key={'item' + componentName + counter}
