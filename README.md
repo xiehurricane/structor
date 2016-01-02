@@ -2,6 +2,7 @@ Structor - a user interface builder for React
 ----------
 
 [![structor channel on discord](https://img.shields.io/badge/discord-structor%40reactiflux-0077dd.svg?style=flat)](https://discord.gg/0ZcbPKXt5bWioOhk)
+[![facebook group](https://img.shields.io/badge/facebook%20group-follow-blue.svg?style=flat)](https://www.facebook.com/groups/structor/)
 
 [![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
 [![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
