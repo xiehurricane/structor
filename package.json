@@ -1,6 +1,6 @@
 {
   "name": "structor",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A user interface builder for Web applications with React UI",
   "main": "structor.js",
   "scripts": {
