@@ -61,6 +61,7 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 if (state.selectedUmyId) {
                     state.searchResult = Utils.findByUmyId(state.model, state.selectedUmyId);
                     state.isDomNodeInCurrentPage = UtilStore.hasPageDomNode(state.selectedUmyId);
+                    state.isSelectedUmyIdInCurrentPage = state.searchResult.pageIndex === state.currentPageIndex;
                 }
                 state.selectComponentCounter++;
                 //console.log('Component refresh selection: ' + state.selectedUmyId);
@@ -74,6 +75,7 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 state.selectedUmyId = null;
                 state.searchResult = null;
                 state.isDomNodeInCurrentPage = false;
+                state.isSelectedUmyIdInCurrentPage = false;
                 state.selectComponentCounter++;
                 return state;
             })();
@@ -235,6 +237,7 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                     state.selectedUmyId = null;
                     state.searchResult = null;
                     state.isDomNodeInCurrentPage = false;
+                    state.isSelectedUmyIdInCurrentPage = false;
                     state.selectComponentCounter++;
                 }
                 return state;

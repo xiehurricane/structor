@@ -199,11 +199,7 @@ export function _findByPropsUmyId(modelItem, umyId, visitorCallback, parentList)
 
     let _parentList = [].concat(parentList);
 
-    if(modelItem.pages && modelItem.pages.length > 0){
-        modelItem.pages.forEach( page => {
-            _findByPropsUmyId(page, umyId, visitorCallback, _parentList);
-        });
-    } else if (modelItem.props && modelItem.props['data-umyid'] === umyId) {
+    if (modelItem.props && modelItem.props['data-umyid'] === umyId) {
         return true;
     } else {
         if (modelItem.props) {
@@ -279,9 +275,19 @@ export function _traverseModel(model, visitorCallback) {
 export function findByUmyId(model, umyId) {
     let items = [];
     let searchResult = null;
-    _findByPropsUmyId(model, umyId, function (item) {
-        items.push(item);
-    });
+    if(model.pages && model.pages.length > 0){
+        model.pages.forEach( (page, index) => {
+            _findByPropsUmyId(page, umyId, item => {
+                item.pageIndex = index;
+                items.push(item);
+            });
+        });
+    } else {
+        _findByPropsUmyId(model, umyId, function (item) {
+            item.pageIndex = -1;
+            items.push(item);
+        });
+    }
     if (items.length == 1) {
         searchResult = items[0];
     } else if (items.length > 1) {

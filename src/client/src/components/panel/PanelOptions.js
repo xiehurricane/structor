@@ -60,8 +60,8 @@ class PanelOptions extends Component {
             borderRadius: '3px'
         };
         let panelContent = null;
-        const { selectedUmyId, isDomNodeInCurrentPage, searchResult } = this.props;
-        if(selectedUmyId && isDomNodeInCurrentPage && searchResult && searchResult.found){
+        const { selectedUmyId, isSelectedUmyIdInCurrentPage, searchResult } = this.props;
+        if(selectedUmyId && isSelectedUmyIdInCurrentPage && searchResult && searchResult.found){
 
             let optionInputs = [];
 
@@ -140,7 +140,8 @@ function mapStateToProps(state) {
     return {
         selectedUmyId: deskPage.selectedUmyId,
         searchResult: deskPage.searchResult,
-        isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage,
+        isSelectedUmyIdInCurrentPage: deskPage.isSelectedUmyIdInCurrentPage,
+        //isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage,
         focusedPathInProps: deskPage.quickOptions.focusedPathInProps
     };
 }

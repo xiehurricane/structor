@@ -57,6 +57,7 @@ const initialState = {
         selectComponentCounter: 0,
         searchResult: null,
         isDomNodeInCurrentPage: false,
+        isSelectedUmyIdInCurrentPage: false,
         inClipboard: null,
         clipboardMode: 'EMPTY_MODE',
         defaultsIndexMap: {},

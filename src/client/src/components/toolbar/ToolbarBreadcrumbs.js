@@ -34,12 +34,12 @@ class ToolbarBreadcrumbs extends Component {
 
     render() {
 
-        const { selectedUmyId, isDomNodeInCurrentPage, searchResult } = this.props;
+        const { selectedUmyId, isSelectedUmyIdInCurrentPage, searchResult } = this.props;
 
         let crumbs = [];
         let children = [];
         let active = 'Nothing is selected';
-        if(selectedUmyId && isDomNodeInCurrentPage && searchResult){
+        if(selectedUmyId && isSelectedUmyIdInCurrentPage && searchResult){
             active = searchResult.found.type;
             if(searchResult.parentList && searchResult.parentList.length > 0){
                 searchResult.parentList.forEach( (parent, index) => {
@@ -98,7 +98,8 @@ function mapStateToProps(state) {
     return {
         selectedUmyId: deskPage.selectedUmyId,
         searchResult: deskPage.searchResult,
-        isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage
+        isSelectedUmyIdInCurrentPage: deskPage.isSelectedUmyIdInCurrentPage
+        //isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage
     };
 }
 

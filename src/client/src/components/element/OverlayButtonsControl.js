@@ -39,7 +39,7 @@ class OverlayButtonsControl extends Component {
     shouldComponentUpdate(nextProps, nextState){
         return (
             this.props.selectComponentCounter < nextProps.selectComponentCounter
-            || this.props.isDomNodeInCurrentPage !== nextProps.isDomNodeInCurrentPage
+            || this.props.isSelectedUmyIdInCurrentPage !== nextProps.isSelectedUmyIdInCurrentPage
             || this.props.clipboardMode !== nextProps.clipboardMode
             || this.props.selectedUmyIdToCopy !== nextProps.selectedUmyIdToCopy
             || this.props.selectedUmyIdToCut !== nextProps.selectedUmyIdToCut
@@ -55,8 +55,9 @@ class OverlayButtonsControl extends Component {
     componentDidUpdate(){
         const { isGlobalOverlay } = this.props;
         if(isGlobalOverlay){
-            const { selectedUmyId, searchResult, isDomNodeInCurrentPage, clipboardMode } = this.props;
-            if(isDomNodeInCurrentPage && selectedUmyId && searchResult){
+            UtilStore.destroyCurrentOverlayPlugin();
+            const { selectedUmyId, searchResult, isSelectedUmyIdInCurrentPage, clipboardMode } = this.props;
+            if(isSelectedUmyIdInCurrentPage && selectedUmyId && searchResult){
                 const frameWindow = UtilStore.getFrameWindow();
                 const DOMNode = UtilStore.getPageDomNode(selectedUmyId);
                 if(frameWindow && DOMNode && searchResult){
@@ -161,8 +162,6 @@ class OverlayButtonsControl extends Component {
                     UtilStore.setCurrentOverlayPlugin(plugin);
                     plugin.append(DOMNode);
                 }
-            } else {
-                UtilStore.destroyCurrentOverlayPlugin();
             }
         }
         //let thisDOMNode = React.findDOMNode(this);
@@ -178,8 +177,8 @@ class OverlayButtonsControl extends Component {
     }
 
     render(){
-        const { selectedUmyId, searchResult, isDomNodeInCurrentPage, clipboardMode } = this.props;
-        if(isDomNodeInCurrentPage && selectedUmyId && searchResult){
+        const { selectedUmyId, searchResult, isSelectedUmyIdInCurrentPage, clipboardMode } = this.props;
+        if(isSelectedUmyIdInCurrentPage && selectedUmyId && searchResult){
             if(clipboardMode !== 'EMPTY_MODE'){
                 if(clipboardMode === 'ADD_NEW_MODE' || clipboardMode === 'COPY_MODE'){
                     return (<OverlayTreeviewItemPaste
@@ -253,7 +252,8 @@ function mapStateToProps(state) {
         selectedUmyId: deskPage.selectedUmyId,
         selectComponentCounter: deskPage.selectComponentCounter,
         searchResult: deskPage.searchResult,
-        isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage,
+        isSelectedUmyIdInCurrentPage: deskPage.isSelectedUmyIdInCurrentPage,
+        //isDomNodeInCurrentPage: deskPage.isDomNodeInCurrentPage,
         clipboardMode: deskPage.clipboardMode,
         selectedUmyIdToCopy: deskPage.selectedUmyIdToCopy,
         selectedUmyIdToCut: deskPage.selectedUmyIdToCut,
