@@ -21,9 +21,6 @@ import escodegen from 'escodegen';
 import FileManager from './FileManager.js';
 import * as fileParser from './FileParser.js';
 
-const group_keyword = '@Group:';
-const resource_keyword = '@Resources';
-
 function findExportsNode(ast){
     var exports = null;
     fileParser.traverse(ast, node => {

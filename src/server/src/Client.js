@@ -23,6 +23,7 @@ class Client {
     constructor (sm) {
         this.sm = sm;
         this.fileManager = new FileManager();
+        this.authenticationToken = null;
     }
 
     setupUserCredentials(options){
@@ -49,7 +50,11 @@ class Client {
         return new Promise( (resolve, reject) => {
             var requestOptions = {
                 uri: url,
-                headers: {'Content-type': 'application/json'},
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'X-Auth-Token': this.authenticationToken
+                },
                 method: 'POST',
                 json: true,
                 body: body
@@ -105,6 +110,10 @@ class Client {
     get (url, isAuth = false) {
         return new Promise( (resolve, reject) => {
             var requestOptions = {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Auth-Token': this.authenticationToken
+                },
                 uri: url,
                 method: 'GET',
                 json: true
@@ -161,7 +170,10 @@ class Client {
         return new Promise( (resolve, reject) => {
             let requestOptions = {
                 uri: url,
-                headers: {'Content-type': 'application/json'},
+                headers: {
+                    'Content-type': 'application/json',
+                    'X-Auth-Token': this.authenticationToken
+                },
                 method: 'POST',
                 body: JSON.stringify(body),
                 encoding: null

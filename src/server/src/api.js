@@ -59,12 +59,12 @@ class Api {
 
         this.storageManager = new StorageManager(this.stateManager);
         this.indexManager = new IndexManager(this.stateManager);
-        this.generatorManager = new GeneratorManager(this.stateManager, this.indexManager);
         this.staticSiteManager = new StaticSiteManager(this.stateManager);
         this.exportManager = new ExportManager(this.stateManager);
         this.livePreviewManager = new LivePreviewManager(this.stateManager);
         this.clientManager = new ClientManager(this.stateManager);
         this.middlewareCompilerManager = new MiddlewareCompilerManager(this.stateManager);
+        this.generatorManager = new GeneratorManager(this.stateManager, this.indexManager, this.clientManager);
         this.validator = new Validator();
 
         this.app = express();
@@ -165,14 +165,19 @@ class Api {
                 //console.log(proxyURL);
                 this.proxyURL = proxyURL;
 
-                if(!this.proxy){
+                if(!this.proxy && this.proxyURL){
                     this.proxy = httpProxy.createProxyServer({});
                     this.proxy.on('error', (err, req, res) => {
                         let statusText = 'Proxy server error connecting to ' + this.proxyURL + req.url + " " + JSON.stringify(err);
                         res.writeHead(500, statusText);
                         res.end(statusText);
-                        console.log(statusText);
+                        console.error(statusText);
                     });
+                    this.proxy.on('proxyReq', ((_proxyURL) => {
+                        return (proxyReq, req, res, options) => {
+                            proxyReq.setHeader('X-Forwarded-Host', _proxyURL);
+                        }
+                    })(this.proxyURL.replace('http://', '')));
                     //
                     this.app.all('/*', (req, res, next) => {
                         let url = req.url;
@@ -247,12 +252,8 @@ class Api {
                     });
             })
             .then( () => {
-                //console.log("Starting compilers: ");
-                //console.log("Starting dev middleware: ");
                 this.app.use(this.middlewareCompilerManager.getDevMiddleware());
-                //console.log("Starting hot middleware: ");
                 this.app.use(this.middlewareCompilerManager.getHotMiddleware());
-                //console.log("Starting builder middleware: ");
                 this.app.use(this.middlewareCompilerManager.getBuilderMiddleware({
                     callback: stats => {
                         this.socketClient.emit('compiler.message', stats);
@@ -280,91 +281,6 @@ class Api {
     readProjectFiles(options){
         return this.storageManager.readProjectDir();
     }
-
-    //checkCreateProject(options){
-    //    return this.validator.validateOptions(options, ['projectName'])
-    //        .then( () => {
-    //            return this.clientManager.checkCreateProject({ projectName: options.projectName });
-    //        });
-    //}
-
-    //createProject(options){
-    //    return this.validator.validateOptions(options,
-    //        ['projectName', 'projectDescription', 'projectLicense', 'files', 'pageContents', 'projectModel'])
-    //        .then( () => {
-    //            let projectGallery = {
-    //                projectName: options.projectName,
-    //                description: options.projectDescription,
-    //                license: options.projectLicense
-    //            };
-    //            let entries = [];
-    //            if(options.files && options.files.length > 0){
-    //                options.files.map(file => {
-    //                    if(file.checked === true){
-    //                        entries.push(file.name);
-    //                    }
-    //                });
-    //            }
-    //
-    //            const staticContentDirName = '__static_preview_content';
-    //            const appDestFileName = '__app.tar.gz';
-    //            const staticDestFileName = '__preview.tar.gz';
-    //            let projectData = null;
-    //            let applicationPackageFilePath = null;
-    //            let previewPackageFilePath = null;
-    //
-    //            return this.clientManager.createProject(projectGallery)
-    //                .then( projectObj => {
-    //                    projectData = projectObj;
-    //                    return this.indexManager.initIndex()
-    //                        .then( indexObj => {
-    //                            return this.staticSiteManager.doGeneration(
-    //                                options.projectModel, staticContentDirName, indexObj, options.pageContents)
-    //                                .then( generatedObj => {
-    //                                    return this.staticSiteManager.commitGeneration(generatedObj);
-    //                                });
-    //                        })
-    //                })
-    //                .then( () => {
-    //                    return this.storageManager.copyProjectDocsToStaticContent(staticContentDirName);
-    //                })
-    //                .then( () => {
-    //                    return this.storageManager.packProjectFiles(entries, appDestFileName);
-    //                })
-    //                .then( filePath => {
-    //                    applicationPackageFilePath = filePath;
-    //                    return this.storageManager.packProjectFiles([staticContentDirName], staticDestFileName);
-    //                })
-    //                .then( filePath => {
-    //                    previewPackageFilePath = filePath;
-    //                    return this.clientManager.uploadProjectFiles({
-    //                        projectId: projectData.id,
-    //                        filePaths: [applicationPackageFilePath, previewPackageFilePath]
-    //                    });
-    //                })
-    //                .then( () => {
-    //                    return this.storageManager.removeProjectFile(staticContentDirName)
-    //                        .then( () => {
-    //                            return this.storageManager.removeProjectFile(appDestFileName);
-    //                        })
-    //                        .then( () => {
-    //                            return this.storageManager.removeProjectFile(staticDestFileName);
-    //                        });
-    //                })
-    //                .catch( err => {
-    //                    return this.storageManager.removeProjectFile(staticContentDirName)
-    //                        .then( () => {
-    //                            return this.storageManager.removeProjectFile(appDestFileName);
-    //                        })
-    //                        .then( () => {
-    //                            return this.storageManager.removeProjectFile(staticDestFileName);
-    //                        })
-    //                        .then( () => {
-    //                            throw Error(err);
-    //                        });
-    //                });
-    //        });
-    //}
 
     saveProjectModel(options){
         return this.storageManager.writeProjectJsonModel(options.model);
@@ -464,17 +380,31 @@ class Api {
     getGenerationMetaInf(options){
         return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorName'])
             .then( () => {
-                const { componentModel, generatorName, componentName, componentGroup: groupName, meta } = options;
-                return this.generatorManager.doPreGeneration(
-                    componentModel,
-                    generatorName,
-                    {
-                        componentName,
-                        groupName
-                    }
-                )
-                    .then( metaInfoObj => {
-                        return metaInfoObj;
+                const { componentModel, generatorName, componentName, componentGroup: groupName } = options;
+                return this.generatorManager.initGenerator(generatorName)
+                    .then(generatorObj => {
+                        if(!generatorObj.config){
+                            throw Error('Generator ' + generatorObj.filePath + ' is not configured properly.');
+                        }
+                        if(generatorObj.config.type && generatorObj.config.type === 'online'){
+                            return this.generatorManager.doPreGenerationOnline(
+                                componentModel,
+                                generatorObj,
+                                {
+                                    componentName,
+                                    groupName
+                                }
+                            );
+                        } else {
+                            return this.generatorManager.doPreGeneration(
+                                componentModel,
+                                generatorObj,
+                                {
+                                    componentName,
+                                    groupName
+                                }
+                            );
+                        }
                     });
             });
     }
@@ -483,17 +413,33 @@ class Api {
         return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorName', 'meta'])
             .then( () => {
                 const { componentModel, generatorName, componentName, componentGroup: groupName, meta } = options;
-                return this.generatorManager.doGeneration(
-                    componentModel,
-                    generatorName,
-                    {
-                        componentName,
-                        groupName
-                    },
-                    meta
-                )
-                    .then( generatedObj => {
-                        return generatedObj;
+
+                return this.generatorManager.initGenerator(generatorName)
+                    .then(generatorObj => {
+                        if(!generatorObj.config){
+                            throw Error('Generator ' + generatorObj.filePath + ' is not configured properly.');
+                        }
+                        if(generatorObj.config.type && generatorObj.config.type === 'online'){
+                            return this.generatorManager.doGenerationOnline(
+                                componentModel,
+                                generatorObj,
+                                {
+                                    componentName,
+                                    groupName
+                                },
+                                meta
+                            );
+                        } else {
+                            return this.generatorManager.doGeneration(
+                                componentModel,
+                                generatorObj,
+                                {
+                                    componentName,
+                                    groupName
+                                },
+                                meta
+                            );
+                        }
                     });
             });
     }

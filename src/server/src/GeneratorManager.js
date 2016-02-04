@@ -23,18 +23,10 @@ import * as formatter from './FileFormatter.js';
 
 class GeneratorManager {
 
-    constructor(sm, im){
+    constructor(sm, im, cm){
 
         this.sm = sm;
-
-        //
-        //this.projectDirPath = projectDirPath;
-        //this.builderDirPath = path.join(projectDirPath, builderDirName);
-        //this.generatorsDirPath = path.join(this.builderDirPath, generatorsDirName);
-        //this.sourceDirPath = path.join(this.builderDirPath, sourceDirName);
-        //this.indexFilePath = path.join(this.sourceDirPath, 'index.js');
-        //this.scriptsDirName = scriptsDirName;
-
+        this.clientManager = cm;
         this.fileManager = new FileManager();
         this.indexManager = im;
     }
@@ -118,7 +110,8 @@ class GeneratorManager {
             });
     }
 
-    createDataObject(componentModel, generatorName, userInputObj){
+    createDataObject(componentModel, generatorObj, userInputObj){
+
         let dataObj = {
             component: {
                 model: componentModel,
@@ -127,88 +120,136 @@ class GeneratorManager {
                 indexFilePath: this.sm.getProject('index.filePath')
             },
             generator: {
-                name: generatorName
+                name: generatorObj.config.name,
+                filePath: generatorObj.filePath,
+                dirPath: generatorObj.dirPath
+            },
+            project: {
+                dirPath: this.sm.getProject('dirPath')
             }
         };
 
-        return this.indexManager.initIndex()
-            .then( indexObj => {
+        return this.fileManager.readJson(this.sm.getProject('config.filePath')).then(jsonData => {
 
-                dataObj.component.imports = [];
+            dataObj.project.config = jsonData;
 
-                let modelComponentMap = modelParser.getModelComponentMap(componentModel);
-                if(indexObj.groups){
+            if(!generatorObj.config.component){
+                throw Error('Generator ' + generatorObj.filePath + ' configuration does not have component section.');
+            }
 
-                    _.forOwn(indexObj.groups, (value, prop) => {
-                        if(value.components && value.components.length > 0){
-                            value.components.forEach((componentInIndex) => {
-                                if(modelComponentMap[componentInIndex.name]){
-                                    dataObj.component.imports.push({
+            dataObj.component.outputFilePath =
+                path.join(
+                    this.sm.getProject('dirPath'),
+                    pathResolver.replaceInPath(
+                        generatorObj.config.component.destDirPath,
+                        _.pick(dataObj.component, ['componentName', 'groupName'])
+
+                    ),
+                    dataObj.component.componentName + '.' + generatorObj.config.component.fileExtension
+                );
+            if(generatorObj.config.component.script){
+                dataObj.component.generatorScriptPath =
+                    path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), generatorObj.config.component.script);
+            }
+
+            dataObj.modules = {};
+            if(generatorObj.config.modules && generatorObj.config.modules.length > 0){
+                generatorObj.config.modules.forEach((module, index) => {
+
+                    let replaceInfoObj = _.pick(dataObj.component, ['componentName', 'groupName']);
+
+                    dataObj.modules[module.id] = {
+                        outputFilePath: path.join(
+                            this.sm.getProject('dirPath'),
+                            pathResolver.replaceInPath( module.destDirPath, replaceInfoObj ),
+                            pathResolver.replaceInPath( module.name, replaceInfoObj )
+                        ),
+                        name: pathResolver.replaceInPath( module.name, replaceInfoObj ),
+                        validateJS: module.validateJS
+                    };
+                    if(module.script){
+                        dataObj.modules[module.id].generatorScriptPath =
+                            path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), module.script);
+                    }
+
+                });
+            }
+
+        }).then(() => {
+            return this.indexManager.initIndex()
+                .then( indexObj => {
+
+                    dataObj.component.imports = [];
+                    dataObj.componentIndexMap = {};
+
+                    let modelComponentMap = modelParser.getModelComponentMap(componentModel);
+                    if(indexObj.groups){
+
+                        _.forOwn(indexObj.groups, (value, prop) => {
+                            if(value.components && value.components.length > 0){
+                                value.components.forEach((componentInIndex) => {
+                                    if(modelComponentMap[componentInIndex.name]){
+                                        dataObj.component.imports.push({
+                                            name: componentInIndex.name,
+                                            source: componentInIndex.source,
+                                            member: componentInIndex.member
+                                        });
+                                    }
+                                    dataObj.componentIndexMap[componentInIndex.name] = {
                                         name: componentInIndex.name,
                                         source: componentInIndex.source,
                                         member: componentInIndex.member
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-                return this.initGenerator(generatorName).then( generatorObj => {
-                    if(!generatorObj.config){
-                        throw Error('Generator ' + generatorObj.filePath + ' is not configured properly.');
-                    }
-                    if(!generatorObj.config.component){
-                        throw Error('Generator ' + generatorObj.filePath + ' configuration does not have component section.');
-                    }
-                    dataObj.generator.filePath = generatorObj.filePath;
-                    dataObj.generator.dirPath = generatorObj.dirPath;
-                    dataObj.component.outputFilePath =
-                        path.join(
-                            this.sm.getProject('dirPath'),
-                            pathResolver.replaceInPath(
-                                generatorObj.config.component.destDirPath,
-                                _.pick(dataObj.component, ['componentName', 'groupName'])
-
-                            ),
-                            dataObj.component.componentName + '.' + generatorObj.config.component.fileExtension
-                        );
-                    dataObj.component.generatorScriptPath =
-                        path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), generatorObj.config.component.script);
-
-                    dataObj.modules = {};
-                    if(generatorObj.config.modules && generatorObj.config.modules.length > 0){
-                        generatorObj.config.modules.forEach((module, index) => {
-
-                            let replaceInfoObj = _.pick(dataObj.component, ['componentName', 'groupName']);
-
-                            dataObj.modules[module.id] = {
-                                outputFilePath: path.join(
-                                    this.sm.getProject('dirPath'),
-                                    pathResolver.replaceInPath( module.destDirPath, replaceInfoObj ),
-                                    pathResolver.replaceInPath( module.name, replaceInfoObj )
-                                ),
-                                name: pathResolver.replaceInPath( module.name, replaceInfoObj ),
-                                generatorScriptPath: path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), module.script),
-                                validateJS: module.validateJS
-                            };
-
+                                    }
+                                });
+                            }
                         });
                     }
                     //dataObj.generator = generatorObj;
                     return dataObj;
                 });
-            });
+        });
+
     }
 
-    doPreGeneration(componentModel, generatorName, userInputObj){
-        return this.createDataObject(componentModel, generatorName, userInputObj)
+    doPreGeneration(componentModel, generatorObj, userInputObj){
+        return this.createDataObject(componentModel, generatorObj, userInputObj)
             .then( dataObj => {
-                return this.preGenerateText(dataObj.component.generatorScriptPath, dataObj) ;
+                let module = require(dataObj.component.generatorScriptPath);
+                return module.preProcess(dataObj)
+                    .catch(err => {
+                        throw Error('Generator script failed. ' + err + '. File path: ' + dataObj.component.generatorScriptPath);
+                    });
             });
     }
 
-    doGeneration(componentModel, generatorName, userInputObj, meta){
-        return this.createDataObject(componentModel, generatorName, userInputObj)
+    doPreGenerationOnline(componentModel, generatorObj, userInputObj){
+        return this.createDataObject(componentModel, generatorObj, userInputObj)
+            .then( dataObj => {
+                let componentData = pathResolver.resolveFromComponentPerspective(dataObj);
+                const { generatorScript } = dataObj.component;
+                if(generatorScript){
+                    let module = require(generatorScript);
+                    return module.preProcess(componentData)
+                        .catch(err => {
+                            throw Error('Generator script failed. ' + err + '. File path: ' + generatorScript);
+                        });
+                }
+                return componentData;
+            }).then( componentData => {
+                return this.clientManager.invokePreGenerationOnline(
+                    {
+                        data: {
+                            generatorName: generatorObj.config.name,
+                            generatorVersion: generatorObj.config.version,
+                            componentPerspective: componentData
+                        }
+                    }
+                );
+            });
+    }
+
+    doGeneration(componentModel, generatorObj, userInputObj, meta){
+        return this.createDataObject(componentModel, generatorObj, userInputObj)
             .then( dataObj => {
 
                 let generatedObj = {
@@ -220,44 +261,95 @@ class GeneratorManager {
                 sequence = sequence.then( () => {
                     let componentData = pathResolver.resolveFromComponentPerspective(dataObj);
                     componentData.meta = meta;
-                    return this.generateText(componentData.component.generatorScriptPath, componentData, false)
+                    let module = require(componentData.component.generatorScriptPath);
+                    return module.process(componentData)
                         .then( sourceCode => {
                             generatedObj.component.sourceCode = sourceCode;
                             generatedObj.component.outputFilePath = componentData.component.outputFilePath;
                             generatedObj.component.relativeFilePathInIndex = componentData.component.relativeFilePathInIndex;
                             generatedObj.component.componentName = componentData.component.componentName;
                             generatedObj.component.groupName = componentData.component.groupName;
+                        })
+                        .catch( err => {
+                            throw Error('Generator script failed. ' + err + '. File path: ' + componentData.component.generatorScriptPath);
                         });
                 });
 
                 _.forOwn(dataObj.modules, (value, prop) => {
                     sequence = sequence.then( () => {
-                        try{
-                            let moduleData = pathResolver.resolveFromModulePerspective(dataObj, prop);
-                            moduleData.meta = meta;
-                            return this.generateText(value.generatorScriptPath, moduleData, false)
-                                .then(sourceCode => {
-                                    generatedObj.modules[prop] = {
-                                        sourceCode: sourceCode,
-                                        outputFilePath: moduleData.modules[prop].outputFilePath,
-                                        name: moduleData.modules[prop].name,
-                                        id: prop
-                                    };
-                                });
-                        } catch (e){
-                            throw Error(e);
-                        }
+                        let moduleData = pathResolver.resolveFromModulePerspective(dataObj, prop);
+                        moduleData.meta = meta;
+                        let module = require(value.generatorScriptPath);
+                        return module.process(moduleData)
+                            .then(sourceCode => {
+                                generatedObj.modules[prop] = {
+                                    sourceCode: sourceCode,
+                                    outputFilePath: moduleData.modules[prop].outputFilePath,
+                                    name: moduleData.modules[prop].name,
+                                    id: prop
+                                };
+                            })
+                            .catch( err => {
+                                throw Error('Generator script failed. ' + err + '. File path: ' + value.generatorScriptPath);
+                            });
                     });
                 });
 
                 sequence = sequence.then(() => {
-                    return this.fileManager.removeFile(path.join(this.sm.getProject('dirPath'), '.errors'))
-                        .then( () => {
-                            return generatedObj;
-                        });
+                    return generatedObj;
                 });
 
                 return sequence;
+            });
+    }
+
+    doGenerationOnline(componentModel, generatorObj, userInputObj, meta){
+
+        let dataOnline = {
+            generatorName: generatorObj.config.name,
+            generatorVersion: generatorObj.config.version,
+            metadata: meta,
+            componentPerspective: null,
+            modulesPerspective: {}
+        };
+
+        return this.createDataObject(componentModel, generatorObj, userInputObj)
+            .then(dataObj => {
+                dataOnline.componentPerspective = pathResolver.resolveFromComponentPerspective(dataObj);
+                const { generatorScriptPath } = dataObj.component;
+                if (generatorScriptPath) {
+                    let module = require(generatorScriptPath);
+                    return module.process(dataOnline.componentPerspective)
+                        .then(componentData => {
+                            dataOnline.componentPerspective = componentData;
+                            return dataObj;
+                        })
+                        .catch(err => {
+                            throw Error('Generator script failed. ' + err + '. File path: ' + generatorScriptPath);
+                        });
+                }
+                return dataObj;
+
+            }).then(dataObj => {
+                let sequence = Promise.resolve();
+                _.forOwn(dataObj.modules, (value, prop) => {
+                    sequence = sequence.then(() => {
+                        dataOnline.modulesPerspective[prop] = pathResolver.resolveFromComponentPerspective(dataObj, prop);
+                        if (value.generatorScriptPath) {
+                            let module = require(value.generatorScriptPath);
+                            return module.process(dataOnline.modulesPerspective[prop])
+                                .then(moduleData => {
+                                    dataOnline.modulesPerspective[prop] = moduleData;
+                                })
+                                .catch(err => {
+                                    throw Error('Generator script failed. ' + err + '. File path: ' + value.generatorScriptPath);
+                                });
+                        }
+                    });
+                });
+                return sequence;
+            }).then(() => {
+                return this.clientManager.invokeGenerationOnline({data: dataOnline});
             });
     }
 
@@ -299,43 +391,43 @@ class GeneratorManager {
         return sequence;
     }
 
-    preGenerateText(scriptFilePath, dataObj){
-
-        let module = require(scriptFilePath);
-        return module.preProcess(dataObj).catch( err => {
-            throw Error('Generator script failed. ' + err + '. File path: ' + scriptFilePath);
-        });
-
-    }
-
-    generateText(scriptFilePath, dataObj, formatJS = true){
-
-        let module = require(scriptFilePath);
-        return module.process(dataObj).then( sourceCode => {
-            if (formatJS) {
-                let prevSourceCode = sourceCode;
-                try {
-                    return formatter.formatJsFile(sourceCode);
-                } catch (e) {
-                    let errorFilePath = path.join(this.sm.getProject('dirPath'), '.errors', 'generators', path.basename(scriptFilePath));
-                    this.fileManager.ensureFilePath(errorFilePath)
-                        .then(() => {
-                            this.fileManager.writeFile(errorFilePath, prevSourceCode);
-                        })
-                        .catch(err => {
-                            console.error('Writing bad file. ' + err);
-                        });
-                    throw e;
-                }
-            } else {
-                return sourceCode;
-            }
-        })
-        .catch( err => {
-            throw Error('Generator script failed. ' + err + '. File path: ' + scriptFilePath);
-        });
-
-    }
+    //preGenerateText(scriptFilePath, dataObj){
+    //
+    //    let module = require(scriptFilePath);
+    //    return module.preProcess(dataObj).catch( err => {
+    //        throw Error('Generator script failed. ' + err + '. File path: ' + scriptFilePath);
+    //    });
+    //
+    //}
+    //
+    //generateText(scriptFilePath, dataObj, formatJS = true){
+    //
+    //    let module = require(scriptFilePath);
+    //    return module.process(dataObj).then( sourceCode => {
+    //        if (formatJS) {
+    //            let prevSourceCode = sourceCode;
+    //            try {
+    //                return formatter.formatJsFile(sourceCode);
+    //            } catch (e) {
+    //                let errorFilePath = path.join(this.sm.getProject('dirPath'), '.errors', 'generators', path.basename(scriptFilePath));
+    //                this.fileManager.ensureFilePath(errorFilePath)
+    //                    .then(() => {
+    //                        this.fileManager.writeFile(errorFilePath, prevSourceCode);
+    //                    })
+    //                    .catch(err => {
+    //                        console.error('Writing bad file. ' + err);
+    //                    });
+    //                throw e;
+    //            }
+    //        } else {
+    //            return sourceCode;
+    //        }
+    //    })
+    //    .catch( err => {
+    //        throw Error('Generator script failed. ' + err + '. File path: ' + scriptFilePath);
+    //    });
+    //
+    //}
 
 }
 

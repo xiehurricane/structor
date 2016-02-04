@@ -27,16 +27,24 @@ class ClientManager {
         this.fileManager = new FileManager();
     }
 
+    getAllProjects(options){
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/structor/invoke', { methodName: 'getProjectGallery' });
+    }
+
+    invokePreGenerationOnline(options){
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/gengine/preprocess', options.data);
+    }
+
+    invokeGenerationOnline(options){
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/gengine/process', options.data);
+    }
+
     initUserCredentials(options){
         return this.client.setupUserCredentials(options).then(() => { return 'OK'});
     }
 
     removeUserCredentials(options){
         return this.client.removeUserCredentials().then(() => { return 'OK'});
-    }
-
-    getAllProjects(options){
-        return this.client.post(this.sm.getIn('client.serviceURL') + '/structor/invoke', { methodName: 'getProjectGallery' });
     }
 
     loadUserProfile(){

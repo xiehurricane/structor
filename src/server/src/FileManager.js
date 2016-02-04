@@ -223,7 +223,7 @@ class FileManager {
                 if (err) {
                     reject(err);
                 }
-                var found = {files: []},
+                let found = {files: []},
                     total = 0;
 
                 // Read through all the files in this directory
@@ -233,10 +233,13 @@ class FileManager {
                         if (total === 0) {
                             resolve(found);
                         }
-                        for (var x = 0, l = files.length; x < l; x++) {
-                            var absPath = path.join(dirPath, files[x]);
-                            fs.stat(absPath, (function(_path, _name, _x){
+                        for (let x = 0, l = files.length; x < l; x++) {
+                            let absPath = path.join(dirPath, files[x]);
+                            fs.stat(absPath, ((_path, _name, _x) => {
                                 return (err, stat) => {
+                                    if (err) {
+                                        reject(err);
+                                    }
                                     found.files.push({
                                         name: _name,
                                         path: _path,

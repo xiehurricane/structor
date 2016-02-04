@@ -80,7 +80,7 @@ class StorageManager {
     }
 
     loadProxyURL(options){
-        const proxyConfFilePath = this.sm.getProject('proxyConfig.filePath');
+        const proxyConfFilePath = this.sm.getProject('config.filePath');
         return this.fileManager.ensureFilePath(proxyConfFilePath)
             .then( () => {
                 return this.fileManager.readJson(proxyConfFilePath)

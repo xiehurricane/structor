@@ -36,6 +36,15 @@ export function resolveFromComponentPerspective(dataObject){
         }
     });
 
+    _.forOwn(_copyObject.componentIndexMap, (value, prop) => {
+        if(value.source.substr(0, 6) === '../../'){
+            let absoluteSourcePath = path.resolve(indexFileDirPath, value.source);
+            value.relativeSource = repairPath(path.relative(absoluteComponentDirPath, absoluteSourcePath)).replace(/\\/g, '/');
+        } else {
+            value.relativeSource = value.source;
+        }
+    });
+
     _.forOwn(_copyObject.modules, (value, prop) => {
         value.relativeFilePath = repairPath(path.relative(absoluteComponentDirPath, value.outputFilePath)).replace(/\\/g, '/');
     });
@@ -60,6 +69,15 @@ export function resolveFromModulePerspective(dataObject, moduleId){
             variable.relativeSource = repairPath(path.relative(absoluteModuleDirPath, absoluteSourcePath)).replace(/\\/g, '/');
         } else {
             variable.relativeSource = variable.source;
+        }
+    });
+
+    _.forOwn(_copyObject.componentIndexMap, (value, prop) => {
+        if(value.source.substr(0, 6) === '../../'){
+            let absoluteSourcePath = path.resolve(indexFileDirPath, value.source);
+            value.relativeSource = repairPath(path.relative(absoluteModuleDirPath, absoluteSourcePath)).replace(/\\/g, '/');
+        } else {
+            value.relativeSource = value.source;
         }
     });
 
