@@ -45,8 +45,7 @@ class Application extends Component {
     componentDidMount(){
         this.props.invokeServerApi('checkProjectDir', {}, [ServerActions.DATA_PROJECT_DIR_STATUS]);
         this.props.invokeServerApi('getPackageConfig', {}, [ServerActions.DATA_PACKAGE_CONFIG]);
-        this.props.invokeServerApi('loadUserProfile', {}, [ServerActions.DATA_USER_PROFILE], null, true);
-        //this.props.setStage('start');
+        //this.props.invokeServerApi('loadUserProfile', {}, [ServerActions.DATA_USER_PROFILE], null, true);
     }
 
     handleGoHome(e){
