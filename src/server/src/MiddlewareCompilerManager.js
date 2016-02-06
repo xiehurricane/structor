@@ -32,12 +32,9 @@ class MiddlewareCompilerManager {
     }
 
     getDevMiddlewareCompiler(){
-        //console.log("inside getDevMiddlewareCompliler");
         if(this.compiler === null){
-
             let configPart = require(this.sm.getProject('webpackConfig.filePath')) || {};
-            //console.log(JSON.stringify(configPart, null, 4));
-            const webpackConfig = _.merge({
+            const webpackConfig = _.mergeWith({
                 name: "browser",
                 entry: [
                     'webpack-hot-middleware/client?path=/' + this.sm.getProject('desk.dirName') + '/a&overlay=false',
@@ -55,13 +52,16 @@ class MiddlewareCompilerManager {
                     new webpack.NoErrorsPlugin()
                 ],
                 module: {
-                    // todo: move babel-loader config elsewhere, but not in babelrc
                     loaders: [
                         {
                             test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel',
                             query: {
-                                cacheDirectory: false,
-                                presets: ['react', 'es2015', 'stage-0'],
+                                cacheDirectory: true,
+                                presets: [
+                                    path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-preset-react'),
+                                    path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-preset-es2015'),
+                                    path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-preset-stage-0')
+                                ],
                                 plugins: [
                                     [path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-plugin-react-transform'), {
                                         transforms: [{

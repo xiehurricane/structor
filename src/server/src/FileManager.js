@@ -191,7 +191,7 @@ class FileManager {
                         }
                         for (let x = 0, l = files.length; x < l; x++) {
                             if(testFileNames){
-                                isDir(path.join(start, files[x]), _.contains(testFileNames, files[x]));
+                                isDir(path.join(start, files[x]), _.includes(testFileNames, files[x]));
                             } else {
                                 isDir(path.join(start, files[x]), true);
                             }
