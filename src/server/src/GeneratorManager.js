@@ -121,6 +121,7 @@ class GeneratorManager {
             },
             generator: {
                 name: generatorObj.config.name,
+                version: generatorObj.config.version,
                 filePath: generatorObj.filePath,
                 dirPath: generatorObj.dirPath
             },
@@ -225,26 +226,26 @@ class GeneratorManager {
     doPreGenerationOnline(componentModel, generatorObj, userInputObj){
         return this.createDataObject(componentModel, generatorObj, userInputObj)
             .then( dataObj => {
-                let componentData = pathResolver.resolveFromComponentPerspective(dataObj);
+                let dataOnline = {
+                    generator: dataObj.generator,
+                    project: dataObj.project
+                };
+                dataOnline.componentPerspective = pathResolver.resolveFromComponentPerspective({
+                    component: dataObj.component,
+                    componentIndexMap: dataObj.componentIndexMap,
+                    modules: dataObj.modules
+                });
                 const { generatorScript } = dataObj.component;
                 if(generatorScript){
                     let module = require(generatorScript);
-                    return module.preProcess(componentData)
+                    return module.preProcess(dataOnline)
                         .catch(err => {
                             throw Error('Generator script failed. ' + err + '. File path: ' + generatorScript);
                         });
                 }
-                return componentData;
-            }).then( componentData => {
-                return this.clientManager.invokePreGenerationOnline(
-                    {
-                        data: {
-                            generatorName: generatorObj.config.name,
-                            generatorVersion: generatorObj.config.version,
-                            componentPerspective: componentData
-                        }
-                    }
-                );
+                return dataOnline;
+            }).then( dataOnline => {
+                return this.clientManager.invokePreGenerationOnline({ data: dataOnline } );
             });
     }
 
@@ -304,42 +305,51 @@ class GeneratorManager {
     }
 
     doGenerationOnline(componentModel, generatorObj, userInputObj, meta){
-
-        let dataOnline = {
-            generatorName: generatorObj.config.name,
-            generatorVersion: generatorObj.config.version,
-            metadata: meta,
-            componentPerspective: null,
-            modulesPerspective: {}
-        };
-
         return this.createDataObject(componentModel, generatorObj, userInputObj)
             .then(dataObj => {
-                dataOnline.componentPerspective = pathResolver.resolveFromComponentPerspective(dataObj);
-                const { generatorScriptPath } = dataObj.component;
-                if (generatorScriptPath) {
-                    let module = require(generatorScriptPath);
-                    return module.process(dataOnline.componentPerspective)
-                        .then(componentData => {
-                            dataOnline.componentPerspective = componentData;
-                            return dataObj;
-                        })
-                        .catch(err => {
-                            throw Error('Generator script failed. ' + err + '. File path: ' + generatorScriptPath);
-                        });
-                }
-                return dataObj;
 
-            }).then(dataObj => {
-                let sequence = Promise.resolve();
+                let dataOnline = {
+                    metadata: meta,
+                    generator: dataObj.generator,
+                    project: dataObj.project,
+                    modulesPerspective: {}
+                };
+
+                dataOnline.componentPerspective = pathResolver.resolveFromComponentPerspective({
+                    component: dataObj.component,
+                    componentIndexMap: dataObj.componentIndexMap,
+                    modules: dataObj.modules
+                });
+
                 _.forOwn(dataObj.modules, (value, prop) => {
-                    sequence = sequence.then(() => {
-                        dataOnline.modulesPerspective[prop] = pathResolver.resolveFromComponentPerspective(dataObj, prop);
+                    dataOnline.modulesPerspective[prop] = pathResolver.resolveFromModulePerspective({
+                        component: dataObj.component,
+                        componentIndexMap: dataObj.componentIndexMap,
+                        modules: dataObj.modules
+                    }, prop);
+                });
+
+                let sequence = Promise.resolve();
+                sequence = sequence.then( () => {
+                    const { generatorScriptPath } = dataObj.component;
+                    if (generatorScriptPath) {
+                        let module = require(generatorScriptPath);
+                        return module.process(dataOnline)
+                            .then( data => {
+                                dataOnline = data;
+                            })
+                            .catch(err => {
+                                throw Error('Generator script failed. ' + err + '. File path: ' + generatorScriptPath);
+                            });
+                    }
+                });
+                _.forOwn(dataObj.modules, (value, prop) => {
+                    sequence = sequence.then( () => {
                         if (value.generatorScriptPath) {
                             let module = require(value.generatorScriptPath);
-                            return module.process(dataOnline.modulesPerspective[prop])
-                                .then(moduleData => {
-                                    dataOnline.modulesPerspective[prop] = moduleData;
+                            return module.process(dataOnline)
+                                .then( data => {
+                                    dataOnline = data;
                                 })
                                 .catch(err => {
                                     throw Error('Generator script failed. ' + err + '. File path: ' + value.generatorScriptPath);
@@ -347,9 +357,9 @@ class GeneratorManager {
                         }
                     });
                 });
-                return sequence;
-            }).then(() => {
-                return this.clientManager.invokeGenerationOnline({data: dataOnline});
+                return sequence.then( () => {
+                    return this.clientManager.invokeGenerationOnline({data: dataOnline});
+                });
             });
     }
 

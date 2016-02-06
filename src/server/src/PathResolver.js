@@ -17,10 +17,11 @@
 
 import _ from 'lodash';
 import path from 'path';
+import { fulex } from './utils.js';
 
 export function resolveFromComponentPerspective(dataObject){
 
-    let _copyObject = _.clone(dataObject, true);
+    let _copyObject = fulex(dataObject);
 
     let absoluteComponentPath = _copyObject.component.outputFilePath;
     let absoluteComponentDirPath = path.dirname(absoluteComponentPath);
@@ -54,7 +55,7 @@ export function resolveFromComponentPerspective(dataObject){
 
 export function resolveFromModulePerspective(dataObject, moduleId){
 
-    let _copyObject = _.clone(dataObject, true);
+    let _copyObject = fulex(dataObject);
 
     let indexFileDirPath = path.dirname(dataObject.component.indexFilePath);
     let absoluteModulePath = _copyObject.modules[moduleId].outputFilePath;
