@@ -54,9 +54,19 @@ function appendToNode(node, variableString){
         }
     });
     if(node.properties){
-        node.properties.push(
-            newPart
-        );
+        let index = -1;
+        if(node.properties.length > 0){
+             index = _.findIndex(node.properties, (o) => {
+                return (o.key === 'Identifier' && o.name === newPart.name);
+            });
+        }
+        if(index >= 0){
+            node.properties[index] = newPart;
+        } else {
+            node.properties.push(
+                newPart
+            );
+        }
     }
 }
 

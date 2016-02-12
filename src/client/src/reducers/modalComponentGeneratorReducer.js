@@ -27,9 +27,20 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
         case Actions.SHOW_MODAL_COMPONENT_GENERATOR: //-----------------------------------------------------------------
             return (() => {
                 state = Utils.fulex(state);
+                state.wizardCode = 'generator';
                 state.isOpen = true;
                 state.groupName = null;
                 state.componentName = null;
+                return state;
+            })();
+
+        case Actions.SHOW_MODAL_COMPONENT_REGENERATOR: //-----------------------------------------------------------------
+            return (() => {
+                state = Utils.fulex(state);
+                state.wizardCode = 'regenerator';
+                state.isOpen = true;
+                state.groupName = payload.groupName;
+                state.componentName = payload.componentName;
                 return state;
             })();
 

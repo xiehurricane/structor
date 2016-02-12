@@ -181,7 +181,7 @@ class GeneratorManager {
                 .then( indexObj => {
 
                     dataObj.component.imports = [];
-                    dataObj.componentIndexMap = {};
+                    dataObj.componentIndex = [];
 
                     let modelComponentMap = modelParser.getModelComponentMap(componentModel);
                     if(indexObj.groups){
@@ -196,11 +196,11 @@ class GeneratorManager {
                                             member: componentInIndex.member
                                         });
                                     }
-                                    dataObj.componentIndexMap[componentInIndex.name] = {
+                                    dataObj.componentIndex.push({
                                         name: componentInIndex.name,
                                         source: componentInIndex.source,
                                         member: componentInIndex.member
-                                    }
+                                    });
                                 });
                             }
                         });
@@ -232,15 +232,15 @@ class GeneratorManager {
                 };
                 dataOnline.componentPerspective = pathResolver.resolveFromComponentPerspective({
                     component: dataObj.component,
-                    componentIndexMap: dataObj.componentIndexMap,
+                    componentIndex: dataObj.componentIndex,
                     modules: dataObj.modules
                 });
-                const { generatorScript } = dataObj.component;
-                if(generatorScript){
-                    let module = require(generatorScript);
+                const { generatorScriptPath } = dataObj.component;
+                if(generatorScriptPath){
+                    let module = require(generatorScriptPath);
                     return module.preProcess(dataOnline)
                         .catch(err => {
-                            throw Error('Generator script failed. ' + err + '. File path: ' + generatorScript);
+                            throw Error('Generator script failed. ' + err + '. File path: ' + generatorScriptPath);
                         });
                 }
                 return dataOnline;
@@ -317,14 +317,14 @@ class GeneratorManager {
 
                 dataOnline.componentPerspective = pathResolver.resolveFromComponentPerspective({
                     component: dataObj.component,
-                    componentIndexMap: dataObj.componentIndexMap,
+                    componentIndex: dataObj.componentIndex,
                     modules: dataObj.modules
                 });
 
                 _.forOwn(dataObj.modules, (value, prop) => {
                     dataOnline.modulesPerspective[prop] = pathResolver.resolveFromModulePerspective({
                         component: dataObj.component,
-                        componentIndexMap: dataObj.componentIndexMap,
+                        componentIndex: dataObj.componentIndex,
                         modules: dataObj.modules
                     }, prop);
                 });

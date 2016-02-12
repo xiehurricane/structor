@@ -23,6 +23,7 @@ import * as ServerActions from './serverActions.js';
 import * as DeskPageActions from './deskPageActions.js';
 
 export const SHOW_MODAL_COMPONENT_GENERATOR = 'SHOW_MODAL_COMPONENT_GENERATOR';
+export const SHOW_MODAL_COMPONENT_REGENERATOR = 'SHOW_MODAL_COMPONENT_REGENERATOR';
 export const HIDE_MODAL_COMPONENT_GENERATOR = 'HIDE_MODAL_COMPONENT_GENERATOR';
 export const COMPONENT_GENERATOR_START_STEP_0 = 'COMPONENT_GENERATOR_START_STEP_0';
 export const COMPONENT_GENERATOR_SUBMIT_STEP_0 = 'COMPONENT_GENERATOR_SUBMIT_STEP_0';
@@ -38,6 +39,36 @@ export function showModalComponentGenerator(){
     return {
         type: SHOW_MODAL_COMPONENT_GENERATOR
     }
+}
+
+export function showModalComponentRegenerator(options){
+
+    return (dispatch, getState) => {
+
+        let errors = [];
+        let { componentName }  = options;
+        let { deskPage: { componentsTree } } = getState();
+        var testComponent =  UtilStore.getComponentFromTree(componentsTree, componentName);
+        if(!testComponent.value){
+            errors.push('There is no component with name: ' + componentName);
+        } else if(!testComponent.value.absoluteSource){
+            errors.push('Selected component has the unreachable source code. Please generate the source code first.');
+        }
+        if(errors.length > 0){
+            errors.forEach( message => {
+                dispatch(ServerActions.setServerMessage(message));
+            });
+        } else {
+            dispatch({
+                type: SHOW_MODAL_COMPONENT_REGENERATOR, // store data for forms in case user steps back
+                payload: {
+                    groupName: testComponent.group,
+                    componentName: componentName
+                }
+            });
+            dispatch(startStep1());
+        }
+    };
 }
 
 export function hideModalComponentGenerator(){

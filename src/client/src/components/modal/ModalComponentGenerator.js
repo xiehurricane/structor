@@ -28,6 +28,7 @@ import {
 import * as ModalComponentGeneratorActions from '../../actions/modalComponentGeneratorActions.js';
 
 import WizardGenerateComponent from '../wizard/WizardGenerateComponent.js';
+import WizardRegenerateComponent from '../wizard/WizardRegenerateComponent.js';
 
 class ModalComponentGenerator extends Component {
 
@@ -43,7 +44,14 @@ class ModalComponentGenerator extends Component {
     }
 
     render(){
-        let wizardElement = this.props.isOpen ? <WizardGenerateComponent /> : null;
+        let wizardElement = null;
+        if(this.props.isOpen){
+            if(this.props.wizardCode === 'generator'){
+                wizardElement = (<WizardGenerateComponent />);
+            } else if(this.props.wizardCode === 'regenerator'){
+                wizardElement = (<WizardRegenerateComponent />);
+            }
+        }
         return (
             <Modal show={this.props.isOpen}
                    onHide={() => {}}
@@ -78,7 +86,8 @@ ModalComponentGenerator.defaultProps = {
 function mapStateToProps(state) {
     const { modalComponentGenerator } = state;
     return {
-        isOpen: modalComponentGenerator.isOpen
+        isOpen: modalComponentGenerator.isOpen,
+        wizardCode: modalComponentGenerator.wizardCode
     };
 }
 

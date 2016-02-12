@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import * as DeskPageActions from '../../actions/deskPageActions.js';
 import { toggleComponentsHierarchy } from '../../actions/deskActions.js';
 import { showModalComponentEditor } from '../../actions/modalComponentEditorActions.js';
-import { showModalComponentGenerator } from '../../actions/modalComponentGeneratorActions.js';
+import { showModalComponentGenerator, showModalComponentRegenerator } from '../../actions/modalComponentGeneratorActions.js';
 import { showModalComponentVariant } from '../../actions/modalComponentVariantActions.js';
 
 import * as Utils from '../../api/utils.js';
@@ -140,6 +140,9 @@ class OverlayButtonsControl extends Component {
                                     },
                                     {
                                         label: 'Generate source code', onClick: () => { this.props.showModalComponentGenerator() }
+                                    },
+                                    {
+                                        label: 'Regenerate source code', onClick: () => { this.props.showModalComponentRegenerator({componentName: searchResult.found.type}) }
                                     }
                                 ],
                                 onClose: this.props.discardComponentSelection,
@@ -266,7 +269,8 @@ let mappedActions = Object.assign({}, DeskPageActions,
         showModalComponentEditor: showModalComponentEditor,
         showModalComponentGenerator: showModalComponentGenerator,
         toggleComponentsHierarchy: toggleComponentsHierarchy,
-        showModalComponentVariant: showModalComponentVariant
+        showModalComponentVariant: showModalComponentVariant,
+        showModalComponentRegenerator: showModalComponentRegenerator
     }
 );
 

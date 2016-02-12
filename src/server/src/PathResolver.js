@@ -37,12 +37,12 @@ export function resolveFromComponentPerspective(dataObject){
         }
     });
 
-    _.forOwn(_copyObject.componentIndexMap, (value, prop) => {
-        if(value.source.substr(0, 6) === '../../'){
-            let absoluteSourcePath = path.resolve(indexFileDirPath, value.source);
-            value.relativeSource = repairPath(path.relative(absoluteComponentDirPath, absoluteSourcePath)).replace(/\\/g, '/');
+    _copyObject.componentIndex.forEach( item => {
+        if(item.source.substr(0, 6) === '../../'){
+            let absoluteSourcePath = path.resolve(indexFileDirPath, item.source);
+            item.relativeSource = repairPath(path.relative(absoluteComponentDirPath, absoluteSourcePath)).replace(/\\/g, '/');
         } else {
-            value.relativeSource = value.source;
+            item.relativeSource = item.source;
         }
     });
 
@@ -73,12 +73,12 @@ export function resolveFromModulePerspective(dataObject, moduleId){
         }
     });
 
-    _.forOwn(_copyObject.componentIndexMap, (value, prop) => {
-        if(value.source.substr(0, 6) === '../../'){
-            let absoluteSourcePath = path.resolve(indexFileDirPath, value.source);
-            value.relativeSource = repairPath(path.relative(absoluteModuleDirPath, absoluteSourcePath)).replace(/\\/g, '/');
+    _copyObject.componentIndex.forEach( item => {
+        if(item.source.substr(0, 6) === '../../'){
+            let absoluteSourcePath = path.resolve(indexFileDirPath, item.source);
+            item.relativeSource = repairPath(path.relative(absoluteModuleDirPath, absoluteSourcePath)).replace(/\\/g, '/');
         } else {
-            value.relativeSource = value.source;
+            item.relativeSource = item.source;
         }
     });
 

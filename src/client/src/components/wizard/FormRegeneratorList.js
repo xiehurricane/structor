@@ -20,20 +20,11 @@ import {
     Button
 } from 'react-bootstrap';
 
-class FormGeneratorList extends Component {
+class FormRegeneratorList extends Component {
 
     constructor(props) {
         super(props);
-        this.handleBackStep = this.handleBackStep.bind(this);
         this.handleSubmitStep = this.handleSubmitStep.bind(this);
-    }
-
-    handleBackStep(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.props.onBackStep) {
-            this.props.onBackStep();
-        }
     }
 
     handleSubmitStep(e) {
@@ -51,16 +42,25 @@ class FormGeneratorList extends Component {
         let generatorItems = [];
         if(this.props.generatorList && this.props.generatorList.length > 0){
             this.props.generatorList.forEach( (generator, index) => {
-                generatorItems.push(
-                    <a className="list-group-item" href="#"
-                       key={'generator' + generator.config.name + index}
-                       style={{position: 'relative'}}
-                       data-generator-name={generator.config.name}
-                       onClick={this.handleSubmitStep}>
-                        <span>{generator.config.description}</span>
-                    </a>
-                );
+                if(generator.config.isRegenerator === true){
+                    generatorItems.push(
+                        <a className="list-group-item" href="#"
+                           key={'generator' + generator.config.name + index}
+                           style={{position: 'relative'}}
+                           data-generator-name={generator.config.name}
+                           onClick={this.handleSubmitStep}>
+                            <span>{generator.config.description}</span>
+                        </a>
+                    );
+                }
             });
+        }
+        if(generatorItems.length === 0){
+            generatorItems.push(
+                <p className="text-center">
+                    <span>There are no installed generators which are able to regenerate the source code</span>
+                </p>
+            );
         }
         return (
             <div style={this.props.formStyle}>
@@ -80,13 +80,10 @@ class FormGeneratorList extends Component {
                     </tr>
                     </tbody>
                 </table>
-                <div style={{display: 'table', textAlign: 'center', width: '100%', marginTop: '2em'}}>
-                    <Button bsStyle='default' onClick={this.handleBackStep}>Back</Button>
-                </div>
             </div>
         );
     }
 
 }
 
-export default FormGeneratorList;
+export default FormRegeneratorList;

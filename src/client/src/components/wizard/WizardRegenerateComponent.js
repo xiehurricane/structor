@@ -20,11 +20,11 @@ import { connect } from 'react-redux';
 import * as ModalComponentGeneratorActions from '../../actions/modalComponentGeneratorActions.js';
 
 import FormComponentName from './FormComponentName.js';
-import FormGeneratorList from './FormGeneratorList.js';
+import FormRegeneratorList from './FormRegeneratorList.js';
 import FormGeneratorMetaInfo from './FormGeneratorMetaInfo.js';
 import FormGeneratedSourceCode from './FormGeneratedSourceCode.js';
 
-class WizardGenerateComponent extends Component {
+class WizardRegenerateComponent extends Component {
 
     componentDidMount(){
         this.props.startStep0();
@@ -37,22 +37,11 @@ class WizardGenerateComponent extends Component {
             marginTop: '2em'
         };
         switch(this.props.step) {
-            case 0:
-                stepComponent = (
-                    <FormComponentName
-                        formStyle={formStyle}
-                        groupNames={this.props.groupNames}
-                        groupName={this.props.groupName}
-                        componentName={this.props.componentName}
-                        onSubmitStep={this.props.submitStep0}/>
-                );
-                break;
             case 1:
                 stepComponent = (
-                    <FormGeneratorList
+                    <FormRegeneratorList
                         formStyle={formStyle}
                         generatorList={this.props.generatorList}
-                        onBackStep={this.props.startStep0}
                         onSubmitStep={this.props.submitStep1}/>
                 );
                 break;
@@ -82,7 +71,7 @@ class WizardGenerateComponent extends Component {
         return (
             <div style={{width: '100%'}}>
                 <h4 className='text-center'>
-                    <span>Generate&nbsp;</span>
+                    <span>Regenerate&nbsp;</span>
                     <span className='text-danger'>{componentName}</span>
                     <span>&nbsp;source code</span>
                 </h4>
@@ -107,5 +96,5 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     ModalComponentGeneratorActions
-)(WizardGenerateComponent);
+)(WizardRegenerateComponent);
 
