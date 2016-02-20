@@ -32,7 +32,7 @@ class GeneratorManager {
     }
 
     initGenerator(name){
-        return this.fileManager.readDirectory(this.sm.getProject('generators.dirPath'), ['generator.json'])
+        return this.fileManager.readDirectoryFiles(this.sm.getProject('generators.dirPath'), ['generator.json'])
             .then( found => {
                 if(!found.files || found.files.length <= 0){
                     throw Error('Current project does not have generators.');
@@ -67,46 +67,58 @@ class GeneratorManager {
 
     getGeneratorList(){
         return this.fileManager.readDirectory(this.sm.getProject('generators.dirPath'), ['generator.json'])
-            .then( found => {
-                if(!found.files || found.files.length <= 0){
-                    throw Error('Current project does not have generators.');
-                }
-                let generatorList = [];
-                let chain = found.files.reduce(
-                    (sequence, filePath) => {
-                        return sequence.then((jsonObject) => {
-                            if(jsonObject){
-                                return jsonObject;
-                            } else {
-                                return this.fileManager.readJson(filePath)
-                                    .then( jsonObj => {
-                                        generatorList.push(
-                                            {
-                                                dirPath: path.dirname(filePath),
-                                                filePath: filePath,
-                                                config: jsonObj
-                                            }
-                                        );
-                                    });
-                            }
-                        }).catch( err => {
-                            throw Error(err.message + '. Generator file path: ' + filePath);
-                        });
-                    },
-                    Promise.resolve()
-                );
-                return chain.then( () => {
-                    generatorList.sort( (a, b) => {
-                        if (a.config.name > b.config.name) {
-                            return 1;
-                        }
-                        if (a.config.name < b.config.name) {
-                            return -1;
-                        }
-                        return 0;
-                    });
-                    return generatorList;
+            .then( dirTree => {
+                this.fileManager.traverseDirTree(dirTree, (type, obj) => {
+                    if(obj.files && obj.files.length > 0){
+                        obj.dirs = [];
+                    }
                 });
+                let sequence = Promise.resolve();
+                this.fileManager.traverseDirTree(dirTree, (type, obj) => {
+                    if(type === 'file'){
+                        sequence = sequence.then(() => {
+                            return this.fileManager.readJson(obj.filePath)
+                                .then( jsonObj => {
+                                    obj.config = jsonObj;
+                                });
+                        });
+                    }
+                });
+                return sequence.then(() => { return dirTree; });
+            })
+            .then( dirTree => {
+                var catalogs = {};
+                var allFiles = [];
+                this.fileManager.traverseDirTree(dirTree, (type, obj) => {
+                    if(type === 'dir'){
+                        if(obj.files && obj.files.length > 0){
+                            allFiles = allFiles.concat(obj.files);
+                        }
+                        var files = [];
+                        this.fileManager.traverseDirTree(obj, (_type, innerObj) => {
+                            if(_type === 'file'){
+                                files.push(innerObj);
+                            }
+                        });
+                        if(files.length > 0){
+                            let innerCatalogs = [];
+                            if(obj.dirs && obj.dirs.length > 0){
+                                obj.dirs.forEach(dir => {
+                                    if(dir.dirs && dir.dirs.length > 0){
+                                        innerCatalogs.push(dir.dirNamePath);
+                                    }
+                                });
+                                catalogs[obj.dirNamePath] = {
+                                    dirName: obj.dirName,
+                                    catalogs: innerCatalogs,
+                                    files: files
+                                };
+                            }
+                        }
+                    }
+                });
+                catalogs.allFiles = allFiles;
+                return catalogs;
             });
     }
 

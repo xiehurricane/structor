@@ -25,12 +25,6 @@ import * as formatter from './FileFormatter.js';
 
 class FileManager {
 
-    traverse(entity){
-        _.forOwn(entity, (value, prop) => {
-            //console.log('Prop: ' + prop + 'Value: ' + value);
-        });
-    }
-
     ensureFilePath(filePath){
         return new Promise((resolve, reject) => {
             fs.ensureFile(filePath, err => {
@@ -146,55 +140,83 @@ class FileManager {
         });
     }
 
-    _readDir(start, callback, testFileNames) {
+    traverseDirTree(tree, callback){
+        if(tree){
+            if(tree.dirs && tree.dirs.length > 0){
+                tree.dirs.forEach(dir => {
+                    callback('dir', dir);
+                    this.traverseDirTree(dir, callback);
+                });
+            }
+            if(tree.files && tree.files.length > 0){
+                tree.files.forEach(file => {
+                    callback('file', file);
+                });
+            }
+        }
+    }
+
+    readDirectoryTree(result, start, callback, testFileNames = undefined) {
 
         // Use lstat to resolve symlink if we are passed a symlink
         fs.lstat(start, ( err, stat ) => {
                 if (err) {
                     callback(err);
                 }
-                let found = {dirs: [], files: []},
-                    total = 0,
-                    processed = 0;
-
-                let isDir = (abspath, isValid) => {
+                let total = 0;
+                let processed = 0;
+                var isDir = (dirPath, fileName) => {
+                    const abspath = path.join(dirPath, fileName);
                     fs.stat(abspath, (err, stat) => {
+                        if(err){
+                            callback(err);
+                        }
                         if (stat && stat.isDirectory()) {
-                            if (isValid === true) {
-                                found.dirs.push(abspath);
-                            }
-                            // If we found a directory, recurse!
-                            this._readDir(abspath, (err, data) => {
-                                found.dirs = found.dirs.concat(data.dirs);
-                                found.files = found.files.concat(data.files);
+                            var dirNamePath = result.dirNamePath ? result.dirNamePath + '.' + fileName : fileName;
+                            var resultDir = {dirName: fileName, dirNamePath: dirNamePath, dirPath: abspath, dirs:[], files: [] };
+                            result.dirs.push(resultDir);
+                            this.readDirectoryTree(resultDir, abspath, err => {
+                                if(err){
+                                    callback(err);
+                                }
                                 if (++processed == total) {
-                                    callback(null, found);
+                                    callback();
                                 }
                             }, testFileNames);
                         } else {
-                            if (isValid === true) {
-                                found.files.push(abspath);
+                            let isValid = testFileNames ? _.includes(testFileNames, fileName) : true;
+                            if(isValid){
+                                result.files.push({
+                                    fileName: fileName,
+                                    filePath: abspath
+                                });
                             }
                             if (++processed == total) {
-                                callback(null, found);
+                                callback();
                             }
                         }
                     });
                 };
-
-                // Read through all the files in this directory
                 if (stat && stat.isDirectory()) {
                     fs.readdir(start, (err, files) => {
+                        if(err){
+                            callback(err);
+                        }
                         total = files.length;
                         if (total === 0) {
-                            callback(null, found);
+                            callback();
                         }
-                        for (let x = 0, l = files.length; x < l; x++) {
-                            if(testFileNames){
-                                isDir(path.join(start, files[x]), _.includes(testFileNames, files[x]));
-                            } else {
-                                isDir(path.join(start, files[x]), true);
+                        files.sort((a, b) => {
+                            if (a > b) {
+                                return 1;
                             }
+                            if (a < b) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+                        for (let x = 0, l = files.length; x < l; x++) {
+                            isDir(start, files[x]);
                         }
                     });
                 } else {
@@ -206,13 +228,26 @@ class FileManager {
 
     readDirectory(dirPath, testFileNames = undefined){
         return new Promise( (resolve, reject) => {
-            this._readDir(dirPath, (err, found) => {
+            let result = {dirs: [], files:[]};
+            this.readDirectoryTree(result, dirPath, err => {
                 if(err){
                     reject(err);
                 } else {
-                    resolve(found);
+                    resolve(result);
                 }
             }, testFileNames);
+        });
+    }
+
+    readDirectoryFiles(dirPath, testFileNames = undefined){
+        return this.readDirectory(dirPath, testFileNames).then(dirTree => {
+            let files = [];
+            this.traverseDirTree(dirTree, (type, obj) => {
+                if(type === 'file'){
+                    files.push(obj.filePath);
+                }
+            });
+            return { files };
         });
     }
 

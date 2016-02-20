@@ -53,14 +53,14 @@ function appendToNode(node, variableString){
             newPart = node.init.properties[0];
         }
     });
-    if(node.properties){
+    if (node.properties) {
         let index = -1;
-        if(node.properties.length > 0){
-             index = _.findIndex(node.properties, (o) => {
-                return (o.key === 'Identifier' && o.name === newPart.name);
+        if (node.properties.length > 0) {
+            index = _.findIndex(node.properties, (o) => {
+                return (o.key && o.key.type === 'Identifier' && o.key.name === newPart.key.name);
             });
         }
-        if(index >= 0){
+        if (index >= 0) {
             node.properties[index] = newPart;
         } else {
             node.properties.push(

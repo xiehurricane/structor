@@ -3,7 +3,7 @@ build-conf
 images
 node_modules
 src
-test-project
 .babelrc
+.gitignore
 .npmignore
 structor.iml

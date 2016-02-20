@@ -107,7 +107,7 @@ class ExportManager {
 
         let projectDataObj = this.createProjectDataObject(projectModel, destDirPath, indexObj);
 
-        return this.fileManager.readDirectory(this.sm.getProject('templates.dirPath'))
+        return this.fileManager.readDirectoryFiles(this.sm.getProject('templates.dirPath'))
             .then( found => {
                 if(!found.files || found.files.length <= 0){
                     throw Error('Current project does not have a templates for export.');

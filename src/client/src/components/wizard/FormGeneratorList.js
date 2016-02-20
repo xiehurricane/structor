@@ -49,19 +49,20 @@ class FormGeneratorList extends Component {
 
     render() {
         let generatorItems = [];
-        if(this.props.generatorList && this.props.generatorList.length > 0){
-            this.props.generatorList.forEach( (generator, index) => {
-                generatorItems.push(
-                    <a className="list-group-item" href="#"
-                       key={'generator' + generator.config.name + index}
-                       style={{position: 'relative'}}
-                       data-generator-name={generator.config.name}
-                       onClick={this.handleSubmitStep}>
-                        <span>{generator.config.description}</span>
-                    </a>
-                );
-            });
-        }
+        console.log(JSON.stringify(this.props.generatorList, null, 4));
+        //if(this.props.generatorList && this.props.generatorList.length > 0){
+        //    this.props.generatorList.forEach( (generator, index) => {
+        //        generatorItems.push(
+        //            <a className="list-group-item" href="#"
+        //               key={'generator' + generator.config.name + index}
+        //               style={{position: 'relative'}}
+        //               data-generator-name={generator.config.name}
+        //               onClick={this.handleSubmitStep}>
+        //                <span>{generator.config.description}</span>
+        //            </a>
+        //        );
+        //    });
+        //}
         return (
             <div style={this.props.formStyle}>
                 <h5 className='text-center'>Select appropriate generators' pack</h5>
