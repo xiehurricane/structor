@@ -20,6 +20,8 @@ import {
     Button
 } from 'react-bootstrap';
 
+const ALL_GROUP_KEY = 'All';
+
 class FormRegeneratorList extends Component {
 
     constructor(props) {
