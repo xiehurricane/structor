@@ -378,10 +378,10 @@ class Api {
     }
 
     getGenerationMetaInf(options){
-        return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorName'])
+        return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorFilePath'])
             .then( () => {
-                const { componentModel, generatorName, componentName, componentGroup: groupName } = options;
-                return this.generatorManager.initGenerator(generatorName)
+                const { componentModel, generatorFilePath, componentName, componentGroup: groupName } = options;
+                return this.generatorManager.initGeneratorByFile(generatorFilePath)
                     .then(generatorObj => {
                         if(!generatorObj.config){
                             throw Error('Generator ' + generatorObj.filePath + ' is not configured properly.');
@@ -410,11 +410,11 @@ class Api {
     }
 
     generateComponentCode(options){
-        return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorName', 'meta'])
+        return this.validator.validateOptions(options, ['componentName', 'componentGroup', 'componentModel', 'generatorFilePath', 'meta'])
             .then( () => {
-                const { componentModel, generatorName, componentName, componentGroup: groupName, meta } = options;
+                const { componentModel, generatorFilePath, componentName, componentGroup: groupName, meta } = options;
 
-                return this.generatorManager.initGenerator(generatorName)
+                return this.generatorManager.initGeneratorByFile(generatorFilePath)
                     .then(generatorObj => {
                         if(!generatorObj.config){
                             throw Error('Generator ' + generatorObj.filePath + ' is not configured properly.');

@@ -150,7 +150,7 @@ export function submitStep1(options){
 
     return (dispatch, getState) => {
 
-        const { generatorName } = options;
+        const { generatorFilePath } = options;
 
         const state = getState();
         const { deskPage: { searchResult }, modalComponentGenerator: { groupName, componentName } } = state;
@@ -162,10 +162,10 @@ export function submitStep1(options){
                     componentGroup: groupName,
                     componentName: componentName,
                     componentModel: model,
-                    generatorName: generatorName
+                    generatorFilePath: generatorFilePath
                 },
                 [COMPONENT_GENERATOR_START_STEP_2],
-                { generatorName }
+                { generatorFilePath }
             )
         );
     }
@@ -187,7 +187,7 @@ export function submitStep2(options){
     return (dispatch, getState) => {
         try{
             const state = getState();
-            const { deskPage: { searchResult }, modalComponentGenerator: { groupName, componentName, selectedGeneratorName } } = state;
+            const { deskPage: { searchResult }, modalComponentGenerator: { groupName, componentName, selectedGeneratorFilePath } } = state;
             const metaModel = JSON.parse(options.metaModel);
             let model = Utils.fulex(searchResult.found);
             Utils.cleanPropsUmyId(model);
@@ -198,7 +198,7 @@ export function submitStep2(options){
                         componentGroup: groupName,
                         componentName: componentName,
                         componentModel: model,
-                        generatorName: selectedGeneratorName,
+                        generatorFilePath: selectedGeneratorFilePath,
                         meta: metaModel
                     },
                     [COMPONENT_GENERATOR_START_STEP_3],

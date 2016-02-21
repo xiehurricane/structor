@@ -90,7 +90,7 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
                 if(payload.data && payload.options){
                     state.metaModel = JSON.stringify(payload.data.metaModel, null, 4);
                     state.metaHelp = payload.data.metaHelp;
-                    state.selectedGeneratorName = payload.options.generatorName;
+                    state.selectedGeneratorFilePath = payload.options.generatorFilePath;
                 }
                 return state;
             })();

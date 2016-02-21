@@ -65,6 +65,17 @@ class GeneratorManager {
             });
     }
 
+    initGeneratorByFile(filePath){
+        return this.fileManager.readJson(filePath)
+            .then( jsonObj => {
+                return {
+                    dirPath: path.dirname(filePath),
+                    filePath: filePath,
+                    config: jsonObj
+                }
+            });
+    }
+
     getGeneratorList(){
         return this.fileManager.readDirectory(this.sm.getProject('generators.dirPath'), ['generator.json'])
             .then( dirTree => {
@@ -87,14 +98,22 @@ class GeneratorManager {
                 return sequence.then(() => { return dirTree; });
             })
             .then( dirTree => {
-                var catalogs = {};
-                var allFiles = [];
+                let catalogs = {};
+                let allFiles = [];
+                let allCatalogs = [];
+                if(dirTree.dirs && dirTree.dirs.length > 0){
+                    dirTree.dirs.forEach(dir => {
+                        if(dir.dirs && dir.dirs.length > 0){
+                            allCatalogs.push({dirNamePath: dir.dirNamePath, dirName: dir.dirName});
+                        }
+                    });
+                }
                 this.fileManager.traverseDirTree(dirTree, (type, obj) => {
                     if(type === 'dir'){
                         if(obj.files && obj.files.length > 0){
                             allFiles = allFiles.concat(obj.files);
                         }
-                        var files = [];
+                        let files = [];
                         this.fileManager.traverseDirTree(obj, (_type, innerObj) => {
                             if(_type === 'file'){
                                 files.push(innerObj);
@@ -105,7 +124,7 @@ class GeneratorManager {
                             if(obj.dirs && obj.dirs.length > 0){
                                 obj.dirs.forEach(dir => {
                                     if(dir.dirs && dir.dirs.length > 0){
-                                        innerCatalogs.push(dir.dirNamePath);
+                                        innerCatalogs.push({dirNamePath: dir.dirNamePath, dirName: dir.dirName});
                                     }
                                 });
                                 catalogs[obj.dirNamePath] = {
@@ -117,7 +136,10 @@ class GeneratorManager {
                         }
                     }
                 });
-                catalogs.allFiles = allFiles;
+                catalogs.All = {
+                    catalogs: allCatalogs,
+                    files: allFiles
+                };
                 return catalogs;
             });
     }

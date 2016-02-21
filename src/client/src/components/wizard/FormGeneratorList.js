@@ -20,12 +20,22 @@ import {
     Button
 } from 'react-bootstrap';
 
+const ALL_GROUP_KEY = 'All';
+
 class FormGeneratorList extends Component {
 
     constructor(props) {
         super(props);
         this.handleBackStep = this.handleBackStep.bind(this);
         this.handleSubmitStep = this.handleSubmitStep.bind(this);
+        this.handleChangeCatalog = this.handleChangeCatalog.bind(this);
+        this.handleChangeBackCatalog = this.handleChangeBackCatalog.bind(this);
+        this.groupsHistory = [];
+        this.state = {
+            groupKey: ALL_GROUP_KEY,
+            groupName: ALL_GROUP_KEY,
+            groupNameBack: null
+        };
     }
 
     handleBackStep(e) {
@@ -40,44 +50,144 @@ class FormGeneratorList extends Component {
         e.preventDefault();
         e.stopPropagation();
         if (this.props.onSubmitStep) {
-            var generatorName = e.currentTarget.attributes['data-generator-name'].value;
+            let generatorFilePath = e.currentTarget.attributes['data-generator-file'].value;
             this.props.onSubmitStep({
-                generatorName: generatorName
+                generatorFilePath: generatorFilePath
             });
         }
     }
 
+    handleChangeCatalog(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const newGroupKey = e.currentTarget.attributes['data-catalog'].value;
+        const newGroupName = e.currentTarget.attributes['data-catalog-name'].value;
+        if(newGroupKey){
+            let newGroupNameBack = null;
+            if(newGroupKey !== ALL_GROUP_KEY){
+                const { groupKey, groupName, groupNameBack } = this.state;
+                newGroupNameBack = groupName;
+                this.groupsHistory.push({ groupKey, groupName, groupNameBack});
+            } else {
+                this.groupsHistory = [];
+            }
+            this.setState({
+                groupKey: newGroupKey,
+                groupName: newGroupName,
+                groupNameBack: newGroupNameBack
+            });
+        }
+    }
+
+    handleChangeBackCatalog(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(this.groupsHistory.length > 0){
+            const { groupKey, groupName, groupNameBack } = this.groupsHistory.pop();
+            if(groupKey){
+                this.setState({
+                    groupKey,
+                    groupName,
+                    groupNameBack
+                });
+            }
+        }
+    }
+
     render() {
+        let generatorGroupCatalogs = [];
         let generatorItems = [];
-        console.log(JSON.stringify(this.props.generatorList, null, 4));
-        //if(this.props.generatorList && this.props.generatorList.length > 0){
-        //    this.props.generatorList.forEach( (generator, index) => {
-        //        generatorItems.push(
-        //            <a className="list-group-item" href="#"
-        //               key={'generator' + generator.config.name + index}
-        //               style={{position: 'relative'}}
-        //               data-generator-name={generator.config.name}
-        //               onClick={this.handleSubmitStep}>
-        //                <span>{generator.config.description}</span>
-        //            </a>
-        //        );
-        //    });
-        //}
+        let headGroupItems = [];
+        const { generatorList } = this.props;
+        const { groupKey, groupName, groupNameBack } = this.state;
+        const generatorGroup = generatorList[groupKey];
+        headGroupItems.push(
+                <a href="#"
+                   className="list-group-item"
+                   key={'allFiles'}
+                   style={{position: 'relative'}}
+                   data-catalog="All"
+                   data-catalog-name="All"
+                   onClick={this.handleChangeCatalog}>
+                    <span>Reset filter</span>
+                    <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
+                        <span className="fa fa-reply-all"></span>
+                    </span>
+                </a>
+        );
+        if(this.groupsHistory.length > 0){
+            headGroupItems.push(
+                    <a href="#"
+                       className="list-group-item"
+                       key={'backNavigation'}
+                       style={{position: 'relative'}}
+                       onClick={this.handleChangeBackCatalog}>
+                        <span>{groupNameBack}</span>
+                        <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
+                            <span className="fa fa-reply"></span>
+                        </span>
+
+                    </a>
+            );
+        }
+        if(generatorGroup){
+            if(generatorGroup.catalogs && generatorGroup.catalogs.length > 0){
+                generatorGroup.catalogs.forEach( (catalog, index) => {
+                    generatorGroupCatalogs.push(
+                            <a href="#"
+                               className="list-group-item"
+                               key={'catalog' + index}
+                               style={{position: 'relative'}}
+                               data-catalog={catalog.dirNamePath}
+                               data-catalog-name={catalog.dirName}
+                               onClick={this.handleChangeCatalog}>
+                                <span>{catalog.dirName}</span>
+                                <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
+                                    <span className="fa fa-chevron-right"></span>
+                                </span>
+                            </a>
+                    );
+                });
+            }
+            if(generatorGroup.files && generatorGroup.files.length > 0){
+                generatorGroup.files.forEach( (generator, index) => {
+                    generatorItems.push(
+                        <a href="#"
+                           className="list-group-item"
+                           key={'generator' + generator.config.name + index}
+                           style={{position: 'relative'}}
+                           data-generator-file={generator.filePath}
+                           onClick={this.handleSubmitStep}>
+                            <span>{generator.config.description}</span>
+                        </a>
+                    );
+                });
+            }
+        }
         return (
             <div style={this.props.formStyle}>
-                <h5 className='text-center'>Select appropriate generators' pack</h5>
+                <h5 className='text-center'>{'Generators : ' + groupKey}</h5>
                 <table style={{width: '100%'}}>
                     <tbody>
                     <tr>
-                        <td style={{width: '20%'}}></td>
-                        <td>
-                            <div style={{ maxHeight: '22em', width: '100%', overflow: 'auto'}}>
+                        <td style={{width: '20em', verticalAlign: 'top', padding: '0 .5em 0 0'}}>
+                            <div style={{height: '22em', width: '100%', overflow: 'auto'}}>
+                                <div className="list-group">
+                                    {headGroupItems}
+                                </div>
+                                { generatorGroupCatalogs.length > 0 ? <small>Filter by category:</small> : null }
+                                <div className="list-group">
+                                    {generatorGroupCatalogs}
+                                </div>
+                            </div>
+                        </td>
+                        <td style={{verticalAlign: 'top'}}>
+                            <div style={{height: '22em', width: '100%', overflow: 'auto'}}>
                                 <div className="list-group">
                                     {generatorItems}
                                 </div>
                             </div>
                         </td>
-                        <td style={{width: '20%'}}></td>
                     </tr>
                     </tbody>
                 </table>
