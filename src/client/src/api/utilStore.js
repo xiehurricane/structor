@@ -134,7 +134,7 @@ export function removeMarksFromModel(model){
 
 export function pushUndoState(model){
     if(undoPool.length >= 50){
-        undoPool = _.rest(undoPool, 50);
+        undoPool = _.takeRight(undoPool, 50);
     }
     undoPool.push({
         projectModel: model

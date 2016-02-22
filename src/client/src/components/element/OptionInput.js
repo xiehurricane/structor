@@ -111,6 +111,10 @@ class OptionInput extends Component {
         }, 1000);
     }
 
+    componentWillUnmount(){
+        this.delayedChangeInputValue.cancel;
+    }
+
     componentDidMount(){
         if(this.props.focused){
             let input = this.refs.inputElement;
