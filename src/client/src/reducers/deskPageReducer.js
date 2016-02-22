@@ -125,16 +125,16 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
         case Actions.SET_AVAILABLE_COMPONENT_DEFAULT_INDEX: //----------------------------------------------------------
 
             return (() => {
-                state = Utils.fulex(state);
-                let index = parseInt(payload.index);
-                if (state.selectedAvailableComponentDefaults && state.selectedAvailableComponentName) {
-                    if (index >= 0 && index < state.selectedAvailableComponentDefaults.length) {
-                        //console.log('Set available component default index: ' + index);
-                        state.defaultsIndexMap[state.selectedAvailableComponentName] = index;
+                if(!state.previewModel){
+                    state = Utils.fulex(state);
+                    let index = parseInt(payload.index);
+                    if (state.selectedAvailableComponentDefaults && state.selectedAvailableComponentName) {
+                        if (index >= 0 && index < state.selectedAvailableComponentDefaults.length) {
+                            //console.log('Set available component default index: ' + index);
+                            state.defaultsIndexMap[state.selectedAvailableComponentName] = index;
+                        }
+                        state.clipboard = state.selectedAvailableComponentDefaults[index];
                     }
-                    state.clipboard = state.selectedAvailableComponentDefaults[index];
-                    state.previewModel = null;
-                    state.previewComponentCounter++;
                 }
                 return state;
             })();
