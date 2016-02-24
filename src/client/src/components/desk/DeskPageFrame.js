@@ -227,21 +227,24 @@ class DeskPageFrame extends Component {
     }
 
     handleKeyDown(e){
-        //console.log('Key is down');
-        //console.log(document.activeElement);
-        if(document.activeElement.tagName.toUpperCase() === 'BODY'
-            || document.activeElement.tagName.toUpperCase() === 'A'
-            || (document.activeElement.tagName.toUpperCase() === 'IFRAME'
-            && document.activeElement.contentDocument === this.contentDocument)){
+        //console.log('Key is down:' + e.which);
+        //console.log('ActiveElement: ' + document.activeElement);
+
+        let contentEditableElement = document.activeElement.attributes['contenteditable']
+            ? document.activeElement.attributes['contenteditable'].value : false;
+        let elementNameUpperCase = document.activeElement.tagName.toUpperCase();
+        if(e.which === 27){ // Esc key
+            this.props.discardClipboard();
+            this.props.stopQuickPasteInModelByName();
+        } else if(elementNameUpperCase !== 'INPUT'
+            && elementNameUpperCase !== 'TEXTAREA'
+            && elementNameUpperCase !== 'SELECT'
+            && !contentEditableElement
+            && !window.getSelection().toString()){
             if (e.which === 8 || e.which === 46) { // Del or Backspace key
                 e.stopPropagation();
                 e.preventDefault();
                 this.props.deleteInModelSelected();
-            } else if(e.which === 27){ // Esc key
-                e.stopPropagation();
-                e.preventDefault();
-                this.props.discardClipboard();
-                this.props.stopQuickPasteInModelByName();
             } else if (e.metaKey || e.ctrlKey) {
                 //console.log('Meta key is down ->');
                 const { selectedUmyIdToCopy, selectedUmyIdToCut } = this.props;
