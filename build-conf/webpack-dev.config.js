@@ -6,7 +6,8 @@ module.exports = [
         name: "browser",
         entry: {
             main: './src/client/src/main.js',
-            docs: './src/client/src/docs.js'
+            docs: './src/client/src/docs.js',
+            generators: './src/client/src/generators.js'
         },
         output: {
             path: './static',

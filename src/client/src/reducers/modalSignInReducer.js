@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import * as Actions from '../actions/applicationActions.js';
-
-function mergeState(state, newState){
-    return state.merge(newState);
-}
+import * as Actions from '../actions/modalSignInActions.js';
 
 export default function(state = {}, action = {type: 'UNKNOWN'}){
 
@@ -26,11 +22,11 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
 
     switch (action.type){
 
-        case Actions.SET_APPLICATION_STAGE:
-            return Object.assign({}, state, { stage: payload.stage });
+        case Actions.SHOW_MODAL_SIGN_IN: //-------------------------------------------------------------------------
+            return Object.assign({}, state, { isOpen: true });
 
-        case Actions.SET_USER_CREDENTIALS:
-            return Object.assign({}, state, { userAccount: payload.data });
+        case Actions.HIDE_MODAL_SIGN_IN: //-------------------------------------------------------------------------
+            return Object.assign({}, state, { isOpen: false });
 
         default:
             return state;

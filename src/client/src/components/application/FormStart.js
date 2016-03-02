@@ -42,7 +42,7 @@ class FormStart extends Component {
                     <Col xs={10} md={8} sm={10} lg={6} xsOffset={1} mdOffset={2} smOffset={1} lgOffset={3}>
                         {alert}
                         <Panel>
-                            <h4 className="text-center text-primary">Apparently, there are some issues with project directory, look at the error message.</h4>
+                            <h4 className="text-center text-primary">There are some issues with project directory.</h4>
                             <h4 className="text-center text-primary">If you don't understand the cause of the error please write to <a href="mailto:support@helmetrex.com">Structor Support</a></h4>
                             <Button bsStyle={ 'default'} block={true} onClick={this.handleRecheckClick}>
                                 <span>Recheck current directory</span>

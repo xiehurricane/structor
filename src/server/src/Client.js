@@ -26,24 +26,8 @@ class Client {
         this.authenticationToken = null;
     }
 
-    setupUserCredentials(options){
-        return new Promise( (resolve, reject) => {
-            this.sm.setIn('client.user', options.user);
-            this.sm.setIn('client.pass', options.pass);
-            resolve();
-        });
-    }
-
-    removeUserCredentials(){
-        return new Promise( (resolve, reject) => {
-            this.sm.setIn('client.user', null);
-            this.sm.setIn('client.pass', null);
-            resolve();
-        });
-    }
-
-    getUser(){
-        return this.configModel.user;
+    setAuthenticationToken(token){
+        this.authenticationToken = token;
     }
 
     post (url, body, isAuth = false) {
@@ -77,7 +61,7 @@ class Client {
                         if (response) {
                             if (response.statusCode !== 200) {
                                 if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
                                 }
@@ -93,7 +77,7 @@ class Client {
                                     }
                                     reject(errorMessage.substr(0, errorMessage.length - 2));
                                 } else {
-                                    resolve(body.data);
+                                    resolve(body);
                                 }
                             }
                         } else {
@@ -136,24 +120,62 @@ class Client {
                         if (response) {
                             if (response.statusCode !== 200) {
                                 if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url);
+                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url + '. Response: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
                                 reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
                             } else {
-                                if (body.error === true) {
-                                    let errorMessage = "Error: ";
-                                    if(body.errors && body.errors.length > 0){
-                                        body.errors.map( errorStr => {
-                                            errorMessage += errorStr + ', ';
-                                        });
-                                    }
-                                    reject(errorMessage.substr(0, errorMessage.length - 2));
+                                resolve(body);
+                            }
+                        } else {
+                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                        }
+                    }
+                )
+            } catch (e) {
+                reject('Error: ' + e.message);
+            }
+        });
+    }
+
+    getText (url, isAuth = false) {
+        return new Promise( (resolve, reject) => {
+            var requestOptions = {
+                headers: {
+                    'X-Auth-Token': this.authenticationToken
+                },
+                uri: url,
+                method: 'GET',
+                json: false
+            };
+            if (isAuth) {
+                if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
+                    requestOptions.auth = {
+                        'user': this.sm.getIn('client.user'),
+                        'pass': this.sm.getIn('client.pass'),
+                        'sendImmediately': true
+                    }
+                } else {
+                    reject('Specify user name and password or create new account.');
+                }
+            }
+            try {
+                request(
+                    requestOptions,
+                    (error, response, body) => {
+                        if (response) {
+                            if (response.statusCode !== 200) {
+                                if (response.statusCode === 401) {
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
-                                    resolve(body.data);
+                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url + '. Response: ' + JSON.stringify(body));
                                 }
+                            } else if (error) {
+                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                            } else {
+                                resolve(body);
                             }
                         } else {
                             reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
@@ -196,7 +218,7 @@ class Client {
                         if (response) {
                             if (response.statusCode !== 200) {
                                 if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
                                 }
@@ -246,7 +268,7 @@ class Client {
                         if (response) {
                             if (response.statusCode !== 200) {
                                 if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
                                 }
@@ -300,7 +322,7 @@ class Client {
                         if (response) {
                             if (response.statusCode !== 200) {
                                 if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
                                 }

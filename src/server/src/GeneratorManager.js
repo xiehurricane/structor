@@ -84,13 +84,15 @@ class GeneratorManager {
                         obj.dirs = [];
                     }
                 });
-                let sequence = Promise.resolve();
+                let sequence = this.fileManager.readJson(this.sm.getProject('config.filePath'));
                 this.fileManager.traverseDirTree(dirTree, (type, obj) => {
                     if(type === 'file'){
-                        sequence = sequence.then(() => {
+                        sequence = sequence.then(projectConfig => {
                             return this.fileManager.readJson(obj.filePath)
                                 .then( jsonObj => {
                                     obj.config = jsonObj;
+                                    obj.projectConfig = projectConfig;
+                                    return projectConfig;
                                 });
                         });
                     }

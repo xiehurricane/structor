@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+import docCookies from '../api/cookies.js';
 import * as Utils from '../api/utils.js';
 import * as UtilStore from '../api/utilStore.js';
 import * as ServerActions from './serverActions.js';
+
 export const SET_APPLICATION_STAGE = 'SET_APPLICATION_STAGE';
 export const EXPORT_APPLICATION = 'EXPORT_APPLICATION';
+export const SET_USER_CREDENTIALS = 'SET_USER_CREDENTIALS';
 
 export function setApplicationStage(stage){
     return {
@@ -61,3 +64,31 @@ export function saveProject(){
 
     }
 }
+
+export function signIn(){
+    return (dispatch, getState) => {
+        const { application: { userAccount:{ email, token}} } = getState();
+        if(!email){
+            let tokenFromCookies = docCookies.getItem("structor-market-token");
+            if (tokenFromCookies) {
+                dispatch(
+                    ServerActions.invoke('initUserCredentialsByToken',
+                        { token: tokenFromCookies },
+                        [SET_USER_CREDENTIALS]
+                    )
+                );
+            }
+        }
+    }
+}
+
+export function signOut(){
+    return (dispatch, getState) => {
+        docCookies.removeItem("structor-market-token", "/");
+        dispatch(ServerActions.invoke('removeUserCredentials', {}));
+        dispatch({type: SET_USER_CREDENTIALS, payload: {
+            data: { userAccount: {}}
+        }});
+    }
+}
+

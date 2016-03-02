@@ -17,10 +17,35 @@
 
 const initialState = {
     application: {
-        stage: 'start'
+        stage: 'start',
+        userAccount: {
+            email: null,
+            regDate: null,
+            subscriptionDescription: null,
+            subscriptionStartDate: null,
+            subscriptionEndDate: null
+        }
     },
     documentation: {
         projectDoc: {}
+    },
+    generators: {
+        installed: {
+            list: [],
+            filter: {
+                groupKey: 'All',
+                groupName: 'All',
+                groupNameBack: null
+            }
+        },
+        available: {
+            list: [],
+            filter: {
+                groupKey: 'All',
+                groupName: 'All',
+                groupNameBack: null
+            }
+        }
     },
     server: {
         request: {
@@ -116,6 +141,9 @@ const initialState = {
         urlValue: null
     },
     modalComponentVariant: {
+        isOpen: false
+    },
+    modalSignIn: {
         isOpen: false
     }
 };

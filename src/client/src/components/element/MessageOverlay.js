@@ -58,7 +58,8 @@ class MessageOverlay extends Component {
                 borderRadius: '.3em',
                 verticalAlign: 'middle',
                 textAlign: 'left',
-                padding: '1.7em',
+                padding: '1.5em',
+                marginBottom: '0.5em',
                 fontSize: '12px'
             };
             const buttonStyle = {
@@ -83,14 +84,17 @@ class MessageOverlay extends Component {
                 } else {
                     messageStyle.backgroundColor = '#5cb85c';
                 }
+                let messageText = item.text && item.text.length > 300 ? item.text.substr(0, 300) : item.text;
                 messages.push(
-                    <p key={'sm' + index} style={messageStyle} >
-                        <span>{item.text}</span>
+                        <div key={'sm' + index} style={messageStyle} >
+                            <p style={{margin: 0}}><span>{messageText}</span></p>
+                            <p style={{margin: 0, cursor: 'pointer'}} onClick={() => {alert(item.text);}}><span>{'[...]'}</span></p>
                         <span
                             style={buttonStyle}
                             className="fa fa-times"
-                            data-message-index={index} onClick={this.handleServerMessageClick}></span>
-                    </p>
+                            data-message-index={index}
+                            onClick={this.handleServerMessageClick}></span>
+                        </div>
                 )
             });
 

@@ -18,10 +18,11 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import { saveProject, exportApplication } from '../../actions/applicationActions.js';
+import { saveProject, exportApplication, signOut } from '../../actions/applicationActions.js';
 import * as DeskActions from '../../actions/deskActions.js';
 import { commandReloadPage } from '../../actions/deskPageActions.js';
 import { showModalProxySetup } from '../../actions/modalProxySetupActions.js';
+import { showModalSignIn } from '../../actions/modalSignInActions.js';
 
 class ToolbarLeft extends Component {
 
@@ -29,18 +30,11 @@ class ToolbarLeft extends Component {
         super(props);
         //this.state = { open: props.open };
         this.handlePublishProject = this.handlePublishProject.bind(this);
-        this.handleProxySetup = this.handleProxySetup.bind(this);
     }
 
     handlePublishProject(e) {
         e.stopPropagation();
         e.preventDefault();
-    }
-
-    handleProxySetup(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        this.props.showModalProxySetup();
     }
 
     //recreateTooltips(){
@@ -89,17 +83,27 @@ class ToolbarLeft extends Component {
                                 <span className="fa fa-gift fa-fw" />&nbsp;Export project</a>
                             </li>
                             <li className="divider" />
-                            <li><a href="#" onClick={this.handleProxySetup}>
+                            <li><a href="#" onClick={() => { this.props.showModalProxySetup(); } }>
                                 <span className="fa fa-gears fa-fw" />&nbsp;Proxy settings</a>
-                            </li>
-                            <li className="divider" />
-                            <li><a href="#" onClick={this.handlePublishProject}>
-                                <span className="fa fa-cloud-upload fa-fw" />&nbsp;Publish project</a>
                             </li>
                             <li className="divider" />
                             <li><a href="/structor/docs.html" target="_blank">
                                 <span className="fa fa-paperclip fa-flip-vertical fa-fw"></span>&nbsp;Project documentation</a>
                             </li>
+                            <li className="divider" />
+                            <li><a href="/structor/generators.html" target="_blank">
+                                <span className="fa fa-list fa-fw"></span>&nbsp;Generators</a>
+                            </li>
+                            <li className="divider" />
+                            { this.props.userAccount.email ?
+                                <li><a href="#" onClick={() => {this.props.signOut()}}>
+                                    <span className="fa fa-sign-out fa-fw" />&nbsp;{'Sign out ' + this.props.userAccount.email}</a>
+                                </li>
+                                :
+                                <li><a href="#" onClick={() => { this.props.showModalSignIn(); }}>
+                                    <span className="fa fa-sign-in fa-fw" />&nbsp;Sign in to Structor Market</a>
+                                </li>
+                            }
                         </ul>
                     </div>
 
@@ -186,14 +190,15 @@ class ToolbarLeft extends Component {
 
 
 function mapStateToProps(state) {
-    const { desk } = state;
+    const { desk, application: {userAccount} } = state;
     return {
         isAvailableComponentsButtonActive: desk.isAvailableComponentsButtonActive,
         isComponentsHierarchyButtonActive: desk.isComponentsHierarchyButtonActive,
         isQuickOptionsButtonActive: desk.isQuickOptionsButtonActive,
         isEditMode: desk.isEditMode,
         isLivePreviewMode: desk.isLivePreviewMode,
-        isDocumentMode: desk.isDocumentMode
+        isDocumentMode: desk.isDocumentMode,
+        userAccount: userAccount
     };
 }
 
@@ -202,7 +207,9 @@ let mappedActions = Object.assign({}, DeskActions,
         showModalProxySetup,
         saveProject,
         exportApplication,
-        commandReloadPage
+        commandReloadPage,
+        showModalSignIn,
+        signOut
     }
 );
 

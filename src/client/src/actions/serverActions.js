@@ -34,42 +34,42 @@ export function waitServerResponse(method){
     return {
         type: WAIT_SERVER_RESPONSE,
         payload: { method: method }
-    }
+    };
 }
 
 export function receiveServerResponseSuccess(method, resetActiveCounter = false){
     return {
         type: RECEIVE_SERVER_RESPONSE_SUCCESS,
         payload: { method: method, resetActiveCounter: resetActiveCounter }
-    }
+    };
 }
 
 export function receiveServerResponseFailure(method, errorText, resetActiveCounter = false){
     return {
         type: RECEIVE_SERVER_RESPONSE_FAILURE,
         payload: { method: method, errorText: errorText, resetActiveCounter: resetActiveCounter }
-    }
+    };
 }
 
 export function removeMessage(index){
     return {
         type: REMOVE_SERVER_MESSAGE,
         payload: { index: index }
-    }
+    };
 }
 
 export function setServerMessage(text, isError = true){
     return {
         type: SET_SERVER_MESSAGE,
         payload: { text: text, isError: isError }
-    }
+    };
 }
 
 export function transferDataToAction(type, options = null, data = null){
     return {
         type: type,
         payload: { options: options, data: data }
-    }
+    };
 }
 
 export function invoke(method, options, transferActions = [], transferOptions = null, isSoftErrorIgnored = false){
@@ -113,7 +113,15 @@ export function invoke(method, options, transferActions = [], transferOptions = 
                         dispatch(receiveServerResponseFailure(method, null));
 
                     } else {
-                        dispatch(receiveServerResponseFailure(method, JSON.stringify(data.errors)));
+                        let errorText = '';
+                        if(_.isArray(data.errors)){
+                            data.errors.forEach(errText => {
+                                errorText += '\n' + errText;
+                            });
+                        } else {
+                            errorText = JSON.stringify(data.errors);
+                        }
+                        dispatch(receiveServerResponseFailure(method, errorText));
                     }
                 } else {
                     transferActions.forEach( actionType => {
@@ -123,8 +131,8 @@ export function invoke(method, options, transferActions = [], transferOptions = 
                 }
             }).catch( error => {
                 //console.log('request failed', error);
-                dispatch(receiveServerResponseFailure(method, error));
-            })
+                dispatch(receiveServerResponseFailure(method, error.message));
+            });
 
     }
 }
@@ -168,7 +176,7 @@ export function invokeSilently(method, options, transferActions = [], transferOp
                 }
             }).catch( error => {
                 console.error('request failed', error);
-            })
+            });
 
     }
 }

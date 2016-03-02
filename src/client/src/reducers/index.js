@@ -26,7 +26,8 @@ import modalComponentGeneratorReducer from './modalComponentGeneratorReducer.js'
 import modalPageInfoReducer from './modalPageInfoReducer.js';
 import modalProxySetupReducer from './modalProxySetupReducer.js';
 import modalComponentVariantReducer from './modalComponentVariantReducer.js';
-
+import modalSignInReducer from './modalSignInReducer.js';
+import generatorsReducer from './generatorsReducer.js';
 const rootReducer = combineReducers({
     application: applicationReducer,
     documentation: documentationReducer,
@@ -38,7 +39,9 @@ const rootReducer = combineReducers({
     modalComponentGenerator: modalComponentGeneratorReducer,
     modalPageInfo: modalPageInfoReducer,
     modalProxySetup: modalProxySetupReducer,
-    modalComponentVariant: modalComponentVariantReducer
+    modalComponentVariant: modalComponentVariantReducer,
+    modalSignIn: modalSignInReducer,
+    generators: generatorsReducer
 });
 
 export default rootReducer;

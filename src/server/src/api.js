@@ -78,7 +78,7 @@ class Api {
                     res.send({ data: response });
                 })
                 .catch( err => {
-                    let errorMessage = err.message ? err.message : err;
+                    let errorMessage = err.message ? err.message : err.toString();
                     res.send({ error: true, errors: [errorMessage] });
                 });
         });
@@ -123,20 +123,22 @@ class Api {
         });
     }
 
+    initUserCredentialsByToken(options){
+        return this.validator.validateOptions(options, ['token'])
+            .then(() => {
+                return this.clientManager.initUserCredentialsByToken(options);
+            });
+    }
+
     initUserCredentials(options){
-        return this.clientManager.initUserCredentials(options);
+        return this.validator.validateOptions(options, ['username', 'password'])
+            .then(() => {
+                return this.clientManager.initUserCredentials(options);
+            });
     }
 
     removeUserCredentials(options){
-        return this.clientManager.removeUserCredentials();
-    }
-
-    loadUserProfile(options){
-        return this.clientManager.loadUserProfile();
-    }
-
-    createUserProfile(options){
-        return this.clientManager.createUserProfile(options);
+        return this.clientManager.removeAuthToken();
     }
 
     readConfiguration(options){
@@ -541,7 +543,16 @@ class Api {
             });
     }
 
+    getGeneratorBriefText(options){
+        return this.validator.validateOptions(options, ['generatorKey'])
+            .then(() => {
+                return this.clientManager.getGeneratorBriefText(options.generatorKey);
+            });
+    }
 
+    getAvailableGeneratorList(options){
+        return this.clientManager.getAvailableGeneratorList();
+    }
 
 }
 

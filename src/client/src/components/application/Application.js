@@ -30,6 +30,7 @@ import ModalComponentGenerator from '../modal/ModalComponentGenerator.js';
 import ModalComponentVariant from '../modal/ModalComponentVariant.js';
 import ModalPageInfo from '../modal/ModalPageInfo.js';
 import ModalProxySetup from '../modal/ModalProxySetup.js';
+import ModalSignIn from '../modal/ModalSignIn.js';
 import FormStart from './FormStart.js';
 import Desk from '../desk/Desk.js';
 
@@ -43,6 +44,7 @@ class Application extends Component {
     }
 
     componentDidMount(){
+        this.props.signIn();
         this.props.invokeServerApi('checkProjectDir', {}, [ServerActions.DATA_PROJECT_DIR_STATUS]);
         this.props.invokeServerApi('getPackageConfig', {}, [ServerActions.DATA_PACKAGE_CONFIG]);
         //this.props.invokeServerApi('loadUserProfile', {}, [ServerActions.DATA_USER_PROFILE], null, true);
@@ -126,6 +128,7 @@ class Application extends Component {
                 <ModalProxySetup />
                 <MessageOverlay />
                 <GlobalOverlay />
+                <ModalSignIn />
             </div>
         );
     }
@@ -145,6 +148,7 @@ export default connect(
     mapStateToProps,
     {
         invokeServerApi: ServerActions.invoke,
-        setStage: AppActions.setApplicationStage
+        setStage: AppActions.setApplicationStage,
+        signIn: AppActions.signIn
     }
 )(Application);

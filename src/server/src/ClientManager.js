@@ -28,63 +28,69 @@ class ClientManager {
     }
 
     getAllProjects(options){
-        return this.client.post(this.sm.getIn('client.serviceURL') + '/structor/invoke', { methodName: 'getProjectGallery' });
+        return this.client.get(this.sm.getIn('client.serviceURL') + '/sm/public/gallery/list');
     }
 
     invokePreGenerationOnline(options){
-        return this.client.post(this.sm.getIn('client.serviceURL') + '/gengine/preprocess', options.data);
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/sm/gengine/preprocess', options.data);
     }
 
     invokeGenerationOnline(options){
-        return this.client.post(this.sm.getIn('client.serviceURL') + '/gengine/process', options.data);
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/sm/gengine/process', options.data);
     }
 
-    initUserCredentials(options){
-        return this.client.setupUserCredentials(options).then(() => { return 'OK'});
-    }
-
-    removeUserCredentials(options){
-        return this.client.removeUserCredentials().then(() => { return 'OK'});
-    }
-
-    loadUserProfile(){
-        var userProfile = {
-            login: this.sm.getIn('client.user')
-        };
-        return this.client.post(this.sm.getIn('client.serviceURL') + "/api/structor/secure/getUserProfile", userProfile, true)
-            .then( () => {
-                return { userName: this.sm.getIn('client.user') };
+    initUserCredentialsByToken(options){
+        this.client.setAuthenticationToken(options.token);
+        return this.client.get(this.sm.getIn('client.serviceURL') + '/sm/user/profile-full')
+            .then(userAccount => {
+                return Object.assign({}, userAccount, {token: options.token});
+            })
+            .catch(err => {
+                console.log('Authentication token is invalid or was expired');
             });
     }
 
-    createUserProfile(options){
-        var userProfile = {
-            login: options.user,
-            pwd: options.pass,
-            email: options.email
-        };
-        return this.client.post(this.sm.getIn('client.serviceURL') + "/api/structor/addUser", userProfile);
+    initUserCredentials(options){
+        return this.client.post(this.sm.getIn('client.serviceURL') + '/sm/auth',
+            { username: options.username, password: options.password })
+            .then(response => {
+                return this.initUserCredentialsByToken(response);
+            })
+            .catch(error => {
+                throw Error('Account credentials are not valid.');
+            });
+    }
+
+    removeAuthToken(){
+        this.client.setAuthenticationToken(null);
+        return Promise.resolve();
     }
 
     downloadGalleryFile(downloadUrl){
         return this.client.downloadGet(downloadUrl);
     }
 
-    //createProject(options){
-    //    return this.client.post('/secure/createProject', options, true);
-    //}
-    //
-    //checkCreateProject(options){
-    //    return this.client.post('/secure/checkCreateProject', options, true);
-    //}
-    //
-    //uploadProjectFiles(options){
-    //    var uploadConfig = {
-    //        url: '/secure/uploadProject/' + options.projectId,
-    //        filePaths: options.filePaths
-    //    };
-    //    return this.client.upload(uploadConfig, true);
-    //}
+    getGeneratorBriefText(generatorKey){
+        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
+            .then(projectConfig => {
+                return this.client.getText(this.sm.getIn('client.serviceURL') + '/genclient/' +
+                    projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/brief.md');
+            })
+            .then(text => {
+                return {
+                    briefText: text
+                }
+            });
+    }
+
+    getAvailableGeneratorList(){
+        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
+            .then(projectConfig => {
+                if(projectConfig.projectId){
+                    return this.client.get(this.sm.getIn('client.serviceURL') + '/sm/public/generator/map?projectId=' + projectConfig.projectId);
+                }
+            });
+    }
 
 }
 
