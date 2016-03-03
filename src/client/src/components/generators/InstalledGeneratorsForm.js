@@ -153,7 +153,10 @@ class InstalledGeneratorsForm extends Component {
         }
         return (
             <div>
-                <h5 className='text-center'>{'Generators : ' + groupKey}</h5>
+                <h5 className='text-center'>
+                    <small>{'Category:  '}</small>
+                    <span>{groupKey}</span>
+                </h5>
                 <Grid fluid={ true }>
                     <Row style={ { minHeight: "40em", position: 'relative'} }>
                         <Col

@@ -36,13 +36,13 @@ class ModalSignIn extends Component {
         this.handleSignIn = this.handleSignIn.bind(this);
     }
 
-    handleClose(e){
+    handleClose(e) {
         e.stopPropagation();
         e.preventDefault();
         this.props.hideModalSignIn();
     }
 
-    handleSignIn(e){
+    handleSignIn(e) {
         e.stopPropagation();
         e.preventDefault();
         this.props.signIn(this.refs.emailElement.getValue(),
@@ -51,37 +51,68 @@ class ModalSignIn extends Component {
         //this.props.saveModalProxySetup(this.refs.urlInputElement.getUrlValue());
     }
 
-    render(){
+    render() {
         return (
             <Modal show={this.props.isOpen}
                    onHide={this.props.hideModalSignIn}
                    dialogClassName='umy-modal-overlay'
                    backdrop={true}
                    keyboard={true}
-                   bsSize='small'
+                   bsSize='large'
                    ref='dialog'
                    animation={true}>
-                <form>
-                <Modal.Header closeButton={true} aria-labelledby='contained-modal-title'>
-                    <Modal.Title id='contained-modal-title'>Sign in to Structor Market</Modal.Title>
-                </Modal.Header>
                 <Modal.Body>
-                    <InputTextStateful type="text"
-                                       ref='emailElement'
-                                       label='E-mail'
-                                       placeholder="Enter e-mail address"/>
-                    <InputTextStateful type="password"
-                                       ref='passwordElement'
-                                       label='Password'
-                                       placeholder="Enter password"/>
-                    <CheckboxStateful id="staySignedElement" ref="staySignedElement" value={true} />
-                    <label style={{marginLeft: '0.5em', cursor: 'pointer'}} htmlFor="staySignedElement">Stay signed in</label>
+                    <h4 className='text-center' style={{margin: '2em 0 2em 0'}}>Sign in to Structor Market</h4>
+                    <form>
+                        <table style={{width: '100%'}}>
+                            <tbody>
+                            <tr>
+                                <td style={{width: '30%'}}></td>
+                                <td style={{verticalAlign: 'middle'}}>
+                                    <InputTextStateful type="text"
+                                                       ref='emailElement'
+                                                       label='E-mail'
+                                                       placeholder="Enter e-mail address"/>
+                                </td>
+                                <td style={{width: '30%', verticalAlign: 'middle', padding: '0.5em 0 0.5em 1em'}}>
+                                    <p><a href="http://localhost/sign-up" target="_blank"><span>Create new account</span></a></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '30%'}}></td>
+                                <td style={{verticalAlign: 'middle'}}>
+                                    <InputTextStateful type="password"
+                                                       ref='passwordElement'
+                                                       label='Password'
+                                                       placeholder="Enter password"/>
+                                </td>
+                                <td style={{width: '30%', verticalAlign: 'middle', padding: '0.5em 0 0.5em 1em'}}>
+                                    <p><a href="http://localhost/password-recover-request" target="_blank"><span>Forgot password?</span></a></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '30%'}}></td>
+                                <td style={{paddingTop: '0.5em'}}>
+                                    <CheckboxStateful id="staySignedElement" ref="staySignedElement" value={true}/>
+                                    <label style={{marginLeft: '0.5em', cursor: 'pointer'}} htmlFor="staySignedElement">Stay
+                                        signed in</label>
+                                </td>
+                                <td style={{width: '30%'}}></td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '30%'}}></td>
+                                <td style={{textAlign: 'center', padding: '2em 0 3em 0'}}>
+                                    <Button type="submit" onClick={this.handleSignIn} bsStyle="primary">Sign In</Button>
+                                    <span>&nbsp;</span>
+                                    <span>&nbsp;</span>
+                                    <Button onClick={this.handleClose}>Cancel</Button>
+                                </td>
+                                <td style={{width: '30%'}}></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.handleClose}>Cancel</Button>
-                    <Button type="submit" onClick={this.handleSignIn} bsStyle="primary">Sign In</Button>
-                </Modal.Footer>
-                </form>
             </Modal>
         );
     }

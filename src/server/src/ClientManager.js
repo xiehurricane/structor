@@ -70,11 +70,27 @@ class ClientManager {
         return this.client.downloadGet(downloadUrl);
     }
 
+    downloadGeneratorFile(generatorKey, version){
+
+        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
+            .then(projectConfig => {
+                if(projectConfig.projectName){
+                    let downloadUrl = this.sm.getIn('client.serviceURL') + '/genclient/' +
+                        projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/' + version + '/client.tar.gz';
+                    return this.client.downloadGet(downloadUrl);
+                }
+                throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
+            });
+    }
+
     getGeneratorBriefText(generatorKey){
         return this.fileManager.readJson(this.sm.getProject('config.filePath'))
             .then(projectConfig => {
-                return this.client.getText(this.sm.getIn('client.serviceURL') + '/genclient/' +
-                    projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/brief.md');
+                if(projectConfig.projectName){
+                    return this.client.getText(this.sm.getIn('client.serviceURL') + '/genclient/' +
+                        projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/brief.md');
+                }
+                throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
             })
             .then(text => {
                 return {
@@ -89,6 +105,7 @@ class ClientManager {
                 if(projectConfig.projectId){
                     return this.client.get(this.sm.getIn('client.serviceURL') + '/sm/public/generator/map?projectId=' + projectConfig.projectId);
                 }
+                throw Error('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
             });
     }
 

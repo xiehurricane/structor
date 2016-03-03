@@ -26,7 +26,7 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
             return (() => {
                 state = Object.assign({}, state);
                 state.installed = {
-                    list: payload.data,
+                    list: payload.data || [],
                     filter: state.installed.filter
                 };
                 return state;
@@ -36,7 +36,7 @@ export default function(state = {}, action = {type: 'UNKNOWN'}){
             return (() => {
                 state = Object.assign({}, state);
                 state.available = {
-                    list: payload.data,
+                    list: payload.data || [],
                     filter: state.available.filter
                 };
                 return state;

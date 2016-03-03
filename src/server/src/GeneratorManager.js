@@ -142,6 +142,19 @@ class GeneratorManager {
                     catalogs: allCatalogs,
                     files: allFiles
                 };
+                _.forOwn(catalogs, (value, prop) => {
+                    if(value.files && value.files.length > 0){
+                        value.files.sort((a, b) => {
+                            if (a.filePath > b.filePath) {
+                                return 1;
+                            }
+                            if (a.filePath < b.filePath) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+                    }
+                });
                 return catalogs;
             });
     }

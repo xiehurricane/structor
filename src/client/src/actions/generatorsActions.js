@@ -60,14 +60,44 @@ export function setFilterForAvailable(filter){
 
 export function installGenerator(key, version){
     console.log('Installing generator: ' + key + ' version: ' + version);
-    return {
-        type: 'Unnimplemented'
+    const method1 = 'downloadGenerator';
+    return (dispatch, getState) => {
+        dispatch(ServerActions.waitServerResponse(method1));
+        return makeRequest(method1, {generatorKey: key, version})
+            .then(() => {
+                dispatch(ServerActions.receiveServerResponseSuccess(method1));
+                dispatch(ServerActions.setServerMessage('Generator was installed successfully', false));
+                dispatch(
+                    ServerActions.invoke('getGeneratorList',
+                        {},
+                        [GET_INSTALLED_GENERATORS_LIST]
+                    )
+                );
+            })
+            .catch( error => {
+                dispatch(ServerActions.receiveServerResponseFailure(method1, error.message));
+            });
     };
 }
 
 export function uninstallGenerator(key){
     console.log('Uninstalling generator: ' + key);
-    return {
-        type: 'Unnimplemented'
+    const method1 = 'removeGenerator';
+    return (dispatch, getState) => {
+        dispatch(ServerActions.waitServerResponse(method1));
+        return makeRequest(method1, {generatorKey: key})
+            .then(() => {
+                dispatch(ServerActions.receiveServerResponseSuccess(method1));
+                dispatch(ServerActions.setServerMessage('Generator was uninstalled successfully', false));
+                dispatch(
+                    ServerActions.invoke('getGeneratorList',
+                        {},
+                        [GET_INSTALLED_GENERATORS_LIST]
+                    )
+                );
+            })
+            .catch( error => {
+                dispatch(ServerActions.receiveServerResponseFailure(method1, error.message));
+            });
     };
 }

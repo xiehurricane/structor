@@ -167,7 +167,10 @@ class FormRegeneratorList extends Component {
         }
         return (
             <div style={this.props.formStyle}>
-                <h5 className='text-center'>{'Generators : ' + groupKey}</h5>
+                <h5 className='text-center'>
+                    <small>{'Category: '}</small>
+                    <span>{groupKey}</span>
+                </h5>
                 <table style={{width: '100%'}}>
                     <tbody>
                     <tr>
@@ -175,11 +178,10 @@ class FormRegeneratorList extends Component {
                             <div style={{height: '22em', width: '100%', overflow: 'auto'}}>
                                 <div className="list-group">
                                     {headGroupItems}
-                                </div>
-                                { generatorGroupCatalogs.length > 0 ? <small>Filter by category:</small> : null }
-                                <div className="list-group">
+                                    <div className="list-group-item active">{groupName}</div>
                                     {generatorGroupCatalogs}
                                 </div>
+
                             </div>
                         </td>
                         <td style={{verticalAlign: 'top'}}>

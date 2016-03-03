@@ -27,6 +27,7 @@ class FormGeneratorList extends Component {
     constructor(props) {
         super(props);
         this.handleBackStep = this.handleBackStep.bind(this);
+        this.handleInstallAdditional = this.handleInstallAdditional.bind(this);
         this.handleSubmitStep = this.handleSubmitStep.bind(this);
         this.handleChangeCatalog = this.handleChangeCatalog.bind(this);
         this.handleChangeBackCatalog = this.handleChangeBackCatalog.bind(this);
@@ -44,6 +45,18 @@ class FormGeneratorList extends Component {
         if (this.props.onBackStep) {
             this.props.onBackStep();
         }
+    }
+
+    handleInstallAdditional(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (this.props.onBackStep) {
+            this.props.onBackStep();
+        }
+        window.open(
+            '/structor/generators.html',
+            '_blank'
+        );
     }
 
     handleSubmitStep(e) {
@@ -166,7 +179,10 @@ class FormGeneratorList extends Component {
         }
         return (
             <div style={this.props.formStyle}>
-                <h5 className='text-center'>{'Generators : ' + groupKey}</h5>
+                <h5 className='text-center'>
+                    <small>{'Category: '}</small>
+                    <span>{groupKey}</span>
+                </h5>
                 <table style={{width: '100%'}}>
                     <tbody>
                     <tr>
@@ -174,9 +190,7 @@ class FormGeneratorList extends Component {
                             <div style={{height: '22em', width: '100%', overflow: 'auto'}}>
                                 <div className="list-group">
                                     {headGroupItems}
-                                </div>
-                                { generatorGroupCatalogs.length > 0 ? <small>Filter by category:</small> : null }
-                                <div className="list-group">
+                                    <div className="list-group-item active">{groupName}</div>
                                     {generatorGroupCatalogs}
                                 </div>
                             </div>
@@ -193,6 +207,9 @@ class FormGeneratorList extends Component {
                 </table>
                 <div style={{display: 'table', textAlign: 'center', width: '100%', marginTop: '2em'}}>
                     <Button bsStyle='default' onClick={this.handleBackStep}>Back</Button>
+                    <span>&nbsp;</span>
+                    <span>&nbsp;</span>
+                    <a href="#" onClick={this.handleInstallAdditional}>Install additional generators</a>
                 </div>
             </div>
         );

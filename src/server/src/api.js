@@ -239,6 +239,27 @@ class Api {
 
     }
 
+    downloadGenerator(options) {
+        const generatorPackFilePath = 'client.tar.gz';
+        return this.validator.validateOptions(options, ['generatorKey', 'version'])
+            .then( () => {
+                return this.clientManager.downloadGeneratorFile(options.generatorKey, options.version);
+            })
+            .then( fileBody => {
+                return this.storageManager.writeGeneratorBinaryFile(generatorPackFilePath, fileBody);
+            })
+            .then( () => {
+                return this.storageManager.unpackGeneratorFile(generatorPackFilePath);
+            });
+    }
+
+    removeGenerator(options){
+        return this.validator.validateOptions(options, ['generatorKey'])
+            .then(() => {
+                return this.storageManager.deleteGeneratorDirByKey(options.generatorKey);
+            });
+    }
+
     openLocalProject(options){
         let response = {};
         return this.storageManager.readProjectJsonModel()

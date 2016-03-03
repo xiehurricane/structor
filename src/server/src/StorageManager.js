@@ -120,6 +120,11 @@ class StorageManager {
         return this.fileManager.writeBinaryFile(destFilePath, fileData);
     }
 
+    writeGeneratorBinaryFile(filePath, fileData){
+        let destFilePath = path.join(this.sm.getProject('generators.dirPath'), filePath);
+        return this.fileManager.writeBinaryFile(destFilePath, fileData);
+    }
+
     writeSourceFile(filePath, fileData){
         return this.fileManager.writeFile(filePath, fileData, false);
     }
@@ -140,6 +145,19 @@ class StorageManager {
                         return this.fileManager.removeFile(srcFilePath);
                     });
             });
+    }
+
+    unpackGeneratorFile(filePath){
+        let srcFilePath = path.join(this.sm.getProject('generators.dirPath'), filePath);
+        return this.fileManager.unpackTarGz(srcFilePath, this.sm.getProject('generators.dirPath'))
+            .then(() => {
+                return this.fileManager.removeFile(srcFilePath);
+            });
+    }
+
+    deleteGeneratorDirByKey(generatorKey){
+        let srcFilePath = path.join(this.sm.getProject('generators.dirPath'), generatorKey.replace(/\./g, path.sep));
+        return this.fileManager.removeFile(srcFilePath);
     }
 
     readProjectJsonModel(){
@@ -347,6 +365,17 @@ class StorageManager {
                         }
                     })
                     .then( () => {
+                        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
+                            .then(projectConfig => {
+                                if(!projectConfig.projectName){
+                                    throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
+                                }
+                                if(!projectConfig.projectId){
+                                    throw Error('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
+                                }
+                            })
+                    })
+                    .then( () => {
                         return this.fileManager.readDirectoryFlat(this.sm.getProject('builder.dirPath'))
                             .then( foundObj => {
                                 let requiredFiles = foundObj.files.filter( file => {
@@ -359,10 +388,11 @@ class StorageManager {
                                 if(requiredFiles.length >= 5){
                                     return 'ready-to-go';
                                 } else {
-                                    throw Error('Directory ' + this.sm.getProject('builder.dirPath') + ' has corrupted structure.');
+                                    throw Error('It seems that directory ' + this.sm.getProject('builder.dirPath') + ' has corrupted structure.');
                                 }
                             });
-                    }).catch( err => {
+                    })
+                    .catch( err => {
                         throw Error(err);
                     });
             });
