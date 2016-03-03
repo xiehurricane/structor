@@ -32,11 +32,15 @@ class ClientManager {
     }
 
     invokePreGenerationOnline(options){
-        return this.client.post(this.sm.getIn('client.serviceURL') + '/sm/gengine/preprocess', options.data);
+        return this.client.post(this.sm.getIn('client.serviceURL') +
+            '/sm/gengine/preprocess?generatorKey=' + options.generatorKey + '&projectId=' + options.projectId,
+            options.data);
     }
 
     invokeGenerationOnline(options){
-        return this.client.post(this.sm.getIn('client.serviceURL') + '/sm/gengine/process', options.data);
+        return this.client.post(this.sm.getIn('client.serviceURL') +
+            '/sm/gengine/process?generatorKey=' + options.generatorKey + '&projectId=' + options.projectId,
+            options.data);
     }
 
     initUserCredentialsByToken(options){

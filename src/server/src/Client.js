@@ -60,10 +60,12 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                                }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url);
+                                    reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
                                 reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
@@ -119,10 +121,12 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                                }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url + '. Response: ' + JSON.stringify(body));
+                                    reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
                                 reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
@@ -167,10 +171,12 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                                }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url + '. Response: ' + JSON.stringify(body));
+                                    reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
                                 reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
@@ -217,10 +223,12 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                                }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url);
+                                    reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
                                 reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
@@ -267,10 +275,12 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
-                                    reject('User account is not authenticated. Please sign in to Structor Market.');
+                                if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden.');
+                                }else if (response.statusCode === 401) {
+                                    reject('User account is not authenticated.');
                                 } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url);
+                                    reject('Got error code ' + response.statusCode + '. Error: ' + response.statusMessage);
                                 }
                             } else if (error) {
                                 reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
@@ -289,68 +299,68 @@ class Client {
 
     }
 
-    upload(option, isAuth = false) {
-        return new Promise( (resolve, reject) => {
-            const url = option.url;
-            let requestOptions = {
-                uri: url,
-                method: 'POST'
-            };
-            if (isAuth) {
-                if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
-                    requestOptions.auth = {
-                        'user': this.sm.getIn('client.user'),
-                        'pass': this.sm.getIn('client.pass'),
-                        'sendImmediately': true
-                    }
-                } else {
-                    reject('Specify user name and password or create new account.');
-                }
-            }
-            requestOptions.formData = {};
-            if (option.filePaths && option.filePaths.length > 0) {
-                option.filePaths.map( (filePath, index) => {
-                    requestOptions.formData['file_' + index] = fs.createReadStream(filePath);
-                });
-            } else {
-                reject('Files for uploading were not specified.');
-            }
-            try {
-                request(
-                    requestOptions,
-                    (error, response, body) => {
-                        if (response) {
-                            if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
-                                    reject('User account is not authenticated. Please sign in to Structor Market.');
-                                } else {
-                                    reject('Got error code ' + response.statusCode + ' processing request to ' + url);
-                                }
-                            } else if (error) {
-                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
-                            } else if (body) {
-                                if (body.error === true) {
-                                    let errorMessage = "Error: ";
-                                    if(body.errors && body.errors.length > 0){
-                                        body.errors.map( errorStr => {
-                                            errorMessage += errorStr + ', ';
-                                        });
-                                    }
-                                    reject(errorMessage.substr(0, errorMessage.length - 2));
-                                } else {
-                                    resolve(body.data);
-                                }
-                            }
-                        } else {
-                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
-                        }
-                    }
-                )
-            } catch (e) {
-                reject('Error: ' + e.message);
-            }
-        });
-    }
+    //upload(option, isAuth = false) {
+    //    return new Promise( (resolve, reject) => {
+    //        const url = option.url;
+    //        let requestOptions = {
+    //            uri: url,
+    //            method: 'POST'
+    //        };
+    //        if (isAuth) {
+    //            if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
+    //                requestOptions.auth = {
+    //                    'user': this.sm.getIn('client.user'),
+    //                    'pass': this.sm.getIn('client.pass'),
+    //                    'sendImmediately': true
+    //                }
+    //            } else {
+    //                reject('Specify user name and password or create new account.');
+    //            }
+    //        }
+    //        requestOptions.formData = {};
+    //        if (option.filePaths && option.filePaths.length > 0) {
+    //            option.filePaths.map( (filePath, index) => {
+    //                requestOptions.formData['file_' + index] = fs.createReadStream(filePath);
+    //            });
+    //        } else {
+    //            reject('Files for uploading were not specified.');
+    //        }
+    //        try {
+    //            request(
+    //                requestOptions,
+    //                (error, response, body) => {
+    //                    if (response) {
+    //                        if (response.statusCode !== 200) {
+    //                            if (response.statusCode === 401) {
+    //                                reject('User account is not authenticated. Please sign in to Structor Market.');
+    //                            } else {
+    //                                reject('Got error code ' + response.statusCode + ' processing request to ' + url);
+    //                            }
+    //                        } else if (error) {
+    //                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+    //                        } else if (body) {
+    //                            if (body.error === true) {
+    //                                let errorMessage = "Error: ";
+    //                                if(body.errors && body.errors.length > 0){
+    //                                    body.errors.map( errorStr => {
+    //                                        errorMessage += errorStr + ', ';
+    //                                    });
+    //                                }
+    //                                reject(errorMessage.substr(0, errorMessage.length - 2));
+    //                            } else {
+    //                                resolve(body.data);
+    //                            }
+    //                        }
+    //                    } else {
+    //                        reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+    //                    }
+    //                }
+    //            )
+    //        } catch (e) {
+    //            reject('Error: ' + e.message);
+    //        }
+    //    });
+    //}
 
 }
 

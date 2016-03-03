@@ -123,8 +123,8 @@ const initialState = {
         componentName: null,
         generatorList: [],
         selectedGeneratorName: null,
-        metaModel: null,
-        metaHelp: null,
+        metaModel: '',
+        metaHelp: '',
         componentSourceDataObject: null,
         generatedComponentsCounter: 0
     },

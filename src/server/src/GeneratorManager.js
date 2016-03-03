@@ -294,7 +294,11 @@ class GeneratorManager {
                 }
                 return dataOnline;
             }).then( dataOnline => {
-                return this.clientManager.invokePreGenerationOnline({ data: dataOnline } );
+                return this.clientManager.invokePreGenerationOnline({
+                    generatorKey: dataOnline.generator.name,
+                    projectId: dataOnline.project.config.projectId,
+                    data: dataOnline
+                });
             });
     }
 
@@ -407,7 +411,11 @@ class GeneratorManager {
                     });
                 });
                 return sequence.then( () => {
-                    return this.clientManager.invokeGenerationOnline({data: dataOnline});
+                    return this.clientManager.invokeGenerationOnline({
+                        generatorKey: dataOnline.generator.name,
+                        projectId: dataOnline.project.config.projectId,
+                        data: dataOnline
+                    });
                 });
             });
     }
