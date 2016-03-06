@@ -466,7 +466,6 @@ export default function (state = {}, action = {type: 'UNKNOWN'}) {
                 state.model.pages[state.currentPageIndex].pageTitle = payload.pageTitle;
                 state.model.pages[state.currentPageIndex].pageProps = payload.pageProps;
                 state.model.pages[state.currentPageIndex].pageScript = payload.pageScript;
-                console.log('Moving page into index route position: ' + payload.makeIndexRoute);
                 if(payload.makeIndexRoute && state.model.pages.length > 1){
                     const tempModel = state.model.pages.splice(state.currentPageIndex, 1)[0];
                     if(tempModel){

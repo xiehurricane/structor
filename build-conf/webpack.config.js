@@ -28,6 +28,7 @@ module.exports = [
         },
         plugins: [
             new ExtractTextPlugin("styles.css"),
+            new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.optimize.DedupePlugin(),
             new webpack.optimize.UglifyJsPlugin({
                 compress: {

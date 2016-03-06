@@ -59,7 +59,6 @@ export function setFilterForAvailable(filter){
 }
 
 export function installGenerator(key, version){
-    console.log('Installing generator: ' + key + ' version: ' + version);
     const method1 = 'downloadGenerator';
     return (dispatch, getState) => {
         dispatch(ServerActions.waitServerResponse(method1));
@@ -81,7 +80,6 @@ export function installGenerator(key, version){
 }
 
 export function uninstallGenerator(key){
-    console.log('Uninstalling generator: ' + key);
     const method1 = 'removeGenerator';
     return (dispatch, getState) => {
         dispatch(ServerActions.waitServerResponse(method1));
