@@ -56,7 +56,7 @@ class MiddlewareCompilerManager {
                         {
                             test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel',
                             query: {
-                                cacheDirectory: false,
+                                cacheDirectory: true,
                                 presets: [
                                     path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-preset-react'),
                                     path.join(this.sm.getServer('nodeModules.dirPath'), 'babel-preset-es2015'),

@@ -51,6 +51,7 @@ class ClientManager {
             })
             .catch(err => {
                 console.log('Authentication token is invalid or was expired');
+                return {};
             });
     }
 
