@@ -97,7 +97,7 @@ class GeneratorBriefPanel extends Component {
         let uninstallButton = null;
         if(installedVersion){
             uninstallButton = (
-                <Button bsStyle="warning"
+                <Button bsStyle="default"
                         data-key={generatorKey}
                         onClick={this.handleOnUninstallVersion} >
                     <span>Uninstall</span>
