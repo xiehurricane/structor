@@ -51,6 +51,7 @@ Watch the presentation about how Structor works. This presentation shows all cap
 * [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
 * [Generators metadata overview](https://github.com/ipselon/structor/wiki/Generators-metadata-overview)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
+* [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
 
 ### Tutorials
 
