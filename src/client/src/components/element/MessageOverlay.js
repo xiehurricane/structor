@@ -97,10 +97,19 @@ class MessageOverlay extends Component {
                         </div>
                 )
             });
+            const overlayStyle = {
+                position: 'fixed',
+                width: '30em',
+                padding: '0.5em',
+                right: '0',
+                top: '0',
+                bottom: 0,
+                zIndex: '9999',
+                overflow: 'hidden'};
 
             this._overlay = (
                 <div
-                    style={{position: 'absolute', width: '30em', padding: '0.5em', right: '0', top: '0', zIndex: '9999'}}>
+                    style={overlayStyle}>
                     <div style={{position: 'relative', width: '100%', height: '100%'}}>
                         {messages}
                     </div>

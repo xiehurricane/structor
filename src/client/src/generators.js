@@ -33,6 +33,7 @@ import { Provider } from 'react-redux';
 import Generators from './components/generators/Generators.js';
 
 const store = storeManager(initialState);
+window.serviceUrl = 'http://probe.helmetrex.com';
 
 ReactDOM.render(
     <Provider store={store}>

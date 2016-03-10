@@ -64,7 +64,7 @@ class GeneratorBriefPanel extends Component {
         const {generatorKey, versions, projectRepo, installedVersion} = this.props;
         let imgUrl = null;
         if(generatorKey){
-            imgUrl = 'http://localhost/genclient/' + projectRepo + '/' + generatorKey.replace(/\./g,'/') + '/screenshot.png';
+            imgUrl = window.serviceUrl + '/genclient/' + projectRepo + '/' + generatorKey.replace(/\./g,'/') + '/screenshot.png';
         }
         let installButton = null;
         if(versions){
@@ -141,7 +141,7 @@ class GeneratorBriefPanel extends Component {
                                     <div dangerouslySetInnerHTML={{__html: this.state.html}}></div>
                                 </div>
                                 <p style={{ marginTop: '2em'}}>
-                                    <a target="__blank" href={'http://localhost/generator?key=' + generatorKey + '&repo=' + projectRepo}>
+                                    <a target="__blank" href={window.serviceUrl + '/generator?key=' + generatorKey + '&repo=' + projectRepo}>
                                         <i className="fa fa-external-link"></i>
                                         <span style={{marginLeft: '0.5em'}}>Read more...</span>
                                     </a>

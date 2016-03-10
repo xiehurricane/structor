@@ -75,7 +75,7 @@ class ModalSignIn extends Component {
                                                        placeholder="Enter e-mail address"/>
                                 </td>
                                 <td style={{width: '30%', verticalAlign: 'middle', padding: '0.5em 0 0.5em 1em'}}>
-                                    <p><a href="http://localhost/sign-up" target="_blank"><span>Create new account</span></a></p>
+                                    <p><a href={window.serviceUrl + '/sign-up'} target="_blank"><span>Create new account</span></a></p>
                                 </td>
                             </tr>
                             <tr>
@@ -87,7 +87,7 @@ class ModalSignIn extends Component {
                                                        placeholder="Enter password"/>
                                 </td>
                                 <td style={{width: '30%', verticalAlign: 'middle', padding: '0.5em 0 0.5em 1em'}}>
-                                    <p><a href="http://localhost/password-recover-request" target="_blank"><span>Forgot password?</span></a></p>
+                                    <p><a href={window.serviceUrl + '/password-recover-request'} target="_blank"><span>Forgot password?</span></a></p>
                                 </td>
                             </tr>
                             <tr>

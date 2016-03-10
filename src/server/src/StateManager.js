@@ -24,7 +24,7 @@ class StateManager {
             projectState: 'unknown',
             client: {
                 //serviceURL: 'http://helmetrex.com',
-                serviceURL: 'http://localhost',
+                serviceURL: 'http://probe.helmetrex.com',
                 user: null,
                 pass: null
             },

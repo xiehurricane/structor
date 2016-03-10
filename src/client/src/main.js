@@ -55,6 +55,8 @@ socket.on( 'compiler.message', stats => {
 //    store.dispatch(saveProject());
 //};
 
+window.serviceUrl = 'http://probe.helmetrex.com';
+
 ReactDOM.render(
     <Provider store={store}>
         <Application />
