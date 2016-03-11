@@ -30,7 +30,19 @@ class Client {
         this.authenticationToken = token;
     }
 
-    post (url, body, isAuth = false) {
+    removeUserCredentials(){
+        return new Promise( (resolve, reject) => {
+            this.sm.setIn('client.user', null);
+            this.sm.setIn('client.pass', null);
+            resolve();
+        });
+    }
+
+    getUser(){
+        return this.configModel.user;
+    }
+
+    post (url, requestBody, isAuth = false) {
         return new Promise( (resolve, reject) => {
             var requestOptions = {
                 uri: url,
@@ -41,7 +53,8 @@ class Client {
                 },
                 method: 'POST',
                 json: true,
-                body: body
+                body: requestBody,
+                followAllRedirects: false
             };
             if (isAuth) {
                 if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
@@ -59,7 +72,18 @@ class Client {
                     requestOptions,
                     (error, response, body) => {
                         if (response) {
+
                             if (response.statusCode !== 200) {
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.post(response.headers.location, requestBody, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
+                                    reject('User is not authenticated');
                                 if(response.statusCode === 403){
                                     reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                                 }else if (response.statusCode === 401) {
@@ -102,7 +126,8 @@ class Client {
                 },
                 uri: url,
                 method: 'GET',
-                json: true
+                json: true,
+                followAllRedirects: false
             };
             if (isAuth) {
                 if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
@@ -125,6 +150,16 @@ class Client {
                                     reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                                 }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.get(response.headers.location, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
+                                    reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
@@ -175,6 +210,16 @@ class Client {
                                     reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                                 }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.post(response.headers.location, requestBody, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
+                                    reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
@@ -227,6 +272,16 @@ class Client {
                                     reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                                 }else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.get(response.headers.location, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
+                                    reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }

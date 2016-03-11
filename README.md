@@ -2,6 +2,8 @@ Structor - a user interface builder for React
 ----------
 
 [![facebook group](https://img.shields.io/badge/facebook%20group-follow-blue.svg?style=flat)](https://www.facebook.com/groups/structor/)
+[![Twitter Follow](https://img.shields.io/twitter/follow/@helmetrex.svg?style=social)](https://twitter.com/helmetrex)
+[![Become a patron](https://img.shields.io/badge/Donate-5%24-brightgreen.svg)](https://www.patreon.com/bePatron?u=910758&patAmt=5)
 
 [![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
 [![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
@@ -12,19 +14,21 @@ Are you thinking about changing the old-school looking interface of your Web App
 
 But maybe you are not ready to step into a gamble and seek for new employees who already obtained the cutting-edge technologies?
 
-Structor is our new Open Source project, which were developed especially to overcome such challenges. Structor is the Swiss Army knife in UI-development. Structor eliminates the routine tasks, it’s a fast and handy tool for the visual construction of User Interface from a pre-created components.
-
-Structor is not just a next visual UI-builder. Structor is an effective and valuable tool for a whole development life-cycle from interface design through prototyping to implementation.
+Structor is our new Open Source project, which were developed especially to overcome such challenges. Structor is the Swiss Army knife in Wep application development. Structor eliminates the routine tasks, it’s a fast and handy tool for the visual construction of User Interface from a pre-created components.
 
 ### Features
 
-* Visual combining of interface elements (well known WYSIWYG principals, from now - for your web-applications). You always get the instant result - how your UI-components look, feel, how they can interact with each other and with User.
+* Visual combining of interface elements utilising well known WYSIWYG principals. You always get the instant feedback - how your UI-components look, feel, how they can interact with each other and with User.
+
 * A unique flexible and configurable code generation. UI developer is able to configure the existing code generators or create his own code generator. Both options are quick and simple. And the result is - clear and clean code generated with taking into account your preferable design patterns.
+
 * Advanced documentation features for components. All components used in Structor has built-in documentation. Thus, it’s easy and convenient to configure and modify components within Structor.
-* Structor has “boilerplates” - bundles with a sets of simple basic components or components with an advanced complicated logic. It’s really easy to reuse components in Structor.
+
+* Structor works with specially crafted projects - bundles with a sets of simple basic components or components with an advanced complicated logic. It’s really easy to reuse components in Structor.
+
 * Structor’s Team support. We are providing service support both for integration of Structor into your development process and overall fulfillment.
 
-The builder runs as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
+The builder runs locally as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
 Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
@@ -37,21 +41,17 @@ Watch the presentation about how Structor works. This presentation shows all cap
 * [Speed designing of ToDo list](https://www.youtube.com/watch?v=PggnIYdaJFI&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1&index=3)
 * [How to create login menu to Facebook and GooglePlus](https://www.youtube.com/watch?v=Ks2tWAJvDqo&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1&index=4)
 
-### Structor Market
-
-##### Site 
-[http://helmetrex.com](http://helmetrex.com)
-
-##### List of existing boilerplates
+### List of existing projects on GitHub
 
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
 * [material-ui-prepack](https://github.com/ipselon/material-ui-prepack)
 
-### Documentation
+### Articles
 
 * [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
 * [Generators metadata overview](https://github.com/ipselon/structor/wiki/Generators-metadata-overview)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
+* [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
 
 ### Tutorials
 
