@@ -82,11 +82,9 @@ class Client {
                                         .catch(err => {
                                             reject(err);
                                         });
-                                } else if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
-                                if(response.statusCode === 403){
+                                } else if(response.statusCode === 403){
                                     reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
-                                }else if (response.statusCode === 401) {
+                                } else if (response.statusCode === 401) {
                                     reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
@@ -146,10 +144,6 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if(response.statusCode === 403){
-                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
-                                }else if (response.statusCode === 401) {
-                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 if(response.statusCode >= 301 && response.statusCode <= 302){
                                     this.get(response.headers.location, isAuth)
                                         .then(data => {
@@ -158,8 +152,10 @@ class Client {
                                         .catch(err => {
                                             reject(err);
                                         });
+                                } else if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                                 } else if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
@@ -206,20 +202,18 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if(response.statusCode === 403){
-                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
-                                }else if (response.statusCode === 401) {
-                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 if(response.statusCode >= 301 && response.statusCode <= 302){
-                                    this.post(response.headers.location, requestBody, isAuth)
+                                    this.getText(response.headers.location, isAuth)
                                         .then(data => {
                                             resolve(data);
                                         })
                                         .catch(err => {
                                             reject(err);
                                         });
-                                } else if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                } else if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                                }else if (response.statusCode === 401) {
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
@@ -239,7 +233,7 @@ class Client {
         });
     }
 
-    download(url, body, isAuth = false) {
+    download(url, requestBody, isAuth = false) {
         return new Promise( (resolve, reject) => {
             let requestOptions = {
                 uri: url,
@@ -248,7 +242,7 @@ class Client {
                     'X-Auth-Token': this.authenticationToken
                 },
                 method: 'POST',
-                body: JSON.stringify(body),
+                body: JSON.stringify(requestBody),
                 encoding: null
             };
             if (isAuth) {
@@ -268,20 +262,18 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if(response.statusCode === 403){
-                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
-                                }else if (response.statusCode === 401) {
-                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 if(response.statusCode >= 301 && response.statusCode <= 302){
-                                    this.get(response.headers.location, isAuth)
+                                    this.download(response.headers.location, requestBody, isAuth)
                                         .then(data => {
                                             resolve(data);
                                         })
                                         .catch(err => {
                                             reject(err);
                                         });
-                                } else if (response.statusCode === 401) {
-                                    reject('User is not authenticated');
+                                } else if(response.statusCode === 403){
+                                    reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                                }else if (response.statusCode === 401) {
+                                    reject('User account is not authenticated. Please sign in to Structor Market.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
@@ -330,9 +322,17 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if(response.statusCode === 403){
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.downloadGet(response.headers.location, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if(response.statusCode === 403){
                                     reject('User account is not signed in. Requested operation is forbidden.');
-                                }else if (response.statusCode === 401) {
+                                } else if (response.statusCode === 401) {
                                     reject('User account is not authenticated.');
                                 } else {
                                     reject('Got error code ' + response.statusCode + '. Error: ' + response.statusMessage);
