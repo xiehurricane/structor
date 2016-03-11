@@ -46,7 +46,7 @@ class Client {
         return this.configModel.user;
     }
 
-    post (url, body, isAuth = false) {
+    post (url, requestBody, isAuth = false) {
         return new Promise( (resolve, reject) => {
             var requestOptions = {
                 uri: url,
@@ -57,7 +57,8 @@ class Client {
                 },
                 method: 'POST',
                 json: true,
-                body: body
+                body: requestBody,
+                followAllRedirects: false
             };
             if (isAuth) {
                 if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
@@ -75,8 +76,17 @@ class Client {
                     requestOptions,
                     (error, response, body) => {
                         if (response) {
+
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.post(response.headers.location, requestBody, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
                                     reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
@@ -116,7 +126,8 @@ class Client {
                 },
                 uri: url,
                 method: 'GET',
-                json: true
+                json: true,
+                followAllRedirects: false
             };
             if (isAuth) {
                 if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
@@ -133,9 +144,18 @@ class Client {
                 request(
                     requestOptions,
                     (error, response, body) => {
+                        console.log(JSON.stringify(body, null, 4));
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.get(response.headers.location, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
                                     reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
@@ -166,7 +186,7 @@ class Client {
         });
     }
 
-    download(url, body, isAuth = false) {
+    download(url, requestBody, isAuth = false) {
         return new Promise( (resolve, reject) => {
             let requestOptions = {
                 uri: url,
@@ -175,8 +195,9 @@ class Client {
                     'X-Auth-Token': this.authenticationToken
                 },
                 method: 'POST',
-                body: JSON.stringify(body),
-                encoding: null
+                body: JSON.stringify(requestBody),
+                encoding: null,
+                followAllRedirects: false
             };
             if (isAuth) {
                 if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
@@ -195,7 +216,15 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.post(response.headers.location, requestBody, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
                                     reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
@@ -226,7 +255,8 @@ class Client {
                 headers: {
                     'User-Agent': 'request'
                 },
-                encoding: null
+                encoding: null,
+                followAllRedirects: false
             };
             if (isAuth) {
                 if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
@@ -245,7 +275,15 @@ class Client {
                     (error, response, body) => {
                         if (response) {
                             if (response.statusCode !== 200) {
-                                if (response.statusCode === 401) {
+                                if(response.statusCode >= 301 && response.statusCode <= 302){
+                                    this.get(response.headers.location, isAuth)
+                                        .then(data => {
+                                            resolve(data);
+                                        })
+                                        .catch(err => {
+                                            reject(err);
+                                        });
+                                } else if (response.statusCode === 401) {
                                     reject('User is not authenticated');
                                 } else {
                                     reject('Got error code ' + response.statusCode + ' processing request to ' + url);
