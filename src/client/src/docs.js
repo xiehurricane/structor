@@ -33,7 +33,7 @@ import { Provider } from 'react-redux';
 import Documentation from './components/documentation/Documentation.js';
 
 const store = storeManager(initialState);
-window.serviceUrl = 'http://probe.helmetrex.com';
+window.serviceUrl = 'https://helmetrex.com';
 
 ReactDOM.render(
     <Provider store={store}>

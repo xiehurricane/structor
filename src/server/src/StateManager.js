@@ -23,8 +23,7 @@ class StateManager {
         this.state = fromJS({
             projectState: 'unknown',
             client: {
-                //serviceURL: 'http://helmetrex.com',
-                serviceURL: 'http://probe.helmetrex.com',
+                serviceURL: 'https://helmetrex.com',
                 user: null,
                 pass: null
             },
