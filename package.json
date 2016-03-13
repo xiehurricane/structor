@@ -1,6 +1,6 @@
 {
   "name": "structor",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "A user interface builder for Web applications with React UI",
   "main": "structor.js",
   "scripts": {
@@ -89,7 +89,7 @@
     "react",
     "ui",
     "components",
-    "generate",
+    "generation",
     "builder",
     "visual",
     "hot-reload",
