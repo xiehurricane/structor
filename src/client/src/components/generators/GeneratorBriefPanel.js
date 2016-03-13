@@ -30,19 +30,31 @@ class GeneratorBriefPanel extends Component {
         };
     }
     componentDidMount() {
-        const {generatorKey, docName} = this.props;
+        const {generatorKey} = this.props;
         if(generatorKey){
-            makeRequest('getGeneratorBriefText', {generatorKey})
-                .then(response => {
-                    if(response.data && response.data.briefText){
-                        let html = null;
-                        try{
-                            html = marked(response.data.briefText);
-                        } catch(e){}
-                        this.setState({ html });
-                    }
-                });
+            this.fetchText(generatorKey);
         }
+    }
+    componentWillReceiveProps(nextProps) {
+        const {generatorKey} = nextProps;
+        const {generatorKey : _generatorKey} = this.props;
+        if(generatorKey && generatorKey !== _generatorKey){
+            if(generatorKey){
+                this.fetchText(generatorKey);
+            }
+        }
+    }
+    fetchText(generatorKey){
+        makeRequest('getGeneratorBriefText', {generatorKey})
+            .then(response => {
+                if(response.data && response.data.briefText){
+                    let html = null;
+                    try{
+                        html = marked(response.data.briefText);
+                    } catch(e){}
+                    this.setState({ html });
+                }
+            });
     }
     handleOnInstallVersion(e){
         e.preventDefault();
