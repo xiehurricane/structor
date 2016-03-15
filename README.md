@@ -1,9 +1,8 @@
-Structor - a user interface builder for React
+Structor - a user interface builder for Web applications with React UI
 ----------
 
 [![facebook group](https://img.shields.io/badge/facebook%20group-follow-blue.svg?style=flat)](https://www.facebook.com/groups/structor/)
-[![Twitter Follow](https://img.shields.io/twitter/follow/@helmetrex.svg?style=social)](https://twitter.com/helmetrex)
-[![Become a patron](https://img.shields.io/badge/Donate-5%24-brightgreen.svg)](https://www.patreon.com/bePatron?u=910758&patAmt=5)
+[![Twitter Follow](https://img.shields.io/twitter/follow/@StructorMarket.svg?style=social)](https://twitter.com/StructorMarket)
 
 [![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
 [![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
@@ -87,17 +86,6 @@ The next time you want to open project in Structor, just go to the folder where 
 ##### Tips
 * To run with different port: ```structor -p <port>```<br/>
 * To specify different project's working directory: ```structor -d <path_to_project_dir>```
-
-### How to add own boilerplate to Structor Market
-The source code of all boilerplates which are presented on Structor Market are located on GitHub. Consequently, you can add a reference of your own Structor compatible boilerplate to the market which exists on GitHub. To do that you have to visit [Structor Market](http://helmetrex.com) and enter the name of repository into add form.
-
-The source code has to be compatible with Structor, to see examples of compatible repositories just visit any of already presented boilerplates. Also please note, in order to have a good looking thumbnail of your project on the market add 'screenshot.png' file with screen shot of the Structor's workspace with your project open.
-
-Or if you know repositories of Structor compatible repos not presented on the market, please add it to the market's gallery. We appreciate your contribution to the market.
-
-### Discussion
-
-You are welcome to join Discord channel: [#structor](https://discord.gg/0ZcbPKXt5bWioOhk)
 
 #### License
 Apache License, Version 2.0 (Apache-2.0)
