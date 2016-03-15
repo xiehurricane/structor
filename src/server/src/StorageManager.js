@@ -171,7 +171,7 @@ class StorageManager {
     installPackages(){
         return new Promise( (resolve, reject) => {
             try{
-                let child = exec('npm install', {cwd: this.sm.getProject('dirPath')},
+                let child = exec('npm set progress=false && npm install && npm set progress=true', {cwd: this.sm.getProject('dirPath')},
                     (error, stdout, stderr) => {
                         if (error !== null) {
                             reject(error);
