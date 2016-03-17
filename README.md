@@ -9,17 +9,15 @@ Structor - a user interface builder for Web applications with React UI
 
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
-Are you thinking about changing the old-school looking interface of your Web Application into the modern one? Do you want to make it fast, convenient and just exciting?
-
-But maybe you are not ready to step into a gamble and seek for new employees who already obtained the cutting-edge technologies?
-
-Structor is our new Open Source project, which were developed especially to overcome such challenges. Structor is the Swiss Army knife in Wep application development. Structor eliminates the routine tasks, it’s a fast and handy tool for the visual construction of User Interface from a pre-created components.
+Structor was developed to overcome many challenges in Web application development. It’s a fast and handy tool for the visual construction of User Interface from a pre-created components.
 
 ### Features
 
 * Visual combining of interface elements utilising well known WYSIWYG principals. You always get the instant feedback - how your UI-components look, feel, how they can interact with each other and with User.
 
 * A unique flexible and configurable code generation. UI developer is able to configure the existing code generators or create his own code generator. Both options are quick and simple. And the result is - clear and clean code generated with taking into account your preferable design patterns.
+
+* Installable online source code generators, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
 
 * Advanced documentation features for components. All components used in Structor has built-in documentation. Thus, it’s easy and convenient to configure and modify components within Structor.
 
@@ -35,18 +33,21 @@ Watch the presentation about how Structor works. This presentation shows all cap
 
 ### Videos
 
+* [Videos on Structor Market](https://helmetrex.com/videos)
+* [Spring Data REST Bootstrap prepack intro](https://www.youtube.com/watch?v=ag57pjaW9F8)
 * [Fetch data from GitHub | Part 1](https://www.youtube.com/watch?v=AY65e6Ry_rY)
 * [Fetch data from GitHub | Part 2](https://www.youtube.com/watch?v=JLz8B0XJPyk)
 * [Speed designing of ToDo list](https://www.youtube.com/watch?v=PggnIYdaJFI&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1&index=3)
-* [How to create login menu to Facebook and GooglePlus](https://www.youtube.com/watch?v=Ks2tWAJvDqo&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1&index=4)
 
 ### List of existing projects on GitHub
 
+* [sdr-bootstrap-prepack](https://github.com/ipselon/sdr-bootstrap-prepack)
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
 * [material-ui-prepack](https://github.com/ipselon/material-ui-prepack)
 
 ### Articles
 
+* [Using React Router inside of components](https://github.com/ipselon/structor/wiki/Using-React-Router-inside-of-components)
 * [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
 * [Generators metadata overview](https://github.com/ipselon/structor/wiki/Generators-metadata-overview)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
