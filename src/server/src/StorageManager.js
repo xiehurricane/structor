@@ -18,6 +18,8 @@ import path from 'path';
 import _ from 'lodash';
 import child_process from 'child_process';
 import FileManager from './FileManager.js';
+import FileGenerator from './FileGenerator.js';
+import * as fileParser from './FileParser.js';
 import ProjectCompiler from './ProjectCompiler.js';
 
 const exec = child_process.exec;
@@ -38,6 +40,7 @@ class StorageManager {
 
         this.fileManager = new FileManager();
         this.compiler = new ProjectCompiler();
+        this.fileGenerator = new FileGenerator();
 
     }
 
@@ -79,40 +82,72 @@ class StorageManager {
         return this.fileManager.readJson(srcFilePath);
     }
 
-    loadProxyURL(options){
-        const proxyConfFilePath = this.sm.getProject('config.filePath');
-        return this.fileManager.ensureFilePath(proxyConfFilePath)
-            .then( () => {
-                return this.fileManager.readJson(proxyConfFilePath)
-                    .then( jsonObj => {
-                        let data = jsonObj;
-                        if(options){
-                            if(options.proxyURLDelete){
-                                data.proxyURL = null;
-                            } else if(options.proxyURL){
-                                data.proxyURL = options.proxyURL;
-                            }
-                        }
-                        return this.fileManager.writeJson(proxyConfFilePath, data)
-                            .then( () => {
-                                return data.proxyURL;
-                            });
-                    })
-                    .catch( err => {
-                        return this.fileManager.writeJson(proxyConfFilePath, { proxyURL: options.proxyURL })
-                            .then( () => {
-                                return options.proxyURL;
-                            });
-                    });
+    rewriteConfigOption(optionString){
+        return this.fileManager.readFile(this.sm.getProject('config.filePath'))
+            .then( data => {
+                if(!data){
+                    throw Error('Config file is empty.');
+                }
+                try{
+                    return fileParser.getFileAst(data);
+                } catch(e){
+                    throw Error(e.message + '. File path: ' + this.sm.getProject('config.filePath'));
+                }
+            })
+            .then(ast => {
+                var newAst = fileParser.getFileAst('var c = {' + optionString + '}');
+                var newPart = null;
+                fileParser.traverse(newAst, node => {
+                    if(node.type === 'VariableDeclarator' && node.id.name === 'c'){
+                        newPart = node.init.properties[0];
+                    }
+                });
+
+                if (ast.body[0].declaration && ast.body[0].declaration.properties) {
+                    let properties = ast.body[0].declaration.properties;
+                    let index = -1;
+                    if (properties.length > 0) {
+                        index = _.findIndex(properties, (o) => {
+                            return (o.key && o.key.type === 'Identifier' && o.key.name === newPart.key.name);
+                        });
+                    }
+                    if (index >= 0) {
+                        ast.body[0].declaration.properties[index] = newPart;
+                    } else {
+                        ast.body[0].declaration.properties.push(
+                            newPart
+                        );
+                    }
+                }
+                delete require.cache[this.sm.getProject('config.filePath')];
+                return this.fileManager.writeFile(
+                    this.sm.getProject('config.filePath'), this.fileGenerator.generateFileFromAst(ast), false);
             });
     }
 
-    readProjectConfig(){
-        return this.fileManager.readJson(this.sm.getProject('config.filePath'));
+    loadProxyURL(options){
+
+        if(options && (options.proxyURLDelete || options.proxyURL)){
+            let optionString = 'proxyURL: ';
+            let result = null;
+            if(options.proxyURLDelete){
+                optionString += 'null';
+            } else if(options.proxyURL){
+                optionString += '\'' + options.proxyURL + '\'';
+                result = options.proxyURL;
+            }
+            return this.rewriteConfigOption(optionString)
+                .then(() => {
+                    return result;
+                });
+        } else {
+            let data = require(this.sm.getProject('config.filePath'));
+            return Promise.resolve(data.proxyURL);
+        }
     }
 
-    writeProjectConfig(options){
-        return this.fileManager.writeJson(this.sm.getProject('config.filePath'), options);
+    readProjectConfig(){
+        return require(this.sm.getProject('config.filePath'));
     }
 
     writeProjectBinaryFile(filePath, fileData){
@@ -354,47 +389,12 @@ class StorageManager {
             .then( () => {
                 return 'dir-is-empty';
             }).catch( err => {
-                return this.fileManager.readDirectoryFlat(this.sm.getProject('dirPath'))
-                    .then( foundObj => {
-                        let requiredFiles = foundObj.files.filter( file => {
-                            return (file && (file.name === 'package.json'
-                            || file.name === 'node_modules'));
-                        });
-                        if(requiredFiles.length !== 2){
-                            throw Error('Directory ' + this.sm.getProject('dirPath') + ' does not have package.json or node_modules.');
-                        }
-                    })
-                    .then( () => {
-                        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
-                            .then(projectConfig => {
-                                if(!projectConfig.projectName){
-                                    throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
-                                }
-                                if(!projectConfig.projectId){
-                                    throw Error('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
-                                }
-                            })
-                    })
-                    .then( () => {
-                        return this.fileManager.readDirectoryFlat(this.sm.getProject('builder.dirPath'))
-                            .then( foundObj => {
-                                let requiredFiles = foundObj.files.filter( file => {
-                                    return (file && (file.name === 'desk'
-                                    || file.name === 'defaults'
-                                    || file.name === 'generators'
-                                    || file.name === 'src'
-                                    || file.name === 'templates'));
-                                });
-                                if(requiredFiles.length >= 5){
-                                    return 'ready-to-go';
-                                } else {
-                                    throw Error('It seems that directory ' + this.sm.getProject('builder.dirPath') + ' has corrupted structure.');
-                                }
-                            });
-                    })
-                    .catch( err => {
-                        throw Error(err);
-                    });
+                try{
+                    require(this.sm.getProject('config.filePath'));
+                    return 'ready-to-go';
+                } catch(e){
+                    throw Error('The source code in directory ' + this.sm.getProject('dirPath') + ' seems is not Structor compatible.');
+                }
             });
     }
 

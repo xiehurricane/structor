@@ -16,6 +16,7 @@
  */
 
 import _ from 'lodash';
+import escodegen from 'escodegen';
 import FileManager from './FileManager.js';
 import * as formatter from './FileFormatter.js';
 
@@ -42,6 +43,10 @@ class FileGenerator {
             }).then( data => {
                 return this.fileManager.writeFile(destFilePath, data);
             });
+    }
+
+    generateFileFromAst(ast){
+        return formatter.formatJsFile(escodegen.generate(ast));
     }
 }
 

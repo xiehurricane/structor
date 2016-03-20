@@ -54,7 +54,7 @@ class StateManager {
                 },
                 project:{
                     config: {
-                        fileName: 'config.json'
+                        fileName: 'config.js'
                     },
                     webpackConfig: {
                         fileName: 'webpack.config.js'

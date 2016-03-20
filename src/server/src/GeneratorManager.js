@@ -84,7 +84,7 @@ class GeneratorManager {
                         obj.dirs = [];
                     }
                 });
-                let sequence = this.fileManager.readJson(this.sm.getProject('config.filePath'));
+                let sequence = Promise.resolve(require(this.sm.getProject('config.filePath')));
                 this.fileManager.traverseDirTree(dirTree, (type, obj) => {
                     if(type === 'file'){
                         sequence = sequence.then(projectConfig => {
@@ -179,7 +179,7 @@ class GeneratorManager {
             }
         };
 
-        return this.fileManager.readJson(this.sm.getProject('config.filePath')).then(jsonData => {
+        return Promise.resolve(require(this.sm.getProject('config.filePath'))).then(jsonData => {
 
             dataObj.project.config = jsonData;
 

@@ -76,42 +76,36 @@ class ClientManager {
     }
 
     downloadGeneratorFile(generatorKey, version){
-
-        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
-            .then(projectConfig => {
-                if(projectConfig.projectName){
-                    let downloadUrl = this.sm.getIn('client.serviceURL') + '/genclient/' +
-                        projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/' + version + '/client.tar.gz';
-                    return this.client.downloadGet(downloadUrl);
-                }
-                throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
-            });
+        const projectConfig = require(this.sm.getProject('config.filePath'));
+        if(projectConfig.projectName){
+            let downloadUrl = this.sm.getIn('client.serviceURL') + '/genclient/' +
+                projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/' + version + '/client.tar.gz';
+            return this.client.downloadGet(downloadUrl);
+        }
+        throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
     }
 
     getGeneratorBriefText(generatorKey){
-        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
-            .then(projectConfig => {
-                if(projectConfig.projectName){
-                    return this.client.getText(this.sm.getIn('client.serviceURL') + '/genclient/' +
-                        projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/brief.md');
-                }
-                throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
-            })
-            .then(text => {
-                return {
-                    briefText: text
-                }
-            });
+        const projectConfig = require(this.sm.getProject('config.filePath'));
+        if(projectConfig.projectName){
+            return this.client.getText(this.sm.getIn('client.serviceURL') + '/genclient/' +
+                projectConfig.projectName + '/' + generatorKey.replace(/\./g,'/') + '/brief.md')
+                .then(text => {
+                    return {
+                        briefText: text
+                    }
+                });
+
+        }
+        throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
     }
 
     getAvailableGeneratorList(){
-        return this.fileManager.readJson(this.sm.getProject('config.filePath'))
-            .then(projectConfig => {
-                if(projectConfig.projectId){
-                    return this.client.get(this.sm.getIn('client.serviceURL') + '/sm/public/generator/map?projectId=' + projectConfig.projectId);
-                }
-                throw Error('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
-            });
+        const projectConfig = require(this.sm.getProject('config.filePath'));
+        if(projectConfig.projectId){
+            return this.client.get(this.sm.getIn('client.serviceURL') + '/sm/public/generator/map?projectId=' + projectConfig.projectId);
+        }
+        throw Error('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
     }
 
 }

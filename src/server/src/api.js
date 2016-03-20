@@ -141,22 +141,6 @@ class Api {
         return this.clientManager.removeAuthToken();
     }
 
-    readConfiguration(options){
-        return this.storageManager.readServerConfig();
-    }
-
-    storeConfiguration(options){
-        return this.storageManager.writeServerConfig(options);
-    }
-
-    readLocalConfiguration(options){
-        return this.storageManager.readProjectConfig();
-    }
-
-    storeLocalConfiguration(options){
-        return this.storageManager.writeProjectConfig(options);
-    }
-
     getPackageConfig(options){
         return this.storageManager.readPackageConfig();
     }
