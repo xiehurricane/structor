@@ -90,7 +90,7 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                                reject('Error connection to ' + url + '. ' + String(error));
                             } else {
                                 if (body.error === true) {
                                     let errorMessage = "Error: ";
@@ -105,12 +105,12 @@ class Client {
                                 }
                             }
                         } else {
-                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                            reject('Error connection to ' + url);
                         }
                     }
                 )
             } catch (e) {
-                reject('Error: ' + e.message);
+                reject(String(e));
             }
         });
     }
@@ -160,17 +160,17 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                                reject('Error connection to ' + url + ". " + String(error));
                             } else {
                                 resolve(body);
                             }
                         } else {
-                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                            reject('Error connection to ' + url);
                         }
                     }
                 )
             } catch (e) {
-                reject('Error: ' + e.message);
+                reject(String(e));
             }
         });
     }
@@ -218,17 +218,17 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                                reject('Error connection to ' + url + '. ' + String(error));
                             } else {
                                 resolve(body);
                             }
                         } else {
-                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                            reject('Error connection to ' + url);
                         }
                     }
                 )
             } catch (e) {
-                reject('Error: ' + e.message);
+                reject(String(e));
             }
         });
     }
@@ -278,17 +278,17 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                                reject('Error connection to ' + url + '. ' + String(error));
                             } else {
                                 resolve(body);
                             }
                         } else {
-                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                            reject('Error connection to ' + url);
                         }
                     }
                 )
             } catch (e) {
-                reject('Error: ' + e.message);
+                reject(String(e));
             }
         });
 
@@ -338,17 +338,17 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Error: ' + response.statusMessage);
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                                reject('Error connection to ' + url + '. ' + String(error));
                             } else {
                                 resolve(body);
                             }
                         } else {
-                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
+                            reject('Error connection to ' + url);
                         }
                     }
                 )
             } catch (e) {
-                reject('Error: ' + e.message);
+                reject(String(e));
             }
         });
 

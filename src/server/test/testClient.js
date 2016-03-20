@@ -3,12 +3,12 @@ import StateManager from '../src/StateManager.js';
 
 let sm = new StateManager();
 
-sm.setIn('client.serviceURL', 'http://helmetrex.com/rbs');
+sm.setIn('client.serviceURL', 'https://helmetrex.com');
 
 
 let client = new Client(sm);
 
-client.get('welcome')
+client.get('https://helmetrex.com/iyoiuysm/public/gallery/list')
     .then( response => {
         console.log(JSON.stringify(response, null, 4));
     })

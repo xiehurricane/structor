@@ -423,6 +423,37 @@ class GeneratorManager {
     commitGeneration(generatedObj){
         let sequence = Promise.resolve();
 
+        if(generatedObj.generatorFilePath){
+            console.log('Init generator for preSave method...');
+            sequence = sequence.then(() => {
+                return this.initGeneratorByFile(generatedObj.generatorFilePath)
+                    .then(generatorObj => {
+                        if(generatorObj.config.component.script){
+                            const generatorScriptPath =
+                                path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), generatorObj.config.component.script);
+                            let module = require(generatorScriptPath);
+                            const options = {
+                                project: {
+                                    dirPath: this.sm.getProject('dirPath')
+                                },
+                                component: {
+                                    outputFilePath: generatedObj.component.outputFilePath,
+                                    componentName: generatedObj.component.componentName,
+                                    groupName: generatedObj.component.groupName
+                                }
+                            };
+                            if(module.preSave){
+                                console.log('Starting preSave method...');
+                                return module.preSave(options)
+                                    .catch(err => {
+                                        throw Error('Generator preSave method is failed. ' + err + '. File path: ' + generatorScriptPath);
+                                    });
+                            }
+                        }
+                    });
+            });
+        }
+
         _.forOwn(generatedObj.modules, (value, prop) => {
             if(value.sourceCode && value.sourceCode.length > 0){
                 sequence = sequence.then(() => {
@@ -456,6 +487,13 @@ class GeneratorManager {
                 })
         });
         return sequence;
+    }
+
+    removeGeneratorCache(name){
+        return this.initGenerator(name).then(generatorObj => {
+            const generatorScriptPath = path.join(generatorObj.dirPath, this.sm.getProject('scripts.dirName'), generatorObj.config.component.script);
+            delete require.cache[generatorScriptPath];
+        });
     }
 
     //preGenerateText(scriptFilePath, dataObj){

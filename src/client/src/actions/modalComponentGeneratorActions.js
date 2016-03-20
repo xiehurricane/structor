@@ -229,12 +229,17 @@ export function submitStep3(options){
 
         const {
             deskPage: { searchResult },
-            modalComponentGenerator: { componentName, componentSourceDataObject }
+            modalComponentGenerator: { componentName, componentSourceDataObject, selectedGeneratorFilePath }
         } = getState();
+
+        // workaround in order to invoke preSave method in generator component script
+        const componentSourceData = Object.assign({}, componentSourceDataObject, {
+            generatorFilePath: selectedGeneratorFilePath
+        });
 
         const isChildrenAcceptable = options.sourceCode.indexOf('this.props.children') >= 0;
         dispatch(
-            ServerActions.invoke('commitComponentCode', componentSourceDataObject,
+            ServerActions.invoke('commitComponentCode', componentSourceData,
                 [
                     DeskPageActions.REWRITE_MODEL_NODE,
                     HIDE_MODAL_COMPONENT_GENERATOR,

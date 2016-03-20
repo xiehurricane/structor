@@ -256,6 +256,9 @@ class Api {
     removeGenerator(options){
         return this.validator.validateOptions(options, ['generatorKey'])
             .then(() => {
+                return this.generatorManager.removeGeneratorCache(options.generatorKey);
+            })
+            .then(() => {
                 return this.storageManager.deleteGeneratorDirByKey(options.generatorKey);
             });
     }
