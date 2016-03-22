@@ -159,11 +159,10 @@ class GeneratorManager {
             });
     }
 
-    createDataObject(componentModel, generatorObj, userInputObj){
+    createDataObject(generatorObj, userInputObj){
 
         let dataObj = {
             component: {
-                model: componentModel,
                 componentName: userInputObj.componentName,
                 groupName: userInputObj.groupName,
                 indexFilePath: this.sm.getProject('index.filePath')
@@ -224,45 +223,57 @@ class GeneratorManager {
 
                 });
             }
-
-        }).then(() => {
-            return this.indexManager.initIndex()
-                .then( indexObj => {
-
-                    dataObj.component.imports = [];
-                    dataObj.componentIndex = [];
-
-                    let modelComponentMap = modelParser.getModelComponentMap(componentModel);
-                    if(indexObj.groups){
-
-                        _.forOwn(indexObj.groups, (value, prop) => {
-                            if(value.components && value.components.length > 0){
-                                value.components.forEach((componentInIndex) => {
-                                    if(modelComponentMap[componentInIndex.name]){
-                                        dataObj.component.imports.push({
-                                            name: componentInIndex.name,
-                                            source: componentInIndex.source,
-                                            member: componentInIndex.member
-                                        });
-                                    }
-                                    dataObj.componentIndex.push({
-                                        name: componentInIndex.name,
-                                        source: componentInIndex.source,
-                                        member: componentInIndex.member
-                                    });
-                                });
-                            }
-                        });
-                    }
-                    //dataObj.generator = generatorObj;
-                    return dataObj;
-                });
+            return dataObj;
         });
 
     }
 
+    createIndexObject(componentModel){
+        return this.indexManager.initIndex()
+            .then( indexObj => {
+
+                let dataObj = {
+                    component: {
+                        model: componentModel,
+                        imports: []
+                    },
+                    componentIndex: []
+                };
+
+                let modelComponentMap = modelParser.getModelComponentMap(componentModel);
+                if(indexObj.groups){
+
+                    _.forOwn(indexObj.groups, (value, prop) => {
+                        if(value.components && value.components.length > 0){
+                            value.components.forEach((componentInIndex) => {
+                                if(modelComponentMap[componentInIndex.name]){
+                                    dataObj.component.imports.push({
+                                        name: componentInIndex.name,
+                                        source: componentInIndex.source,
+                                        member: componentInIndex.member
+                                    });
+                                }
+                                dataObj.componentIndex.push({
+                                    name: componentInIndex.name,
+                                    source: componentInIndex.source,
+                                    member: componentInIndex.member
+                                });
+                            });
+                        }
+                    });
+                }
+                //dataObj.generator = generatorObj;
+                return dataObj;
+            });
+    }
+
     doPreGeneration(componentModel, generatorObj, userInputObj){
-        return this.createDataObject(componentModel, generatorObj, userInputObj)
+        return this.createDataObject(generatorObj, userInputObj)
+            .then( dataObj => {
+                return this.createIndexObject(componentModel).then(indexObj => {
+                    return _.merge({}, dataObj, indexObj);
+                });
+            })
             .then( dataObj => {
                 let module = require(dataObj.component.generatorScriptPath);
                 return module.preProcess(dataObj)
@@ -273,7 +284,12 @@ class GeneratorManager {
     }
 
     doPreGenerationOnline(componentModel, generatorObj, userInputObj){
-        return this.createDataObject(componentModel, generatorObj, userInputObj)
+        return this.createDataObject(generatorObj, userInputObj)
+            .then( dataObj => {
+                return this.createIndexObject(componentModel).then(indexObj => {
+                    return _.merge({}, dataObj, indexObj);
+                });
+            })
             .then( dataObj => {
                 let dataOnline = {
                     generator: dataObj.generator,
@@ -303,7 +319,12 @@ class GeneratorManager {
     }
 
     doGeneration(componentModel, generatorObj, userInputObj, meta){
-        return this.createDataObject(componentModel, generatorObj, userInputObj)
+        return this.createDataObject(generatorObj, userInputObj)
+            .then( dataObj => {
+                return this.createIndexObject(componentModel).then(indexObj => {
+                    return _.merge({}, dataObj, indexObj);
+                });
+            })
             .then( dataObj => {
 
                 let generatedObj = {
@@ -358,7 +379,12 @@ class GeneratorManager {
     }
 
     doGenerationOnline(componentModel, generatorObj, userInputObj, meta){
-        return this.createDataObject(componentModel, generatorObj, userInputObj)
+        return this.createDataObject(generatorObj, userInputObj)
+            .then( dataObj => {
+                return this.createIndexObject(componentModel).then(indexObj => {
+                    return _.merge({}, dataObj, indexObj);
+                });
+            })
             .then(dataObj => {
 
                 let dataOnline = {

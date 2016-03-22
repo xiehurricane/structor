@@ -5,7 +5,8 @@ module.exports = [
     {
         name: "browser",
         entry: {
-            main: './src/client/src/main.js',
+            //main: './src/client/src/main.js',
+            main: './src/application/main.js',
             docs: './src/client/src/docs.js',
             generators: './src/client/src/generators.js'
         },

@@ -16,12 +16,12 @@
 
 'use strict';
 
-// third-party libs
+
 import '../lib/bootstrap/css/custom/bootstrap.css';
 import '../lib/bootstrap/js/bootstrap.js';
 import '../lib/font-awesome/css/font-awesome.css';
 import '../lib/react-widgets/css/react-widgets.css';
-// umyproto libs
+
 import '../css/umyproto.deskpage.css';
 
 import 'babel-polyfill';
@@ -32,6 +32,7 @@ import initialState from './store/initialState.js';
 import { saveProject } from './actions/applicationActions.js';
 import { handleCompilerMessage } from './actions/webSocketActions.js';
 import { Provider } from 'react-redux';
+
 import Application from './components/application/Application.js';
 //import { fromJS } from 'immutable';
 import { init } from './plugin/plugins.js';

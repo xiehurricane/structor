@@ -1,0 +1,133 @@
+/*
+ * Copyright 2015 Alexander Pustovalov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { getAll } from './selectors.js';
+import * as actions from './actions.js';
+
+class Container extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        this._mountNode = document.createElement('div');
+        this._mountNode.style['z-index'] = '9999';
+        document.body.appendChild(this._mountNode);
+        ReactDOM.render(this._overlay, this._mountNode);
+    }
+
+    componentWillUnmount() {
+        ReactDOM.unmountComponentAtNode(this._mountNode);
+        this._mountNode = null;
+    }
+
+    componentDidUpdate() {
+        if (this._mountNode) {
+            ReactDOM.render(this._overlay, this._mountNode);
+        }
+    }
+
+    render() {
+        const { model: {messages}, close } = this.props;
+        if (messages.size > 0) {
+            const style = {
+                position: 'relative',
+                color: '#ffffff',
+                borderRadius: '.3em',
+                verticalAlign: 'middle',
+                textAlign: 'left',
+                padding: '1.5em',
+                marginBottom: '0.5em',
+                fontSize: '12px'
+            };
+            const buttonStyle = {
+                position: 'absolute',
+                top: '0',
+                right: '0',
+                width: '1em',
+                height: '1em',
+                color: '#fff',
+                borderRadius: '50%',
+                verticalAlign: 'middle',
+                textAlign: 'center',
+                cursor: 'pointer',
+                fontSize: '18px'
+            };
+
+            let messagesItems = [];
+            messages.forEach( (item, key) => {
+                let messageStyle = Object.assign({}, style);
+                if(item.type === actions.FAILED || item.type === actions.TIMEOUT){
+                    messageStyle.backgroundColor = '#C90008';
+                } else {
+                    messageStyle.backgroundColor = '#5cb85c';
+                }
+                let messageText = item.text && item.text.length > 300 ? item.text.substr(0, 300) : item.text;
+                messagesItems.push(
+                        <div key={key} style={messageStyle} >
+                            <p style={{margin: 0}}><span>{messageText}</span></p>
+                            <p style={{margin: 0, cursor: 'pointer'}} onClick={() => {alert(item.text);}}><span>{'[...]'}</span></p>
+                        <span
+                            style={buttonStyle}
+                            className="fa fa-times"
+                            onClick={() => {close(key)}}></span>
+                        </div>
+                )
+            });
+            const overlayStyle = {
+                position: 'fixed',
+                width: '30em',
+                padding: '0.5em',
+                right: '0',
+                top: '0',
+                bottom: 0,
+                zIndex: '9999',
+                overflow: 'hidden'};
+
+            this._overlay = (
+                <div
+                    style={overlayStyle}>
+                    <div style={{position: 'relative', width: '100%', height: '100%'}}>
+                        {messagesItems}
+                    </div>
+
+                </div>
+            );
+        } else {
+            this._overlay = (
+                <span></span>
+            );
+        }
+        return (
+            <span></span>
+        );
+    }
+
+}
+
+export default connect(
+    createStructuredSelector({
+        model: getAll
+    }),
+        dispatch => bindActionCreators(actions, dispatch)
+)(Container);
+

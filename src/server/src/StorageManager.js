@@ -393,7 +393,7 @@ class StorageManager {
                     require(this.sm.getProject('config.filePath'));
                     return 'ready-to-go';
                 } catch(e){
-                    throw Error('The source code in directory ' + this.sm.getProject('dirPath') + ' seems is not Structor compatible.');
+                    throw Error('The source code in directory ' + this.sm.getProject('dirPath') + ' seems is not Structor compatible. ' + String(e));
                 }
             });
     }
