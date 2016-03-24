@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { getAll } from './selectors.js';
+import { componentModel } from './selectors.js';
 import * as actions from './actions.js';
 
 class Container extends Component {
@@ -47,7 +47,7 @@ class Container extends Component {
     }
 
     render() {
-        const { model: {messages}, close } = this.props;
+        const { componentModel: {messages}, close } = this.props;
         if (messages.size > 0) {
             const style = {
                 position: 'relative',
@@ -81,11 +81,23 @@ class Container extends Component {
                 } else {
                     messageStyle.backgroundColor = '#5cb85c';
                 }
-                let messageText = item.text && item.text.length > 300 ? item.text.substr(0, 300) : item.text;
+                let messageText = item.text;
+                let textNeedCut = messageText && messageText.length > 300;
+                if(textNeedCut){
+                    messageText = messageText.substr(0, 300) + '...';
+                }
                 messagesItems.push(
                         <div key={key} style={messageStyle} >
                             <p style={{margin: 0}}><span>{messageText}</span></p>
-                            <p style={{margin: 0, cursor: 'pointer'}} onClick={() => {alert(item.text);}}><span>{'[...]'}</span></p>
+                            { textNeedCut ?
+                                <p style={{margin: '0.5em 0 0 0', cursor: 'pointer'}}>
+                                    <a href="#" onClick={(e) => {e.preventDefault(); e.stopPropagation(); alert(item.text);}}>
+                                        <span>[Read more]</span>
+                                    </a>
+                                </p>
+                                :
+                                null
+                            }
                         <span
                             style={buttonStyle}
                             className="fa fa-times"
@@ -125,9 +137,6 @@ class Container extends Component {
 }
 
 export default connect(
-    createStructuredSelector({
-        model: getAll
-    }),
-        dispatch => bindActionCreators(actions, dispatch)
+    createStructuredSelector({ componentModel }), dispatch => bindActionCreators(actions, dispatch)
 )(Container);
 

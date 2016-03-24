@@ -25,6 +25,21 @@ export function getProjectInfo(){
         })
         .then(projectDirectoryStatus => {
             result.projectDirectoryStatus = projectDirectoryStatus;
+            if(projectDirectoryStatus === 'ready-to-go'){
+                return makeRequest('openLocalProject')
+                    .then(projectData => {
+                        result.projectData = projectData;
+                        return result;
+                    });
+            }
             return result;
         })
+}
+
+export function initUserCredentialsByToken(token){
+    return makeRequest('initUserCredentialsByToken', {token: token});
+}
+
+export function initUserCredentials(email, password){
+    return makeRequest('initUserCredentials', { username: email, password: password });
 }

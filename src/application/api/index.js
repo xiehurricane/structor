@@ -15,8 +15,18 @@
  */
 import * as restApi from './app/restApi.js';
 import * as serverApi from './app/serverApi.js';
+import * as utils from './utils/utils.js';
+import * as utilsStore from './utils/utilsStore.js';
+import * as HtmlComponents from './utils/HtmlComponents.js';
+import * as cookies from './utils/cookies.js';
+import * as graphApi from './model/graphApi.js';
 
 export {
     restApi,
-    serverApi
+    serverApi,
+    utils,
+    utilsStore,
+    HtmlComponents,
+    cookies,
+    graphApi
 };

@@ -19,11 +19,21 @@ import {combineReducers} from 'redux';
 import { reducer as appContainerReducer } from '../controllers/app/AppContainer/index.js';
 import { reducer as appSpinnerReducer } from '../controllers/app/AppSpinner/index.js';
 import { reducer as appMessageReducer } from '../controllers/app/AppMessage/index.js';
+import { reducer as deskReducer } from '../controllers/workspace/Desk/index.js';
+import { reducer as deskPageReducer } from '../controllers/workspace/DeskPage/index.js';
+import { reducer as toolbarLeftReducer } from '../controllers/workspace/ToolbarLeft/index.js';
+import { reducer as toolbarTopReducer } from '../controllers/workspace/ToolbarTop/index.js';
+import { reducer as pageControlsReducer } from '../controllers/workspace/PageControls/index.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
     appSpinner: appSpinnerReducer,
-    appMessage: appMessageReducer
+    appMessage: appMessageReducer,
+    desk: deskReducer,
+    deskPage: deskPageReducer,
+    toolbarLeft: toolbarLeftReducer,
+    toolbarTop: toolbarTopReducer,
+    pageControls: pageControlsReducer
 });
 
 export default reducer;

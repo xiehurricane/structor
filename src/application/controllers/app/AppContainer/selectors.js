@@ -14,4 +14,6 @@
  * limitations under the License.
  */
 
-export const getAll = state => state.appContainer;
+export const componentModel = state => state.appContainer;
+export const userAccountModel = state => state.appContainer.userAccount;
+export const authenticationModel = state => state.appContainer.authentication;

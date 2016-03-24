@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import Container from './Container.js';
 import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
 import * as actions from './actions.js';
 
 export {
     reducer,
+    mainSaga,
+    models,
     actions
 }
 

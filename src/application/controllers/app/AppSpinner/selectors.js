@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export const getAll = state => state.appSpinner;
+export const componentModel = state => state.appSpinner;

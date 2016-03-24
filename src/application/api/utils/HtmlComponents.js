@@ -75,7 +75,9 @@ const HtmlComponents = {
         text: 'Text with emphasis'
     },
     'i': {
-        text: 'Alternate text'
+        props: {
+            className: 'fa fa-star'
+        }
     },
     'div': {
         children: [

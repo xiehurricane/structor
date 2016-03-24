@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createStructuredSelector } from 'reselect';
-import { getAll } from './selectors.js';
+import { componentModel } from './selectors.js';
 import * as actions from './actions.js';
 
 class Container extends Component {
@@ -47,7 +47,7 @@ class Container extends Component {
     }
 
     render() {
-        const { model: { tasks } } = this.props;
+        const { componentModel: { tasks } } = this.props;
         const tasksCount = tasks.size;
         if (tasksCount > 0) {
 
@@ -96,8 +96,5 @@ class Container extends Component {
 }
 
 export default connect(
-    createStructuredSelector({
-        model: getAll
-    }),
-    dispatch => bindActionCreators(actions, dispatch)
+    createStructuredSelector({ componentModel }), dispatch => bindActionCreators(actions, dispatch)
 )(Container)

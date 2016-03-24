@@ -16,8 +16,14 @@
 
 export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
 export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
-export const GET_PROJECT_INFO_FAIL = "AppContainer/GET_PROJECT_INFO_FAIL";
+export const SIGN_IN = "AppContainer/SIGN_IN";
+export const SIGN_IN_DONE = "AppContainer/SIGN_IN_DONE";
+export const SIGN_IN_FAILED = "AppContainer/SIGN_IN_FAILED";
+export const SIGN_OUT = "AppContainer/SIGN_OUT";
 
 export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
 export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
-export const getProjectInfoFail = (payload) => ({type: GET_PROJECT_INFO_FAIL, payload});
+export const signIn = (email, password, staySignedIn) => ({type: SIGN_IN, payload: {email, password, staySignedIn}});
+export const signInDone = (payload) => ({type: SIGN_IN_DONE, payload});
+export const signInFailed = (error) => ({type: SIGN_IN_FAILED, payload: error});
+export const signOut = () => ({type: SIGN_OUT});

@@ -29,12 +29,13 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 
 import reducer from './redux/reducer.js';
 import mainSaga from './sagas/saga.js';
+import { handleCompilerMessage } from './controllers/workspace/DeskPage/actions.js';
 
 import { init } from './plugins/plugins.js';
-import docCookie from './api/cookies.js';
 
 import { MainFrame } from './views/index.js';
 
@@ -42,14 +43,14 @@ window.serviceUrl = 'http://localhost';
 init();
 
 const sagaMiddleware = createSagaMiddleware(mainSaga);
-const store = createStore(reducer, applyMiddleware(sagaMiddleware));
+const store = createStore(reducer, applyMiddleware(sagaMiddleware, thunk));
 
 const { protocol, hostname, port } = window.location;
 const socket = io.connect(protocol + '//' + hostname + ':' + port);
 socket.on( 'invitation', message => console.log(message) );
 socket.on( 'compiler.message', stats => {
     console.log('compiler.message: ' + JSON.stringify(stats));
-    //store.dispatch(handleCompilerMessage(stats));
+    store.dispatch(handleCompilerMessage(stats));
 });
 
 //window.onbeforeunload = function(e) {

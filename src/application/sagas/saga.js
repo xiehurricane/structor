@@ -16,7 +16,8 @@
 import { fork } from 'redux-saga/effects';
 import { mainSaga as appContainerSaga } from '../controllers/app/AppContainer/index.js';
 import { mainSaga as appMessageSaga } from '../controllers/app/AppMessage/index.js';
+import { mainSaga as deskPageSaga } from '../controllers/workspace/DeskPage/index.js';
 
 export default function* mainSaga(){
-    yield [fork(appContainerSaga), fork(appMessageSaga)];
+    yield [fork(appContainerSaga), fork(appMessageSaga), fork(deskPageSaga)];
 }

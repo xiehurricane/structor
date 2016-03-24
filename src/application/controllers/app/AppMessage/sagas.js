@@ -27,7 +27,7 @@ function* closeSuccessMessage(key){
 // main saga
 export default function* mainSaga() {
     while(true){
-        const action = yield take(actions.SUCCESS);
-        yield fork(closeSuccessMessage, action.payload.timestamp);
+        const { payload } = yield take(actions.SUCCESS);
+        yield fork(closeSuccessMessage, payload.timestamp);
     }
 };

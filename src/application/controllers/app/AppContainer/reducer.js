@@ -15,45 +15,74 @@
  */
 
 import * as actions from './actions.js';
+import { utilsStore, HtmlComponents } from '../../../api/index.js';
 
 const initialState = {
-    fetch: {
-        status: 'done',
+    userAccount: {
+        email: null,
+        regDate: null,
+        subscriptionDescription: null,
+        subscriptionStartDate: null,
+        subscriptionEndDate: null
+    },
+    authentication: {
         error: null
     },
     packageConfig: {},
-    projectDirectoryStatus: null
+    projectDirectoryStatus: null,
+    workspaceMode: null
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
-    switch (type) {
-        case actions.GET_PROJECT_INFO:
-            return Object.assign({}, state, {
-                fetch: {
-                    status: 'start',
-                    error: null
-                }
-            });
-        case actions.GET_PROJECT_INFO_DONE:
-            return Object.assign({}, state, {
-                fetch: {
-                    status: 'done',
-                    error: null
-                },
-                packageConfig: payload.packageConfig,
-                projectDirectoryStatus: payload.projectDirectoryStatus
-            });
-        case actions.GET_PROJECT_INFO_FAIL:
-            return Object.assign({}, state, {
-                fetch: {
-                    status: 'error',
-                    error: String(payload)
-                }
-            });
-        default:
-            return state
+
+    if(type === actions.GET_PROJECT_INFO_DONE){
+
+        //let { model, componentsTree} = payload.projectData;
+
+        // add Html components as additional group
+        //componentsTree['Html'] = HtmlComponents.getSortedHtmlComponents();
+
+        return Object.assign({}, state, {
+            packageConfig: payload.packageConfig,
+            projectDirectoryStatus: payload.projectDirectoryStatus,
+
+            //componentsTree: componentsTree,
+            workspaceMode: 'desk'
+        });
     }
+
+    if(type === actions.SIGN_IN){
+        return Object.assign({}, state, {
+            authentication: {
+                error: null
+            }
+        });
+    }
+
+    if(type === actions.SIGN_IN_DONE){
+        return Object.assign({}, state, {
+            userAccount: payload
+        });
+    }
+
+    if(type === actions.SIGN_IN_FAILED){
+        return Object.assign({}, state, {
+            authentication: {
+                error: String(payload)
+            }
+        });
+    }
+
+    if(type === actions.SIGN_OUT){
+        return Object.assign({}, state, {
+            userAccount: initialState.userAccount
+        });
+    }
+
+    return state;
+
 }
+
 

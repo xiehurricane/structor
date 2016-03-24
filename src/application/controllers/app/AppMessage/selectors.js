@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export const getAll = state => state.appMessage;
+export const componentModel = state => state.appMessage;

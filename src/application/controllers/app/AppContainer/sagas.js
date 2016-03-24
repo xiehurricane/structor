@@ -13,35 +13,75 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import validator from 'validator';
 import { fork, take, call, put, race } from 'redux-saga/effects';
 import * as actions from './actions.js';
-import { actions as spinnerActions } from '../AppSpinner/index.js';
-import { actions as messageActions } from '../AppMessage/index.js';
-import { serverApi } from '../../../api/index.js';
+import * as spinnerActions from '../AppSpinner/actions.js';
+import * as messageActions from '../AppMessage/actions.js';
+//import * as deskActions from '../../workspace/Desk/actions.js';
+import * as deskPageActions from '../../workspace/DeskPage/actions.js';
+import { serverApi, cookies } from '../../../api';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function* getProjectInfo(){
-    while(true){
-        yield take(actions.GET_PROJECT_INFO);
-        try {
-            yield put(spinnerActions.started(actions.GET_PROJECT_INFO));
-            const {timeout, response} = yield race({
-                response: call(serverApi.getProjectInfo),
-                timeout: call(delay, 30000)
-            });
-            if(response){
-                yield put(actions.getProjectInfoDone(response));
-                yield put(messageActions.success('Project info obtained successfully.'));
-            } else {
-                yield put(messageActions.timeout('Project info timed out.'));
-            }
-        } catch(error) {
-            yield put(actions.getProjectInfoFail(error));
-            yield put(messageActions.failed('Project info timed out.'));
+function* signInByToken(){
+    let tokenFromCookies = cookies.getItem("structor-market-token");
+    if (tokenFromCookies) {
+        try{
+            const userCredentials = yield call(serverApi.initUserCredentialsByToken, tokenFromCookies);
+            yield put(actions.signInDone(userCredentials));
+        } catch(e){
+            console.warn(String(e));
         }
-        yield put(spinnerActions.done(actions.GET_PROJECT_INFO));
     }
+}
+
+function* signIn(){
+    while(true){
+        const {payload: {email, password, staySignedIn}} = yield take(actions.SIGN_IN);
+        if(!email || email.length <= 0){
+            put(actions.signInFailed('Please enter e-mail address value'));
+        } else if( !validator.isEmail(email) ){
+            put(actions.signInFailed('Please enter valid e-mail address value'));
+        } else {
+            yield put(spinnerActions.started(actions.SIGN_IN));
+            try{
+                const response = yield call(serverApi.initUserCredentials, email, password);
+                if(staySignedIn === true){
+                    docCookies.setItem("structor-market-token", response.token, 31536e3, "/");
+                }
+                yield put(actions.signInDone(response))
+            } catch(e){
+                yield put(actions.signInFailed(e));
+            }
+            yield put(spinnerActions.done(actions.SIGN_IN));
+        }
+    }
+}
+
+function* getProjectInfo(){
+    yield take(actions.GET_PROJECT_INFO);
+    try {
+        yield put(spinnerActions.started(actions.GET_PROJECT_INFO));
+        yield call(signInByToken);
+        const {timeout, response} = yield race({
+            response: call(serverApi.getProjectInfo),
+            timeout: call(delay, 30000)
+        });
+        if(response){
+
+            const {projectData: {model, componentsTree}, packageConfig, projectDirectoryStatus} = response;
+
+            yield put(deskPageActions.loadModel(model));
+            yield put(actions.getProjectInfoDone({packageConfig, projectDirectoryStatus}));
+
+        } else {
+            yield put(messageActions.timeout('Project initialization timeout.'));
+        }
+    } catch(error) {
+        yield put(messageActions.failed('Project initialization error. ' + String(error)));
+    }
+    yield put(spinnerActions.done(actions.GET_PROJECT_INFO));
 }
 
 // main saga
