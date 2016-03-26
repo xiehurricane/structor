@@ -15,36 +15,22 @@
  */
 
 import * as actions from './actions.js';
-import { utils, utilsStore, graphApi } from '../../../api';
 
 const initialState = {
+    pages: [],
     currentPageName: null,
     currentPagePath: null,
-    currentPageIndex: 0,
     reloadPageCounter: 0,
     reloadPageRequest: false,
     isEditModeOn: true,
     isLivePreviewModeOn: false,
+    selectedUmyId: null
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    if(type === actions.LOAD_MODEL){
-        let { pages } = payload;
-        // force to have at least one page
-        if (!pages || pages.length <= 0) {
-            let pageModel = utilsStore.getTemplatePageModel();
-            pages = [pageModel];
-        }
-        graphApi.initGraph(payload);
-        return Object.assign({}, state, {
-            currentPageName: pages[0].pageName,
-            currentPagePath: pages[0].pagePath,
-            currentPageIndex: 0
-        });
-    }
     if(type === actions.RELOAD_PAGE){
         return Object.assign({}, state, {
             reloadPageCounter: state.reloadPageCounter + 1
@@ -53,8 +39,21 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.CHANGE_PAGE_ROUTE){
         return Object.assign({}, state, {
-            currentPagePath: payload
+            currentPagePath: payload.pagePath,
+            currentPageName: payload.pageName
         });
+    }
+
+    if(type === actions.SET_PAGES){
+        if(payload && payload.length > 0){
+            const currentPath = state.currentPagePath ? state.currentPagePath : payload[0].pagePath;
+            const currentName = state.currentPageName ? state.currentPageName : payload[0].pageName;
+            return Object.assign({}, state, {
+                currentPagePath: currentPath,
+                currentPageName: currentName,
+                pages: payload
+            });
+        }
     }
 
     if(type === actions.SET_EDIT_MODE_ON){
@@ -84,6 +83,12 @@ export default (state = initialState, action = {}) => {
                 reloadPageRequest: false
             });
         }
+    }
+
+    if(type === actions.SET_SELECTED_UIMY_ID){
+        return Object.assign({}, state, {
+            selectedUmyId: payload
+        });
     }
 
     return state;

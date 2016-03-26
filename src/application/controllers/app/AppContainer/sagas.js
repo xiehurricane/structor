@@ -62,7 +62,7 @@ function* signIn(){
 function* getProjectInfo(){
     yield take(actions.GET_PROJECT_INFO);
     try {
-        yield put(spinnerActions.started(actions.GET_PROJECT_INFO));
+        yield put(spinnerActions.started('Loading project model'));
         yield call(signInByToken);
         const {timeout, response} = yield race({
             response: call(serverApi.getProjectInfo),
@@ -81,7 +81,7 @@ function* getProjectInfo(){
     } catch(error) {
         yield put(messageActions.failed('Project initialization error. ' + String(error)));
     }
-    yield put(spinnerActions.done(actions.GET_PROJECT_INFO));
+    yield put(spinnerActions.done('Loading project model'));
 }
 
 // main saga

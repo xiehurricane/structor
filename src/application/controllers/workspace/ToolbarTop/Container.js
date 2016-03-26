@@ -16,13 +16,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
+import { modelSelector } from './selectors.js';
 
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
-
-import PageControls from '../PageControls';
+import PageListControls from '../PageListControls';
+import PageViewControls from '../PageViewControls';
 
 class Container extends Component {
 
@@ -34,13 +31,11 @@ class Container extends Component {
 
         return (
             <div style={this.props.style}>
-                <div style={{width: '100%'}}>
-                    <div style={{
-                    display: 'table',
-                    padding: '5px 10px 5px 10px'
-                }}>
-                    <PageControls />
-                </div>
+                <div style={{minWidth: '50em', width: '100%', padding: '5px 10px 5px 10px'}}>
+                    <div className="btn-toolbar" role="toolbar" >
+                        <PageListControls />
+                        <PageViewControls />
+                    </div>
                 </div>
             </div>
         );
@@ -48,7 +43,5 @@ class Container extends Component {
 }
 
 
-export default connect(
-    createStructuredSelector({ componentModel }), dispatch => bindActionCreators(actions, dispatch)
-)(Container)
+export default connect(modelSelector)(Container);
 

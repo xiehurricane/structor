@@ -16,15 +16,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
-
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
+import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
 
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 import Desk from '../../workspace/Desk';
+import PageOptionsModal from '../../workspace/PageOptionsModal';
 
 class Container extends Component {
 
@@ -77,13 +75,12 @@ class Container extends Component {
             <div style={{overflow: 'hidden'}}>
                 <div ref='appBody' style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0', overflow: 'auto'}}>
                     {content}
+                    <PageOptionsModal />
                 </div>
             </div>
         );
     }
 }
 
-export default connect(
-    createStructuredSelector({ componentModel }),  dispatch => bindActionCreators(actions, dispatch)
-)(Container)
+export default connect( modelSelector, containerActions)(Container);
 

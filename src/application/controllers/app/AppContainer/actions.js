@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { bindActionCreators } from 'redux';
 
 export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
 export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
@@ -27,3 +28,7 @@ export const signIn = (email, password, staySignedIn) => ({type: SIGN_IN, payloa
 export const signInDone = (payload) => ({type: SIGN_IN_DONE, payload});
 export const signInFailed = (error) => ({type: SIGN_IN_FAILED, payload: error});
 export const signOut = () => ({type: SIGN_OUT});
+
+export const containerActions = (dispatch) => bindActionCreators({
+    getProjectInfo, getProjectInfoDone, signIn, signInDone, signInFailed, signOut
+}, dispatch);

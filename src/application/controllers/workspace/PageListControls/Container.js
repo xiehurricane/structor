@@ -16,14 +16,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
+import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
 
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
-
-import { componentModel as deskPageModel } from '../DeskPage/selectors.js';
-import { changePageRoute } from '../DeskPage/actions.js';
 import { graphApi } from '../../../api/index.js';
 
 class Container extends Component {
@@ -33,13 +28,13 @@ class Container extends Component {
     }
 
     render(){
-        const {componentModel, deskPageModel, changePageRoute} = this.props;
-        const model = graphApi.getModel();
+        const {componentModel, deskPageModel, changePageRoute, showModal} = this.props;
+        const pages = deskPageModel.pages;
         let pagesList = [];
         let currentRoutePathLabel = deskPageModel.currentPagePath;
-        if(model.pages && model.pages.length > 0){
+        if(pages && pages.length > 0){
             let indexRouteLabel = ' [IndexRoute]';
-            model.pages.forEach( (page, index) => {
+            pages.forEach( (page, index) => {
                 let routePathLabel = page.pagePath;
                 if(index === 0){
                     if(routePathLabel === deskPageModel.currentPagePath){
@@ -49,7 +44,13 @@ class Container extends Component {
                 }
                 pagesList.push(
                     <li key={routePathLabel}>
-                        <a onClick={() => { changePageRoute(page.pagePath) }} href="#">
+                        <a onClick={
+                                (e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    changePageRoute({ pagePath: page.pagePath, pageName: page.pageName });
+                                }
+                            } href="#">
                             {routePathLabel}
                         </a>
                     </li>
@@ -57,7 +58,7 @@ class Container extends Component {
             } );
         }
         return (
-            <div className="btn-group" role="group">
+            <div  {...this.props} className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
                     onClick={() => {}}
@@ -66,7 +67,7 @@ class Container extends Component {
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    onClick={() => {}}
+                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); showModal() }}
                     title="View page info">
                                         <span>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -91,7 +92,4 @@ class Container extends Component {
 
 }
 
-export default connect(
-    createStructuredSelector({componentModel, deskPageModel}),
-    dispatch => bindActionCreators({...actions, changePageRoute}, dispatch)
-)(Container)
+export default connect(modelSelector, containerActions)(Container);

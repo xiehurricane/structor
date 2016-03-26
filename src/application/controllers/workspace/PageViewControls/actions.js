@@ -13,4 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { bindActionCreators } from 'redux';
+import { changeViewportWidth } from '../Desk/actions.js';
+import { addNewPage, clonePage } from '../DeskPage/actions.js';
 
+export const containerActions = (dispatch) => bindActionCreators({
+    changeViewportWidth, addNewPage, clonePage
+}, dispatch);

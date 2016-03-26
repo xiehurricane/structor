@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
-import { toggleAvailableComponents, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
+import { changePageRoute } from '../DeskPage/actions.js';
+import { showModal } from '../PageOptionsModal/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
-    reloadPage, setEditModeOn, setLivePreviewModeOn,
-    toggleAvailableComponents, toggleQuickOptions, togglePageTreeview
+    changePageRoute, showModal
 }, dispatch);

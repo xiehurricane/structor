@@ -13,11 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
-import { toggleAvailableComponents, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    reloadPage, setEditModeOn, setLivePreviewModeOn,
-    toggleAvailableComponents, toggleQuickOptions, togglePageTreeview
-}, dispatch);
+import * as actions from './actions.js';
+
+const initialState = {
+    show: false
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    if(type === actions.HIDE_MODAL){
+        return Object.assign({}, state, {
+            show: false
+        });
+    }
+
+    if(type === actions.SHOW_MODAL){
+        return Object.assign({}, state, {
+            show: true
+        });
+    }
+
+    return state;
+}
+

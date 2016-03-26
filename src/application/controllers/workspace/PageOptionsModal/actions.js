@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { bindActionCreators } from 'redux';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
-import { toggleAvailableComponents, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
+import { changePageOptions } from '../DeskPage/actions.js';
+
+export const HIDE_MODAL = "PageOptionsModal/HIDE_MODAL";
+export const SHOW_MODAL = "PageOptionsModal/SHOW_MODAL";
+//import { changeViewportWidth } from '../Desk/actions.js';
+//import { addNewPage, clonePage } from '../DeskPage/actions.js';
+
+export const hideModal = () => ({type: HIDE_MODAL});
+export const showModal = () => ({type: SHOW_MODAL});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    reloadPage, setEditModeOn, setLivePreviewModeOn,
-    toggleAvailableComponents, toggleQuickOptions, togglePageTreeview
+    hideModal, showModal, changePageOptions
 }, dispatch);

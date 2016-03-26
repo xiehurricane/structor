@@ -131,8 +131,20 @@ export function getGraph(){
     return graph;
 }
 
+export function getNode(key){
+    return graph.node(key);
+}
+
 export function getModel(){
     return model;
+}
+
+export function getModelNode(key){
+    const node = graph.node(key);
+    if(node){
+        return node.modelNode;
+    }
+    return undefined;
 }
 
 export function traverseGraph(rootNodeKey, result){
@@ -142,7 +154,8 @@ export function traverseGraph(rootNodeKey, result){
             key: rootNodeKey,
             modelNode: rootNode.modelNode,
             index: rootNode.index,
-            prop: rootNode.prop
+            prop: rootNode.prop,
+            selected: rootNode.selected
         };
         let children = graph.children(rootNodeKey);
         if(children && children.length > 0){

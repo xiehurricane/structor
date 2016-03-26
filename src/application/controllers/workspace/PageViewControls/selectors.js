@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
-import { toggleAvailableComponents, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
+import { createStructuredSelector } from 'reselect';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    reloadPage, setEditModeOn, setLivePreviewModeOn,
-    toggleAvailableComponents, toggleQuickOptions, togglePageTreeview
-}, dispatch);
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.pageViewControls,
+    deskModel: state => state.desk,
+    currentPagePath: state => state.deskPage.currentPagePath
+});
+

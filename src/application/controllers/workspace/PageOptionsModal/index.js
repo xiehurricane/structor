@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
-import { toggleAvailableComponents, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    reloadPage, setEditModeOn, setLivePreviewModeOn,
-    toggleAvailableComponents, toggleQuickOptions, togglePageTreeview
-}, dispatch);
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
+import * as actions from './actions.js';
+
+export {
+    reducer,
+    mainSaga,
+    models,
+    actions
+}
+
+export default Container;

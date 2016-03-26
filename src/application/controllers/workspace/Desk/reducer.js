@@ -17,12 +17,33 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    iframeWidth: '100%'
+    iframeWidth: '100%',
+    isAvailableComponentsActive: false,
+    isPageTreeviewActive: false,
+    isQuickOptionsActive: false
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
+
+    if(type === actions.CHANGE_VIEWPORT_WIDTH){
+        return Object.assign({}, state, {
+            iframeWidth: payload
+        });
+    }
+
+    if(type === actions.TOGGLE_AVAILABLE_COMPONENTS){
+        return Object.assign({}, state, { isAvailableComponentsActive: !state.isAvailableComponentsActive });
+    }
+
+    if(type === actions.TOGGLE_PAGE_TREEVIEW){
+        return Object.assign({}, state, { isPageTreeviewActive: !state.isPageTreeviewActive });
+    }
+
+    if(type === actions.TOGGLE_QUICK_OPTIONS){
+        return Object.assign({}, state, { isQuickOptionsActive: !state.isQuickOptionsActive });
+    }
 
     return state;
 }

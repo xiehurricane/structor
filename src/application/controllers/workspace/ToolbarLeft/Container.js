@@ -16,17 +16,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
 import { Button } from 'react-bootstrap';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
-
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
-
-import { userAccountModel } from '../../app/AppContainer/selectors.js';
-
-import { componentModel as deskPageModel } from '../DeskPage/selectors.js';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
 
 class Container extends Component {
 
@@ -40,8 +32,9 @@ class Container extends Component {
             componentModel,
             userAccountModel,
             deskPageModel,
+            deskModel,
             toggleAvailableComponents,
-            toggleComponentsHierarchy,
+            togglePageTreeview,
             toggleQuickOptions,
             setLivePreviewModeOn,
             setEditModeOn,
@@ -107,34 +100,28 @@ class Container extends Component {
                     </div>
 
                     <Button
-                        bsStyle={componentModel.isAvailableComponentsButtonActive ? 'primary' : 'default'}
+                        bsStyle={deskModel.isAvailableComponentsActive ? 'primary' : 'default'}
                         style={{marginTop: '1em', width: '100%'}}
-                        disabled={!componentModel.isEditModeOn}
+                        disabled={!deskPageModel.isEditModeOn}
                         onClick={toggleAvailableComponents}
-                        data-toggle="tooltip"
-                        data-placement="right"
                         title="Show the list of available components">
                         <span className="fa fa-plus" />
                     </Button>
 
                     <Button
-                        bsStyle={componentModel.isComponentsHierarchyButtonActive ? 'primary' : 'default'}
+                        bsStyle={deskModel.isPageTreeviewActive ? 'primary' : 'default'}
                         style={{marginTop: '0.25em', width: '100%'}}
-                        disabled={!componentModel.isEditModeOn}
-                        onClick={toggleComponentsHierarchy}
-                        data-toggle="tooltip"
-                        data-placement="right"
+                        disabled={!deskPageModel.isEditModeOn}
+                        onClick={togglePageTreeview}
                         title="Show components' hierarchy on current page">
                         <span className="fa fa-code" />
                     </Button>
 
                     <Button
-                        bsStyle={componentModel.isQuickOptionsButtonActive ? 'primary' : 'default'}
+                        bsStyle={deskModel.isQuickOptionsActive ? 'primary' : 'default'}
                         style={{marginTop: '0.25em', width: '100%'}}
-                        disabled={!componentModel.isEditModeOn}
+                        disabled={!deskPageModel.isEditModeOn}
                         onClick={toggleQuickOptions}
-                        data-toggle="tooltip"
-                        data-placement="right"
                         title="Show component's quick options panel">
                         <span className="fa fa-paint-brush" />
                     </Button>
@@ -143,8 +130,6 @@ class Container extends Component {
                         bsStyle={deskPageModel.isEditModeOn ? 'primary' : 'default'}
                         style={{marginTop: '1em', width: '100%'}}
                         onClick={setEditModeOn}
-                        data-toggle="tooltip"
-                        data-placement="right"
                         title="Switch to edit page mode">
                         <span className="fa fa-wrench" />
                     </Button>
@@ -153,8 +138,6 @@ class Container extends Component {
                         bsStyle={deskPageModel.isLivePreviewModeOn ? 'primary' : 'default'}
                         style={{marginTop: '0.25em', width: '100%'}}
                         onClick={setLivePreviewModeOn}
-                        data-toggle="tooltip"
-                        data-placement="right"
                         title="Switch to view page mode">
                         <span className="fa fa-hand-pointer-o" />
                     </Button>
@@ -163,22 +146,9 @@ class Container extends Component {
                         bsStyle="default"
                         style={{marginTop: '1em', width: '100%'}}
                         onClick={reloadPage}
-                        data-toggle="tooltip"
-                        data-placement="right"
                         title="Reload current page. State will be lost.">
                         <span className="fa fa-refresh" />
                     </Button>
-                    {/*
-                    <Button
-                        bsStyle={this.props.isDocumentMode ? 'primary' : 'default'}
-                        style={{marginTop: '0.25em', width: '100%'}}
-                        onClick={this.props.startDocumentMode}
-                        data-toggle="tooltip"
-                        data-placement="right"
-                        title="Open project's documentation">
-                        <span className="fa fa-paperclip fa-flip-vertical" />
-                    </Button>
-                     */}
                     <div style={{marginTop: '0.25em', width: '100%', height: '2em'}} />
                 </div>
             </div>
@@ -187,17 +157,5 @@ class Container extends Component {
 
 }
 
-export default connect(
-    createStructuredSelector({
-        componentModel,
-        userAccountModel,
-        deskPageModel
-    }),
-        dispatch => bindActionCreators({
-            ...actions,
-            reloadPage,
-            setEditModeOn,
-            setLivePreviewModeOn
-        }, dispatch)
-)(Container)
+export default connect(modelSelector, containerActions)(Container);
 

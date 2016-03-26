@@ -16,14 +16,16 @@
 
 import {combineReducers} from 'redux';
 
-import { reducer as appContainerReducer } from '../controllers/app/AppContainer/index.js';
-import { reducer as appSpinnerReducer } from '../controllers/app/AppSpinner/index.js';
-import { reducer as appMessageReducer } from '../controllers/app/AppMessage/index.js';
-import { reducer as deskReducer } from '../controllers/workspace/Desk/index.js';
-import { reducer as deskPageReducer } from '../controllers/workspace/DeskPage/index.js';
-import { reducer as toolbarLeftReducer } from '../controllers/workspace/ToolbarLeft/index.js';
-import { reducer as toolbarTopReducer } from '../controllers/workspace/ToolbarTop/index.js';
-import { reducer as pageControlsReducer } from '../controllers/workspace/PageControls/index.js';
+import appContainerReducer from '../controllers/app/AppContainer/reducer.js';
+import appSpinnerReducer from '../controllers/app/AppSpinner/reducer.js';
+import appMessageReducer from '../controllers/app/AppMessage/reducer.js';
+import deskReducer from '../controllers/workspace/Desk/reducer.js';
+import deskPageReducer from '../controllers/workspace/DeskPage/reducer.js';
+import toolbarLeftReducer from '../controllers/workspace/ToolbarLeft/reducer.js';
+import toolbarTopReducer from '../controllers/workspace/ToolbarTop/reducer.js';
+import pageListControlsReducer from '../controllers/workspace/PageListControls/reducer.js';
+import pageViewControlsReducer from '../controllers/workspace/PageViewControls/reducer.js';
+import pageOptionsModalReducer from '../controllers/workspace/PageOptionsModal/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -33,7 +35,9 @@ const reducer = combineReducers({
     deskPage: deskPageReducer,
     toolbarLeft: toolbarLeftReducer,
     toolbarTop: toolbarTopReducer,
-    pageControls: pageControlsReducer
+    pageListControls: pageListControlsReducer,
+    pageViewControls: pageViewControlsReducer,
+    pageOptionsModal: pageOptionsModalReducer
 });
 
 export default reducer;

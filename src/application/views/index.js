@@ -15,7 +15,9 @@
  */
 
 import MainFrame from './app/MainFrame.js';
+import PageComponentForm from './workspace/PageComponentForm.js';
 
 export {
-    MainFrame
+    MainFrame,
+    PageComponentForm
 }

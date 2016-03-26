@@ -13,5 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { createStructuredSelector } from 'reselect';
 
-export const componentModel = state => state.appSpinner;
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.appSpinner
+});

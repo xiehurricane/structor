@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { bindActionCreators } from 'redux';
+
 export const SUCCESS = "AppMessage/SUCCESS";
 export const FAILED = "AppMessage/FAILED";
 export const TIMEOUT = "AppMessage/TIMEOUT";
@@ -24,3 +26,7 @@ export const success = (text) => ({ type: SUCCESS, payload: {text, timestamp: Da
 export const failed = (text) => ({ type: FAILED, payload: {text, timestamp: Date.now()} });
 export const timeout = (text) => ({ type: TIMEOUT, payload: {text, timestamp: Date.now()} });
 export const close = (key) => ({ type: CLOSE, payload: key });
+
+export const containerActions = (dispatch) => bindActionCreators({
+    success, failed, timeout, close
+}, dispatch);

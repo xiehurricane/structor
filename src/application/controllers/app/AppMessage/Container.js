@@ -17,10 +17,8 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
+import { modelSelector } from './selectors.js';
+import { containerActions, FAILED, TIMEOUT } from './actions.js';
 
 class Container extends Component {
 
@@ -76,7 +74,7 @@ class Container extends Component {
             let messagesItems = [];
             messages.forEach( (item, key) => {
                 let messageStyle = Object.assign({}, style);
-                if(item.type === actions.FAILED || item.type === actions.TIMEOUT){
+                if(item.type === FAILED || item.type === TIMEOUT){
                     messageStyle.backgroundColor = '#C90008';
                 } else {
                     messageStyle.backgroundColor = '#5cb85c';
@@ -136,7 +134,5 @@ class Container extends Component {
 
 }
 
-export default connect(
-    createStructuredSelector({ componentModel }), dispatch => bindActionCreators(actions, dispatch)
-)(Container);
+export default connect( modelSelector, containerActions)(Container);
 

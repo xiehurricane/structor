@@ -13,5 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { createStructuredSelector } from 'reselect';
 
-export const componentModel = state => state.toolbarLeft;
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.toolbarLeft,
+    userAccountModel: state => state.appContainer.userAccount,
+    deskPageModel: state => state.deskPage,
+    deskModel: state => state.desk
+});

@@ -16,16 +16,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
-
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
-
+import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
 
 import DeskPage from '../DeskPage';
-import { componentModel as deskPageModel } from '../DeskPage/selectors.js';
-
 import ToolbarLeft from '../ToolbarLeft';
 import ToolbarTop from '../ToolbarTop';
 
@@ -46,7 +40,7 @@ class Container extends Component {
         const {componentModel, deskPageModel} = this.props;
         let leftPanelWidth = 0;
         let leftPanelInner = null;
-        if(this.props.isAvailableComponentsButtonActive){
+        if(componentModel.isAvailableComponentsActive && !deskPageModel.isLivePreviewModeOn){
             leftPanelWidth = 200;
             leftPanelInner = (<div></div>);
             //leftPanelInner = (<PanelAvailableComponents />);
@@ -54,7 +48,7 @@ class Container extends Component {
 
         let bottomPanelHeight = 0;
         let bottomPanelInner = null;
-        if(this.props.isComponentsHierarchyButtonActive){
+        if(componentModel.isPageTreeviewActive && !deskPageModel.isLivePreviewModeOn){
             bottomPanelHeight = 300;
             bottomPanelInner = (<div></div>);
             //bottomPanelInner = (<PanelComponentsHierarchy />);
@@ -62,7 +56,7 @@ class Container extends Component {
 
         let rightPanelWidth = 0;
         let rightPanelInner = null;
-        if(this.props.isQuickOptionsButtonActive){
+        if(componentModel.isQuickOptionsActive && !deskPageModel.isLivePreviewModeOn){
             rightPanelWidth = 250;
             rightPanelInner = (<div></div>);
             //rightPanelInner = (<PanelOptions></PanelOptions>);
@@ -111,7 +105,7 @@ class Container extends Component {
             topComponent = <ToolbarTop style={toolbarTopStyle}/>;
             topPanelHeight = 3;
 
-            if(!this.props.isComponentsHierarchyButtonActive){
+            if(!componentModel.isPageTreeviewActive){
                 let breadcrumbsTopStyle = {
                     position: 'absolute',
                     top: '3em',
@@ -193,12 +187,7 @@ class Container extends Component {
                 </div>
             </div>
         )
-
     }
-
 }
 
-export default connect(
-    createStructuredSelector({componentModel, deskPageModel}),
-    dispatch => bindActionCreators(actions, dispatch)
-)(Container)
+export default connect(modelSelector, containerActions)(Container);

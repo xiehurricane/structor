@@ -17,26 +17,11 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    isAvailableComponentsButtonActive: false,
-    isComponentsHierarchyButtonActive: false,
-    isQuickOptionsButtonActive: false
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
-
-    if(type === actions.TOGGLE_AVAILABLE_COMPONENTS_BUTTON){
-        return Object.assign({}, state, { isAvailableComponentsButtonActive: !state.isAvailableComponentsButtonActive });
-    }
-
-    if(type === actions.TOGGLE_COMPONENTS_HIERARCHY_BUTTON){
-        return Object.assign({}, state, { isComponentsHierarchyButtonActive: !state.isComponentsHierarchyButtonActive });
-    }
-
-    if(type === actions.TOGGLE_QUICK_OPTIONS_BUTTON){
-        return Object.assign({}, state, { isQuickOptionsButtonActive: !state.isQuickOptionsButtonActive });
-    }
 
     return state;
 

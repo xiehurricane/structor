@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
+import { forOwn } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { createStructuredSelector } from 'reselect';
-import { forOwn } from 'lodash';
-import { componentModel } from './selectors.js';
-import * as actions from './actions.js';
+import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
 
 import { utilsStore, graphApi } from '../../../api/index.js';
 
@@ -29,6 +27,7 @@ class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.handleComponentClick = this.handleComponentClick.bind(this);
     }
 
     componentDidMount(){
@@ -83,7 +82,6 @@ class Container extends Component {
         const { componentModel } = this.props;
         const { componentModel: newComponentModel } = nextProps;
         if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
-            const {started} = this.props;
             var domNode = ReactDOM.findDOMNode(this);
             domNode.src = '/deskpage' + componentModel.currentPagePath;
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
@@ -97,9 +95,11 @@ class Container extends Component {
         const { componentModel } = this.props;
         const { componentModel: newComponentModel } = nextProps;
         return (
-            newComponentModel.reloadPageCounter != componentModel.reloadPageCounter
-            || newComponentModel.currentPagePath != componentModel.currentPagePath
-            || newComponentModel.isEditModeOn != componentModel.isEditModeOn
+            nextProps.style !== this.props.style
+            || newComponentModel.reloadPageCounter !== componentModel.reloadPageCounter
+            || newComponentModel.currentPagePath !== componentModel.currentPagePath
+            || newComponentModel.isEditModeOn !== componentModel.isEditModeOn
+            || newComponentModel.selectedUmyId !== componentModel.selectedUmyId
         );
     }
 
@@ -114,7 +114,8 @@ class Container extends Component {
         const nodeMap = utilsStore.getPageDomNodeMap();
         forOwn(nodeMap, (node, key) => {
             if(node){
-                $(node).off("mousedown.umy");
+                $(node).off("mousedown.umy").off("mouseover.umy");
+                //$(node).off("mouseout.umy");
             }
         });
         //if(this.contentWindow) {
@@ -126,24 +127,30 @@ class Container extends Component {
 
     }
 
+    handleComponentClick(umyId){
+        const { setSelectedUmyId } = this.props;
+        setSelectedUmyId(umyId);
+    }
+
     mapDomNodes(){
+
         if(this.contentWindow && this.contentWindow.Page){
             this.clearDomNodes();
             utilsStore.setFrameWindow(this.contentWindow);
             const instanceMap = this.contentWindow.Page.getInstanceMap();
             forOwn(instanceMap, (DOMNode, key) => {
                 utilsStore.setPageDomNode(key, DOMNode);
-                $(DOMNode).on("mousedown.umy", ((_dataumyid, cb) => {
-                    return (e) => {
-                        if(!e.metaKey && !e.ctrlKey){
-                            e.stopPropagation();
-                            e.preventDefault();
-                            cb(_dataumyid);
-                        }
-                    };
-                })(key, (umyId) => {alert('Clicked on ' + umyId)}));
+                //$(DOMNode)
+                //    .on("mousedown.umy", ((_dataumyid, cb) => {
+                //        return (e) => {
+                //            if(!e.metaKey && !e.ctrlKey){
+                //                e.stopPropagation();
+                //                e.preventDefault();
+                //                cb(_dataumyid);
+                //            }
+                //        };
+                //    })(key, this.handleComponentClick));
             });
-
             //this.props.setComponentSelection();
             //this.contentWindow.addEventListener('keydown', this.handleKeyDown, false);
             //window.addEventListener('keydown', this.handleKeyDown, false);
@@ -157,9 +164,5 @@ class Container extends Component {
 
 }
 
-
-export default connect(
-    createStructuredSelector({componentModel}),
-        dispatch => bindActionCreators(actions, dispatch)
-)(Container)
+export default connect(modelSelector, containerActions)(Container);
 

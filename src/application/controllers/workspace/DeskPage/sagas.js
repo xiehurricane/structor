@@ -15,9 +15,8 @@
  */
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import * as actions from './actions.js';
-import { actions as spinnerActions } from '../../app/AppSpinner/index.js';
-import { actions as messageActions } from '../../app/AppMessage/index.js';
-//import { serverApi } from '../../../api/index.js';
+import * as spinnerActions from '../../app/AppSpinner/actions.js';
+import * as messageActions from '../../app/AppMessage/actions.js';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
