@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { bindActionCreators } from 'redux';
+import { setSelectedKey } from '../DeskPage/actions.js';
+import { togglePageTreeview} from '../Desk/actions.js';
 
-export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
-export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
-
-export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
-export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
+export const containerActions = (dispatch) => bindActionCreators({
+    togglePageTreeview, setSelectedKey
+}, dispatch);

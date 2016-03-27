@@ -22,6 +22,7 @@ import { containerActions } from './actions.js';
 import DeskPage from '../DeskPage';
 import ToolbarLeft from '../ToolbarLeft';
 import ToolbarTop from '../ToolbarTop';
+import PageTreeViewPanel from '../PageTreeViewPanel';
 
 //import ToolbarTop from '../toolbar/ToolbarTop.js';
 //import ToolbarBreadcrumbs from '../toolbar/ToolbarBreadcrumbs.js';
@@ -50,8 +51,7 @@ class Container extends Component {
         let bottomPanelInner = null;
         if(componentModel.isPageTreeviewActive && !deskPageModel.isLivePreviewModeOn){
             bottomPanelHeight = 300;
-            bottomPanelInner = (<div></div>);
-            //bottomPanelInner = (<PanelComponentsHierarchy />);
+            bottomPanelInner = (<PageTreeViewPanel />);
         }
 
         let rightPanelWidth = 0;

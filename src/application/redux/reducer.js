@@ -26,6 +26,7 @@ import toolbarTopReducer from '../controllers/workspace/ToolbarTop/reducer.js';
 import pageListControlsReducer from '../controllers/workspace/PageListControls/reducer.js';
 import pageViewControlsReducer from '../controllers/workspace/PageViewControls/reducer.js';
 import pageOptionsModalReducer from '../controllers/workspace/PageOptionsModal/reducer.js';
+import pageTreeViewPanelReducer from '../controllers/workspace/PageTreeViewPanel/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -37,7 +38,8 @@ const reducer = combineReducers({
     toolbarTop: toolbarTopReducer,
     pageListControls: pageListControlsReducer,
     pageViewControls: pageViewControlsReducer,
-    pageOptionsModal: pageOptionsModalReducer
+    pageOptionsModal: pageOptionsModalReducer,
+    pageTreeViewPanel: pageTreeViewPanelReducer
 });
 
 export default reducer;

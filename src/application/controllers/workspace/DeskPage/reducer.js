@@ -18,13 +18,17 @@ import * as actions from './actions.js';
 
 const initialState = {
     pages: [],
+
     currentPageName: null,
     currentPagePath: null,
-    reloadPageCounter: 0,
     reloadPageRequest: false,
     isEditModeOn: true,
     isLivePreviewModeOn: false,
-    selectedUmyId: null
+    selectedKeys: [],
+
+    reloadPageCounter: 0,
+    selectedUpdateCounter: 0,
+    modelUpdateCounter: 0
 };
 
 export default (state = initialState, action = {}) => {
@@ -44,6 +48,16 @@ export default (state = initialState, action = {}) => {
         });
     }
 
+    if(type === actions.CHANGE_PAGE_ROUTE_FEEDBACK){
+        const existingPaths = state.pages.filter(page => page.pagePath === payload );
+        if(existingPaths && existingPaths.length > 0){
+            return Object.assign({}, state, {
+                currentPagePath: existingPaths[0].pagePath,
+                currentPageName: existingPaths[0].pageName
+            });
+        }
+    }
+
     if(type === actions.SET_PAGES){
         if(payload && payload.length > 0){
             const currentPath = state.currentPagePath ? state.currentPagePath : payload[0].pagePath;
@@ -51,7 +65,9 @@ export default (state = initialState, action = {}) => {
             return Object.assign({}, state, {
                 currentPagePath: currentPath,
                 currentPageName: currentName,
-                pages: payload
+                pages: payload,
+                selectedKeys: [],
+                modelUpdateCounter: state.modelUpdateCounter + 1
             });
         }
     }
@@ -59,14 +75,16 @@ export default (state = initialState, action = {}) => {
     if(type === actions.SET_EDIT_MODE_ON){
         return Object.assign({}, state, {
             isEditModeOn: true,
-            isLivePreviewModeOn: false
+            isLivePreviewModeOn: false,
+            modelUpdateCounter: state.modelUpdateCounter + 1
         });
     }
 
     if(type === actions.SET_LIVE_PREVIEW_MODE_ON){
         return Object.assign({}, state, {
             isEditModeOn: false,
-            isLivePreviewModeOn: true
+            isLivePreviewModeOn: true,
+            modelUpdateCounter: state.modelUpdateCounter + 1
         });
     }
 
@@ -85,9 +103,10 @@ export default (state = initialState, action = {}) => {
         }
     }
 
-    if(type === actions.SET_SELECTED_UIMY_ID){
+    if(type === actions.SET_SELECTED_KEY){
         return Object.assign({}, state, {
-            selectedUmyId: payload
+            selectedKeys: payload,
+            selectedUpdateCounter: state.selectedUpdateCounter + 1
         });
     }
 

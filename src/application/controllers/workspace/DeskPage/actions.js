@@ -33,9 +33,8 @@ export const EXECUTE_RELOAD_PAGE_REQUEST = "DeskPage/EXECUTE_RELOAD_PAGE_REQUEST
 export const COMPILER_START = "DeskPage/COMPILER_START";
 export const COMPILER_DONE = "DeskPage/COMPILER_DONE";
 export const COMPILER_TIMEOUT = "DeskPage/COMPILER_TIMEOUT";
-export const SET_SELECTED_UIMY_ID = "DeskPage/SET_SELECTED_UMYID";
+export const CHANGE_PAGE_ROUTE_FEEDBACK = "DeskPage/CHANGE_PAGE_ROUTE_FEEDBACK";
 
-//export const loadModel = (payload) => ({type: LOAD_MODEL, payload});
 export const setPages = (pages) => ({type: SET_PAGES, payload: pages});
 export const reloadPage = () => ({type: RELOAD_PAGE});
 export const loadPage = () => ({type: LOAD_PAGE});
@@ -49,104 +48,15 @@ export const executeReloadPageRequest = () => ({ type: EXECUTE_RELOAD_PAGE_REQUE
 export const compilerStart = () => ({ type: COMPILER_START });
 export const compilerDone = () => ({ type: COMPILER_DONE });
 export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
+export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 
-export const loadModel = (model) => (dispatch, getState) => {
-    let { pages } = model;
-    // force to have at least one page
-    if (!pages || pages.length <= 0) {
-        let pageModel = utilsStore.getTemplatePageModel();
-        model.pages = [pageModel];
-    }
-    graphApi.initGraph(model);
-    let pagePathList = [];
-    model.pages.forEach(page => {
-        pagePathList.push({
-            pagePath: page.pagePath,
-            pageName: page.pageName
-        });
-    });
-    dispatch({type: SET_PAGES, payload: pagePathList});
-};
+import { setSelectedKey, SET_SELECTED_KEY } from './actions/selectComponents.js';
+import { loadModel, addNewPage, clonePage, changePageOptions } from './actions/modelPageActions.js';
 
-export const addNewPage = () => (dispatch, getState) => {
-    let pageModel = utilsStore.getTemplatePageModel();
-    let model = graphApi.getModel();
-    pageModel.pageName = pageModel.pageName + model.pages.length;
-    pageModel.pagePath = pageModel.pagePath + model.pages.length;
-    model.pages.push(pageModel);
-    dispatch(loadModel(model));
-    dispatch({type: CHANGE_PAGE_ROUTE, payload: { pagePath: pageModel.pagePath, pageName: pageModel.pageName }});
-};
-
-export const clonePage = (pagePath) => (dispatch, getState) => {
-    let model = graphApi.getModel();
-    let modelNode = graphApi.getModelNode(pagePath);
-    if(modelNode){
-        let newModelNode = utils.fulex(modelNode);
-        newModelNode.pageName = modelNode.pageName + '_copy';
-        newModelNode.pagePath = modelNode.pagePath + '_copy';
-        model.pages.push(newModelNode);
-        dispatch(loadModel(model));
-        dispatch({type: CHANGE_PAGE_ROUTE, payload:{ pagePath: newModelNode.pagePath, pageName: newModelNode.pageName }});
-        dispatch(success('Page is cloned'));
-    } else {
-        dispatch(failed('Page with path \'' + pagePath + '\' was not found'));
-    }
-};
-
-export const changePageOptions = (options) => (dispatch, getState) => {
-
-    let {pageName, pagePath, makeIndexRoute, currentPagePath} = options;
-
-    if(!pageName || pageName.length <= 0 || !validator.isAlphanumeric(pageName)){
-        dispatch(failed('Please enter alphanumeric value for page component name'));
-    } else if(!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/'){
-        dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
-    } else {
-        var firstChar = pageName.charAt(0).toUpperCase();
-        pageName = firstChar + pageName.substr(1);
-        let node = graphApi.getNode(currentPagePath);
-        if(node && node.modelNode){
-            node.modelNode.pageName = pageName;
-            node.modelNode.pagePath = pagePath;
-            let model = graphApi.getModel();
-            if(makeIndexRoute && model.pages.length > 1){
-                console.log('Make index : ' + pagePath + ', index: ' + node.index);
-                const tempModel = model.pages.splice(node.index, 1)[0];
-                if(tempModel){
-                    model.pages.splice(0, 0, tempModel);
-                }
-            }
-            dispatch(loadModel(model));
-            dispatch({type: CHANGE_PAGE_ROUTE, payload:{ pagePath, pageName }});
-            dispatch(hidePageOptionsModal());
-            dispatch(success('Page route is changed successfully.'));
-        } else {
-            dispatch(failed('Page with path \'' + pagePath + '\' was not found'));
-        }
-    }
-};
-
-export const setSelectedUmyId = (umyId) => (dispatch, getState) => {
-    const { deskPage: { selectedUmyId } } = getState();
-    if (selectedUmyId) {
-        let graphNode = graphApi.getNode(selectedUmyId);
-        if (graphNode) {
-            graphNode.selected = undefined;
-        } else {
-            dispatch(failed('Currently selected component with id \'' + selectedUmyId + '\' was not found'));
-        }
-    }
-    if(selectedUmyId !== umyId){
-        let nextGraphNode = graphApi.getNode(umyId);
-        if(nextGraphNode){
-            nextGraphNode.selected = true;
-            dispatch({type: SET_SELECTED_UIMY_ID, payload: umyId});
-        } else {
-            dispatch(failed('The next to select component with id \'' + selectedUmyId + '\' was not found'));
-        }
-    }
-};
+export {
+    setSelectedKey, SET_SELECTED_KEY,
+    loadModel, addNewPage, clonePage, changePageOptions
+}
 
 export const handleCompilerMessage = (message) => (dispatch, getState) => {
     if(message.status === 'start'){
@@ -164,4 +74,6 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
     }
 };
 
-export const containerActions = (dispatch) => bindActionCreators({loadPage, pageLoaded, setSelectedUmyId}, dispatch);
+export const containerActions = (dispatch) => bindActionCreators({
+    loadPage, pageLoaded, setSelectedKey, changePageRouteFeedback
+}, dispatch);

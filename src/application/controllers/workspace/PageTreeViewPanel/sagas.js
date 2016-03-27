@@ -13,37 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { fork, take, call, put, race } from 'redux-saga/effects';
-import * as actions from './actions.js';
-import { actions as spinnerActions } from '../AppSpinner/index.js';
-import { actions as messageActions } from '../AppMessage/index.js';
-import { serverApi } from '../../../api/index.js';
-
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-function* getProjectInfo(){
-    while(true){
-        yield take(actions.GET_PROJECT_INFO);
-        try {
-            yield put(spinnerActions.started(actions.GET_PROJECT_INFO));
-            const {timeout, response} = yield race({
-                response: call(serverApi.getProjectInfo),
-                timeout: call(delay, 30000)
-            });
-            if(response){
-                yield put(actions.getProjectInfoDone(response));
-            } else {
-                yield put(messageActions.timeout('Project initialization timeout.'));
-            }
-        } catch(error) {
-            yield put(messageActions.failed('Project initialization error. ' + String(error)));
-        }
-        yield put(spinnerActions.done(actions.GET_PROJECT_INFO));
-    }
-}
+//import { fork, take, call, put, race } from 'redux-saga/effects';
+//import * as actions from './actions.js';
+//import { actions as spinnerActions } from '../AppSpinner/index.js';
+//import { actions as messageActions } from '../AppMessage/index.js';
+//import { serverApi } from '../../../api/index.js';
+//
+//const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+//
+//function* getProjectInfo(){
+//    while(true){
+//        yield take(actions.GET_PROJECT_INFO);
+//        try {
+//            yield put(spinnerActions.started(actions.GET_PROJECT_INFO));
+//            const {timeout, response} = yield race({
+//                response: call(serverApi.getProjectInfo),
+//                timeout: call(delay, 30000)
+//            });
+//            if(response){
+//                yield put(actions.getProjectInfoDone(response));
+//            } else {
+//                yield put(messageActions.timeout('Project initialization timeout.'));
+//            }
+//        } catch(error) {
+//            yield put(messageActions.failed('Project initialization error. ' + String(error)));
+//        }
+//        yield put(spinnerActions.done(actions.GET_PROJECT_INFO));
+//    }
+//}
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(getProjectInfo)];
+    //yield [fork(getProjectInfo)];
 
 };

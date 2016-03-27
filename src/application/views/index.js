@@ -14,10 +14,21 @@
  * limitations under the License.
  */
 
+// commons
+import ContentEditable from './common/ContentEditable.js';
+
+// app
 import MainFrame from './app/MainFrame.js';
+
+// workspace
 import PageComponentForm from './workspace/PageComponentForm.js';
+import PageTreeViewItem from './workspace/PageTreeViewItem.js';
+import PageTreeViewItemText from './workspace/PageTreeViewItemText.js';
 
 export {
+    ContentEditable,
     MainFrame,
-    PageComponentForm
+    PageComponentForm,
+    PageTreeViewItem,
+    PageTreeViewItemText
 }

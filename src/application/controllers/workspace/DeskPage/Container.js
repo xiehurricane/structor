@@ -28,6 +28,7 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.handleComponentClick = this.handleComponentClick.bind(this);
+        this.handlePathnameChanged = this.handlePathnameChanged.bind(this);
     }
 
     componentDidMount(){
@@ -40,35 +41,14 @@ class Container extends Component {
             this.contentWindow = domNode.contentWindow;
             if(this.contentWindow.pageReadyState !== 'initialized'){
 
-                this.contentWindow.onPageDidMount = () => {
-                    console.log('PageForDesk was mounted');
-                };
-                this.contentWindow.onPageWillUnmount = () => {
-                    const {componentModel} = this.props;
-                    console.log('PageForDesk will unmount');
-                    console.log('componentModel.isEditModeOn ' + componentModel.isEditModeOn);
-                    if(componentModel.isEditModeOn){
-                        this.clearDomNodes();
-                    }
-                };
-                this.contentWindow.onPageDidUpdate = () => {
-                    const {componentModel} = this.props;
-                    console.log('PageForDesk did update');
-                    console.log('componentModel.isEditModeOn ' + componentModel.isEditModeOn);
-                    if(componentModel.isEditModeOn){
-                        this.mapDomNodes();
-                    }
-                };
-                this.contentWindow.onPageWillUpdate = () => {
-                    const {componentModel} = this.props;
-                    console.log('PageForDeak will update');
-                    console.log('componentModel.isEditModeOn ' + componentModel.isEditModeOn);
-                    if(componentModel.isEditModeOn){
-                        this.clearDomNodes();
-                    }
+                this.contentWindow.onPageDidMount = (page) => {
+                    this.page = page;
+                    page.setGraphApi(graphApi);
+                    page.setOnComponentMouseDown(this.handleComponentClick);
+                    page.setOnPathnameChanged(this.handlePathnameChanged);
                 };
 
-                this.contentWindow.__createPageDesk(graphApi);
+                this.contentWindow.__createPageDesk();
             }
             pageLoaded();
         });
@@ -76,17 +56,22 @@ class Container extends Component {
 
     componentWillUpdate(nextProps, nextState){
 
+        console.log('DeskPage will update...');
+
         this.doUpdatePageModel = false;
-        this.contentWindow.Page.setGraph(graphApi);
+        this.doUpdateSelected = false;
 
         const { componentModel } = this.props;
         const { componentModel: newComponentModel } = nextProps;
+
         if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
             var domNode = ReactDOM.findDOMNode(this);
             domNode.src = '/deskpage' + componentModel.currentPagePath;
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
             this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
-        } else {
+        } else if(newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter) {
+            this.doUpdateSelected = true;
+        } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
         }
     }
@@ -95,67 +80,40 @@ class Container extends Component {
         const { componentModel } = this.props;
         const { componentModel: newComponentModel } = nextProps;
         return (
-            nextProps.style !== this.props.style
+            nextProps.style.width !== this.props.style.width
             || newComponentModel.reloadPageCounter !== componentModel.reloadPageCounter
             || newComponentModel.currentPagePath !== componentModel.currentPagePath
             || newComponentModel.isEditModeOn !== componentModel.isEditModeOn
-            || newComponentModel.selectedUmyId !== componentModel.selectedUmyId
+            || newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter
+            || newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter
         );
     }
 
     componentDidUpdate(){
-        if(this.doUpdatePageModel){
-            const { componentModel } = this.props;
-            this.contentWindow.Page.updatePageModel(componentModel.currentPagePath);
-        }
-    }
-
-    clearDomNodes(){
-        const nodeMap = utilsStore.getPageDomNodeMap();
-        forOwn(nodeMap, (node, key) => {
-            if(node){
-                $(node).off("mousedown.umy").off("mouseover.umy");
-                //$(node).off("mouseout.umy");
+        if(this.page){
+            if(this.doUpdatePageModel){
+                console.log('Updating page model');
+                const { componentModel } = this.props;
+                this.page.updatePageModel({
+                    pathname: componentModel.currentPagePath,
+                    isEditModeOn: componentModel.isEditModeOn
+                });
             }
-        });
-        //if(this.contentWindow) {
-        //    this.contentWindow.removeEventListener('keydown', this.handleKeyDown, false);
-        //}
-        //window.removeEventListener('keydown', this.handleKeyDown, false);
-        utilsStore.resetPageDomNode();
-        utilsStore.resetFrameWindow();
-
-    }
-
-    handleComponentClick(umyId){
-        const { setSelectedUmyId } = this.props;
-        setSelectedUmyId(umyId);
-    }
-
-    mapDomNodes(){
-
-        if(this.contentWindow && this.contentWindow.Page){
-            this.clearDomNodes();
-            utilsStore.setFrameWindow(this.contentWindow);
-            const instanceMap = this.contentWindow.Page.getInstanceMap();
-            forOwn(instanceMap, (DOMNode, key) => {
-                utilsStore.setPageDomNode(key, DOMNode);
-                //$(DOMNode)
-                //    .on("mousedown.umy", ((_dataumyid, cb) => {
-                //        return (e) => {
-                //            if(!e.metaKey && !e.ctrlKey){
-                //                e.stopPropagation();
-                //                e.preventDefault();
-                //                cb(_dataumyid);
-                //            }
-                //        };
-                //    })(key, this.handleComponentClick));
-            });
-            //this.props.setComponentSelection();
-            //this.contentWindow.addEventListener('keydown', this.handleKeyDown, false);
-            //window.addEventListener('keydown', this.handleKeyDown, false);
-
+            if(this.doUpdateSelected){
+                console.log('Updating selected only');
+                this.page.updateInitialState();
+            }
         }
+    }
+
+    handleComponentClick(key, isModifier){
+        const { setSelectedKey } = this.props;
+        setSelectedKey(key, isModifier);
+    }
+
+    handlePathnameChanged(pathname){
+        const { changePageRouteFeedback } = this.props;
+        changePageRouteFeedback(pathname);
     }
 
     render(){

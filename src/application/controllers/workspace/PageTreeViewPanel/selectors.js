@@ -14,4 +14,11 @@
  * limitations under the License.
  */
 
-export const getAll = state => state.appContainer;
+import { createStructuredSelector } from 'reselect';
+
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.pageTreeViewPanel,
+    deskPageModel: state => state.deskPage,
+    deskModel: state => state.desk
+});
+

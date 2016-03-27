@@ -279,27 +279,37 @@ body {
 
 .umy-treeview-list {
     line-height: 22px;
-    border-left: 1px solid #35b3ee;
-    /*border: 1px solid #ffffff;*/
+    border-left: 1px solid #cdcdcd;
     -webkit-padding-start: 0;
     padding: 0 0 0 1em;
-    /*list-style: outside;*/
+    list-style: none;
+}
+
+.umy-treeview-list-selected {
+    border: 0;
+    line-height: 22px;
+    -webkit-padding-start: 0;
+    padding: 0 0 0 1em;
     list-style: none;
 }
 
 .umy-treeview-list-item {
     position: relative;
     padding-left: 3px;
-    /*border-left: 1px solid #ffffff;*/
-    /*border-top: 1px solid #ffffff;*/
     white-space: nowrap;
     font-size: 14px;
     letter-spacing: 0px;
 }
 
-.umy-treeview-list-item .selected {
-    /*border: 1px solid #ffffff;*/
-    background-color: #35b3ee;
+.umy-treeview-list-item-selected {
+    border: 1px solid #35b3ee;
+    background-color: rgba(54, 194, 255, 0.11);
+    border-radius: 3px;
+    position: relative;
+    padding-left: 3px;
+    white-space: nowrap;
+    font-size: 14px;
+    letter-spacing: 0px;
 }
 
 .umy-treeview-list-item-link {

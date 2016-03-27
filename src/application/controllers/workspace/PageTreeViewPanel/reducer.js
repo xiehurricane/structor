@@ -15,33 +15,32 @@
  */
 
 import * as actions from './actions.js';
-import { utilsStore, HtmlComponents } from '../../api/index.js';
 
 const initialState = {
-    packageConfig: {},
-    projectDirectoryStatus: null
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    if(type === actions.GET_PROJECT_INFO_DONE){
+    //if(type === actions.GET_PROJECT_INFO_DONE){
+    //
+    //    let { model, componentsTree} = payload.projectData;
+    //
+    //    // force to have at least one page
+    //    if (!model.pages || model.pages.length <= 0) {
+    //        let pageModel = utilStore.getTemplatePageModel();
+    //        model.pages = [pageModel];
+    //    }
+    //    componentsTree['Html'] = HtmlComponents.getSortedHtmlComponents();
+    //
+    //    return Object.assign({}, state, {
+    //        packageConfig: payload.packageConfig,
+    //        projectDirectoryStatus: payload.projectDirectoryStatus,
+    //        projectData: payload.projectData
+    //    });
+    //}
 
-        let { model, componentsTree} = payload.projectData;
-
-        // force to have at least one page
-        if (!model.pages || model.pages.length <= 0) {
-            let pageModel = utilStore.getTemplatePageModel();
-            model.pages = [pageModel];
-        }
-        componentsTree['Html'] = HtmlComponents.getSortedHtmlComponents();
-
-        return Object.assign({}, state, {
-            packageConfig: payload.packageConfig,
-            projectDirectoryStatus: payload.projectDirectoryStatus,
-            projectData: payload.projectData
-        });
-    }
+    return state;
 }
 

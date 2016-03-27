@@ -33,17 +33,15 @@ import thunk from 'redux-thunk';
 
 import reducer from './redux/reducer.js';
 import mainSaga from './sagas/saga.js';
+import myMiddleware from './redux/middleware.js';
 import { handleCompilerMessage } from './controllers/workspace/DeskPage/actions.js';
-
-import { init } from './plugins/plugins.js';
 
 import { MainFrame } from './views/index.js';
 
 window.serviceUrl = 'http://localhost';
-init();
 
 const sagaMiddleware = createSagaMiddleware(mainSaga);
-const store = createStore(reducer, applyMiddleware(sagaMiddleware, thunk));
+const store = createStore(reducer, applyMiddleware(myMiddleware, sagaMiddleware, thunk));
 
 const { protocol, hostname, port } = window.location;
 const socket = io.connect(protocol + '//' + hostname + ':' + port);

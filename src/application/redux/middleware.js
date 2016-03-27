@@ -13,15 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { fork, take } from 'redux-saga/effects';
-import { mainSaga as appContainerSaga } from '../controllers/app/AppContainer/index.js';
-import { mainSaga as appMessageSaga } from '../controllers/app/AppMessage/index.js';
-import { mainSaga as deskPageSaga } from '../controllers/workspace/DeskPage/index.js';
 
-export default function* mainSaga(){
-    yield [fork(appContainerSaga), fork(appMessageSaga), fork(deskPageSaga)];
-    //while(true){
-    //    const action = yield take('*');
-    //    console.log('Action: ' + action.type);
-    //}
+export default store => next => action => {
+    //console.log('Action: ' + action.type);
+    return next(action);
 }
