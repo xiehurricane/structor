@@ -29,6 +29,7 @@ class Container extends Component {
         super(props);
         this.handleComponentClick = this.handleComponentClick.bind(this);
         this.handlePathnameChanged = this.handlePathnameChanged.bind(this);
+        this.handleSelectParentClick = this.handleSelectParentClick.bind(this);
     }
 
     componentDidMount(){
@@ -41,11 +42,17 @@ class Container extends Component {
             this.contentWindow = domNode.contentWindow;
             if(this.contentWindow.pageReadyState !== 'initialized'){
 
-                this.contentWindow.onPageDidMount = (page) => {
+                this.contentWindow.onPageDidMount = (page, pathname) => {
                     this.page = page;
                     page.setGraphApi(graphApi);
                     page.setOnComponentMouseDown(this.handleComponentClick);
                     page.setOnPathnameChanged(this.handlePathnameChanged);
+                    page.setOnSelectParentClick(this.handleSelectParentClick);
+                    const { componentModel } = this.props;
+                    page.updatePageModel({
+                        pathname: pathname,
+                        isEditModeOn: componentModel.isEditModeOn
+                    });
                 };
 
                 this.contentWindow.__createPageDesk();
@@ -109,6 +116,11 @@ class Container extends Component {
     handleComponentClick(key, isModifier){
         const { setSelectedKey } = this.props;
         setSelectedKey(key, isModifier);
+    }
+
+    handleSelectParentClick(key, isModifier){
+        const { setSelectedParentKey } = this.props;
+        setSelectedParentKey(key, isModifier);
     }
 
     handlePathnameChanged(pathname){

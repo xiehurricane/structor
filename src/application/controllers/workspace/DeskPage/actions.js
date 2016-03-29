@@ -50,11 +50,17 @@ export const compilerDone = () => ({ type: COMPILER_DONE });
 export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 
-import { setSelectedKey, SET_SELECTED_KEY } from './actions/selectComponents.js';
-import { loadModel, addNewPage, clonePage, changePageOptions } from './actions/modelPageActions.js';
+import {
+    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey,
+    SET_SELECTED_KEY, UPDATE_SELECTED
+} from './actions/selectComponents.js';
+import {
+    loadModel, addNewPage, clonePage, changePageOptions
+} from './actions/modelPageActions.js';
 
 export {
-    setSelectedKey, SET_SELECTED_KEY,
+    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey,
+    SET_SELECTED_KEY, UPDATE_SELECTED,
     loadModel, addNewPage, clonePage, changePageOptions
 }
 
@@ -75,5 +81,5 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    loadPage, pageLoaded, setSelectedKey, changePageRouteFeedback
+    loadPage, pageLoaded, setSelectedKey, setSelectedParentKey, changePageRouteFeedback
 }, dispatch);

@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-'use strict';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
 
-/**
- * jQuery plugins repository
- *
- * @type {exports}
- */
-import factory from '../plugins/object-factory.js';
-// modules of plugins
-import componentOverlay from './component-overlay.js';
-
-
-export function init() {
-    factory('umyComponentOverlay', componentOverlay);
+export {
+    reducer,
+    mainSaga
 }
+
+export default Container;

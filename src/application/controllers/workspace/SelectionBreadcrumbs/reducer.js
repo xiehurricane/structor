@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
-export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
+import * as actions from './actions.js';
 
-export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
-export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
+const initialState = {
+
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    return state;
+}
+

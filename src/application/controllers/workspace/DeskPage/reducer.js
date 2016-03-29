@@ -110,6 +110,12 @@ export default (state = initialState, action = {}) => {
         });
     }
 
+    if(type === actions.UPDATE_SELECTED){
+        return Object.assign({}, state, {
+            selectedUpdateCounter: state.selectedUpdateCounter + 1
+        });
+    }
+
     return state;
 }
 

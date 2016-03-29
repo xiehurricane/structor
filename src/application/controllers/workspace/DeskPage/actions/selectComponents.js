@@ -16,6 +16,9 @@
 import { utils, utilsStore, graphApi } from '../../../../api';
 
 export const SET_SELECTED_KEY = "DeskPage/SET_SELECTED_KEY";
+export const UPDATE_SELECTED = "DeskPage/UPDATE_SELECTED";
+
+export const updateSelected = () => ({type: UPDATE_SELECTED});
 
 export const setSelectedKey = (key, isModifier) => (dispatch, getState) => {
     let { deskPage: { selectedKeys } } = getState();
@@ -70,5 +73,27 @@ export const setSelectedKey = (key, isModifier) => (dispatch, getState) => {
                 }
             }
         }
+    }
+};
+
+export const setSelectedParentKey = (key, isModifier) => (dispatch, getState) => {
+    const parentKey = graphApi.getGraph().parent(key);
+    if(parentKey){
+        const parentParentKey = graphApi.getGraph().parent(parentKey);
+        if(parentParentKey){
+            dispatch(setSelectedKey(parentKey, isModifier));
+        }
+    }
+};
+
+export const setHighlightSelectedKey = (key, isHighlighted) => (dispatch, getState) => {
+    let graphNode = graphApi.getNode(key);
+    if(graphNode){
+        if(!isHighlighted){
+            graphNode.highlighted = undefined;
+        } else if(isHighlighted){
+            graphNode.highlighted = true;
+        }
+        dispatch(updateSelected());
     }
 };

@@ -23,13 +23,7 @@ import DeskPage from '../DeskPage';
 import ToolbarLeft from '../ToolbarLeft';
 import ToolbarTop from '../ToolbarTop';
 import PageTreeViewPanel from '../PageTreeViewPanel';
-
-//import ToolbarTop from '../toolbar/ToolbarTop.js';
-//import ToolbarBreadcrumbs from '../toolbar/ToolbarBreadcrumbs.js';
-//import DeskPageFrame from './DeskPageFrame.js';
-//import PanelComponentsHierarchy from '../panel/PanelComponentsHierarchy.js';
-//import PanelAvailableComponents from '../panel/PanelAvailableComponents.js';
-//import PanelOptions from '../panel/PanelOptions.js';
+import ToolbarSelection from '../ToolbarSelection';
 
 class Container extends Component {
 
@@ -105,18 +99,16 @@ class Container extends Component {
             topComponent = <ToolbarTop style={toolbarTopStyle}/>;
             topPanelHeight = 3;
 
-            if(!componentModel.isPageTreeviewActive){
-                let breadcrumbsTopStyle = {
-                    position: 'absolute',
-                    top: '3em',
-                    left: 'calc(4em + ' + leftPanelWidth + 'px)',
-                    right: '5px',
-                    height: '3em'
-                };
-                breadcrumbsComponent = (<div style={breadcrumbsTopStyle}></div>);
-                //breadcrumbsComponent = (<ToolbarBreadcrumbs style={breadcrumbsTopStyle}></ToolbarBreadcrumbs>);
-                topPanelHeight += 3;
-            }
+            let breadcrumbsTopStyle = {
+                position: 'absolute',
+                top: '3em',
+                left: 'calc(4em + ' + leftPanelWidth + 'px)',
+                right: '5px',
+                height: '3em'
+            };
+            //breadcrumbsComponent = (<div style={breadcrumbsTopStyle}></div>);
+            breadcrumbsComponent = (<ToolbarSelection style={breadcrumbsTopStyle}></ToolbarSelection>);
+            topPanelHeight += 3;
 
         } else {
             topPanelHeight = 0.3;

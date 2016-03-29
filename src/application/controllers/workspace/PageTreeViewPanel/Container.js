@@ -26,14 +26,6 @@ import { Button } from 'react-bootstrap';
 
 import { PageTreeViewItem, PageTreeViewItemText } from '../../../views/index.js';
 
-//import * as DeskPageActions from '../../actions/deskPageActions.js';
-
-//import PanelComponentHierarchyItem from './PanelComponentHierarchyItem.js';
-//import PanelComponentHierarchyTextItem from './PanelComponentHierarchyTextItem.js';
-//import OverlayButtonsControl from '../element/OverlayButtonsControl.js';
-
-//import * as DeskActions from '../../actions/deskActions.js';
-
 var scrollToSelected = function($frameWindow, key){
     setTimeout((function(_frameWindow){
         return function(){
@@ -60,23 +52,18 @@ class Container extends Component{
 
     constructor(props) {
         super(props);
+        this.scrollToSelected = this.scrollToSelected.bind(this);
         //this.state = {};
         //this.handleChangeInlineText = this.handleChangeInlineText.bind(this);
     }
 
     componentDidMount() {
         this.$frameWindow = $(this.refs.panelElement);
-        const { deskPageModel, togglePageTreeview } = this.props;
-        if(deskPageModel.selectedKeys && deskPageModel.selectedKeys.length > 0){
-            scrollToSelected(this.$frameWindow, deskPageModel.selectedKeys[deskPageModel.selectedKeys.length - 1]);
-        }
+        this.scrollToSelected();
     }
 
     componentDidUpdate(){
-        const { deskPageModel, togglePageTreeview } = this.props;
-        if(deskPageModel.selectedKeys && deskPageModel.selectedKeys.length > 0){
-            scrollToSelected(this.$frameWindow, deskPageModel.selectedKeys[deskPageModel.selectedKeys.length - 1]);
-        }
+        this.scrollToSelected();
     }
 
     componentWillUnmount() {
@@ -94,11 +81,66 @@ class Container extends Component{
         );
     }
 
+    scrollToSelected(){
+        const { deskPageModel } = this.props;
+        if(deskPageModel.selectedKeys && deskPageModel.selectedKeys.length > 0){
+            scrollToSelected(this.$frameWindow, deskPageModel.selectedKeys[deskPageModel.selectedKeys.length - 1]);
+        }
+    }
+
     //handleChangeInlineText(textValue){
     //    this.props.rewriteModelNode({
     //        text: _.unescape(textValue)
     //    })
     //}
+
+    buildNode(graphNode) {
+
+        let inner = [];
+        const modelNode = graphNode.modelNode;
+
+        let innerProps = [];
+        if(graphNode.props){
+            forOwn(graphNode.props, (prop, propName) => {
+                innerProps.push(this.buildNode(prop));
+            });
+        }
+        let children = [];
+        if(graphNode.children && graphNode.children.length > 0){
+            graphNode.children.forEach(node => {
+                children.push(this.buildNode(node));
+            });
+        } else if(modelNode.text) {
+            inner.push(
+                <PageTreeViewItemText
+                    itemKey={graphNode.key}
+                    key={'text' + graphNode.key}
+                    textValue={modelNode.text} />
+            )
+        }
+
+        if(innerProps.length > 0 || children.length > 0){
+            inner.push(
+                <ul id={graphNode.key}
+                    key={'list' + graphNode.key}
+                    className={graphNode.selected ? 'umy-treeview-list-selected' : 'umy-treeview-list'}>
+                    {innerProps}
+                    {children}
+                </ul>
+            );
+        }
+
+        return (
+            <PageTreeViewItem
+                key={'treeItem' + graphNode.key}
+                itemKey={graphNode.key}
+                isSelected={graphNode.selected}
+                type={modelNode.type}
+                onSelect={this.props.setSelectedKey}>
+                {inner}
+            </PageTreeViewItem>
+        );
+    }
 
     render() {
 
@@ -151,54 +193,6 @@ class Container extends Component{
                     {listItems}
                 </ul>
             </div>
-        );
-    }
-
-    buildNode(graphNode) {
-
-        let inner = [];
-        const modelNode = graphNode.modelNode;
-
-        let innerProps = [];
-        if(graphNode.props){
-            forOwn(graphNode.props, (prop, propName) => {
-                innerProps.push(this.buildNode(prop));
-            });
-        }
-        let children = [];
-        if(graphNode.children && graphNode.children.length > 0){
-            graphNode.children.forEach(node => {
-                children.push(this.buildNode(node));
-            });
-        } else if(modelNode.text) {
-            inner.push(
-                <PageTreeViewItemText
-                    itemKey={graphNode.key}
-                    key={'text' + graphNode.key}
-                    textValue={modelNode.text} />
-            )
-        }
-
-        if(innerProps.length > 0 || children.length > 0){
-            inner.push(
-                <ul id={graphNode.key}
-                    key={'list' + graphNode.key}
-                    className={graphNode.selected ? 'umy-treeview-list-selected' : 'umy-treeview-list'}>
-                    {innerProps}
-                    {children}
-                </ul>
-            );
-        }
-
-        return (
-            <PageTreeViewItem
-                key={'treeItem' + graphNode.key}
-                itemKey={graphNode.key}
-                isSelected={graphNode.selected}
-                type={modelNode.type}
-                onSelect={this.props.setSelectedKey}>
-                {inner}
-            </PageTreeViewItem>
         );
     }
 

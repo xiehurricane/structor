@@ -115,6 +115,18 @@ function addNewToParent(parentKey, selectedNodes){
     return newModelNodes;
 }
 
+function makeModelNode(key, graphNode){
+    let resultNode = {
+        key: key,
+        modelNode: graphNode.modelNode,
+        index: graphNode.index,
+        prop: graphNode.prop,
+        selected: graphNode.selected,
+        highlighted: graphNode.highlighted
+    };
+    return resultNode;
+}
+
 export function initGraph(projectModel){
     model = fulex(projectModel);
     if(model && model.pages && model.pages.length > 0){
@@ -150,13 +162,11 @@ export function getModelNode(key){
 export function traverseGraph(rootNodeKey, result){
     let rootNode = graph.node(rootNodeKey);
     if(rootNode){
-        let resultNode = {
-            key: rootNodeKey,
-            modelNode: rootNode.modelNode,
-            index: rootNode.index,
-            prop: rootNode.prop,
-            selected: rootNode.selected
-        };
+        let resultNode = makeModelNode(rootNodeKey, rootNode);
+        const parentKey = graph.parent(rootNodeKey);
+        if(!parentKey){
+            resultNode.isRoot = true;
+        }
         let children = graph.children(rootNodeKey);
         if(children && children.length > 0){
             children.forEach(child => {
@@ -174,6 +184,43 @@ export function traverseGraph(rootNodeKey, result){
         } else {
             result.children = result.children || [];
             result.children.push(resultNode);
+        }
+    }
+    return result;
+}
+
+export function reverseGraph(childNodeKey, result){
+    let childNode = graph.node(childNodeKey);
+    if(childNode){
+        let childModelNode = makeModelNode(childNodeKey, childNode);
+        if(result){
+            if(result.prop){
+                childModelNode.props[result.prop] = result;
+            } else {
+                childModelNode.children = [result];
+            }
+        }
+        const parentNodeKey = graph.parent(childNodeKey);
+        if(parentNodeKey){
+            reverseGraph(parentNodeKey, childModelNode);
+        } else {
+            childModelNode.isRoot = true;
+        }
+    }
+    return result;
+}
+
+export function getParentsList(childNodeKey, result){
+    let childNode = graph.node(childNodeKey);
+    if(childNode){
+        let childModelNode = makeModelNode(childNodeKey, childNode);
+        result = result || [];
+        result.push(childModelNode);
+        const parentNodeKey = graph.parent(childNodeKey);
+        if(parentNodeKey){
+            getParentsList(parentNodeKey, result);
+        } else {
+            childModelNode.isRoot = true;
         }
     }
     return result;
