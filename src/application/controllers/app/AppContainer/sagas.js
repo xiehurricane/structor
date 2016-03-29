@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import validator from 'validator';
+import { SagaCancellationException } from 'redux-saga';
 import { fork, take, call, put, race } from 'redux-saga/effects';
 import * as actions from './actions.js';
 import * as spinnerActions from '../AppSpinner/actions.js';
@@ -31,7 +32,7 @@ function* signInByToken(){
             const userCredentials = yield call(serverApi.initUserCredentialsByToken, tokenFromCookies);
             yield put(actions.signInDone(userCredentials));
         } catch(e){
-            console.warn(String(e));
+            console.warn(e.message ? e.message : e.toString());
         }
     }
 }
@@ -59,17 +60,28 @@ function* signIn(){
     }
 }
 
-function* getProjectInfo(){
+function* loadProjectInfo(){
+    try{
+        return yield call(serverApi.getProjectInfo);
+    } catch(error){
+        if(error instanceof SagaCancellationException){
+            yield put(messageActions.failed('Project initialization canceled.'));
+        } else {
+            yield put(messageActions.failed('Project initialization error. ' + (error.message ? error.message : error)));
+        }
+    }
+}
+
+function* loadProject(){
     yield take(actions.GET_PROJECT_INFO);
     try {
         yield put(spinnerActions.started('Loading project model'));
         yield call(signInByToken);
         const {timeout, response} = yield race({
-            response: call(serverApi.getProjectInfo),
+            response: call(loadProjectInfo),
             timeout: call(delay, 30000)
         });
         if(response){
-
             const {projectData: {model, componentsTree}, packageConfig, projectDirectoryStatus} = response;
 
             yield put(deskPageActions.loadModel(model));
@@ -79,13 +91,13 @@ function* getProjectInfo(){
             yield put(messageActions.timeout('Project initialization timeout.'));
         }
     } catch(error) {
-        yield put(messageActions.failed('Project initialization error. ' + String(error)));
+        yield put(messageActions.failed('Project loading error. ' + (error.message ? error.message : error)));
     }
     yield put(spinnerActions.done('Loading project model'));
 }
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(getProjectInfo)];
+    yield [fork(loadProject)];
 
 };

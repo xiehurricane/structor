@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 
 import SelectionBreadcrumbs from '../SelectionBreadcrumbs';
+import SelectionControls from '../SelectionControls';
 
 class Container extends Component {
 
@@ -29,17 +30,30 @@ class Container extends Component {
     render(){
 
         const containerStyle = {
+            marginTop: '0.2em',
             display: 'flex',
             flexDirection: 'row',
-            flexWrap: 'nowrap'
+            flexWrap: 'nowrap',
+            alignItems: 'center'
             //padding: '0px 0px 0px 10px'
+        };
+
+        const breadCrumbsStyle = {
+            padding: '0px 1.3em',
+            margin: '0px'
+        };
+
+        const controlsGroupStyle = {
+            padding: '0px',
+            margin: '0px'
         };
 
         return (
             <div {...this.props}>
                 <div style={containerStyle}>
-                    <SelectionBreadcrumbs />
+                    <SelectionBreadcrumbs style={breadCrumbsStyle} />
                     <div className="btn-toolbar" role="toolbar" >
+                        <SelectionControls style={controlsGroupStyle} />
                     </div>
                 </div>
             </div>

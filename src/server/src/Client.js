@@ -90,7 +90,7 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + url + '. ' + String(error));
+                                reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
                             } else {
                                 if (body.error === true) {
                                     let errorMessage = "Error: ";
@@ -110,7 +110,7 @@ class Client {
                     }
                 )
             } catch (e) {
-                reject(String(e));
+                reject(e.message ? e.message : e.toString());
             }
         });
     }
@@ -160,7 +160,7 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + url + ". " + String(error));
+                                reject('Error connection to ' + url + ". " + (error.message ? error.message : error.toString()));
                             } else {
                                 resolve(body);
                             }
@@ -170,7 +170,7 @@ class Client {
                     }
                 )
             } catch (e) {
-                reject(String(e));
+                reject(error.message ? error.message : error.toString());
             }
         });
     }
@@ -218,7 +218,7 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + url + '. ' + String(error));
+                                reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
                             } else {
                                 resolve(body);
                             }
@@ -228,7 +228,7 @@ class Client {
                     }
                 )
             } catch (e) {
-                reject(String(e));
+                reject(e.message ? e.message : e.toString());
             }
         });
     }
@@ -278,7 +278,7 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + url + '. ' + String(error));
+                                reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
                             } else {
                                 resolve(body);
                             }
@@ -288,7 +288,7 @@ class Client {
                     }
                 )
             } catch (e) {
-                reject(String(e));
+                reject(e.message ? e.message : e.toString());
             }
         });
 
@@ -338,7 +338,7 @@ class Client {
                                     reject('Got error code ' + response.statusCode + '. Error: ' + response.statusMessage);
                                 }
                             } else if (error) {
-                                reject('Error connection to ' + url + '. ' + String(error));
+                                reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
                             } else {
                                 resolve(body);
                             }
@@ -348,7 +348,7 @@ class Client {
                     }
                 )
             } catch (e) {
-                reject(String(e));
+                reject(e.message ? e.message : e.toString());
             }
         });
 

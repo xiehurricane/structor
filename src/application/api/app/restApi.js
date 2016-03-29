@@ -42,7 +42,6 @@ export function makeRequest(method, options = {}){
 
                 return response.text()
                     .then(responseText => {
-                        //console.log('Response text: ' + responseText);
                         let jsonData = {};
                         try{
                             jsonData = JSON.parse(responseText);

@@ -29,6 +29,7 @@ import pageOptionsModalReducer from '../controllers/workspace/PageOptionsModal/r
 import pageTreeViewPanelReducer from '../controllers/workspace/PageTreeViewPanel/reducer.js';
 import toolbarSelectionReducer from '../controllers/workspace/ToolbarSelection/reducer.js';
 import selectionBreadcrumbsReducer from '../controllers/workspace/SelectionBreadcrumbs/reducer.js';
+import selectionControlsReducer from '../controllers/workspace/SelectionControls/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -43,7 +44,8 @@ const reducer = combineReducers({
     pageOptionsModal: pageOptionsModalReducer,
     pageTreeViewPanel: pageTreeViewPanelReducer,
     toolbarSelection: toolbarSelectionReducer,
-    selectionBreadcrumbs: selectionBreadcrumbsReducer
+    selectionBreadcrumbs: selectionBreadcrumbsReducer,
+    selectionControls: selectionControlsReducer
 });
 
 export default reducer;

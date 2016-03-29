@@ -28,6 +28,9 @@ module.exports = {
                     "children": [
                         {
                             "type": "p",
+                            "props": {
+                                "data-umyid": "75"
+                            },
                             "children": [
                                 {
                                     "type": "span",
@@ -36,13 +39,13 @@ module.exports = {
                                         "data-umyid": "76"
                                     }
                                 }
-                            ],
-                            "props": {
-                                "data-umyid": "75"
-                            }
+                            ]
                         },
                         {
                             "type": "p",
+                            "props": {
+                                "data-umyid": "87"
+                            },
                             "children": [
                                 {
                                     "type": "span",
@@ -51,13 +54,13 @@ module.exports = {
                                         "data-umyid": "88"
                                     }
                                 }
-                            ],
-                            "props": {
-                                "data-umyid": "87"
-                            }
+                            ]
                         },
                         {
                             "type": "p",
+                            "props": {
+                                "data-umyid": "89"
+                            },
                             "children": [
                                 {
                                     "type": "span",
@@ -66,10 +69,7 @@ module.exports = {
                                         "data-umyid": "90"
                                     }
                                 }
-                            ],
-                            "props": {
-                                "data-umyid": "89"
-                            }
+                            ]
                         }
                     ]
                 },
@@ -82,6 +82,7 @@ module.exports = {
                         {
                             "type": "Input",
                             "props": {
+                                "data-umyid": "78",
                                 "type": "text",
                                 "placeholder": "Enter value",
                                 "addonBefore": "$",
@@ -100,8 +101,7 @@ module.exports = {
                                             }
                                         }
                                     ]
-                                },
-                                "data-umyid": "78"
+                                }
                             },
                             "children": []
                         }
@@ -115,6 +115,9 @@ module.exports = {
                     "children": [
                         {
                             "type": "p",
+                            "props": {
+                                "data-umyid": "82"
+                            },
                             "children": [
                                 {
                                     "type": "span",
@@ -123,14 +126,12 @@ module.exports = {
                                         "data-umyid": "83"
                                     }
                                 }
-                            ],
-                            "props": {
-                                "data-umyid": "82"
-                            }
+                            ]
                         },
                         {
                             "type": "Input",
                             "props": {
+                                "data-umyid": "84",
                                 "type": "text",
                                 "placeholder": "Enter value",
                                 "addonBefore": "$",
@@ -149,8 +150,7 @@ module.exports = {
                                             }
                                         }
                                     ]
-                                },
-                                "data-umyid": "84"
+                                }
                             },
                             "children": []
                         }

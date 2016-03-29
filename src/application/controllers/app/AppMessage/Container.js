@@ -89,7 +89,9 @@ class Container extends Component {
                             <p style={{margin: 0}}><span>{messageText}</span></p>
                             { textNeedCut ?
                                 <p style={{margin: '0.5em 0 0 0', cursor: 'pointer'}}>
-                                    <a href="#" onClick={(e) => {e.preventDefault(); e.stopPropagation(); alert(item.text);}}>
+                                    <a href="#"
+                                       style={{color: '#35b3ee'}}
+                                       onClick={(e) => {e.preventDefault(); e.stopPropagation(); alert(item.text);}}>
                                         <span>[Read more]</span>
                                     </a>
                                 </p>

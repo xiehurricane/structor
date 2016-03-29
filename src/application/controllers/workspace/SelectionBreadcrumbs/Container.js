@@ -65,7 +65,12 @@ class Container extends Component {
 
         let content = null;
         if(selectedKeys){
-            const activeStyle = {padding: '3px', borderRadius: '3px', backgroundColor: '#35b3ee', color: '#ffffff', cursor: 'pointer'};
+            const activeStyle = {
+                padding: '3px',
+                borderRadius: '3px',
+                backgroundColor: '#35b3ee',
+                color: '#ffffff',
+                cursor: 'pointer'};
             if(selectedKeys.length === 1){
                 const parentsList = graphApi.getParentsList(selectedKeys[0]);
                 if(parentsList && parentsList.length > 1){
@@ -124,7 +129,7 @@ class Container extends Component {
                         }
                     }
                     content = (
-                        <ol key='breadcrumb' className='breadcrumb'>
+                        <ol key='breadcrumb' className='breadcrumb' {...this.props}>
                             {content}
                         </ol>
                     );
@@ -147,6 +152,8 @@ class Container extends Component {
                                   onMouseEnter={this.handleSetHighlightSelectedKey}
                                   onMouseLeave={this.handleRemoveHighlightSelectedKey}
                                   onClick={this.handleRemoveSelectedKey}>
+                                <i className="fa fa-times-circle fa-fw"
+                                   style={{opacity: '0.6'}}></i>
                                 {graphNode.modelNode.type}
                             </span>
                         );
@@ -155,9 +162,46 @@ class Container extends Component {
                         }
                     }
                 }
-
+                if(lastShowIndex !== selectedKeys.length){
+                    let menuItems = [];
+                    for(let x = lastShowIndex; x < selectedKeys.length; x++){
+                        graphNode = graphApi.getNode(selectedKeys[x]);
+                        if(graphNode && graphNode.modelNode){
+                            menuItems.push(
+                                <li key={'menuItem' + x}>
+                                    <a href="#"
+                                       style={{display: 'flex', alignItems: 'center'}}
+                                       data-key={selectedKeys[x]}
+                                       title="Remove from selection list"
+                                       onMouseEnter={this.handleSetHighlightSelectedKey}
+                                       onMouseLeave={this.handleRemoveHighlightSelectedKey}
+                                       onClick={this.handleRemoveSelectedKey}>
+                                        <i className="fa fa-times-circle fa-fw"
+                                           style={{fontSize: '10px', opacity: '0.5'}}></i>
+                                        {graphNode.modelNode.type}
+                                    </a>
+                                </li>
+                            );
+                        }
+                    }
+                    content.push(<span key={'delimiterForMenuMore'}>&nbsp;&nbsp;</span>);
+                    content.push(
+                        <span key={'menuMore'}
+                              className="dropdown"
+                              style={activeStyle}>
+                            <span className="dropdown-toggle" data-toggle="dropdown">
+                                <span>More...&nbsp;</span><span className="caret"></span>
+                            </span>
+                          <ul className="dropdown-menu"
+                              role="menu"
+                              style={{overflowY: 'auto', maxHeight: '12em'}}>
+                              {menuItems}
+                          </ul>
+                        </span>
+                    );
+                }
                 content = (
-                    <div style={{padding: '8px 15px'}}>
+                    <div {...this.props}>
                         {content}
                     </div>
 
@@ -166,7 +210,7 @@ class Container extends Component {
         }
         if(!content){
             content = (
-                <div style={{padding: '8px 15px'}}>
+                <div {...this.props}>
                     <span>Nothing is selected</span>
                 </div>
 
@@ -176,6 +220,7 @@ class Container extends Component {
         return content;
     }
 }
+
 
 
 export default connect(modelSelector, containerActions)(Container);
