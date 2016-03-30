@@ -13,45 +13,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { uniqueId, forOwn, isObject } from 'lodash';
 import { Graph } from 'graphlib';
 import { fulex } from '../utils/utils.js';
 
-let graph;
-let model;
+let graphObject = {
+    graph: undefined,
+    model: undefined,
+    rootKeys: [],
+    pageNodes: []
+};
 
-function mapModel(rootKey, rootModelNode, rootIndex, prop) {
-    graph.setNode(rootKey, { modelNode: rootModelNode, index: rootIndex, prop });
+function mapModel(srcGraph, rootKey, rootModelNode, rootIndex, prop) {
+    srcGraph.setNode(rootKey, { modelNode: rootModelNode, index: rootIndex, prop });
     forOwn(rootModelNode.props, (value, prop) => {
         if (isObject(value) && value.type) {
             const childKey = uniqueId();
-            mapModel(childKey, value, 0, prop);
-            graph.setParent(childKey, rootKey);
+            mapModel(srcGraph, childKey, value, 0, prop);
+            srcGraph.setParent(childKey, rootKey);
         }
     });
     const { children } = rootModelNode;
     if (children && children.length > 0) {
         for (let i = 0; i < children.length; i++) {
             const childKey = uniqueId();
-            mapModel(childKey, children[i], i);
-            graph.setParent(childKey, rootKey);
+            mapModel(srcGraph, childKey, children[i], i);
+            srcGraph.setParent(childKey, rootKey);
         }
     }
 }
 
-function adjustIndices(parentKey){
-    const parentNode = graph.node(parentKey);
-    const parentChildren = graph.children(parentKey);
+function makeNodeWrapper(key, graphNode){
+    return {
+        key: key,
+        modelNode: graphNode.modelNode.type + '= ' + graphNode.modelNode.props['data-umyid'],
+        index: graphNode.index,
+        prop: graphNode.prop,
+        selected: graphNode.selected,
+        highlighted: graphNode.highlighted
+    };
+}
+
+function adjustIndices(srcGraph, nodeKey){
+    const parentNode = srcGraph.node(nodeKey);
+    const parentChildren = srcGraph.children(nodeKey);
     if(parentNode && parentChildren && parentChildren.length > 0){
         let childNode;
         parentChildren.forEach(childKey => {
-            childNode = graph.node(childKey);
+            childNode = srcGraph.node(childKey);
             if(childNode){
                 if(childNode.prop){
                     childNode.index = 0;
                 } else if(parentNode.modelNode.children && parentNode.modelNode.children.length > 0){
                     childNode.index = parentNode.modelNode.children.indexOf(childNode.modelNode);
-                    console.log('Found index ' + childNode.index + ' for: ' + childKey)
                 } else {
                     childNode.index = 0;
                 }
@@ -60,109 +75,45 @@ function adjustIndices(parentKey){
     }
 }
 
-function getSelection(selectedKeys){
-    let result = {};
-    if(selectedKeys && selectedKeys.length > 0){
-        result.selectedNodes = [];
-        selectedKeys.forEach(key => {
-            if(!result.parentSelectedKey){
-                result.parentSelectedKey = graph.parent(key);
-            } else if(result.parentSelectedKey !== graph.parent(key)) {
-                throw Error('The parent key has to be the same for all selected keys');
-            }
-            result.selectedNodes.push(graph.node(key));
-        });
-        result.selectedNodes.sort((a, b) => a.index - b.index);
-    }
-    return result;
-}
-
-function removeFromParent(selectedKeys, parentSelectedKey, selectedNodes){
-    let selectedModelNodes = [];
-    selectedNodes.forEach(selectedNode => {
-        selectedModelNodes.push(selectedNode.modelNode);
-    });
-    let parentSelectedNode = graph.node(parentSelectedKey);
-    if(parentSelectedNode){
-        if(parentSelectedNode.modelNode.children.length > 0){
-            let newModelNodes = [];
-            parentSelectedNode.modelNode.children.forEach(childNode => {
-                if(selectedModelNodes.indexOf(childNode) < 0){
-                    newModelNodes.push(childNode);
-                }
+export function initGraph(initialModel){
+    graphObject.model = fulex(initialModel);
+    if(graphObject.model && graphObject.model.pages && graphObject.model.pages.length > 0){
+        graphObject.graph = new Graph({ compound: true });
+        graphObject.graph.setDefaultEdgeLabel('link');
+        graphObject.rootKeys = [];
+        graphObject.pageNodes = [];
+        graphObject.model.pages.forEach((page, index) => {
+            mapModel(graphObject.graph, page.pagePath, page, index);
+            graphObject.rootKeys.push(page.pagePath);
+            graphObject.pageNodes.push({
+                pagePath: page.pagePath,
+                pageName: page.pageName
             });
-            parentSelectedNode.modelNode.children = newModelNodes;
-        }
-        selectedKeys.forEach(selectedKey => {
-            graph.setParent(selectedKey, undefined);
-        });
-        adjustIndices(parentSelectedKey);
-    }
-    return selectedModelNodes;
-}
-
-function addNewToParent(parentKey, selectedNodes){
-    let newModelNodes = [];
-    let newModelNode;
-    let newNodeKey;
-    selectedNodes.forEach(selectedNode => {
-        newModelNode = fulex(selectedNode.modelNode);
-        newModelNodes.push(newModelNode);
-        newNodeKey = uniqueId();
-        mapModel(newNodeKey, newModelNode, -1, selectedNode.prop);
-        graph.setParent(newNodeKey, parentKey);
-    });
-    return newModelNodes;
-}
-
-function makeModelNode(key, graphNode){
-    let resultNode = {
-        key: key,
-        modelNode: graphNode.modelNode,
-        index: graphNode.index,
-        prop: graphNode.prop,
-        selected: graphNode.selected,
-        highlighted: graphNode.highlighted
-    };
-    return resultNode;
-}
-
-export function initGraph(projectModel){
-    model = fulex(projectModel);
-    if(model && model.pages && model.pages.length > 0){
-        graph = new Graph({ compound: true });
-        graph.setDefaultEdgeLabel('link');
-        model.pages.forEach((page, index) => {
-            mapModel(page.pagePath, page, index);
         });
     }
-    return graph;
 }
 
 export function getGraph(){
-    return graph;
+    return graphObject.graph;
+}
+
+export function getModel(){
+    return graphObject.model;
+}
+
+export function getPages(){
+    return graphObject.pageNodes;
 }
 
 export function getNode(key){
     return graph.node(key);
 }
 
-export function getModel(){
-    return model;
-}
-
-export function getModelNode(key){
-    const node = graph.node(key);
-    if(node){
-        return node.modelNode;
-    }
-    return undefined;
-}
-
 export function traverseGraph(rootNodeKey, result){
+    const { graph } = graphObject;
     let rootNode = graph.node(rootNodeKey);
     if(rootNode){
-        let resultNode = makeModelNode(rootNodeKey, rootNode);
+        let resultNode = makeNodeWrapper(rootNodeKey, rootNode);
         const parentKey = graph.parent(rootNodeKey);
         if(!parentKey){
             resultNode.isRoot = true;
@@ -189,107 +140,246 @@ export function traverseGraph(rootNodeKey, result){
     return result;
 }
 
-export function reverseGraph(childNodeKey, result){
-    let childNode = graph.node(childNodeKey);
-    if(childNode){
-        let childModelNode = makeModelNode(childNodeKey, childNode);
-        if(result){
-            if(result.prop){
-                childModelNode.props[result.prop] = result;
-            } else {
-                childModelNode.children = [result];
-            }
-        }
-        const parentNodeKey = graph.parent(childNodeKey);
-        if(parentNodeKey){
-            reverseGraph(parentNodeKey, childModelNode);
-        } else {
-            childModelNode.isRoot = true;
-        }
-    }
+export function traverseAllGraph(){
+    const { rootKeys } = graphObject;
+    let result = [];
+    rootKeys.forEach(key => {
+        result = result.concat(traverseGraph(key));
+    });
     return result;
 }
 
-export function getParentsList(childNodeKey, result){
-    let childNode = graph.node(childNodeKey);
-    if(childNode){
-        let childModelNode = makeModelNode(childNodeKey, childNode);
-        result = result || [];
-        result.push(childModelNode);
-        const parentNodeKey = graph.parent(childNodeKey);
-        if(parentNodeKey){
-            getParentsList(parentNodeKey, result);
-        } else {
-            childModelNode.isRoot = true;
-        }
+export function changePagePathAndName(rootKey, nextPagePath, nextPageName){
+    const { graph, rootKeys } = graphObject;
+    const rootKeyIndex = rootKeys.indexOf(rootKey);
+    if(rootKeyIndex < 0){
+        throw Error('Change page path and name: specified key ' + rootKey + ' is not root key.');
     }
-    return result;
+    let rootNode = graph.node(rootKey);
+    if(rootNode){
+        let modelNode = rootNode.modelNode;
+        graph.removeNode(rootKey);
+        graph.setNode(nextPagePath, modelNode);
+        modelNode.pageName = nextPageName;
+        modelNode.pagePath = nextPagePath;
+        graphObject.rootKeys.splice(rootKeyIndex, 1, nextPagePath);
+        graphObject.pageNodes.splice(rootKeyIndex, 1, { pagePath: nextPagePath, pageName: nextPageName });
+    }
+    return graphObject.pageNodes;
 }
 
-export function moveAfterOrBeforeNode(selectedKeys, afterKey, isAfter){
-    const {parentSelectedKey, selectedNodes} = getSelection(selectedKeys);
-    let afterNode = graph.node(afterKey);
-    if(selectedNodes && afterNode){
-        let selectedModelNodes = removeFromParent(selectedKeys, parentSelectedKey, selectedNodes);
-        const parentAfterKey = graph.parent(afterKey);
-        let parentAfterNode = graph.node(parentAfterKey);
-        if(parentAfterNode){
-            //console.log('Before Parent has: ' + parentAfterNode.modelNode.children.length);
-            let modelNodesArgs = [afterNode.index + (isAfter ? 1 : 0), 0].concat(selectedModelNodes);
-            parentAfterNode.modelNode.children.splice.apply(parentAfterNode.modelNode.children, modelNodesArgs);
-            selectedKeys.forEach(selectedKey => {
-                graph.setParent(selectedKey, parentAfterKey);
-            });
-            //console.log('After Parent has: ' + parentAfterNode.modelNode.children.length);
-            adjustIndices(parentAfterKey);
-        }
-    }
+export function addNewPage(initialModel, pagePath, pageName){
+    let { graph, model, rootKeys, pageNodes } = graphObject;
+    let pageModel = fulex(initialModel);
+    pageModel.pagePath = pagePath;
+    pageModel.pageName = pageName;
+    model.pages.push(pageModel);
+    mapModel(graph, pagePath, pageModel, rootKeys.length);
+    rootKeys.push(pagePath);
+    pageNodes.push({
+        pagePath: pagePath,
+        pageName: pageName
+    });
+    return pageNodes;
 }
 
-export function copyAfterOrBeforeNode(selectedKeys, afterKey, isAfter){
-    const {parentSelectedKey, selectedNodes} = getSelection(selectedKeys);
-    let afterNode = graph.node(afterKey);
-    if(selectedNodes && afterNode){
-        const parentAfterKey = graph.parent(afterKey);
-        let parentAfterNode = graph.node(parentAfterKey);
-        if(parentAfterNode){
-            let newModelNodes = addNewToParent(parentAfterKey, selectedNodes);
-            //console.log('Before Parent has: ' + parentAfterNode.modelNode.children.length);
-            let modelNodesArgs = [afterNode.index + (isAfter ? 1 : 0), 0].concat(newModelNodes);
-            parentAfterNode.modelNode.children.splice.apply(parentAfterNode.modelNode.children, modelNodesArgs);
-            //console.log('After Parent has: ' + parentAfterNode.modelNode.children.length);
-            adjustIndices(parentAfterKey);
-        }
+export function duplicatePage(rootKey){
+    let { graph, model, rootKeys, pageNodes } = graphObject;
+    const rootNode = graph.node(rootKey);
+    if(!rootNode){
+        throw Error('Duplicate page: specified key ' + rootKey + 'is not root key.');
     }
+    let pageModel = fulex(rootNode.modelNode);
+    pageModel.pagePath = pageModel.pagePath + '_copy';
+    pageModel.pageName = pageModel.pageName + '_copy';
+    model.pages.push(pageModel);
+    mapModel(graph, pageModel.pagePath, pageModel, rootKeys.length);
+    rootKeys.push(pageModel.pagePath);
+    pageNodes.push({
+        pagePath: pageModel.pagePath,
+        pageName: pageModel.pageName
+    });
+    return pageNodes;
 }
 
-export function moveAsFirstOrLast(selectedKeys, parentKey, isFirst){
-    const {parentSelectedKey, selectedNodes} = getSelection(selectedKeys);
-    let parentNode = graph.node(parentKey);
-    if(selectedNodes && parentNode){
-        let selectedModelNodes = removeFromParent(selectedKeys, parentSelectedKey, selectedNodes);
-        parentNode.modelNode.children = parentNode.modelNode.children || [];
-        const lastIndex = parentNode.modelNode.children ? parentNode.modelNode.children.length : 0;
-        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(selectedModelNodes);
-        parentNode.modelNode.children.splice.apply(parentNode.modelNode.children, modelNodesArgs);
-        selectedKeys.forEach(selectedKey => {
-            graph.setParent(selectedKey, parentKey);
+export function setIndexPage(rootKey){
+    let { graph, model, rootKeys } = graphObject;
+    const rootNode = graph.node(rootKey);
+    if(!rootNode){
+        throw Error('Set index page: specified key ' + rootKey + 'is not root key.');
+    }
+    const tempModel = model.pages.splice(rootNode.index, 1)[0];
+    if(tempModel){
+        model.pages.splice(0, 0, tempModel);
+    }
+    graphObject.pageNodes = [];
+    graphObject.rootKeys = [];
+    let pageNode;
+    model.pages.forEach((page, index) => {
+        pageNode = graph.node(page.pagePath);
+        pageNode.index = index;
+        graphObject.rootKeys.push(page.pagePath);
+        graphObject.pageNodes.push({
+            pagePath: page.pagePath,
+            pageName: page.pageName
         });
-        adjustIndices(parentKey);
+    });
+    return graphObject.pages;
+}
+
+export function deletePage(rootKey){
+
+}
+
+function detachGraphNode(srcGraph, nodeKey){
+    let cutNode = srcGraph.node(nodeKey);
+    if(!cutNode){
+        throw Error('Detach graph node: node key ' + nodeKey + ' was not found.');
+    }
+    const parentNodeKey = srcGraph.parent(nodeKey);
+    if(parentNodeKey){
+        let parentNode = srcGraph.node(parentNodeKey);
+        if(parentNode && parentNode.modelNode){
+            let { modelNode: parentModelNode } = parentNode;
+            if(cutNode.prop){
+                if(!parentModelNode.props[cutNode.prop]){
+                    throw Error('Detach graph node: model node with key ' + parentNodeKey + ' does not have prop ' + cutNode.prop);
+                }
+                parentModelNode.props[cutNode.prop] = undefined;
+                cutNode.prop = undefined;
+            } else if(parentModelNode.children && parentModelNode.children.length > 0) {
+                const childIndex = parentModelNode.children.indexOf(cutNode.modelNode);
+                if (childIndex < 0) {
+                    throw Error('Detach graph node: child model node with key ' + nodeKey + ' does not belong to parent node with key ' + parentNodeKey);
+                }
+                parentModelNode.children.splice(childIndex, 1);
+            } else {
+                throw Error('Detach graph node: parent node ' + parentNodeKey + ' does not have children or needed prop.');
+            }
+            adjustIndices(srcGraph, parentNodeKey);
+        } else {
+            throw Error('Detach graph node: parent node ' + parentNodeKey + ' is missing or does not have linked modelNode.')
+        }
+        srcGraph.setParent(nodeKey, undefined);
+    }
+    return nodeKey;
+}
+
+function detachGraphNodes(srcGraph, rootNodeKey, testFunc, detachedKeys){
+    detachedKeys = detachedKeys || [];
+    const parentNode = srcGraph.node(rootNodeKey);
+    if(parentNode){
+        let childKeys = srcGraph.children(rootNodeKey);
+        if(testFunc(parentNode)){
+            detachedKeys.push(detachGraphNode(srcGraph, rootNodeKey));
+        }
+        if(childKeys && childKeys.length > 0){
+            let sortedChildrenNodes = [];
+            let propChildrenNodes = [];
+            let childNode;
+            childKeys.forEach(childKey => {
+                childNode = srcGraph.node(childKey);
+                if(childNode){
+                    if(childNode.prop){
+                        propChildrenNodes.push({
+                            key: childKey,
+                            node: childNode
+                        });
+                    } else {
+                        sortedChildrenNodes.push({
+                            key: childKey,
+                            node: childNode
+                        });
+                    }
+                }
+            });
+            if(sortedChildrenNodes.length > 0){
+                sortedChildrenNodes.sort((a, b) => a.node.index - b.node.index);
+            }
+            propChildrenNodes.forEach(childNode => {
+                detachGraphNodes(srcGraph, childNode.key, testFunc, detachedKeys);
+            });
+            sortedChildrenNodes.forEach(childNode => {
+                detachGraphNodes(srcGraph, childNode.key, testFunc, detachedKeys);
+            });
+        }
     }
 }
 
-export function copyAsFirstOrLast(selectedKeys, parentKey, isFirst){
-    const {parentSelectedKey, selectedNodes} = getSelection(selectedKeys);
-    let parentNode = graph.node(parentKey);
-    if(selectedNodes && parentNode){
-        let newModelNodes = addNewToParent(parentKey, selectedNodes);
-        //console.log('Before Parent has: ' + parentAfterNode.modelNode.children.length);
-        parentNode.modelNode.children = parentNode.modelNode.children || [];
-        const lastIndex = parentNode.modelNode.children ? parentNode.modelNode.children.length : 0;
-        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(newModelNodes);
-        parentNode.modelNode.children.splice.apply(parentNode.modelNode.children, modelNodesArgs);
-        //console.log('After Parent has: ' + parentAfterNode.modelNode.children.length);
-        adjustIndices(parentKey);
+function getDetachedKeysForCutting(){
+    const {graph, rootKeys} = graphObject;
+    const testFunc = node => node.isForCutting;
+    let detachedKeys = [];
+    rootKeys.forEach(key => {
+        detachGraphNodes(graph, key, testFunc, detachedKeys);
+    });
+    return detachedKeys;
+}
+
+export function cutPasteBeforeOrAfter(nodeKey, isAfter){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('Cut & paste before or after node: node with key ' + nodeKey + ' was not found.');
+    }
+    let detachedKeys = getDetachedKeysForCutting();
+    if(detachedKeys.length > 0){
+        const parentKey = graph.parent(nodeKey);
+        if(parentKey){
+            let detachedModelNodes = [];
+            let detachedNode;
+            detachedKeys.forEach(detachedKey => {
+                detachedNode = graph.node(detachedKey);
+                if(detachedNode && detachedNode.modelNode){
+                    graph.setParent(detachedKey, parentKey);
+                    detachedModelNodes.push(detachedNode.modelNode);
+                }
+            });
+            let parentNode = graph.node(parentKey);
+            let {modelNode} = parentNode;
+            let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
+            modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+            adjustIndices(graph, parentKey);
+        }
+    }
+    return detachedKeys;
+}
+
+export function cutPasteFirstOrLast(nodeKey, isFirst){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('Cut & paste first or last node: node with key ' + nodeKey + ' was not found.');
+    }
+    let detachedKeys = getDetachedKeysForCutting();
+    if(detachedKeys.length > 0){
+        node.modelNode.children = node.modelNode.children || [];
+        let detachedModelNodes = [];
+        let detachedNode;
+        detachedKeys.forEach(detachedKey => {
+            detachedNode = graph.node(detachedKey);
+            if(detachedNode && detachedNode.modelNode){
+                graph.setParent(detachedKey, nodeKey);
+                detachedModelNodes.push(detachedNode.modelNode);
+            }
+        });
+        let {modelNode} = node;
+        const lastIndex = modelNode.children ? modelNode.children.length : 0;
+        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
+        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+        adjustIndices(graph, nodeKey);
+    }
+    return detachedKeys;
+}
+
+export function cutPasteReplace(nodeKey){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('Cut & paste replace: node with key ' + nodeKey + ' was not found.');
+    }
+    let detachedKeys = getDetachedKeysForCutting();
+    if(detachedKeys.length > 0) {
+
     }
 }
