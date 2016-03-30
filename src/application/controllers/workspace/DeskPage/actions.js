@@ -50,7 +50,9 @@ export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 
 import {
-    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey, resetSelectedKeys,
+    setSelectedKey, setSelectedParentKey,
+    updateSelected, setHighlightSelectedKey,
+    resetSelectedKeys, removeSelectedKeys,
     SET_SELECTED_KEY, UPDATE_SELECTED
 } from './actions/selectComponents.js';
 import {
@@ -58,7 +60,9 @@ import {
 } from './actions/modelPageActions.js';
 
 export {
-    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey, resetSelectedKeys,
+    setSelectedKey, setSelectedParentKey,
+    updateSelected, setHighlightSelectedKey,
+    resetSelectedKeys, removeSelectedKeys,
     SET_SELECTED_KEY, UPDATE_SELECTED,
     loadModel, addNewPage, clonePage, changePageOptions, deletePage
 }

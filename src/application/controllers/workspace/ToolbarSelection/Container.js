@@ -34,18 +34,19 @@ class Container extends Component {
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'nowrap',
-            alignItems: 'center'
+            alignItems: 'center',
+            width: '150em'
             //padding: '0px 0px 0px 10px'
         };
 
         const breadCrumbsStyle = {
-            padding: '0px 1.3em',
-            margin: '0px'
+            padding: '0px',
+            margin: '0px 0.5em 0 0'
         };
 
         const controlsGroupStyle = {
             padding: '0px',
-            margin: '0px'
+            margin: '0px 0px 0px 0.5em'
         };
 
         return (

@@ -13,8 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { bindActionCreators } from 'redux';
+import { graphApi } from '../../../api';
+import { removeSelectedKeys, updateSelected } from '../DeskPage/actions.js';
+
+export const CLIPBOARD_EMPTY = 'Empty';
+export const CLIPBOARD_NEW = 'New';
+export const CLIPBOARD_COPY = 'Copy';
+export const CLIPBOARD_CUT = 'Cut';
+
+export const RESET_KEYS = "ClipboardControls/RESET_KEYS";
+
+export const setForCuttingKeys = (keys) => (dispatch, getState) => {
+
+    const { clipboardControls: { clipboardMode, clipboardKeys } } = getState();
+    if(clipboardMode === CLIPBOARD_CUT && clipboardKeys && clipboardKeys.length > 0){
+        clipboardKeys.forEach(key => {
+            graphApi.removeForCutting(key);
+        });
+    }
+    let newKeys = [];
+    if(keys && keys.length > 0){
+        keys.forEach(key => {
+            graphApi.setForCutting(key);
+            newKeys.push(key);
+        });
+    }
+    dispatch(removeSelectedKeys());
+    dispatch({type: RESET_KEYS, payload: {keys: newKeys, mode: CLIPBOARD_CUT}});
+};
+
+export const removeClipboardKeys = () => (dispatch, getState) => {
+    const { clipboardControls: { clipboardMode, clipboardKeys } } = getState();
+    if(clipboardMode === CLIPBOARD_CUT && clipboardKeys && clipboardKeys.length > 0){
+        clipboardKeys.forEach(key => {
+            graphApi.removeForCutting(key);
+        });
+    }
+    dispatch({type: RESET_KEYS, payload: {keys: [], mode: CLIPBOARD_EMPTY}});
+    dispatch(updateSelected());
+};
+
+export const resetClipboardKeys = () => (dispatch, getState) => {
+    const { clipboardControls: { clipboardKeys, clipboardMode } } = getState();
+    let newKeys = [];
+    if(clipboardKeys && clipboardKeys.length > 0){
+        let node;
+        clipboardKeys.forEach(key => {
+            node = graphApi.getNode(key);
+            if(node){
+                newKeys.push(key);
+            }
+        });
+    }
+    dispatch({type: RESET_KEYS, payload: {keys: newKeys, mode: clipboardMode}});
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
-
+    removeClipboardKeys
 }, dispatch);

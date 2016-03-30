@@ -61,8 +61,17 @@ class Container extends Component {
 
     render(){
 
-        const { deskPageModel: {selectedKeys} } = this.props;
+        const { deskPageModel: {selectedKeys}, removeSelectedKeys } = this.props;
 
+        const labelStyle = {
+            padding: '3px 6px',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: 'rgb(227, 227, 227)',
+            color: 'rgb(107, 107, 107)',
+            marginRight: '0.3em',
+            textShadow: '0 1px 0px rgba(255, 255, 255, 0.8)'
+        };
         let content = null;
         if(selectedKeys){
             const activeStyle = {
@@ -76,13 +85,17 @@ class Container extends Component {
                 if(parentsList && parentsList.length > 1){
                     content = [];
                     const rootItem = parentsList[parentsList.length - 1];
-                    const rootItemStyle = {padding: '3px', border: '1px solid #dddddd', borderRadius: '3px'};
                     content.push(
                         <li key={'rootItem'}>
-                            <span>Selected:&nbsp;&nbsp;</span>
-                            <strong style={rootItemStyle}>
-                             {(rootItem.modelNode.pageName ? rootItem.modelNode.pagePath : 'Unknown')}
-                            </strong>
+                            <span style={labelStyle}
+                                  onClick={() => {removeSelectedKeys()}}>
+                                <i className="fa fa-times-circle fa-fw"
+                                   style={{opacity: '0.6'}}></i>
+                                <span>Selected:&nbsp;&nbsp;</span>
+                                <strong>
+                                    {(rootItem.modelNode.pageName ? rootItem.modelNode.pagePath : 'Unknown')}
+                                </strong>
+                            </span>
                         </li>
                     );
                     const showNumber = 5;
@@ -137,7 +150,12 @@ class Container extends Component {
             } else if(selectedKeys.length > 1) {
                 content = [];
                 content.push(
-                    <span>Selected:&nbsp;&nbsp;</span>
+                    <span style={labelStyle}
+                          onClick={() => {removeSelectedKeys()}}>
+                        <i className="fa fa-times-circle fa-fw"
+                           style={{opacity: '0.6'}}></i>
+                        <span>Selected:&nbsp;&nbsp;</span>
+                    </span>
                 );
                 const lastShowIndex = selectedKeys.length > 5 ? 5 : selectedKeys.length;
                 let graphNode;
@@ -211,7 +229,7 @@ class Container extends Component {
         if(!content){
             content = (
                 <div {...this.props}>
-                    <span>Nothing is selected</span>
+                    <span style={labelStyle}>Nothing is selected</span>
                 </div>
 
             );

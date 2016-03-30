@@ -17,6 +17,7 @@ import validator from 'validator';
 import { utils, utilsStore, graphApi } from '../../../../api';
 import { success, failed, timeout, close} from '../../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../../PageOptionsModal/actions.js';
+import { resetClipboardKeys } from '../../ClipboardControls/actions.js';
 import { setPages, changePageRoute, resetSelectedKeys } from '../actions.js';
 
 export const loadModel = (model) => (dispatch, getState) => {
@@ -100,6 +101,7 @@ export const deletePage = (pagePath) => (dispatch, getState) => {
                 } else if(currentIndex > 0){
                     dispatch(changePageRoute(pageList[currentIndex - 1].pagePath));
                 }
+                dispatch(resetClipboardKeys());
                 dispatch(resetSelectedKeys());
                 dispatch(success('Route path ' + pagePath + ' were deleted successfully'));
             }

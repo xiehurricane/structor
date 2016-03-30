@@ -51,18 +51,22 @@ function makeNodeWrapper(key, graphNode){
         index: graphNode.index,
         prop: graphNode.prop,
         selected: graphNode.selected,
-        highlighted: graphNode.highlighted
+        highlighted: graphNode.highlighted,
+        isForCutting: graphNode.isForCutting,
+        isForCuttingChild: graphNode.isForCuttingChild
     };
 }
 
-function removeGraphBranch(srcGraph, rootKey){
+function traverseGraphBranch(srcGraph, rootKey, cbFunc){
     const children = srcGraph.children(rootKey);
     if(children && children.length){
         children.forEach(key => {
-            removeGraphBranch(srcGraph, key);
+            traverseGraphBranch(srcGraph, key, cbFunc);
         });
     }
-    srcGraph.removeNode(rootKey);
+    if(cbFunc){
+        cbFunc(rootKey);
+    }
 }
 
 function adjustIndices(srcGraph, nodeKey){
@@ -117,6 +121,10 @@ export function getPages(){
 
 export function getNode(key){
     return graphObject.graph.node(key);
+}
+
+export function hasNode(key){
+    return graphObject.graph.hasNode(key);
 }
 
 export function traverseGraph(rootNodeKey, result){
@@ -269,7 +277,9 @@ export function deletePage(rootKey){
         throw Error('Delete page: specified key ' + rootKey + 'is not root key.');
     }
     model.pages.splice(rootNode.index, 1);
-    removeGraphBranch(graph, rootKey);
+    traverseGraphBranch(graph, rootKey, (nodeKey => {
+        graph.removeNode(nodeKey);
+    }));
     graphObject.pageNodes = [];
     graphObject.rootKeys = [];
     let pageNode;
@@ -368,6 +378,30 @@ function getDetachedKeysForCutting(){
         detachGraphNodes(graph, key, testFunc, detachedKeys);
     });
     return detachedKeys;
+}
+
+export function setForCutting(nodeKey){
+    const {graph} = graphObject;
+    let node = graph.node(nodeKey);
+    if(node){
+        node.isForCutting = true;
+        traverseGraphBranch(graph, nodeKey, (key => {
+            let childNode = graph.node(key);
+            childNode.isForCuttingChild = true;
+        }));
+    }
+}
+
+export function removeForCutting(nodeKey){
+    const {graph} = graphObject;
+    let node = graph.node(nodeKey);
+    if(node){
+        node.isForCutting = undefined;
+        traverseGraphBranch(graph, nodeKey, (key => {
+            let childNode = graph.node(key);
+            childNode.isForCuttingChild = undefined;
+        }));
+    }
 }
 
 export function cutPasteBeforeOrAfter(nodeKey, isAfter){

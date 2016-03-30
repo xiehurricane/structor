@@ -20,6 +20,7 @@ import { modelSelector } from './selectors.js';
 
 import PageListControls from '../PageListControls';
 import PageViewControls from '../PageViewControls';
+import ClipboardControls from '../ClipboardControls';
 
 class Container extends Component {
 
@@ -29,13 +30,32 @@ class Container extends Component {
 
     render(){
 
+        const containerStyle = {
+            paddingTop: '0.5em',
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'nowrap',
+            alignItems: 'center',
+            width: '150em'
+            //padding: '0px 0px 0px 10px'
+        };
+
+        const firstControlsGroupStyle = {
+            padding: '0px',
+            margin: '0px'
+        };
+
+        const controlsGroupStyle = {
+            padding: '0px',
+            margin: '0px 0px 0px 0.5em'
+        };
+
         return (
-            <div style={this.props.style}>
-                <div style={{minWidth: '50em', width: '100%', padding: '5px 10px 5px 10px'}}>
-                    <div className="btn-toolbar" role="toolbar" >
-                        <PageListControls />
-                        <PageViewControls />
-                    </div>
+            <div {...this.props}>
+                <div style={containerStyle}>
+                    <PageListControls style={firstControlsGroupStyle} />
+                    <PageViewControls style={controlsGroupStyle} />
+                    <ClipboardControls style={controlsGroupStyle} />
                 </div>
             </div>
         );

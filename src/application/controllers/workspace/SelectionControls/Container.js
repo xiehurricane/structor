@@ -17,6 +17,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
 
 class Container extends Component {
 
@@ -25,50 +26,63 @@ class Container extends Component {
     }
 
     render(){
-
-        return (
-            <div {...this.props} className="btn-group" role="group">
-                <button
-                    className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('copy to clipboard'); }}
-                    title="Copy selected components to clipboard">
-                    <span className="fa fa-clipboard"></span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('cut to clipboard'); }}
-                    title="Cut selected components to clipboard">
-                    <span className="fa fa-scissors"></span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('clone selected'); }}
-                    title="Clone selected components">
-                    <span className="fa fa-clone"></span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('move up'); }}
-                    title="Move up selected components within their parents">
-                    <span className="fa fa-arrow-up"></span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('move down'); }}
-                    title="Move down selected components within their parents">
-                    <span className="fa fa-arrow-down"></span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('delete'); }}
-                    title="Delete selected components">
-                    <span className="fa fa-trash-o"></span>
-                </button>
-            </div>
-        );
+        const { deskPageModel: {selectedKeys}, setForCuttingKeys } = this.props;
+        const buttonLabelStyle = {
+            margin: '0 0.5em'
+        };
+        if(selectedKeys && selectedKeys.length > 0){
+            return (
+                <div {...this.props} className="btn-group" role="group">
+                    <button
+                        className="btn btn-default btn-xs"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('copy to clipboard'); }}
+                        title="Copy selected components to clipboard">
+                        <span className="fa fa-clipboard"></span>
+                        <span style={buttonLabelStyle}>Copy</span>
+                    </button>
+                    <button
+                        className="btn btn-default btn-xs"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setForCuttingKeys(selectedKeys); }}
+                        title="Cut selected components to clipboard">
+                        <span className="fa fa-scissors"></span>
+                        <span style={buttonLabelStyle}>Cut</span>
+                    </button>
+                    <button
+                        className="btn btn-default btn-xs"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('clone selected'); }}
+                        title="Clone selected components">
+                        <span className="fa fa-clone"></span>
+                        <span style={buttonLabelStyle}>Clone</span>
+                    </button>
+                    <button
+                        className="btn btn-default btn-xs"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('move up'); }}
+                        title="Move up selected components within their parents">
+                        <span className="fa fa-arrow-up"></span>
+                        <span style={buttonLabelStyle}>Move Up</span>
+                    </button>
+                    <button
+                        className="btn btn-default btn-xs"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('move down'); }}
+                        title="Move down selected components within their parents">
+                        <span className="fa fa-arrow-down"></span>
+                        <span style={buttonLabelStyle}>Move Down</span>
+                    </button>
+                    <button
+                        className="btn btn-default btn-xs"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('delete'); }}
+                        title="Delete selected components">
+                        <span className="fa fa-trash-o"></span>
+                        <span style={buttonLabelStyle}>Delete</span>
+                    </button>
+                </div>
+            );
+        } else {
+            return (<span style={{display: 'none'}}></span>);
+        }
     }
 }
 
 
-export default connect(modelSelector)(Container);
+export default connect(modelSelector, containerActions)(Container);
 

@@ -15,8 +15,8 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { setSelectedKey, setHighlightSelectedKey } from '../DeskPage/actions.js';
+import { setSelectedKey, setHighlightSelectedKey, removeSelectedKeys } from '../DeskPage/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setSelectedKey, setHighlightSelectedKey
+    setSelectedKey, setHighlightSelectedKey, removeSelectedKeys
 }, dispatch);

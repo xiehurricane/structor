@@ -97,7 +97,7 @@ class ContentEditable extends Component {
 ContentEditable.defaultProps = {
     onBlur: undefined,
     onChange: undefined,
-    html: '',
+    html: ''
 };
 ContentEditable.propTypes = {
     onBlur: PropTypes.func,

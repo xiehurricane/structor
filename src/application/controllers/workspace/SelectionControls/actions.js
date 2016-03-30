@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
+import { setForCuttingKeys } from '../ClipboardControls/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
-
+    setForCuttingKeys
 }, dispatch);
