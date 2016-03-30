@@ -75,6 +75,7 @@ class Container extends Component {
             var domNode = ReactDOM.findDOMNode(this);
             domNode.src = '/deskpage' + componentModel.currentPagePath;
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
+            console.log('Switching to path: ' + newComponentModel.currentPagePath);
             this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
         } else if(newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter) {
             this.doUpdateSelected = true;
@@ -99,7 +100,7 @@ class Container extends Component {
     componentDidUpdate(){
         if(this.page){
             if(this.doUpdatePageModel){
-                console.log('Updating page model');
+                console.log('Updating page model: ' + componentModel.currentPagePath);
                 const { componentModel } = this.props;
                 this.page.updatePageModel({
                     pathname: componentModel.currentPagePath,

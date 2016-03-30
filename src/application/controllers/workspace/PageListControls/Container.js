@@ -28,7 +28,7 @@ class Container extends Component {
     }
 
     render(){
-        const {componentModel, deskPageModel, changePageRoute, showModal} = this.props;
+        const {componentModel, deskPageModel, changePageRoute, showModal, deletePage} = this.props;
         const pages = deskPageModel.pages;
         let pagesList = [];
         let currentRoutePathLabel = deskPageModel.currentPagePath;
@@ -48,7 +48,7 @@ class Container extends Component {
                                 (e) => {
                                     e.stopPropagation();
                                     e.preventDefault();
-                                    changePageRoute({ pagePath: page.pagePath, pageName: page.pageName });
+                                    changePageRoute(page.pagePath);
                                 }
                             } href="#">
                             {routePathLabel}
@@ -61,7 +61,14 @@ class Container extends Component {
             <div  {...this.props} className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
-                    onClick={() => {}}
+                    onClick={(e) => {
+                           e.stopPropagation();
+                           e.preventDefault();
+                           if(confirm('Are you sure you want to delete current page?')){
+                             deletePage(deskPageModel.currentPagePath)
+                           }
+                        }
+                    }
                     title="Delete current page">
                     <span className="fa fa-trash-o" ></span>
                 </button>

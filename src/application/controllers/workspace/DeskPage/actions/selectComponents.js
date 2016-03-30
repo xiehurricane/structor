@@ -97,3 +97,18 @@ export const setHighlightSelectedKey = (key, isHighlighted) => (dispatch, getSta
         dispatch(updateSelected());
     }
 };
+
+export const resetSelectedKeys = () => (dispatch, getState) => {
+    let { deskPage: {selectedKeys}} = getState();
+    let newSelectedKeys = [];
+    let selectedNode;
+    if(selectedKeys && selectedKeys.length > 0){
+        selectedKeys.forEach(key => {
+            selectedNode = graphApi.getNode(key);
+            if(selectedNode && selectedNode.selected){
+                newSelectedKeys.push(key);
+            }
+        });
+        dispatch({type: SET_SELECTED_KEY, payload: newSelectedKeys});
+    }
+};

@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import validator from 'validator';
 import { utils, utilsStore, graphApi } from '../../../../api';
 import { success, failed, timeout, close} from '../../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../../PageOptionsModal/actions.js';
-import { setPages, changePageRoute } from '../actions.js';
+import { setPages, changePageRoute, resetSelectedKeys } from '../actions.js';
 
 export const loadModel = (model) => (dispatch, getState) => {
     let { pages } = model;
@@ -26,72 +27,85 @@ export const loadModel = (model) => (dispatch, getState) => {
         model.pages = [pageModel];
     }
     graphApi.initGraph(model);
-    let pagePathList = [];
-    model.pages.forEach(page => {
-        pagePathList.push({
-            pagePath: page.pagePath,
-            pageName: page.pageName
-        });
-    });
-    dispatch(setPages(pagePathList));
+    let pageList = graphApi.getPages();
+    dispatch(setPages(pageList));
+    dispatch(changePageRoute(pageList[0].pagePath));
 };
 
 export const addNewPage = () => (dispatch, getState) => {
-    let pageModel = utilsStore.getTemplatePageModel();
-    let model = graphApi.getModel();
-    pageModel.pageName = pageModel.pageName + model.pages.length;
-    pageModel.pagePath = pageModel.pagePath + model.pages.length;
-    model.pages.push(pageModel);
-    dispatch(loadModel(model));
-    dispatch(changePageRoute({ pagePath: pageModel.pagePath, pageName: pageModel.pageName }));
+    try{
+        let pageModel = utilsStore.getTemplatePageModel();
+        let pageList = graphApi.getPages();
+        pageList = graphApi.addNewPage(pageModel, pageModel.pagePath + pageList.length, pageModel.pageName + pageList.length);
+        dispatch(setPages(pageList));
+        dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(success('New page was added successfully'));
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
+    }
 };
 
 export const clonePage = (pagePath) => (dispatch, getState) => {
-    let model = graphApi.getModel();
-    let modelNode = graphApi.getModelNode(pagePath);
-    if(modelNode){
-        let newModelNode = utils.fulex(modelNode);
-        newModelNode.pageName = modelNode.pageName + '_copy';
-        newModelNode.pagePath = modelNode.pagePath + '_copy';
-        model.pages.push(newModelNode);
-        dispatch(loadModel(model));
-        dispatch(changePageRoute({ pagePath: newModelNode.pagePath, pageName: newModelNode.pageName }));
-        dispatch(success('Page is cloned'));
-    } else {
-        dispatch(failed('Page with path \'' + pagePath + '\' was not found'));
+    try{
+        let pageList = graphApi.duplicatePage(pagePath);
+        dispatch(setPages(pageList));
+        dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(success('Page was cloned successfully'));
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
     }
 };
 
 export const changePageOptions = (options) => (dispatch, getState) => {
 
-    let {pageName, pagePath, makeIndexRoute, currentPagePath} = options;
+    let {pageName, pagePath, makeIndexRoute, currentPagePath, currentPageName} = options;
 
     if(!pageName || pageName.length <= 0 || !validator.isAlphanumeric(pageName)){
         dispatch(failed('Please enter alphanumeric value for page component name'));
     } else if(!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/'){
         dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
     } else {
-        var firstChar = pageName.charAt(0).toUpperCase();
-        pageName = firstChar + pageName.substr(1);
-        let node = graphApi.getNode(currentPagePath);
-        if(node && node.modelNode){
-            node.modelNode.pageName = pageName;
-            node.modelNode.pagePath = pagePath;
-            let model = graphApi.getModel();
-            if(makeIndexRoute && model.pages.length > 1){
-                console.log('Make index : ' + pagePath + ', index: ' + node.index);
-                const tempModel = model.pages.splice(node.index, 1)[0];
-                if(tempModel){
-                    model.pages.splice(0, 0, tempModel);
-                }
+        try{
+            let pageList;
+            if(pagePath !== currentPagePath || pageName !== currentPageName){
+                var firstChar = pageName.charAt(0).toUpperCase();
+                pageName = firstChar + pageName.substr(1);
+                pageList = graphApi.changePagePathAndName(currentPagePath, pagePath, pageName);
             }
-            dispatch(loadModel(model));
-            dispatch(changePageRoute({ pagePath, pageName }));
+            if(makeIndexRoute){
+                pageList = graphApi.setIndexPage(pagePath);
+            }
+            if(pageList){
+                dispatch(setPages(pageList));
+                dispatch(changePageRoute(pagePath));
+                dispatch(success('Page options were changed successfully'));
+            }
             dispatch(hidePageOptionsModal());
-            dispatch(success('Page route is changed successfully.'));
-        } else {
-            dispatch(failed('Page with path \'' + pagePath + '\' was not found'));
+        } catch(e){
+            dispatch(failed(e.message ? e.message : e));
         }
+    }
+};
+
+export const deletePage = (pagePath) => (dispatch, getState) => {
+    try{
+        const graphNode = graphApi.getNode(pagePath);
+        if(graphNode){
+            const currentIndex = graphNode.index;
+            let pageList = graphApi.deletePage(pagePath);
+            if(pageList){
+                dispatch(setPages(pageList));
+                if(currentIndex === 0){
+                    dispatch(changePageRoute(pageList[0].pagePath));
+                } else if(currentIndex > 0){
+                    dispatch(changePageRoute(pageList[currentIndex - 1].pagePath));
+                }
+                dispatch(resetSelectedKeys());
+                dispatch(success('Route path ' + pagePath + ' were deleted successfully'));
+            }
+        }
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
     }
 };
 

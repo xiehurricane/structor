@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { changePageRoute, deletePage } from '../DeskPage/actions.js';
-import { showModal } from '../PageOptionsModal/actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    changePageRoute, showModal, deletePage
-}, dispatch);
+import { createStructuredSelector } from 'reselect';
+
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.selectionControls
+    //userAccountModel: state => state.appContainer.userAccount,
+    //deskPageModel: state => state.deskPage,
+    //deskModel: state => state.desk
+});
+

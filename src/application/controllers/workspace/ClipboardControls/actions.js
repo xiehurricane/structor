@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
-import { changePageRoute, deletePage } from '../DeskPage/actions.js';
-import { showModal } from '../PageOptionsModal/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
-    changePageRoute, showModal, deletePage
+
 }, dispatch);

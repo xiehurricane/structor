@@ -41,7 +41,11 @@ class Container extends Component {
         e.preventDefault();
         const { changePageOptions, deskPageModel } = this.props;
         const options = this.refs.formPageName.getOptions();
-        changePageOptions({...options, currentPagePath: deskPageModel.currentPagePath});
+        changePageOptions({
+            ...options,
+            currentPagePath: deskPageModel.currentPagePath,
+            currentPageName: deskPageModel.currentPageName
+        });
     }
 
     render(){

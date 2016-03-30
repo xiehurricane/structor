@@ -15,7 +15,6 @@
  */
 
 import { bindActionCreators } from 'redux';
-import validator from 'validator';
 import { utils, utilsStore, graphApi } from '../../../api';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../PageOptionsModal/actions.js';
@@ -40,7 +39,7 @@ export const reloadPage = () => ({type: RELOAD_PAGE});
 export const loadPage = () => ({type: LOAD_PAGE});
 export const pageLoaded = () => ({type: PAGE_LOADED});
 export const pageLoadTimeout = () => ({type: PAGE_LOAD_TIMEOUT});
-export const changePageRoute = (payload) => ({type: CHANGE_PAGE_ROUTE, payload});
+export const changePageRoute = (pagePath) => ({type: CHANGE_PAGE_ROUTE, payload: pagePath});
 export const setLivePreviewModeOn = () => ({ type: SET_LIVE_PREVIEW_MODE_ON });
 export const setEditModeOn = () => ({ type: SET_EDIT_MODE_ON });
 export const setReloadPageRequest = () => ({ type: SET_RELOAD_PAGE_REQUEST });
@@ -51,17 +50,17 @@ export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 
 import {
-    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey,
+    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey, resetSelectedKeys,
     SET_SELECTED_KEY, UPDATE_SELECTED
 } from './actions/selectComponents.js';
 import {
-    loadModel, addNewPage, clonePage, changePageOptions
+    loadModel, addNewPage, clonePage, changePageOptions, deletePage
 } from './actions/modelPageActions.js';
 
 export {
-    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey,
+    setSelectedKey, setSelectedParentKey, updateSelected, setHighlightSelectedKey, resetSelectedKeys,
     SET_SELECTED_KEY, UPDATE_SELECTED,
-    loadModel, addNewPage, clonePage, changePageOptions
+    loadModel, addNewPage, clonePage, changePageOptions, deletePage
 }
 
 export const handleCompilerMessage = (message) => (dispatch, getState) => {
