@@ -46,7 +46,8 @@ class Container extends Component {
         e.preventDefault();
         e.stopPropagation();
         const key = e.currentTarget.dataset.key;
-        const { setSelectedKey } = this.props;
+        const { setSelectedKey, setHighlightSelectedKey } = this.props;
+        setHighlightSelectedKey(key, false);
         setSelectedKey(key);
     }
 
@@ -91,7 +92,7 @@ class Container extends Component {
                                   onClick={() => {removeSelectedKeys()}}>
                                 <i className="fa fa-times-circle fa-fw"
                                    style={{opacity: '0.6'}}></i>
-                                <span>Selected:&nbsp;&nbsp;</span>
+                                <span>Selected on page:&nbsp;</span>
                                 <strong>
                                     {(rootItem.modelNode.pageName ? rootItem.modelNode.pagePath : 'Unknown')}
                                 </strong>
@@ -129,16 +130,56 @@ class Container extends Component {
                                 </li>
                             );
                         } else {
-                            content.push(
-                                <li key={i} active={true} >
+                            const childrenMenuItems = [];
+                            const childrenOfActive = graphApi.getChildNodes(item.key);
+                            if(childrenOfActive && childrenOfActive.length > 0){
+                                childrenOfActive.forEach((child, index) => {
+                                    console.log('Adding children for selected component: ' + child.key);
+                                    childrenMenuItems.push(
+                                        <li key={'childMenuItem' + index}>
+                                            <a href="#"
+                                               style={{display: 'flex', alignItems: 'center'}}
+                                               data-key={child.key}
+                                               onClick={this.handleSetSelectedKey}
+                                               onMouseEnter={this.handleSetHighlightSelectedKey}
+                                               onMouseLeave={this.handleRemoveHighlightSelectedKey}>
+                                                {child.modelNode.type}
+                                            </a>
+                                        </li>
+                                    );
+                                });
+                            }
+                            if(childrenMenuItems.length > 0){
+                                content.push(
+                                    <li key={i} active={true} >
+
+                                    <span key={'menuMore'}
+                                          className="dropdown"
+                                          style={activeStyle}
+                                          data-key={item.key}>
+                                        <span className="dropdown-toggle" data-toggle="dropdown">
+                                            <span>{item.modelNode.type}&nbsp;</span><span className="caret"></span>
+                                        </span>
+                                        <ul className="dropdown-menu"
+                                            role="menu"
+                                            style={{overflowY: 'auto', maxHeight: '12em'}}>
+                                            {childrenMenuItems}
+                                        </ul>
+                                    </span>
+                                    </li>
+                                );
+                            } else {
+                                content.push(
+                                    <li key={i} active={true} >
                                     <span style={activeStyle}
                                           data-key={item.key}
                                           onMouseEnter={this.handleSetHighlightSelectedKey}
                                           onMouseLeave={this.handleRemoveHighlightSelectedKey}>
                                         {item.modelNode.type}
                                     </span>
-                                </li>
-                            );
+                                    </li>
+                                );
+                            }
                         }
                     }
                     content = (

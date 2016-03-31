@@ -18,8 +18,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 
-import SelectionBreadcrumbs from '../SelectionBreadcrumbs';
 import SelectionControls from '../SelectionControls';
+import ClipboardControls from '../ClipboardControls';
 
 class Container extends Component {
 
@@ -39,9 +39,14 @@ class Container extends Component {
             //padding: '0px 0px 0px 10px'
         };
 
-        const breadCrumbsStyle = {
-            padding: '0px',
-            margin: '0px 0.5em 0 0'
+        const labelStyle = {
+            padding: '3px 6px',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: 'rgb(227, 227, 227)',
+            color: 'rgb(107, 107, 107)',
+            textShadow: '0 1px 0px rgba(255, 255, 255, 0.8)',
+            width: '6em'
         };
 
         const controlsGroupStyle = {
@@ -52,10 +57,11 @@ class Container extends Component {
         return (
             <div {...this.props}>
                 <div style={containerStyle}>
-                    <SelectionBreadcrumbs style={breadCrumbsStyle} />
-                    <div className="btn-toolbar" role="toolbar" >
-                        <SelectionControls style={controlsGroupStyle} />
-                    </div>
+                    <span style={labelStyle}>
+                        <span>Selection:</span>
+                    </span>
+                    <SelectionControls style={controlsGroupStyle} />
+                    <ClipboardControls style={controlsGroupStyle} />
                 </div>
             </div>
         );

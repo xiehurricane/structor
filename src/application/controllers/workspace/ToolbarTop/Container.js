@@ -20,7 +20,7 @@ import { modelSelector } from './selectors.js';
 
 import PageListControls from '../PageListControls';
 import PageViewControls from '../PageViewControls';
-import ClipboardControls from '../ClipboardControls';
+import SelectionBreadcrumbs from '../SelectionBreadcrumbs';
 
 class Container extends Component {
 
@@ -40,9 +40,14 @@ class Container extends Component {
             //padding: '0px 0px 0px 10px'
         };
 
-        const firstControlsGroupStyle = {
-            padding: '0px',
-            margin: '0px'
+        const labelStyle = {
+            padding: '3px 6px',
+            borderRadius: '3px',
+            cursor: 'pointer',
+            backgroundColor: 'rgb(227, 227, 227)',
+            color: 'rgb(107, 107, 107)',
+            textShadow: '0 1px 0px rgba(255, 255, 255, 0.8)',
+            width: '6em'
         };
 
         const controlsGroupStyle = {
@@ -50,12 +55,20 @@ class Container extends Component {
             margin: '0px 0px 0px 0.5em'
         };
 
+        const breadCrumbsStyle = {
+            padding: '0px',
+            margin: '0px 0.5em 0 0.5em'
+        };
+
         return (
             <div {...this.props}>
                 <div style={containerStyle}>
-                    <PageListControls style={firstControlsGroupStyle} />
+                    <span style={labelStyle}>
+                        <span>Page view:</span>
+                    </span>
+                    <PageListControls style={controlsGroupStyle} />
                     <PageViewControls style={controlsGroupStyle} />
-                    <ClipboardControls style={controlsGroupStyle} />
+                    <SelectionBreadcrumbs style={breadCrumbsStyle} />
                 </div>
             </div>
         );

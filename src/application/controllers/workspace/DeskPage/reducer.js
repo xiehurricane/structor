@@ -104,6 +104,7 @@ export default (state = initialState, action = {}) => {
     }
 
     if(type === actions.SET_SELECTED_KEY){
+        console.log('SET_SELECTED_KEY');
         return Object.assign({}, state, {
             selectedKeys: payload,
             selectedUpdateCounter: state.selectedUpdateCounter + 1
@@ -111,8 +112,16 @@ export default (state = initialState, action = {}) => {
     }
 
     if(type === actions.UPDATE_SELECTED){
+        console.log('UDPATE_SELECTED');
         return Object.assign({}, state, {
             selectedUpdateCounter: state.selectedUpdateCounter + 1
+        });
+    }
+
+    if(type === actions.UPDATE_PAGE){
+        console.log('UDPATE_PAGE');
+        return Object.assign({}, state, {
+            modelUpdateCounter: state.modelUpdateCounter + 1
         });
     }
 

@@ -18,6 +18,7 @@ import { bindActionCreators } from 'redux';
 import { utils, utilsStore, graphApi } from '../../../api';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../PageOptionsModal/actions.js';
+import { setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } from '../ClipboardControls/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -33,6 +34,7 @@ export const COMPILER_START = "DeskPage/COMPILER_START";
 export const COMPILER_DONE = "DeskPage/COMPILER_DONE";
 export const COMPILER_TIMEOUT = "DeskPage/COMPILER_TIMEOUT";
 export const CHANGE_PAGE_ROUTE_FEEDBACK = "DeskPage/CHANGE_PAGE_ROUTE_FEEDBACK";
+export const UPDATE_PAGE = "DeskPage/UPDATE_PAGE";
 
 export const setPages = (pages) => ({type: SET_PAGES, payload: pages});
 export const reloadPage = () => ({type: RELOAD_PAGE});
@@ -48,13 +50,16 @@ export const compilerStart = () => ({ type: COMPILER_START });
 export const compilerDone = () => ({ type: COMPILER_DONE });
 export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
+export const updatePage = () => ({type: UPDATE_PAGE});
 
 import {
     setSelectedKey, setSelectedParentKey,
     updateSelected, setHighlightSelectedKey,
     resetSelectedKeys, removeSelectedKeys,
+    setSelectedKeys,
     SET_SELECTED_KEY, UPDATE_SELECTED
 } from './actions/selectComponents.js';
+
 import {
     loadModel, addNewPage, clonePage, changePageOptions, deletePage
 } from './actions/modelPageActions.js';
@@ -62,6 +67,7 @@ import {
 export {
     setSelectedKey, setSelectedParentKey,
     updateSelected, setHighlightSelectedKey,
+    setSelectedKeys,
     resetSelectedKeys, removeSelectedKeys,
     SET_SELECTED_KEY, UPDATE_SELECTED,
     loadModel, addNewPage, clonePage, changePageOptions, deletePage
@@ -84,5 +90,7 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    loadPage, pageLoaded, setSelectedKey, setSelectedParentKey, changePageRouteFeedback
+    loadPage, pageLoaded, setSelectedKey,
+    setSelectedParentKey, changePageRouteFeedback,
+    setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast
 }, dispatch);

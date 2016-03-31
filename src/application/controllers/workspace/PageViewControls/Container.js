@@ -38,7 +38,6 @@ class Container extends Component {
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); addNewPage(); }}
                     title="Create new page">
                     <span className="fa fa-plus"></span>
-                    <span style={buttonLabelStyle}>New page</span>
                 </button>
                 <button
                     key="copyPageButton"
@@ -46,11 +45,10 @@ class Container extends Component {
                     onClick={(e) => {e.preventDefault(); e.stopPropagation(); clonePage(currentPagePath);}}
                     title="Duplicate current page">
                     <span className="fa fa-copy"></span>
-                    <span style={buttonLabelStyle}>Clone page</span>
                 </button>
                 <div key="pageWidthButton" className="btn-group" role="group">
                     <button className="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                        <span style={buttonLabelStyle}>{'Width: ' + deskModel.iframeWidth}</span>
+                        <span style={buttonLabelStyle}>{deskModel.iframeWidth}</span>
                         <span className="caret"></span>
                         &nbsp;&nbsp;
                     </button>

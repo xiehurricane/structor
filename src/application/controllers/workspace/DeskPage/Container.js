@@ -29,12 +29,12 @@ class Container extends Component {
         super(props);
         this.handleComponentClick = this.handleComponentClick.bind(this);
         this.handlePathnameChanged = this.handlePathnameChanged.bind(this);
-        this.handleSelectParentClick = this.handleSelectParentClick.bind(this);
     }
 
     componentDidMount(){
         const domNode = ReactDOM.findDOMNode(this);
         const {loadPage, pageLoaded} = this.props;
+        const { setSelectedParentKey, setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } = this.props;
         loadPage();
         domNode.onload = ( () => {
 
@@ -47,7 +47,14 @@ class Container extends Component {
                     page.setGraphApi(graphApi);
                     page.setOnComponentMouseDown(this.handleComponentClick);
                     page.setOnPathnameChanged(this.handlePathnameChanged);
-                    page.setOnSelectParentClick(this.handleSelectParentClick);
+
+                    page.bindToState('onSelectParent', setSelectedParentKey);
+                    page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
+                    page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key) });
+                    page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key) });
+                    page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key) });
+                    page.bindToState('onLast', (key, isModifier) => { pasteLast(key) });
+
                     const { componentModel } = this.props;
                     page.updatePageModel({
                         pathname: pathname,
@@ -77,10 +84,10 @@ class Container extends Component {
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
             console.log('Switching to path: ' + newComponentModel.currentPagePath);
             this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
-        } else if(newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter) {
-            this.doUpdateSelected = true;
         } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
+        } else if(newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter) {
+            this.doUpdateSelected = true;
         }
     }
 
@@ -100,8 +107,8 @@ class Container extends Component {
     componentDidUpdate(){
         if(this.page){
             if(this.doUpdatePageModel){
-                console.log('Updating page model: ' + componentModel.currentPagePath);
                 const { componentModel } = this.props;
+                console.log('Updating page model: ' + componentModel.currentPagePath);
                 this.page.updatePageModel({
                     pathname: componentModel.currentPagePath,
                     isEditModeOn: componentModel.isEditModeOn
@@ -117,11 +124,6 @@ class Container extends Component {
     handleComponentClick(key, isModifier){
         const { setSelectedKey } = this.props;
         setSelectedKey(key, isModifier);
-    }
-
-    handleSelectParentClick(key, isModifier){
-        const { setSelectedParentKey } = this.props;
-        setSelectedParentKey(key, isModifier);
     }
 
     handlePathnameChanged(pathname){

@@ -16,7 +16,7 @@
 
 import { bindActionCreators } from 'redux';
 import { graphApi } from '../../../api';
-import { removeSelectedKeys, updateSelected } from '../DeskPage/actions.js';
+import { removeSelectedKeys, updateSelected, setSelectedKeys, updatePage } from '../DeskPage/actions.js';
 
 export const CLIPBOARD_EMPTY = 'Empty';
 export const CLIPBOARD_NEW = 'New';
@@ -70,6 +70,58 @@ export const resetClipboardKeys = () => (dispatch, getState) => {
     dispatch({type: RESET_KEYS, payload: {keys: newKeys, mode: clipboardMode}});
 };
 
+export const pasteBefore = (key) => (dispatch, getState) => {
+    const { clipboardControls: { clipboardKeys, clipboardMode } } = getState();
+    let resultKeys;
+    if(clipboardMode === CLIPBOARD_CUT){
+        resultKeys = graphApi.cutPasteBeforeOrAfter(key, false);
+        dispatch(removeClipboardKeys());
+    }
+    if(resultKeys && resultKeys.length > 0){
+        dispatch(setSelectedKeys(resultKeys));
+        dispatch(updatePage());
+    }
+};
+
+export const pasteAfter = (key) => (dispatch, getState) => {
+    const { clipboardControls: { clipboardKeys, clipboardMode } } = getState();
+    let resultKeys;
+    if(clipboardMode === CLIPBOARD_CUT){
+        resultKeys = graphApi.cutPasteBeforeOrAfter(key, true);
+        dispatch(removeClipboardKeys());
+    }
+    if(resultKeys && resultKeys.length > 0){
+        dispatch(setSelectedKeys(resultKeys));
+        dispatch(updatePage());
+    }
+};
+
+export const pasteFirst = (key) => (dispatch, getState) => {
+    const { clipboardControls: { clipboardKeys, clipboardMode } } = getState();
+    let resultKeys;
+    if(clipboardMode === CLIPBOARD_CUT){
+        resultKeys = graphApi.cutPasteFirstOrLast(key, true);
+        dispatch(removeClipboardKeys());
+    }
+    if(resultKeys && resultKeys.length > 0){
+        dispatch(setSelectedKeys(resultKeys));
+        dispatch(updatePage());
+    }
+};
+
+export const pasteLast = (key) => (dispatch, getState) => {
+    const { clipboardControls: { clipboardKeys, clipboardMode } } = getState();
+    let resultKeys;
+    if(clipboardMode === CLIPBOARD_CUT){
+        resultKeys = graphApi.cutPasteFirstOrLast(key, false);
+        dispatch(removeClipboardKeys());
+    }
+    if(resultKeys && resultKeys.length > 0){
+        dispatch(setSelectedKeys(resultKeys));
+        dispatch(updatePage());
+    }
+};
+
 export const containerActions = (dispatch) => bindActionCreators({
-    removeClipboardKeys
+    removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast
 }, dispatch);

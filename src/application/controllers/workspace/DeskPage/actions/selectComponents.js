@@ -126,3 +126,29 @@ export const resetSelectedKeys = () => (dispatch, getState) => {
         dispatch({type: SET_SELECTED_KEY, payload: newSelectedKeys});
     }
 };
+
+export const setSelectedKeys = (keys) => (dispatch, getState) => {
+    if(keys && keys.length > 0){
+        const { deskPage: {selectedKeys} } = getState();
+        let selectedNode;
+        if(selectedKeys && selectedKeys.length > 0){
+            selectedKeys.forEach(key => {
+                selectedNode = graphApi.getNode(key);
+                if(selectedNode && selectedNode.selected){
+                    selectedNode.selected = undefined;
+                }
+            });
+        }
+        let newSelectedKeys = [];
+        keys.forEach(key => {
+            let nextGraphNode = graphApi.getNode(key);
+            if(nextGraphNode){
+                nextGraphNode.selected = true;
+                newSelectedKeys.push(key);
+            } else {
+                dispatch(failed('Required to be selected component with id \'' + key + '\' was not found'));
+            }
+        });
+        dispatch({type: SET_SELECTED_KEY, payload: newSelectedKeys});
+    }
+};
