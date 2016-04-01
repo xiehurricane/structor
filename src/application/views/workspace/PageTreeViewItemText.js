@@ -73,8 +73,8 @@ class PageTreeViewItemText extends Component {
             content = (
                 <span
                     ref="textItemElement"
-                    className='text-muted'
-                    style={{position: 'relative'}}>
+                    className='text-danger'
+                    style={{position: 'relative', fontWeight: '200'}}>
 
                     {this.props.textValue}
 
@@ -88,7 +88,8 @@ class PageTreeViewItemText extends Component {
             content = (
                 <span
                     ref="textItemElement"
-                    className='text-muted'
+                    className='text-danger'
+                    style={{position: 'relative', fontWeight: '200'}}
                     onClick={this.handleTextClick}>
 
                     {this.props.textValue}

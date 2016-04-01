@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import { utils, utilsStore, graphApi } from '../../../api';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../PageOptionsModal/actions.js';
-import { setForCuttingKeys, resetClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace } from '../ClipboardControls/actions.js';
-import { setSelectedKey, setSelectedParentKey } from '../SelectionBreadcrumbs/actions.js';
+import { setForCuttingKeys, resetClipboardKeys } from '../ClipboardControls/actions.js';
+import { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace, pasteWrap } from '../ClipboardControls/actions.js';
+import { setSelectedKey, setSelectedParentKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -125,21 +127,25 @@ export const changePageOptions = (options) => (dispatch, getState) => {
 
 export const deletePage = (pagePath) => (dispatch, getState) => {
     try{
-        const graphNode = graphApi.getNode(pagePath);
-        if(graphNode){
-            const currentIndex = graphNode.index;
-            let pageList = graphApi.deletePage(pagePath);
-            if(pageList){
-                dispatch(setPages(pageList));
-                if(currentIndex === 0){
-                    dispatch(changePageRoute(pageList[0].pagePath));
-                } else if(currentIndex > 0){
-                    dispatch(changePageRoute(pageList[currentIndex - 1].pagePath));
-                }
-                dispatch(resetClipboardKeys());
-                dispatch(resetSelectedKeys());
-                dispatch(success('Route path ' + pagePath + ' were deleted successfully'));
+        const { deskPage: {pages} } = getState();
+        let pageIndex;
+        for(let i = 0; i < pages.length; i++){
+            if(pages[i].pagePath === pagePath){
+                pageIndex = i;
+                break;
             }
+        }
+        let pageList = graphApi.deletePage(pagePath);
+        if(pageList){
+            dispatch(setPages(pageList));
+            if(pageIndex === 0){
+                dispatch(changePageRoute(pageList[0].pagePath));
+            } else if(pageIndex > 0){
+                dispatch(changePageRoute(pageList[pageIndex - 1].pagePath));
+            }
+            dispatch(resetClipboardKeys());
+            dispatch(resetSelectedKeys());
+            dispatch(success('Route path ' + pagePath + ' were deleted successfully'));
         }
     } catch(e){
         dispatch(failed(e.message ? e.message : e));
@@ -166,5 +172,5 @@ export const containerActions = (dispatch) => bindActionCreators({
     loadPage, pageLoaded, setSelectedKey,
     setSelectedParentKey, changePageRouteFeedback,
     setForCuttingKeys, pasteBefore, pasteAfter,
-    pasteFirst, pasteLast, pasteReplace
+    pasteFirst, pasteLast, pasteReplace, pasteWrap
 }, dispatch);

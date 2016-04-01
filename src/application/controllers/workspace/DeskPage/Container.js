@@ -35,7 +35,8 @@ class Container extends Component {
     componentDidMount(){
         const domNode = ReactDOM.findDOMNode(this);
         const {loadPage, pageLoaded} = this.props;
-        const { setSelectedParentKey, setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } = this.props;
+        const { setSelectedParentKey, setForCuttingKeys } = this.props;
+        const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap } = this.props;
         const { pasteReplace } = this.props;
         loadPage();
         domNode.onload = ( () => {
@@ -46,6 +47,7 @@ class Container extends Component {
 
                 this.contentWindow.onPageDidMount = (page, pathname) => {
                     this.page = page;
+
                     page.bindOnComponentMouseDown(this.handleComponentClick);
                     page.bindOnPathnameChanged(this.handlePathnameChanged);
                     page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
@@ -58,10 +60,26 @@ class Container extends Component {
                     page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key) });
                     page.bindToState('onLast', (key, isModifier) => { pasteLast(key) });
                     page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key) });
+                    page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key) });
+
+                    page.bindToState('isMultipleSelection', () => {
+                        const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+                        return selectedKeys && selectedKeys.length > 1;
+                    });
 
                     page.bindToState('isAvailableToPaste', key => {
                         const { clipboardControlsModel: {clipboardMode} } = this.props;
                         return clipboardMode !== CLIPBOARD_CUT || graphApi.isCutPasteAvailable(key);
+                    });
+
+                    page.bindToState('isClipboardEmpty', () => {
+                        const { clipboardControlsModel: {clipboardKeys} } = this.props;
+                        return !clipboardKeys || clipboardKeys.length <= 0;
+                    });
+
+                    page.bindToState('isAvailableToWrap', key => {
+                        const { clipboardControlsModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+                        return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
                     });
 
                     const { componentModel } = this.props;
@@ -125,7 +143,7 @@ class Container extends Component {
             }
             if(this.doUpdateMarks){
                 console.log('Updating marked only');
-                this.page.updateInitialState();
+                this.page.updateMarks();
             }
         }
     }

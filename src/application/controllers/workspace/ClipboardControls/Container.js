@@ -29,7 +29,7 @@ class Container extends Component {
     render(){
         const { componentModel: {clipboardMode, clipboardKeys}} = this.props;
         const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
-        const { removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } = this.props;
+        const { removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap } = this.props;
         const { pasteReplace } = this.props;
 
         const containerStyle = {
@@ -162,7 +162,7 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledSingle}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('copy to clipboard'); }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteWrap(selectedKeys[0]); }}
                     title="Wrap selected component with single component from clipboard">
                     <span style={wideButtonLabelStyle}>Wrap</span>
                 </button>

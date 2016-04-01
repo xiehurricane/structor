@@ -46,7 +46,8 @@ class PageTreeViewItem extends Component {
         //    className += ' umy-grid-basic-border-cut';
         //}
 
-        const linkStyle = {outline: 'none'};
+        const linkStyle = {outline: 'none', color: '#2185D0'};
+        const propsStyle = {margin: '0 0 0 0.5em'};
         let label = this.props.type;
         let props = printProps(this.props.modelProps);
 
@@ -55,13 +56,14 @@ class PageTreeViewItem extends Component {
                 <li id={itemKey} className={className}>
                     <span>{'<'}</span>
                     <a key={'toplink'} href="#" onClick={this.handleClick} style={linkStyle}>
-                        <span style={{color: '#246'}}>{label}</span>
+                        <span>{label}</span>
                     </a>
-                    <span>{' ' + props + ' >'}</span>
+                    <span className="text-muted" style={propsStyle}>{props}</span>
+                    <span>{'>'}</span>
                     {this.props.children}
                     <span>{'<'}</span>
                     <a key={'bottomlink'} href="#" onClick={this.handleClick} style={linkStyle}>
-                        <span style={{color: '#246'}}>{label}</span>
+                        <span>{label}</span>
                     </a>
                     <span>{' />'}</span>
                 </li>
@@ -71,9 +73,10 @@ class PageTreeViewItem extends Component {
                 <li id={itemKey} className={className}>
                     <span>{'<'}</span>
                     <a href="#" onClick={this.handleClick} style={linkStyle}>
-                        <span style={{color: '#246'}}>{label}</span>
+                        <span>{label}</span>
                     </a>
-                    <span>{' ' + props + ' />'}</span>
+                    <span className="text-muted" style={propsStyle}>{props}</span>
+                    <span>{'/>'}</span>
                 </li>
             );
         }

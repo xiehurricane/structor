@@ -146,7 +146,7 @@ class Container extends Component{
     render() {
 
         const { deskPageModel, togglePageTreeview } = this.props;
-        const pageGraph = graphApi.traverseGraph(deskPageModel.currentPagePath);
+        const pageGraph = graphApi.getWrappedModelByPagePath(deskPageModel.currentPagePath);
 
         let style = {
             padding: '2em 1em 1em 1em',

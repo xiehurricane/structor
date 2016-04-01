@@ -26,7 +26,8 @@ class Container extends Component {
     }
 
     render(){
-        const { selectionBreadcrumbsModel: {selectedKeys}, setForCuttingKeys } = this.props;
+        const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+        const { setForCuttingKeys, setForCopyingKeys } = this.props;
         const buttonLabelStyle = {
             margin: '0 0.5em'
         };
@@ -36,7 +37,7 @@ class Container extends Component {
                     <button
                         className="btn btn-default btn-xs"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('copy to clipboard'); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setForCopyingKeys(selectedKeys); }}
                         title="Copy selected components to clipboard">
                         <span style={buttonLabelStyle} className="fa fa-clipboard"></span>
                     </button>

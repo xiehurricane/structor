@@ -18,5 +18,6 @@ import { createStructuredSelector } from 'reselect';
 
 export const modelSelector = createStructuredSelector({
     componentModel: state => state.deskPage,
-    clipboardControlsModel: state => state.clipboardControls
+    clipboardControlsModel: state => state.clipboardControls,
+    selectionBreadcrumbsModel: state => state.selectionBreadcrumbs
 });

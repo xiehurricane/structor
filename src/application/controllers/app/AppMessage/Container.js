@@ -109,11 +109,9 @@ class Container extends Component {
                 position: 'fixed',
                 width: '30em',
                 padding: '0.5em',
-                right: '0',
-                top: '0',
-                bottom: 0,
-                zIndex: '9999',
-                overflow: 'hidden'};
+                right: '0px',
+                top: '0px',
+                zIndex: '9999'};
 
             this._overlay = (
                 <div

@@ -190,7 +190,8 @@ class Container extends Component {
             } else if(selectedKeys.length > 1) {
                 content = [];
                 content.push(
-                    <span style={labelStyle}
+                    <span key="rootKey"
+                          style={labelStyle}
                           onClick={() => {removeSelectedKeys()}}>
                         <i className="fa fa-times-circle fa-fw"
                            style={{opacity: '0.6'}}></i>
