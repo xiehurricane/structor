@@ -17,6 +17,7 @@
 import { uniqueId, forOwn, isObject } from 'lodash';
 import { Graph } from 'graphlib';
 import { fulex } from '../utils/utils.js';
+import { getAvailableRoute } from './reactRouterApi.js';
 
 let graphObject = {
     graph: undefined,
@@ -47,6 +48,7 @@ function mapModel(srcGraph, rootKey, rootModelNode, rootIndex, prop) {
 function makeNodeWrapper(key, graphNode){
     return {
         key: key,
+        //modelNode: graphNode.modelNode.type + ' ' + graphNode.modelNode.props['data-umyid'],
         modelNode: graphNode.modelNode,
         index: graphNode.index,
         prop: graphNode.prop,
@@ -119,8 +121,28 @@ export function getPages(){
     return graphObject.pageNodes;
 }
 
+export function getRoots(){
+    return graphObject.rootKeys;
+}
+
 export function getNode(key){
     return graphObject.graph.node(key);
+}
+
+export function getWrappedModelByPagePath(pathname){
+    const roots = getRoots();
+    const rootKey = getAvailableRoute(roots, pathname);
+    let wrappedModel = undefined;
+    if(rootKey){
+        wrappedModel = traverseGraph(rootKey);
+    }
+    return wrappedModel;
+}
+
+export function getMarkedKeysByPagePath(pathname){
+    const roots = getRoots();
+    const rootKey = getAvailableRoute(roots, pathname);
+    return getMarkedKeys(rootKey);
 }
 
 export function getChildNodes(key){
@@ -392,7 +414,15 @@ function getDetachedKeysForCutting(){
     return detachedKeys;
 }
 
+export function isCutPasteAvailable(nodeKey){
+    let childNode = graphObject.graph.node(nodeKey);
+    return !!(childNode && !childNode.isForCuttingChild && !childNode.isForCutting);
+}
+
 export function cutPasteBeforeOrAfter(nodeKey, isAfter){
+    if(!isCutPasteAvailable(nodeKey)){
+        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+    }
     const {graph} = graphObject;
     const node = graph.node(nodeKey);
     if(!node){
@@ -422,6 +452,9 @@ export function cutPasteBeforeOrAfter(nodeKey, isAfter){
 }
 
 export function cutPasteFirstOrLast(nodeKey, isFirst){
+    if(!isCutPasteAvailable(nodeKey)){
+        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+    }
     const {graph} = graphObject;
     const node = graph.node(nodeKey);
     if(!node){
@@ -449,6 +482,9 @@ export function cutPasteFirstOrLast(nodeKey, isFirst){
 }
 
 export function cutPasteReplace(nodeKey){
+    if(!isCutPasteAvailable(nodeKey)){
+        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+    }
     const {graph} = graphObject;
     const node = graph.node(nodeKey);
     if(!node){
@@ -456,8 +492,51 @@ export function cutPasteReplace(nodeKey){
     }
     let detachedKeys = getDetachedKeysForCutting();
     if(detachedKeys.length > 0) {
-
+        const parentKey = graph.parent(nodeKey);
+        if(parentKey){
+            const nodeIndex = node.index;
+            traverseGraphBranch(graph, nodeKey, (key => {
+                graph.removeNode(key);
+            }));
+            node.modelNode.children = node.modelNode.children || [];
+            let detachedModelNodes = [];
+            let detachedNode;
+            detachedKeys.forEach(detachedKey => {
+                detachedNode = graph.node(detachedKey);
+                if(detachedNode && detachedNode.modelNode){
+                    graph.setParent(detachedKey, parentKey);
+                    detachedModelNodes.push(detachedNode.modelNode);
+                }
+            });
+            let parentNode = graph.node(parentKey);
+            let {modelNode} = parentNode;
+            let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
+            modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+            adjustIndices(graph, parentKey);
+        }
     }
+    return detachedKeys;
+}
+
+export function cutPasteWrap(nodeKey){
+    if(!isCutPasteAvailable(nodeKey)){
+        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+    }
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('Cut & paste wrap: node with key ' + nodeKey + ' was not found.');
+    }
+    const { forCutting } = getAllMarkedKeys();
+    if(forCutting.length !== 1){
+        throw Error('Cut & paste wrap: wrapping can be applied only for single component');
+    }
+    const pastedKeys = cutPasteBeforeOrAfter(nodeKey, false);
+    removeForCutting(pastedKeys[0]);
+    setForCutting(nodeKey);
+    cutPasteFirstOrLast(pastedKeys[0], false);
+    return pastedKeys;
+
 }
 
 export function setForCutting(nodeKey){
@@ -482,4 +561,43 @@ export function removeForCutting(nodeKey){
             childNode.isForCuttingChild = undefined;
         }));
     }
+}
+
+export function getMarkedKeys(rootKey){
+    let selected = [];
+    let highlighted = [];
+    let forCutting = [];
+    const {graph} = graphObject;
+    traverseGraphBranch(graph, rootKey, (key => {
+        let childNode = graph.node(key);
+        if(childNode){
+            if(childNode.highlighted){
+                highlighted.push(key);
+            }
+            if(childNode.selected){
+                selected.push(key);
+            }
+            if(childNode.isForCutting){
+                forCutting.push(key);
+            }
+        }
+    }));
+    console.log('Get marked keys, root: ' + rootKey + ', selected: ' + selected.length + ', highlighted: ' + highlighted.length + ', forCutting: ' + forCutting.length);
+    return { selected, highlighted, forCutting };
+}
+
+export function getAllMarkedKeys(){
+    const { graph, rootKeys } = graphObject;
+    let result = undefined;
+    rootKeys.forEach(rootKey => {
+        if(!result){
+            result = getMarkedKeys(rootKey);
+        } else {
+            const {selected, highlighted, forCutting} = getMarkedKeys(rootKey);
+            result.selected = result.selected.concat(selected);
+            result.highlighted = result.highlighted.concat(highlighted);
+            result.forCutting = result.forCutting.concat(forCutting);
+        }
+    });
+    return result;
 }

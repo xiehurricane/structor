@@ -16,7 +16,8 @@
 
 import { bindActionCreators } from 'redux';
 import { graphApi } from '../../../api';
-import { removeSelectedKeys, updateSelected, setSelectedKeys, updatePage } from '../DeskPage/actions.js';
+import { updateMarked, updatePage } from '../DeskPage/actions.js';
+import { removeSelectedKeys, setSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 
 export const CLIPBOARD_EMPTY = 'Empty';
 export const CLIPBOARD_NEW = 'New';
@@ -52,7 +53,7 @@ export const removeClipboardKeys = () => (dispatch, getState) => {
         });
     }
     dispatch({type: RESET_KEYS, payload: {keys: [], mode: CLIPBOARD_EMPTY}});
-    dispatch(updateSelected());
+    dispatch(updateMarked());
 };
 
 export const resetClipboardKeys = () => (dispatch, getState) => {
@@ -122,6 +123,19 @@ export const pasteLast = (key) => (dispatch, getState) => {
     }
 };
 
+export const pasteReplace = (key) => (dispatch, getState) => {
+    const { clipboardControls: { clipboardKeys, clipboardMode } } = getState();
+    let resultKeys;
+    if(clipboardMode === CLIPBOARD_CUT){
+        resultKeys = graphApi.cutPasteReplace(key);
+        dispatch(removeClipboardKeys());
+    }
+    if(resultKeys && resultKeys.length > 0){
+        dispatch(setSelectedKeys(resultKeys));
+        dispatch(updatePage());
+    }
+};
+
 export const containerActions = (dispatch) => bindActionCreators({
-    removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast
+    removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace
 }, dispatch);

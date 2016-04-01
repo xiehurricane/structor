@@ -17,9 +17,9 @@
 import { createStructuredSelector } from 'reselect';
 
 export const modelSelector = createStructuredSelector({
-    componentModel: state => state.selectionBreadcrumbs,
+    componentModel: state => state.selectionBreadcrumbs
     //userAccountModel: state => state.appContainer.userAccount,
-    deskPageModel: state => state.deskPage
+    //deskPageModel: state => state.deskPage
     //deskModel: state => state.desk
 });
 

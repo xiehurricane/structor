@@ -62,7 +62,7 @@ class Container extends Component {
 
     render(){
 
-        const { deskPageModel: {selectedKeys}, removeSelectedKeys } = this.props;
+        const { componentModel: {selectedKeys}, removeSelectedKeys } = this.props;
 
         const labelStyle = {
             padding: '3px 6px',
@@ -134,7 +134,6 @@ class Container extends Component {
                             const childrenOfActive = graphApi.getChildNodes(item.key);
                             if(childrenOfActive && childrenOfActive.length > 0){
                                 childrenOfActive.forEach((child, index) => {
-                                    console.log('Adding children for selected component: ' + child.key);
                                     childrenMenuItems.push(
                                         <li key={'childMenuItem' + index}>
                                             <a href="#"

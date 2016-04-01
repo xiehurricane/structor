@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
-import { setSelectedKey } from '../DeskPage/actions.js';
+import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
 import { togglePageTreeview} from '../Desk/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({

@@ -28,8 +28,9 @@ class Container extends Component {
 
     render(){
         const { componentModel: {clipboardMode, clipboardKeys}} = this.props;
-        const { deskPageModel: {selectedKeys}} = this.props;
+        const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
         const { removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } = this.props;
+        const { pasteReplace } = this.props;
 
         const containerStyle = {
             display: 'flex',
@@ -114,48 +115,55 @@ class Container extends Component {
                 );
             }
         }
+        let disabledCommon = selectedKeys.length !== 1
+            || clipboardKeys.length <= 0
+            || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
+        let disabledSingle = selectedKeys.length !== 1
+            || clipboardKeys.length !== 1
+            || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
+
         let controlGroup = (
             <div style={controlsGroupStyle} className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={selectedKeys.length !== 1 || clipboardKeys.length <= 0}
+                    disabled={disabledCommon}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteBefore(selectedKeys[0]); }}
-                    title="Append components in clipboard before selected component">
+                    title="Append components from clipboard before selected component">
                     <span style={wideButtonLabelStyle}>Before</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={selectedKeys.length !== 1 || clipboardKeys.length <= 0}
+                    disabled={disabledCommon}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteFirst(selectedKeys[0]); }}
-                    title="Insert components in clipboard into selected component on the first position">
+                    title="Insert components from clipboard into selected component on the first position">
                     <span style={wideButtonLabelStyle}>First</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={selectedKeys.length !== 1 || clipboardKeys.length <= 0}
+                    disabled={disabledCommon}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteLast(selectedKeys[0]); }}
-                    title="Insert components in clipboard into selected component on the last position">
+                    title="Insert components from clipboard into selected component on the last position">
                     <span style={wideButtonLabelStyle}>Last</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={selectedKeys.length !== 1 || clipboardKeys.length <= 0}
+                    disabled={disabledCommon}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteAfter(selectedKeys[0]); }}
-                    title="Append components in clipboard after selected component">
+                    title="Append components from clipboard after selected component">
                     <span style={wideButtonLabelStyle}>After</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={selectedKeys.length !== 1 || clipboardKeys.length <= 0}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('copy to clipboard'); }}
-                    title="Replace selected component with components in clipboard">
+                    disabled={disabledCommon}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteReplace(selectedKeys[0]); }}
+                    title="Replace selected component with components from clipboard">
                     <span style={wideButtonLabelStyle}>Replace</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={clipboardKeys.length !== 1 || selectedKeys.length !== 1}
+                    disabled={disabledSingle}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('copy to clipboard'); }}
-                    title="Wrap selected component with component in clipboard">
+                    title="Wrap selected component with single component from clipboard">
                     <span style={wideButtonLabelStyle}>Wrap</span>
                 </button>
             </div>

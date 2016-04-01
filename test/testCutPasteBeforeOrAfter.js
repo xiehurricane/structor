@@ -17,7 +17,7 @@
 require('babel-register');
 var fs = require('fs-extra');
 var model = require('./model_single_page.js');
-var graphApi = require('../src/application/api/model/graphApiNew.js');
+var graphApi = require('../src/application/api/model/graphApi.js');
 
 function writeJson(filePath, jsonObj){
     return new Promise( function(resolve, reject){
@@ -39,10 +39,7 @@ console.log(JSON.stringify(tree, null, 4));
 var graph = graphApi.getGraph();
 var toCutKeys = ['12', '9', '16'];
 toCutKeys.forEach(function(key){
-    var detachedNode = graph.node(key);
-    if(detachedNode){
-        detachedNode.isForCutting = true;
-    }
+    graphApi.setForCutting(key);
 });
 
 var detachedKeys = graphApi.cutPasteBeforeOrAfter('4', true);

@@ -73,7 +73,7 @@ class Container extends Component {
 
         return (
             <div style={{overflow: 'hidden'}}>
-                <div ref='appBody' style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0', overflow: 'auto'}}>
+                <div ref='appBody' style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0'}}>
                     {content}
                     <PageOptionsModal />
                 </div>

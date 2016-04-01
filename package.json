@@ -78,6 +78,7 @@
     "react-bootstrap": "0.28.1",
     "react-dom": "0.14.7",
     "react-redux": "4.4.1",
+    "react-router": "2.0.1",
     "react-widgets": "3.2.0",
     "redux": "3.3.1",
     "redux-saga": "0.9.5",

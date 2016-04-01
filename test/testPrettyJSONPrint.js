@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+require('babel-register');
+var lib = require('../src/application/api/utils/printProps.js');
 
-import { createStructuredSelector } from 'reselect';
+var c = {
+    greatings: "Hello World!!!",
+    style: {
+        width: '100%',
+        height: 100.56,
+        xs: 4,
+        textAlign: 'center'
+    }
+};
 
-export const modelSelector = createStructuredSelector({
-    componentModel: state => state.pageTreeViewPanel,
-    deskPageModel: state => state.deskPage,
-    selectionBreadcrumbsModel: state => state.selectionBreadcrumbs,
-    deskModel: state => state.desk
-});
-
+console.log(lib.printProps(c));

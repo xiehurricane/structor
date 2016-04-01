@@ -76,15 +76,15 @@ class Container extends Component{
         return (
             newDeskPageModel.reloadPageCounter !== deskPageModel.reloadPageCounter
             || newDeskPageModel.currentPagePath !== deskPageModel.currentPagePath
-            || newDeskPageModel.selectedUpdateCounter !== deskPageModel.selectedUpdateCounter
+            || newDeskPageModel.markedUpdateCounter !== deskPageModel.markedUpdateCounter
             || newDeskPageModel.modelUpdateCounter !== deskPageModel.modelUpdateCounter
         );
     }
 
     scrollToSelected(){
-        const { deskPageModel } = this.props;
-        if(deskPageModel.selectedKeys && deskPageModel.selectedKeys.length > 0){
-            scrollToSelected(this.$frameWindow, deskPageModel.selectedKeys[deskPageModel.selectedKeys.length - 1]);
+        const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+        if(selectedKeys && selectedKeys.length > 0){
+            scrollToSelected(this.$frameWindow, selectedKeys[selectedKeys.length - 1]);
         }
     }
 
@@ -136,6 +136,7 @@ class Container extends Component{
                 itemKey={graphNode.key}
                 isSelected={graphNode.selected}
                 type={modelNode.type}
+                modelProps={modelNode.props}
                 onSelect={this.props.setSelectedKey}>
                 {inner}
             </PageTreeViewItem>

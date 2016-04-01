@@ -15,6 +15,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import { printProps } from '../../api/utils/printProps.js';
 
 class PageTreeViewItem extends Component {
 
@@ -23,15 +24,15 @@ class PageTreeViewItem extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(e){
+    handleClick(e) {
         e.preventDefault();
         e.stopPropagation();
-        if(this.props.onSelect){
+        if (this.props.onSelect) {
             this.props.onSelect(this.props.itemKey, e.metaKey || e.ctrlKey);
         }
     }
 
-    render(){
+    render() {
 
         let content = null;
 
@@ -45,27 +46,34 @@ class PageTreeViewItem extends Component {
         //    className += ' umy-grid-basic-border-cut';
         //}
 
-        const linkStyle = { textDecoration: 'none', outline: 'none' };
+        const linkStyle = {outline: 'none'};
         let label = this.props.type;
+        let props = printProps(this.props.modelProps);
 
-        if(this.props.children && this.props.children.length > 0){
+        if (this.props.children && this.props.children.length > 0) {
             content = (
                 <li id={itemKey} className={className}>
+                    <span>{'<'}</span>
                     <a key={'toplink'} href="#" onClick={this.handleClick} style={linkStyle}>
-                        <span>{'<' + label + '>'}</span>
+                        <span style={{color: '#246'}}>{label}</span>
                     </a>
+                    <span>{' ' + props + ' >'}</span>
                     {this.props.children}
+                    <span>{'<'}</span>
                     <a key={'bottomlink'} href="#" onClick={this.handleClick} style={linkStyle}>
-                        <span>{'</' + label + '>'}</span>
+                        <span style={{color: '#246'}}>{label}</span>
                     </a>
+                    <span>{' />'}</span>
                 </li>
             );
         } else {
             content = (
                 <li id={itemKey} className={className}>
+                    <span>{'<'}</span>
                     <a href="#" onClick={this.handleClick} style={linkStyle}>
-                        <span>{'<' + label + ' />'}</span>
+                        <span style={{color: '#246'}}>{label}</span>
                     </a>
+                    <span>{' ' + props + ' />'}</span>
                 </li>
             );
         }

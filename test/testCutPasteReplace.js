@@ -37,22 +37,19 @@ var tree = graphApi.traverseAllGraph();
 console.log(JSON.stringify(tree, null, 4));
 
 var graph = graphApi.getGraph();
-var toCutKeys = ['12', '9', '16'];
+var toCutKeys = ['15', '12', '10'];
 toCutKeys.forEach(function(key){
-    var detachedNode = graph.node(key);
-    if(detachedNode){
-        detachedNode.isForCutting = true;
-    }
+    graphApi.setForCutting(key);
 });
 
-var detachedKeys = graphApi.cutPasteBeforeOrAfter('4', true);
+var detachedKeys = graphApi.cutPasteReplace('4');
 
 tree = graphApi.traverseAllGraph();
 console.log(JSON.stringify(tree, null, 4));
 
 console.log('Detached keys: ' + JSON.stringify(detachedKeys, null, 4));
 
-writeJson('outCopyModel.json', graphApi.getModel())
+writeJson('cutPasteFirstOrLastModel.json', graphApi.getModel())
     .then(function(){
         console.log('Model is written down');
     })

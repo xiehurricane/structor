@@ -26,7 +26,7 @@ class Container extends Component {
     }
 
     render(){
-        const { deskPageModel: {selectedKeys}, setForCuttingKeys } = this.props;
+        const { selectionBreadcrumbsModel: {selectedKeys}, setForCuttingKeys } = this.props;
         const buttonLabelStyle = {
             margin: '0 0.5em'
         };

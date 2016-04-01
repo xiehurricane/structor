@@ -18,7 +18,8 @@ import { bindActionCreators } from 'redux';
 import { utils, utilsStore, graphApi } from '../../../api';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../PageOptionsModal/actions.js';
-import { setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } from '../ClipboardControls/actions.js';
+import { setForCuttingKeys, resetClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace } from '../ClipboardControls/actions.js';
+import { setSelectedKey, setSelectedParentKey } from '../SelectionBreadcrumbs/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -35,6 +36,7 @@ export const COMPILER_DONE = "DeskPage/COMPILER_DONE";
 export const COMPILER_TIMEOUT = "DeskPage/COMPILER_TIMEOUT";
 export const CHANGE_PAGE_ROUTE_FEEDBACK = "DeskPage/CHANGE_PAGE_ROUTE_FEEDBACK";
 export const UPDATE_PAGE = "DeskPage/UPDATE_PAGE";
+export const UPDATE_MARKED = "DeskPage/UPDATE_MARKED";
 
 export const setPages = (pages) => ({type: SET_PAGES, payload: pages});
 export const reloadPage = () => ({type: RELOAD_PAGE});
@@ -51,27 +53,98 @@ export const compilerDone = () => ({ type: COMPILER_DONE });
 export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 export const updatePage = () => ({type: UPDATE_PAGE});
+export const updateMarked = () => ({type: UPDATE_MARKED});
 
-import {
-    setSelectedKey, setSelectedParentKey,
-    updateSelected, setHighlightSelectedKey,
-    resetSelectedKeys, removeSelectedKeys,
-    setSelectedKeys,
-    SET_SELECTED_KEY, UPDATE_SELECTED
-} from './actions/selectComponents.js';
+export const loadModel = (model) => (dispatch, getState) => {
+    let { pages } = model;
+    // force to have at least one page
+    if (!pages || pages.length <= 0) {
+        let pageModel = utilsStore.getTemplatePageModel();
+        model.pages = [pageModel];
+    }
+    graphApi.initGraph(model);
+    let pageList = graphApi.getPages();
+    dispatch(setPages(pageList));
+    dispatch(changePageRoute(pageList[0].pagePath));
+};
 
-import {
-    loadModel, addNewPage, clonePage, changePageOptions, deletePage
-} from './actions/modelPageActions.js';
+export const addNewPage = () => (dispatch, getState) => {
+    try{
+        let pageModel = utilsStore.getTemplatePageModel();
+        let pageList = graphApi.getPages();
+        pageList = graphApi.addNewPage(pageModel, pageModel.pagePath + pageList.length, pageModel.pageName + pageList.length);
+        dispatch(setPages(pageList));
+        dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(success('New page was added successfully'));
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
+    }
+};
 
-export {
-    setSelectedKey, setSelectedParentKey,
-    updateSelected, setHighlightSelectedKey,
-    setSelectedKeys,
-    resetSelectedKeys, removeSelectedKeys,
-    SET_SELECTED_KEY, UPDATE_SELECTED,
-    loadModel, addNewPage, clonePage, changePageOptions, deletePage
-}
+export const clonePage = (pagePath) => (dispatch, getState) => {
+    try{
+        let pageList = graphApi.duplicatePage(pagePath);
+        dispatch(setPages(pageList));
+        dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(success('Page was cloned successfully'));
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
+    }
+};
+
+export const changePageOptions = (options) => (dispatch, getState) => {
+
+    let {pageName, pagePath, makeIndexRoute, currentPagePath, currentPageName} = options;
+
+    if(!pageName || pageName.length <= 0 || !validator.isAlphanumeric(pageName)){
+        dispatch(failed('Please enter alphanumeric value for page component name'));
+    } else if(!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/'){
+        dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
+    } else {
+        try{
+            let pageList;
+            if(pagePath !== currentPagePath || pageName !== currentPageName){
+                var firstChar = pageName.charAt(0).toUpperCase();
+                pageName = firstChar + pageName.substr(1);
+                pageList = graphApi.changePagePathAndName(currentPagePath, pagePath, pageName);
+            }
+            if(makeIndexRoute){
+                pageList = graphApi.setIndexPage(pagePath);
+            }
+            if(pageList){
+                dispatch(setPages(pageList));
+                dispatch(changePageRoute(pagePath));
+                dispatch(success('Page options were changed successfully'));
+            }
+            dispatch(hidePageOptionsModal());
+        } catch(e){
+            dispatch(failed(e.message ? e.message : e));
+        }
+    }
+};
+
+export const deletePage = (pagePath) => (dispatch, getState) => {
+    try{
+        const graphNode = graphApi.getNode(pagePath);
+        if(graphNode){
+            const currentIndex = graphNode.index;
+            let pageList = graphApi.deletePage(pagePath);
+            if(pageList){
+                dispatch(setPages(pageList));
+                if(currentIndex === 0){
+                    dispatch(changePageRoute(pageList[0].pagePath));
+                } else if(currentIndex > 0){
+                    dispatch(changePageRoute(pageList[currentIndex - 1].pagePath));
+                }
+                dispatch(resetClipboardKeys());
+                dispatch(resetSelectedKeys());
+                dispatch(success('Route path ' + pagePath + ' were deleted successfully'));
+            }
+        }
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
+    }
+};
 
 export const handleCompilerMessage = (message) => (dispatch, getState) => {
     if(message.status === 'start'){
@@ -92,5 +165,6 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
 export const containerActions = (dispatch) => bindActionCreators({
     loadPage, pageLoaded, setSelectedKey,
     setSelectedParentKey, changePageRouteFeedback,
-    setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast
+    setForCuttingKeys, pasteBefore, pasteAfter,
+    pasteFirst, pasteLast, pasteReplace
 }, dispatch);

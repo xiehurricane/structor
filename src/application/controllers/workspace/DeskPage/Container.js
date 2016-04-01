@@ -22,6 +22,7 @@ import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
 import { utilsStore, graphApi } from '../../../api/index.js';
+import { CLIPBOARD_CUT } from '../ClipboardControls/actions.js';
 
 class Container extends Component {
 
@@ -35,6 +36,7 @@ class Container extends Component {
         const domNode = ReactDOM.findDOMNode(this);
         const {loadPage, pageLoaded} = this.props;
         const { setSelectedParentKey, setForCuttingKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast } = this.props;
+        const { pasteReplace } = this.props;
         loadPage();
         domNode.onload = ( () => {
 
@@ -44,9 +46,10 @@ class Container extends Component {
 
                 this.contentWindow.onPageDidMount = (page, pathname) => {
                     this.page = page;
-                    page.setGraphApi(graphApi);
-                    page.setOnComponentMouseDown(this.handleComponentClick);
-                    page.setOnPathnameChanged(this.handlePathnameChanged);
+                    page.bindOnComponentMouseDown(this.handleComponentClick);
+                    page.bindOnPathnameChanged(this.handlePathnameChanged);
+                    page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
+                    page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
 
                     page.bindToState('onSelectParent', setSelectedParentKey);
                     page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
@@ -54,6 +57,12 @@ class Container extends Component {
                     page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key) });
                     page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key) });
                     page.bindToState('onLast', (key, isModifier) => { pasteLast(key) });
+                    page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key) });
+
+                    page.bindToState('isAvailableToPaste', key => {
+                        const { clipboardControlsModel: {clipboardMode} } = this.props;
+                        return clipboardMode !== CLIPBOARD_CUT || graphApi.isCutPasteAvailable(key);
+                    });
 
                     const { componentModel } = this.props;
                     page.updatePageModel({
@@ -73,7 +82,7 @@ class Container extends Component {
         console.log('DeskPage will update...');
 
         this.doUpdatePageModel = false;
-        this.doUpdateSelected = false;
+        this.doUpdateMarks = false;
 
         const { componentModel } = this.props;
         const { componentModel: newComponentModel } = nextProps;
@@ -86,8 +95,8 @@ class Container extends Component {
             this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
         } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
-        } else if(newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter) {
-            this.doUpdateSelected = true;
+        } else if(newComponentModel.markedUpdateCounter !== componentModel.markedUpdateCounter) {
+            this.doUpdateMarks = true;
         }
     }
 
@@ -99,7 +108,7 @@ class Container extends Component {
             || newComponentModel.reloadPageCounter !== componentModel.reloadPageCounter
             || newComponentModel.currentPagePath !== componentModel.currentPagePath
             || newComponentModel.isEditModeOn !== componentModel.isEditModeOn
-            || newComponentModel.selectedUpdateCounter !== componentModel.selectedUpdateCounter
+            || newComponentModel.markedUpdateCounter !== componentModel.markedUpdateCounter
             || newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter
         );
     }
@@ -114,8 +123,8 @@ class Container extends Component {
                     isEditModeOn: componentModel.isEditModeOn
                 });
             }
-            if(this.doUpdateSelected){
-                console.log('Updating selected only');
+            if(this.doUpdateMarks){
+                console.log('Updating marked only');
                 this.page.updateInitialState();
             }
         }
