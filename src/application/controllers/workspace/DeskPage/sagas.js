@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
+import { serverApi, graphApi, utils } from '../../../api';
 import * as actions from './actions.js';
 import * as spinnerActions from '../../app/AppSpinner/actions.js';
 import * as messageActions from '../../app/AppMessage/actions.js';
+import { pushHistory } from '../HistoryControls/actions.js';
+
+function* preserveModel(){
+    while(true){
+        yield take(actions.SAVE_MODEL);
+        const model = graphApi.getModel();
+        yield fork(serverApi.saveProjectModel, model);
+    }
+}
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -66,5 +76,9 @@ function* waitForPageLoaded(){
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(waitForPageLoaded), fork(waitForCompiler)];
+    yield [
+        fork(waitForPageLoaded),
+        fork(waitForCompiler),
+        fork(preserveModel)
+    ];
 };

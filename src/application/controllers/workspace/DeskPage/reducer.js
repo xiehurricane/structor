@@ -43,7 +43,6 @@ export default (state = initialState, action = {}) => {
     if(type === actions.CHANGE_PAGE_ROUTE){
         const existingPaths = state.pages.filter(page => page.pagePath === payload );
         if(existingPaths && existingPaths.length > 0){
-            console.log('Change page route to: ' + existingPaths[0].pagePath);
             return Object.assign({}, state, {
                 currentPagePath: existingPaths[0].pagePath,
                 currentPageName: existingPaths[0].pageName
@@ -63,8 +62,6 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.SET_PAGES){
         if(payload && payload.length > 0){
-            //const currentPath = state.currentPagePath ? state.currentPagePath : payload[0].pagePath;
-            //const currentName = state.currentPageName ? state.currentPageName : payload[0].pageName;
             return Object.assign({}, state, {
                 pages: payload
             });

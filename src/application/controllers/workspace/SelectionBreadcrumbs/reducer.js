@@ -25,7 +25,6 @@ export default (state = initialState, action = {}) => {
     const {type, payload} = action;
 
     if(type === actions.SET_SELECTED_KEY){
-        console.log('SET_SELECTED_KEY');
         return Object.assign({}, state, {
             selectedKeys: payload
             //selectedUpdateCounter: state.selectedUpdateCounter + 1

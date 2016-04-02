@@ -27,7 +27,7 @@ class Container extends Component {
 
     render(){
         const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
-        const { setForCuttingKeys, setForCopyingKeys } = this.props;
+        const { setForCuttingKeys, setForCopyingKeys, cloneSelected, moveSelected, deleteSelected } = this.props;
         const buttonLabelStyle = {
             margin: '0 0.5em'
         };
@@ -51,28 +51,28 @@ class Container extends Component {
                     <button
                         className="btn btn-default btn-xs"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('clone selected'); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); cloneSelected(); }}
                         title="Clone selected components">
                         <span style={buttonLabelStyle} className="fa fa-clone"></span>
                     </button>
                     <button
                         className="btn btn-default btn-xs"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('move up'); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); moveSelected(true); }}
                         title="Move up selected components within their parents">
                         <span style={buttonLabelStyle} className="fa fa-arrow-up"></span>
                     </button>
                     <button
                         className="btn btn-default btn-xs"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('move down'); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); moveSelected(false); }}
                         title="Move down selected components within their parents">
                         <span style={buttonLabelStyle} className="fa fa-arrow-down"></span>
                     </button>
                     <button
                         className="btn btn-default btn-xs"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); alert('delete'); }}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteSelected(); }}
                         title="Delete selected components">
                         <span style={buttonLabelStyle} className="fa fa-trash-o"></span>
                     </button>

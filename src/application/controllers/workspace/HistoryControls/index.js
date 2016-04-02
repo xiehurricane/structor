@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-import * as actions from './actions.js';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
 
-const initialState = {
-
-};
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    return state;
+export {
+    reducer,
+    mainSaga
 }
 
+export default Container;

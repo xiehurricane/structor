@@ -31,6 +31,8 @@ import toolbarSelectionReducer from '../controllers/workspace/ToolbarSelection/r
 import selectionBreadcrumbsReducer from '../controllers/workspace/SelectionBreadcrumbs/reducer.js';
 import selectionControlsReducer from '../controllers/workspace/SelectionControls/reducer.js';
 import clipboardControlsReducer from '../controllers/workspace/ClipboardControls/reducer.js';
+import clipboardIndicatorReducer from '../controllers/workspace/ClipboardIndicator/reducer.js';
+import historyControlsReducer from '../controllers/workspace/HistoryControls/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -47,7 +49,9 @@ const reducer = combineReducers({
     toolbarSelection: toolbarSelectionReducer,
     selectionBreadcrumbs: selectionBreadcrumbsReducer,
     selectionControls: selectionControlsReducer,
-    clipboardControls: clipboardControlsReducer
+    clipboardControls: clipboardControlsReducer,
+    clipboardIndicator: clipboardIndicatorReducer,
+    historyControls: historyControlsReducer
 });
 
 export default reducer;

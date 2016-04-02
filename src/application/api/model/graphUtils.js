@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-import { uniqueId, forOwn, isObject } from 'lodash';
+import { forOwn, isObject } from 'lodash';
 import { fulex } from '../utils/utils.js';
+
+let keyLastValue = 0;
 
 export function mapModel(srcGraph, rootModelNode, rootIndex, isNew, prop) {
     if(!rootModelNode.graphRef || !rootModelNode.graphRef.key || isNew){
         rootModelNode.graphRef = {
-            key: uniqueId()
+            key: parseInt(keyLastValue) + 1
         };
     }
     const rootKey = rootModelNode.graphRef.key;
+    keyLastValue = parseInt(rootKey);
     srcGraph.setNode(rootKey, { modelNode: rootModelNode, index: rootIndex, prop });
     forOwn(rootModelNode.props, (value, prop) => {
         if (isObject(value) && value.type) {
@@ -47,12 +50,12 @@ export function makeNodeWrapper(key, graphNode){
         //modelNode: graphNode.modelNode.type + ' ' + graphNode.modelNode.props['data-umyid'],
         modelNode: graphNode.modelNode,
         index: graphNode.index,
-        prop: graphNode.prop
-        //selected: graphNode.selected,
-        //highlighted: graphNode.highlighted,
-        //isForCutting: graphNode.isForCutting,
-        //isForCuttingChild: graphNode.isForCuttingChild,
-        //isForCopying: graphNode.isForCopying
+        prop: graphNode.prop,
+        selected: graphNode.selected,
+        highlighted: graphNode.highlighted,
+        isForCutting: graphNode.isForCutting,
+        isForCuttingChild: graphNode.isForCuttingChild,
+        isForCopying: graphNode.isForCopying
     };
 }
 

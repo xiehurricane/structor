@@ -14,8 +14,35 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
-import { setForCuttingKeys,setForCopyingKeys } from '../ClipboardControls/actions.js';
+import { setForCuttingKeys, setForCopyingKeys, resetClipboardKeys } from '../ClipboardIndicator/actions.js';
+import { graphApi } from '../../../api';
+import { pushHistory } from '../HistoryControls/actions.js';
+import { updatePage } from '../DeskPage/actions.js';
+import { removeSelectedKeys, setSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
+
+export const cloneSelected = () => (dispatch, getState) => {
+    dispatch(pushHistory());
+    let resultKeys = graphApi.cloneSelected();
+    if(resultKeys && resultKeys.length > 0){
+        dispatch(setSelectedKeys(resultKeys));
+        dispatch(updatePage());
+    }
+};
+
+export const moveSelected = (isUp) => (dispatch, getState) => {
+    dispatch(pushHistory());
+    graphApi.moveSelected(isUp);
+    dispatch(updatePage());
+};
+
+export const deleteSelected = () => (dispatch, getState) => {
+    dispatch(pushHistory());
+    graphApi.deleteSelected();
+    dispatch(resetClipboardKeys());
+    dispatch(removeSelectedKeys());
+    dispatch(updatePage());
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setForCuttingKeys, setForCopyingKeys
+    setForCuttingKeys, setForCopyingKeys, cloneSelected, moveSelected, deleteSelected
 }, dispatch);

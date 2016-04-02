@@ -76,7 +76,7 @@ class Container extends Component {
         let content = null;
         if(selectedKeys){
             const activeStyle = {
-                padding: '3px',
+                padding: '2px 6px',
                 borderRadius: '3px',
                 backgroundColor: '#35b3ee',
                 color: '#ffffff',

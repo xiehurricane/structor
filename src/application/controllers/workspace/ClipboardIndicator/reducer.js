@@ -17,12 +17,20 @@
 import * as actions from './actions.js';
 
 const initialState = {
-
+    clipboardMode: actions.CLIPBOARD_EMPTY,
+    clipboardKeys:[]
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
+
+    if(type === actions.RESET_KEYS){
+        return Object.assign({}, state, {
+            clipboardKeys: payload.keys,
+            clipboardMode: payload.mode
+        });
+    }
 
     return state;
 }

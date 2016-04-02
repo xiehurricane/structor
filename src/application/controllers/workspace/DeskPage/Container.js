@@ -35,7 +35,7 @@ class Container extends Component {
     componentDidMount(){
         const domNode = ReactDOM.findDOMNode(this);
         const {loadPage, pageLoaded} = this.props;
-        const { setSelectedParentKey, setForCuttingKeys } = this.props;
+        const { setSelectedParentKey, setForCuttingKeys, setForCopyingKeys } = this.props;
         const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap } = this.props;
         const { pasteReplace } = this.props;
         loadPage();
@@ -54,13 +54,16 @@ class Container extends Component {
                     page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
 
                     page.bindToState('onSelectParent', setSelectedParentKey);
+
                     page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
-                    page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key) });
-                    page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key) });
-                    page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key) });
-                    page.bindToState('onLast', (key, isModifier) => { pasteLast(key) });
-                    page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key) });
-                    page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key) });
+                    page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]) });
+
+                    page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key); });
+                    page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key); });
+                    page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key); });
+                    page.bindToState('onLast', (key, isModifier) => { pasteLast(key); });
+                    page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key); });
+                    page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key); });
 
                     page.bindToState('isMultipleSelection', () => {
                         const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
@@ -68,17 +71,17 @@ class Container extends Component {
                     });
 
                     page.bindToState('isAvailableToPaste', key => {
-                        const { clipboardControlsModel: {clipboardMode} } = this.props;
+                        const { clipboardIndicatorModel: {clipboardMode} } = this.props;
                         return clipboardMode !== CLIPBOARD_CUT || graphApi.isCutPasteAvailable(key);
                     });
 
                     page.bindToState('isClipboardEmpty', () => {
-                        const { clipboardControlsModel: {clipboardKeys} } = this.props;
+                        const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
                         return !clipboardKeys || clipboardKeys.length <= 0;
                     });
 
                     page.bindToState('isAvailableToWrap', key => {
-                        const { clipboardControlsModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+                        const { clipboardIndicatorModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
                         return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
                     });
 

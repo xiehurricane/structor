@@ -43,3 +43,7 @@ export function initUserCredentialsByToken(token){
 export function initUserCredentials(email, password){
     return makeRequest('initUserCredentials', { username: email, password: password });
 }
+
+export function saveProjectModel(model){
+    return makeRequest('saveProjectModel', { model: model });
+}

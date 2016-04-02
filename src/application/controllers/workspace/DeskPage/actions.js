@@ -19,7 +19,7 @@ import { bindActionCreators } from 'redux';
 import { utils, utilsStore, graphApi } from '../../../api';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 import { hideModal as hidePageOptionsModal } from '../PageOptionsModal/actions.js';
-import { setForCuttingKeys, resetClipboardKeys } from '../ClipboardControls/actions.js';
+import { setForCuttingKeys, setForCopyingKeys, resetClipboardKeys } from '../ClipboardIndicator/actions.js';
 import { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace, pasteWrap } from '../ClipboardControls/actions.js';
 import { setSelectedKey, setSelectedParentKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 
@@ -39,6 +39,7 @@ export const COMPILER_TIMEOUT = "DeskPage/COMPILER_TIMEOUT";
 export const CHANGE_PAGE_ROUTE_FEEDBACK = "DeskPage/CHANGE_PAGE_ROUTE_FEEDBACK";
 export const UPDATE_PAGE = "DeskPage/UPDATE_PAGE";
 export const UPDATE_MARKED = "DeskPage/UPDATE_MARKED";
+export const SAVE_MODEL = "DeskPage/SAVE_MODEL";
 
 export const setPages = (pages) => ({type: SET_PAGES, payload: pages});
 export const reloadPage = () => ({type: RELOAD_PAGE});
@@ -56,6 +57,7 @@ export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 export const updatePage = () => ({type: UPDATE_PAGE});
 export const updateMarked = () => ({type: UPDATE_MARKED});
+export const saveModel = () => ({type: SAVE_MODEL});
 
 export const loadModel = (model) => (dispatch, getState) => {
     let { pages } = model;
@@ -171,6 +173,7 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
 export const containerActions = (dispatch) => bindActionCreators({
     loadPage, pageLoaded, setSelectedKey,
     setSelectedParentKey, changePageRouteFeedback,
-    setForCuttingKeys, pasteBefore, pasteAfter,
+    setForCuttingKeys, setForCopyingKeys,
+    pasteBefore, pasteAfter,
     pasteFirst, pasteLast, pasteReplace, pasteWrap
 }, dispatch);

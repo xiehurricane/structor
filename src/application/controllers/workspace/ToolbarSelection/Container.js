@@ -20,6 +20,8 @@ import { modelSelector } from './selectors.js';
 
 import SelectionControls from '../SelectionControls';
 import ClipboardControls from '../ClipboardControls';
+import ClipboardIndicator from '../ClipboardIndicator';
+import HistoryControls from '../HistoryControls';
 
 class Container extends Component {
 
@@ -60,8 +62,10 @@ class Container extends Component {
                     <span style={labelStyle}>
                         <span>Selection:</span>
                     </span>
-                    <SelectionControls style={controlsGroupStyle} />
+                    <HistoryControls style={controlsGroupStyle} />
                     <ClipboardControls style={controlsGroupStyle} />
+                    <SelectionControls style={controlsGroupStyle} />
+                    <ClipboardIndicator style={controlsGroupStyle} />
                 </div>
             </div>
         );

@@ -17,104 +17,35 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
-import { containerActions, CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_EMPTY, CLIPBOARD_NEW } from './actions.js';
+import { containerActions } from './actions.js';
+import { CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_EMPTY, CLIPBOARD_NEW } from '../ClipboardIndicator/actions.js';
 import { graphApi } from '../../../api/index.js';
 
 class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
+    }
+
+    handleButtonClick(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const func = this.props[e.currentTarget.dataset.func];
+        if(func){
+            const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
+            func(selectedKeys[0]);
+        }
     }
 
     render(){
-        const { componentModel: {clipboardMode, clipboardKeys}} = this.props;
+        const { clipboardIndicatorModel: {clipboardMode, clipboardKeys}} = this.props;
         const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
-        const { removeClipboardKeys, pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap } = this.props;
-        const { pasteReplace } = this.props;
 
-        const containerStyle = {
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'nowrap',
-            alignItems: 'center'
-            //padding: '0px 0px 0px 10px'
-        };
-        const controlsGroupStyle = {
-            padding: '0px',
-            margin: '0px 0.5em 0px 0px'
-        };
-        let typeLabelStyle = {
-            padding: '3px 6px',
-            borderRadius: '3px',
-            cursor: 'pointer',
-            backgroundColor: 'rgb(227, 227, 227)',
-            color: 'rgb(107, 107, 107)',
-            marginRight: '0.3em',
-            textShadow: '0 1px 0px rgba(255, 255, 255, 0.8)'
-        };
-        let activeStyle = {
-            padding: '3px 6px',
-            borderRadius: '3px'};
-        let clipboardTypeLabel;
-        if(clipboardMode === CLIPBOARD_COPY){
-            activeStyle.backgroundColor = '#f2fae3';
-            activeStyle.color = '#659f13';
-            clipboardTypeLabel = 'Copied in clipboard';
-        } else if(clipboardMode === CLIPBOARD_CUT){
-            activeStyle.backgroundColor = '#fffceb';
-            activeStyle.color = '#e28327';
-            clipboardTypeLabel = 'Cut in clipboard';
-        } else if(clipboardMode === CLIPBOARD_NEW){
-            activeStyle.backgroundColor = '#ebf7fd';
-            activeStyle.color = '#2d7091';
-            clipboardTypeLabel = 'New in clipboard';
-        } else {
-            clipboardTypeLabel = 'Empty clipboard';
-        }
         const wideButtonLabelStyle = {
             margin: '0 0.5em'
         };
-        let clipboardContent = null;
-        if(clipboardKeys && clipboardKeys.length > 0){
 
-            if(clipboardKeys.length === 1){
-                let clipboardNode = graphApi.getNode(clipboardKeys[0]);
-                clipboardContent = (
-                    <span style={activeStyle}>
-                        <span>{clipboardNode.modelNode.type}</span>
-                    </span>
-                );
-            } else if(clipboardKeys.length > 0) {
-                const childrenMenuItems = [];
-                let clipboardNode;
-                clipboardKeys.forEach((key, index) => {
-                    clipboardNode = graphApi.getNode(key);
-                    childrenMenuItems.push(
-                        <li key={'menuItem' + index}>
-                            <a href="#"
-                               onClick={(e) => {e.stopPropagation(); e.preventDefault();}}
-                               style={{display: 'flex', alignItems: 'center'}}>
-                                {clipboardNode.modelNode.type}
-                            </a>
-                        </li>
-                    );
-                });
-                clipboardContent = (
-                    <span key={'menuMore'}
-                          className="dropdown"
-                          style={activeStyle}>
-                        <span className="dropdown-toggle" data-toggle="dropdown">
-                            <span>Multiple...&nbsp;</span><span className="caret"></span>
-                        </span>
-                        <ul className="dropdown-menu"
-                            role="menu"
-                            style={{overflowY: 'auto', maxHeight: '12em'}}>
-                            {childrenMenuItems}
-                        </ul>
-                    </span>
-                );
-            }
-        }
         let disabledCommon = selectedKeys.length !== 1
             || clipboardKeys.length <= 0
             || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
@@ -123,46 +54,52 @@ class Container extends Component {
             || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
 
         let controlGroup = (
-            <div style={controlsGroupStyle} className="btn-group" role="group">
+            <div className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledCommon}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteBefore(selectedKeys[0]); }}
+                    data-func="pasteBefore"
+                    onClick={this.handleButtonClick}
                     title="Append components from clipboard before selected component">
                     <span style={wideButtonLabelStyle}>Before</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledCommon}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteFirst(selectedKeys[0]); }}
+                    data-func="pasteFirst"
+                    onClick={this.handleButtonClick}
                     title="Insert components from clipboard into selected component on the first position">
                     <span style={wideButtonLabelStyle}>First</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledCommon}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteLast(selectedKeys[0]); }}
+                    data-func="pasteLast"
+                    onClick={this.handleButtonClick}
                     title="Insert components from clipboard into selected component on the last position">
                     <span style={wideButtonLabelStyle}>Last</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledCommon}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteAfter(selectedKeys[0]); }}
+                    data-func="pasteAfter"
+                    onClick={this.handleButtonClick}
                     title="Append components from clipboard after selected component">
                     <span style={wideButtonLabelStyle}>After</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledCommon}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteReplace(selectedKeys[0]); }}
+                    data-func="pasteReplace"
+                    onClick={this.handleButtonClick}
                     title="Replace selected component with components from clipboard">
                     <span style={wideButtonLabelStyle}>Replace</span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledSingle}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); pasteWrap(selectedKeys[0]); }}
+                    data-func="pasteWrap"
+                    onClick={this.handleButtonClick}
                     title="Wrap selected component with single component from clipboard">
                     <span style={wideButtonLabelStyle}>Wrap</span>
                 </button>
@@ -170,17 +107,7 @@ class Container extends Component {
         );
         return (
             <div {...this.props}>
-                <div style={containerStyle}>
-                    {controlGroup}
-                    <span style={typeLabelStyle}
-                          onClick={() => {removeClipboardKeys();}}
-                          title="Click to remove items from clipboard.">
-                        {clipboardMode !== CLIPBOARD_EMPTY ? <i className="fa fa-times-circle fa-fw"
-                           style={{opacity: '0.6'}}></i> : null }
-                        <span>{clipboardTypeLabel}</span>
-                    </span>
-                    {clipboardContent}
-                </div>
+                {controlGroup}
             </div>
         );
     }

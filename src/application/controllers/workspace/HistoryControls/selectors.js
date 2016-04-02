@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-import * as actions from './actions.js';
+import { createStructuredSelector } from 'reselect';
 
-const initialState = {
-
-};
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    return state;
-}
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.historyControls
+    //userAccountModel: state => state.appContainer.userAccount,
+    //selectionBreadcrumbsModel: state => state.selectionBreadcrumbs
+    //deskModel: state => state.desk
+});
 
