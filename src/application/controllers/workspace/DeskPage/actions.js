@@ -21,7 +21,9 @@ import { success, failed, timeout, close} from '../../app/AppMessage/actions.js'
 import { setForCuttingKeys, setForCopyingKeys, resetClipboardKeys } from '../ClipboardIndicator/actions.js';
 import { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace, pasteWrap } from '../ClipboardControls/actions.js';
 import { setSelectedKey, setSelectedParentKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
+import { cloneSelected, deleteSelected } from '../SelectionControls/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
+import { setDefaultVariant } from '../LibraryPanel/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -180,5 +182,6 @@ export const containerActions = (dispatch) => bindActionCreators({
     setSelectedParentKey, changePageRouteFeedback,
     setForCuttingKeys, setForCopyingKeys,
     pasteBefore, pasteAfter,
-    pasteFirst, pasteLast, pasteReplace, pasteWrap
+    pasteFirst, pasteLast, pasteReplace, pasteWrap,
+    cloneSelected, deleteSelected, setDefaultVariant
 }, dispatch);

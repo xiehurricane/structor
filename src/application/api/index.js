@@ -20,6 +20,7 @@ import * as utilsStore from './utils/utilsStore.js';
 import * as HtmlComponents from './utils/HtmlComponents.js';
 import * as cookies from './utils/cookies.js';
 import * as graphApi from './model/graphApi.js';
+import * as previewGraphApi from './model/previewGraphApi.js';
 
 export {
     restApi,
@@ -28,5 +29,6 @@ export {
     utilsStore,
     HtmlComponents,
     cookies,
-    graphApi
+    graphApi,
+    previewGraphApi
 };

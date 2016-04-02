@@ -253,14 +253,14 @@ class Api {
             .then(jsonModel => {
                 response.model = jsonModel;
             })
-            .then( () => {
-                //console.log('Get components tree: ');
-                return this.indexManager.getComponentsTree()
-                    .then( componentsTree => {
-                        response.componentsTree = componentsTree;
-                        //console.log(JSON.stringify(componentsTree, null, 4));
-                    });
-            })
+            //.then( () => {
+            //    //console.log('Get components tree: ');
+            //    return this.indexManager.getComponentsTree()
+            //        .then( componentsTree => {
+            //            response.componentsTree = componentsTree;
+            //            //console.log(JSON.stringify(componentsTree, null, 4));
+            //        });
+            //})
             .then( () => {
                 this.app.use(this.middlewareCompilerManager.getDevMiddleware());
                 this.app.use(this.middlewareCompilerManager.getHotMiddleware());

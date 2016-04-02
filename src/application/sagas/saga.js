@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 import { fork, take } from 'redux-saga/effects';
-import { mainSaga as appContainerSaga } from '../controllers/app/AppContainer/index.js';
-import { mainSaga as appMessageSaga } from '../controllers/app/AppMessage/index.js';
-import { mainSaga as deskPageSaga } from '../controllers/workspace/DeskPage/index.js';
+import appContainerSaga from '../controllers/app/AppContainer/sagas.js';
+import appMessageSaga from '../controllers/app/AppMessage/sagas.js';
+import deskPageSaga from '../controllers/workspace/DeskPage/sagas.js';
+import libraryPanelSaga from '../controllers/workspace/LibraryPanel/sagas.js';
 
 export default function* mainSaga(){
-    yield [fork(appContainerSaga), fork(appMessageSaga), fork(deskPageSaga)];
-    //while(true){
-    //    const action = yield take('*');
-    //    console.log('Action: ' + action.type);
-    //}
+    yield [
+        fork(appContainerSaga),
+        fork(appMessageSaga),
+        fork(deskPageSaga),
+        fork(libraryPanelSaga)
+    ];
 }

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+import {forOwn, isObject} from 'lodash';
 import { makeRequest } from './restApi.js';
+import HtmlComponents, {getSortedHtmlComponents} from '../utils/HtmlComponents.js';
 
 export function getProjectInfo(){
     let result = {};
@@ -46,4 +48,55 @@ export function initUserCredentials(email, password){
 
 export function saveProjectModel(model){
     return makeRequest('saveProjectModel', { model: model });
+}
+
+export function loadComponentsTree(){
+    let result = {};
+    return makeRequest('getComponentsTree', {})
+        .then(response => {
+            if(response){
+                const {componentsTree} = response;
+                if(componentsTree){
+                    componentsTree['Html'] = getSortedHtmlComponents();
+                    let componentDefaultsMap = new Map();
+                    let sequence = Promise.resolve();
+                    forOwn(componentsTree, (group, groupName) => {
+                        if(isObject(group)){
+                            forOwn(group, (componentTypeValue, componentName) => {
+                                sequence = sequence.then(() => {
+                                    return makeRequest('loadComponentDefaults', {componentName})
+                                        .then(response => {
+                                            if(!response || response.length <= 0){
+                                                let htmlDefaults = HtmlComponents[componentName];
+                                                response = [];
+                                                if (htmlDefaults) {
+                                                    response.push({
+                                                        variantName: 'Unsaved variant',
+                                                        type: componentName,
+                                                        props: htmlDefaults.props,
+                                                        children: htmlDefaults.children,
+                                                        text: htmlDefaults.text
+                                                    });
+                                                } else {
+                                                    response.push({
+                                                        variantName: 'Unsaved variant',
+                                                        type: componentName
+                                                    });
+                                                }
+                                            }
+                                            componentDefaultsMap.set(componentName, response);
+                                        });
+                                });
+                            });
+                        }
+                    });
+                    return sequence.then(() => {
+                        result.componentDefaultsMap = componentDefaultsMap;
+                        result.componentsTree = componentsTree;
+                        return result;
+                    });
+                }
+            }
+            return Promise.resolve(result);
+        });
 }

@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
-import { utilsStore, graphApi } from '../../../api/index.js';
+import { utilsStore, graphApi, previewGraphApi } from '../../../api/index.js';
 import { CLIPBOARD_CUT } from '../ClipboardControls/actions.js';
 
 class Container extends Component {
@@ -37,7 +37,8 @@ class Container extends Component {
         const {loadPage, pageLoaded} = this.props;
         const { setSelectedParentKey, setForCuttingKeys, setForCopyingKeys } = this.props;
         const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap } = this.props;
-        const { pasteReplace } = this.props;
+        const { cloneSelected, deleteSelected } = this.props;
+        const { pasteReplace, setDefaultVariant } = this.props;
         loadPage();
         domNode.onload = ( () => {
 
@@ -53,10 +54,23 @@ class Container extends Component {
                     page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
                     page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
 
+                    page.bindGetComponentInPreview(() => {
+                        const { libraryPanelModel: {componentInPreview, variantsInPreview, defaultVariantMap}} = this.props;
+                        if(componentInPreview){
+                            const defaultVariantKey = defaultVariantMap[componentInPreview].key;
+                            const previewModel = previewGraphApi.getWrappedModelForVariant(defaultVariantKey);
+                            return {componentInPreview, variantsInPreview, previewModel, defaultVariantKey};
+                        } else {
+                            return undefined;
+                        }
+                    });
+
                     page.bindToState('onSelectParent', setSelectedParentKey);
 
                     page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
                     page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]) });
+                    page.bindToState('onClone', (key, isModifier) => { cloneSelected() });
+                    page.bindToState('onDelete', (key, isModifier) => { deleteSelected() });
 
                     page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key); });
                     page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key); });
@@ -83,6 +97,10 @@ class Container extends Component {
                     page.bindToState('isAvailableToWrap', key => {
                         const { clipboardIndicatorModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
                         return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
+                    });
+
+                    page.bindToState('setDefaultVariant', (componentName, key) => {
+                        setDefaultVariant(componentName, key);
                     });
 
                     const { componentModel } = this.props;

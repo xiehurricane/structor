@@ -21,6 +21,7 @@ import * as spinnerActions from '../AppSpinner/actions.js';
 import * as messageActions from '../AppMessage/actions.js';
 //import * as deskActions from '../../workspace/Desk/actions.js';
 import * as deskPageActions from '../../workspace/DeskPage/actions.js';
+import { loadComponents } from '../../workspace/LibraryPanel/actions.js';
 import { serverApi, cookies } from '../../../api';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -75,17 +76,18 @@ function* loadProjectInfo(){
 function* loadProject(){
     yield take(actions.GET_PROJECT_INFO);
     try {
-        yield put(spinnerActions.started('Loading project model'));
+        yield put(spinnerActions.started('Loading project'));
         yield call(signInByToken);
         const {timeout, response} = yield race({
             response: call(loadProjectInfo),
             timeout: call(delay, 30000)
         });
         if(response){
-            const {projectData: {model, componentsTree}, packageConfig, projectDirectoryStatus} = response;
+            const {projectData: {model}, packageConfig, projectDirectoryStatus} = response;
 
             yield put(deskPageActions.loadModel(model));
             yield put(actions.getProjectInfoDone({packageConfig, projectDirectoryStatus}));
+            yield put(loadComponents());
 
         } else {
             yield put(messageActions.timeout('Project initialization timeout.'));
@@ -93,7 +95,7 @@ function* loadProject(){
     } catch(error) {
         yield put(messageActions.failed('Project loading error. ' + (error.message ? error.message : error)));
     }
-    yield put(spinnerActions.done('Loading project model'));
+    yield put(spinnerActions.done('Loading project'));
 }
 
 // main saga

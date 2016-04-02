@@ -33,7 +33,7 @@ class Container extends Component {
             userAccountModel,
             deskPageModel,
             deskModel,
-            toggleAvailableComponents,
+            toggleLibraryPanel,
             togglePageTreeview,
             toggleQuickOptions,
             setLivePreviewModeOn,
@@ -100,10 +100,10 @@ class Container extends Component {
                     </div>
 
                     <Button
-                        bsStyle={deskModel.isAvailableComponentsActive ? 'primary' : 'default'}
+                        bsStyle={deskModel.isLibraryPanelActive ? 'primary' : 'default'}
                         style={{marginTop: '1em', width: '100%'}}
                         disabled={!deskPageModel.isEditModeOn}
-                        onClick={toggleAvailableComponents}
+                        onClick={toggleLibraryPanel}
                         title="Show the list of available components">
                         <span className="fa fa-plus" />
                     </Button>

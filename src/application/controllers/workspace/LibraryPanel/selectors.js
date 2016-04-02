@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
-export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
 
-export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
-export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
+import { createStructuredSelector } from 'reselect';
+
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.libraryPanel
+});
+

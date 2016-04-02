@@ -18,7 +18,7 @@ import * as actions from './actions.js';
 
 const initialState = {
     iframeWidth: '100%',
-    isAvailableComponentsActive: false,
+    isLibraryPanelActive: false,
     isPageTreeviewActive: false,
     isQuickOptionsActive: false
 };
@@ -33,8 +33,8 @@ export default (state = initialState, action = {}) => {
         });
     }
 
-    if(type === actions.TOGGLE_AVAILABLE_COMPONENTS){
-        return Object.assign({}, state, { isAvailableComponentsActive: !state.isAvailableComponentsActive });
+    if(type === actions.TOGGLE_LIBRARY_PANEL){
+        return Object.assign({}, state, { isLibraryPanelActive: !state.isLibraryPanelActive });
     }
 
     if(type === actions.TOGGLE_PAGE_TREEVIEW){

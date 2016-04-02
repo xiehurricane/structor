@@ -15,9 +15,9 @@
  */
 import { bindActionCreators } from 'redux';
 import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
-import { toggleAvailableComponents, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
+import { toggleLibraryPanel, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
     reloadPage, setEditModeOn, setLivePreviewModeOn,
-    toggleAvailableComponents, toggleQuickOptions, togglePageTreeview
+    toggleLibraryPanel, toggleQuickOptions, togglePageTreeview
 }, dispatch);

@@ -24,6 +24,7 @@ import ToolbarLeft from '../ToolbarLeft';
 import ToolbarTop from '../ToolbarTop';
 import PageTreeViewPanel from '../PageTreeViewPanel';
 import ToolbarSelection from '../ToolbarSelection';
+import LibraryPanel from '../LibraryPanel';
 
 class Container extends Component {
 
@@ -35,10 +36,9 @@ class Container extends Component {
         const {componentModel, deskPageModel} = this.props;
         let leftPanelWidth = 0;
         let leftPanelInner = null;
-        if(componentModel.isAvailableComponentsActive && !deskPageModel.isLivePreviewModeOn){
+        if(componentModel.isLibraryPanelActive && !deskPageModel.isLivePreviewModeOn){
             leftPanelWidth = 200;
-            leftPanelInner = (<div></div>);
-            //leftPanelInner = (<PanelAvailableComponents />);
+            leftPanelInner = (<LibraryPanel />);
         }
 
         let bottomPanelHeight = 0;
