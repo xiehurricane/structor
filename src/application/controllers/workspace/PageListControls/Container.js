@@ -18,6 +18,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
+import { CHANGE_OPTIONS } from '../PageOptionsModal/actions.js';
 
 import { graphApi } from '../../../api/index.js';
 
@@ -65,7 +66,7 @@ class Container extends Component {
                            e.stopPropagation();
                            e.preventDefault();
                            if(confirm('Are you sure you want to delete current page?')){
-                             deletePage(deskPageModel.currentPagePath)
+                             deletePage()
                            }
                         }
                     }
@@ -74,7 +75,7 @@ class Container extends Component {
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); showModal() }}
+                    onClick={(e) => { e.stopPropagation(); e.preventDefault(); showModal(CHANGE_OPTIONS); }}
                     title="View page info">
                                         <span>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

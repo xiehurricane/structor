@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-import { forOwn, isObject } from 'lodash';
+import { uniqueId, forOwn, isObject } from 'lodash';
 import { fulex } from '../utils/utils.js';
 
-let keyLastValue = 0;
-
 export function mapModel(srcGraph, rootModelNode, rootIndex, isNew, prop) {
-    if(!rootModelNode.graphRef || !rootModelNode.graphRef.key || isNew){
-        rootModelNode.graphRef = {
-            key: parseInt(keyLastValue) + 1
-        };
-    }
-    const rootKey = rootModelNode.graphRef.key;
-    keyLastValue = parseInt(rootKey);
+    const rootKey = uniqueId();
     srcGraph.setNode(rootKey, { modelNode: rootModelNode, index: rootIndex, prop });
     forOwn(rootModelNode.props, (value, prop) => {
         if (isObject(value) && value.type) {

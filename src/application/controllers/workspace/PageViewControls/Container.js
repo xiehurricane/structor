@@ -18,6 +18,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
+import { ADD_NEW, DUPLICATE } from '../PageOptionsModal/actions.js';
 
 class Container extends Component {
 
@@ -26,7 +27,7 @@ class Container extends Component {
     }
 
     render(){
-        const {componentModel, deskModel, changeViewportWidth, addNewPage, clonePage, currentPagePath} = this.props;
+        const {componentModel, deskModel, changeViewportWidth, showModal} = this.props;
         const buttonLabelStyle = {
             margin: '0 0.5em'
         };
@@ -35,16 +36,16 @@ class Container extends Component {
                 <button
                     key="addPageButton"
                     className="btn btn-default btn-xs"
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); addNewPage(); }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); showModal(ADD_NEW); }}
                     title="Create new page">
-                    <span className="fa fa-plus"></span>
+                    <span style={buttonLabelStyle} className="fa fa-plus"></span>
                 </button>
                 <button
                     key="copyPageButton"
                     className="btn btn-default btn-xs"
-                    onClick={(e) => {e.preventDefault(); e.stopPropagation(); clonePage(currentPagePath);}}
-                    title="Duplicate current page">
-                    <span className="fa fa-copy"></span>
+                    onClick={(e) => {e.preventDefault(); e.stopPropagation(); showModal(DUPLICATE); }}
+                    title="Clone current page">
+                    <span style={buttonLabelStyle} className="fa fa-copy"></span>
                 </button>
                 <div key="pageWidthButton" className="btn-group" role="group">
                     <button className="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">

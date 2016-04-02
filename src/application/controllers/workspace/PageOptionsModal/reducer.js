@@ -17,6 +17,7 @@
 import * as actions from './actions.js';
 
 const initialState = {
+    mode: null,
     show: false
 };
 
@@ -26,12 +27,14 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.HIDE_MODAL){
         return Object.assign({}, state, {
+            mode: null,
             show: false
         });
     }
 
     if(type === actions.SHOW_MODAL){
         return Object.assign({}, state, {
+            mode: payload,
             show: true
         });
     }

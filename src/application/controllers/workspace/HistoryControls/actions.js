@@ -16,9 +16,9 @@
 
 import { bindActionCreators } from 'redux';
 import { graphApi } from '../../../api';
-import { setSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
+import { removeSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 import { removeClipboardKeys } from '../ClipboardIndicator/actions.js';
-import { updatePage, saveModel, changePageRoute } from '../DeskPage/actions.js';
+import { updatePage, saveModel, changePageRoute, resetPages } from '../DeskPage/actions.js';
 
 export const UPDATE_HISTORY_COUNTER = "HistoryControls/UPDATE_HISTORY_COUNTER";
 
@@ -32,13 +32,12 @@ export const pushHistory = () => (dispatch, getState) => {
 export const popHistory = () => (dispatch, getState) => {
     let historyObject = graphApi.popHistory();
     if(historyObject){
-        const {markedKeys, pagePath} = historyObject;
-        if(markedKeys && markedKeys.selected) {
-            dispatch(setSelectedKeys(markedKeys.selected));
-        }
+        const {pagePath} = historyObject;
         if(pagePath){
             dispatch(changePageRoute(pagePath));
         }
+        dispatch(resetPages());
+        dispatch(removeSelectedKeys());
         dispatch(removeClipboardKeys());
         dispatch(updatePage());
         dispatch({type: UPDATE_HISTORY_COUNTER});

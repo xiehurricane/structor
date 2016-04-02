@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
+import validator from 'validator';
 import { bindActionCreators } from 'redux';
-import { changePageOptions } from '../DeskPage/actions.js';
+import { changePageOptions, setIndexPage, clonePage, addNewPage } from '../DeskPage/actions.js';
+import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
+
+export const CHANGE_OPTIONS = 1;
+export const ADD_NEW = 2;
+export const DUPLICATE = 3;
 
 export const HIDE_MODAL = "PageOptionsModal/HIDE_MODAL";
 export const SHOW_MODAL = "PageOptionsModal/SHOW_MODAL";
@@ -23,8 +29,58 @@ export const SHOW_MODAL = "PageOptionsModal/SHOW_MODAL";
 //import { addNewPage, clonePage } from '../DeskPage/actions.js';
 
 export const hideModal = () => ({type: HIDE_MODAL});
-export const showModal = () => ({type: SHOW_MODAL});
+export const showModal = (mode) => ({type: SHOW_MODAL, payload: mode});
+
+export const change = (options, mode) => (dispatch, getState) => {
+
+    let {pageName, pagePath, makeIndexRoute} = options;
+    const { deskPage: {pages} } = getState();
+
+    if (!pageName || pageName.length <= 0 || !validator.isAlphanumeric(pageName)) {
+        dispatch(failed('Please enter alphanumeric value for page component name'));
+    } else if (!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/') {
+        dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
+    } else {
+        console.log('Mode is: ' + mode);
+        if (mode === CHANGE_OPTIONS) {
+            dispatch(changePageOptions(pageName, pagePath));
+            if (makeIndexRoute) {
+                dispatch(setIndexPage());
+            }
+            dispatch(hideModal());
+        } else if (mode === ADD_NEW) {
+            let existingPages;
+            if (pages && pages.length > 0) {
+                existingPages = pages.filter(p => p.pagePath === pagePath || p.pageName === pageName);
+            }
+            if (!existingPages || existingPages.length <= 0) {
+                dispatch(addNewPage(pageName, pagePath));
+                if (makeIndexRoute) {
+                    dispatch(setIndexPage());
+                }
+                dispatch(hideModal());
+            } else {
+                dispatch(failed('There is already the page with equal name or path.'))
+            }
+        } else if (mode === DUPLICATE) {
+            let existingPages;
+            if (pages && pages.length > 0) {
+                existingPages = pages.filter(p => p.pagePath === pagePath || p.pageName === pageName);
+            }
+            if (!existingPages || existingPages.length <= 0) {
+                dispatch(clonePage(pageName, pagePath));
+                if (makeIndexRoute) {
+                    dispatch(setIndexPage());
+                }
+                dispatch(hideModal());
+            } else {
+                dispatch(failed('There is already the page with equal name or path.'))
+            }
+        }
+    }
+
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hideModal, showModal, changePageOptions
+    hideModal, change
 }, dispatch);

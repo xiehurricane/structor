@@ -17,7 +17,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
-import { containerActions } from './actions.js';
+import { containerActions, CHANGE_OPTIONS, ADD_NEW, DUPLICATE } from './actions.js';
 
 import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
 import { PageComponentForm } from '../../../views';
@@ -39,13 +39,9 @@ class Container extends Component {
     handleSave(e){
         e.stopPropagation();
         e.preventDefault();
-        const { changePageOptions, deskPageModel } = this.props;
+        const { componentModel, change } = this.props;
         const options = this.refs.formPageName.getOptions();
-        changePageOptions({
-            ...options,
-            currentPagePath: deskPageModel.currentPagePath,
-            currentPageName: deskPageModel.currentPageName
-        });
+        change(options, componentModel.mode);
     }
 
     render(){
@@ -55,11 +51,11 @@ class Container extends Component {
             <Tab
                 key={tabPanes.length + 1}
                 eventKey={tabPanes.length + 1}
-                title='Page component'>
+                title={componentModel.mode === ADD_NEW ? 'Add new page' : 'Page options'}>
                 <PageComponentForm
                     ref="formPageName"
-                    pageName={deskPageModel.currentPageName}
-                    pagePath={deskPageModel.currentPagePath} />
+                    pageName={componentModel.mode === ADD_NEW ? 'NewPage' : deskPageModel.currentPageName}
+                    pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath} />
             </Tab>
         );
 

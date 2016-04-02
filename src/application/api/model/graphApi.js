@@ -232,7 +232,7 @@ export function addNewPage(initialModel, pagePath, pageName){
     return pageNodes;
 }
 
-export function duplicatePage(pagePath){
+export function duplicatePage(pagePath, nextPagePath, nextPageName){
     let { graph, model, pageNodes } = graphObject;
     const pageNode = pageNodes.find(pNode => {
         return pNode.pagePath === pagePath;
@@ -243,8 +243,8 @@ export function duplicatePage(pagePath){
     let rootNode = graph.node(pageNode.pageKey);
     if(rootNode){
         let pageModel = fulex(rootNode.modelNode);
-        pageModel.pagePath = pageModel.pagePath + '_copy';
-        pageModel.pageName = pageModel.pageName + 'Copy';
+        pageModel.pagePath = nextPagePath;
+        pageModel.pageName = nextPageName;
         model.pages.push(pageModel);
         const pageKey = mapModel(graph, pageModel, pageNodes.length, true);
         pageNodes.push({
@@ -399,7 +399,6 @@ export function cutPasteFirstOrLast(nodeKey, isFirst){
     }
     let detachedKeys = getDetachedKeysForCutting();
     if(detachedKeys.length > 0){
-        node.modelNode.children = node.modelNode.children || [];
         let detachedModelNodes = [];
         let detachedNode;
         detachedKeys.forEach(detachedKey => {
@@ -410,7 +409,8 @@ export function cutPasteFirstOrLast(nodeKey, isFirst){
             }
         });
         let {modelNode} = node;
-        const lastIndex = modelNode.children ? modelNode.children.length : 0;
+        modelNode.children = modelNode.children || [];
+        const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
         let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
         modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
         adjustIndices(graph, nodeKey);
@@ -436,7 +436,7 @@ export function cutPasteReplace(nodeKey){
                 traverseGraphBranch(graph, nodeKey, (key => {
                     graph.removeNode(key);
                 }));
-                node.modelNode.children = node.modelNode.children || [];
+                delete node.modelNode;
                 let detachedModelNodes = [];
                 let detachedNode;
                 detachedKeys.forEach(detachedKey => {
@@ -448,6 +448,7 @@ export function cutPasteReplace(nodeKey){
                 });
                 let parentNode = graph.node(parentKey);
                 let {modelNode} = parentNode;
+                modelNode.children = modelNode.children || [];
                 let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
                 modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
                 adjustIndices(graph, parentKey);
@@ -506,6 +507,7 @@ export function copyPasteBeforeOrAfter(nodeKey, isAfter){
                 });
                 let parentNode = graph.node(parentKey);
                 let {modelNode} = parentNode;
+                modelNode.children = modelNode.children || [];
                 let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
                 modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
                 adjustIndices(graph, parentKey);
@@ -525,7 +527,7 @@ export function copyPasteFirstOrLast(nodeKey, isFirst){
     }
     let detachedKeys = getDetachedKeysForCopying();
     if(detachedKeys.length > 0){
-        node.modelNode.children = node.modelNode.children || [];
+
         let detachedModelNodes = [];
         let detachedNode;
         detachedKeys.forEach(detachedKey => {
@@ -536,7 +538,8 @@ export function copyPasteFirstOrLast(nodeKey, isFirst){
             }
         });
         let {modelNode} = node;
-        const lastIndex = modelNode.children ? modelNode.children.length : 0;
+        modelNode.children = modelNode.children || [];
+        const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
         let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
         modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
         adjustIndices(graph, nodeKey);
@@ -560,6 +563,7 @@ export function copyPasteReplace(nodeKey){
                 traverseGraphBranch(graph, nodeKey, (key => {
                     graph.removeNode(key);
                 }));
+                delete node.modelNode;
                 let detachedModelNodes = [];
                 let detachedNode;
                 detachedKeys.forEach(detachedKey => {
@@ -571,6 +575,7 @@ export function copyPasteReplace(nodeKey){
                 });
                 let parentNode = graph.node(parentKey);
                 let {modelNode} = parentNode;
+                modelNode.children = modelNode.children || [];
                 let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
                 modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
                 adjustIndices(graph, parentKey);
@@ -608,24 +613,35 @@ export function cloneSelected(){
     const { selected } = getAllMarkedKeys();
     let pastedKeys = [];
     if(selected && selected.length > 0){
+
+        let clonedMap = new Map();
         let newNodeKey;
         selected.forEach(selectedKey => {
-            const parentKey = graph.parent(selectedKey);
-            let parentNode = graph.node(parentKey);
             const selectedNode = graph.node(selectedKey);
-            if(parentNode && selectedNode && !selectedNode.prop){
+            if(selectedNode && !selectedNode.prop){
                 newNodeKey = copyGraphNode(graph, selectedKey);
+                clonedMap.set(selectedKey, newNodeKey);
+            }
+        });
+
+        clonedMap.forEach((newKey, targetKey) => {
+            const parentKey = graph.parent(targetKey);
+            let parentNode = graph.node(parentKey);
+            const selectedNode = graph.node(targetKey);
+            if(parentNode && selectedNode){
                 let detachedModelNodes = [];
-                let detachedNode = graph.node(newNodeKey);
+                let detachedNode = graph.node(newKey);
                 if(detachedNode && detachedNode.modelNode){
-                    graph.setParent(newNodeKey, parentKey);
+                    graph.setParent(newKey, parentKey);
                     detachedModelNodes.push(detachedNode.modelNode);
+                    let {modelNode} = parentNode;
+                    modelNode.children = modelNode.children || [];
+                    let modelNodesArgs = [selectedNode.index + 1, 0].concat(detachedModelNodes);
+                    modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                    adjustIndices(graph, parentKey);
+                    pastedKeys.push(newNodeKey);
                 }
-                let {modelNode} = parentNode;
-                let modelNodesArgs = [selectedNode.index + 1, 0].concat(detachedModelNodes);
-                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
-                pastedKeys.push(newNodeKey);
+
             }
         });
     }
@@ -636,22 +652,47 @@ export function moveSelected(isUp){
     const {graph} = graphObject;
     const { selected } = getAllMarkedKeys();
     if(selected && selected.length > 0){
+
+        let parentMap = new Map();
+        let parentKey;
+        let childrenGroup;
+        let child;
         selected.forEach(selectedKey => {
-            const parentKey = graph.parent(selectedKey);
-            let parentNode = graph.node(parentKey);
-            const selectedNode = graph.node(selectedKey);
-            if(parentNode && selectedNode && !selectedNode.prop){
-                console.log('Moving element: ' + selectedKey + ' up: ' + isUp);
-                let {modelNode} = parentNode;
-                if(modelNode.children && modelNode.children.length !== 1){
-                    if(isUp){
-                        console.log('Move index up: ' + selectedNode.index);
-                        modelNode.children.splice(selectedNode.index, 1);
-                        modelNode.children.splice(selectedNode.index - 1, 0, selectedNode.modelNode);
-                    } else {
-                        console.log('Move index down: ' + selectedNode.index);
-                        modelNode.children.splice(selectedNode.index, 1);
-                        modelNode.children.splice(selectedNode.index + 1, 0, selectedNode.modelNode);
+            child = graph.node(selectedKey);
+            if(child){
+                parentKey = graph.parent(selectedKey);
+                if(parentKey){
+                    childrenGroup = parentMap.get(parentKey);
+                    if(!childrenGroup){
+                        childrenGroup = [];
+                        parentMap.set(parentKey, childrenGroup);
+                    }
+                    childrenGroup.push(child);
+                }
+            }
+        });
+        let parentNode;
+        parentMap.forEach((group, parentKey) => {
+            parentNode = graph.node(parentKey);
+            let {modelNode} = parentNode;
+            if(modelNode.children && modelNode.children.length !== 1) {
+                if (isUp) {
+                    group.sort((a, b) => a.index - b.index);
+                    for (let u = 0; u < group.length; u++) {
+                        if(group[u].index <= 0){
+                            break;
+                        }
+                        modelNode.children.splice(group[u].index, 1);
+                        modelNode.children.splice(group[u].index - 1, 0, group[u].modelNode);
+                    }
+                } else {
+                    group.sort((a, b) => b.index - a.index);
+                    for(let d = 0; d < group.length; d++){
+                        if(group[d].index >= modelNode.children.length - 1){
+                            break;
+                        }
+                        modelNode.children.splice(group[d].index, 1);
+                        modelNode.children.splice(group[d].index + 1, 0, group[d].modelNode);
                     }
                 }
                 adjustIndices(graph, parentKey);

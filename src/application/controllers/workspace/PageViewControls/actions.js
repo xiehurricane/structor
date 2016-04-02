@@ -15,8 +15,8 @@
  */
 import { bindActionCreators } from 'redux';
 import { changeViewportWidth } from '../Desk/actions.js';
-import { addNewPage, clonePage } from '../DeskPage/actions.js';
+import { showModal } from '../PageOptionsModal/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
-    changeViewportWidth, addNewPage, clonePage
+    changeViewportWidth, showModal
 }, dispatch);

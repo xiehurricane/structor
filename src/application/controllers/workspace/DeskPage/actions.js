@@ -18,10 +18,10 @@ import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import { utils, utilsStore, graphApi } from '../../../api';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
-import { hideModal as hidePageOptionsModal } from '../PageOptionsModal/actions.js';
 import { setForCuttingKeys, setForCopyingKeys, resetClipboardKeys } from '../ClipboardIndicator/actions.js';
 import { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace, pasteWrap } from '../ClipboardControls/actions.js';
 import { setSelectedKey, setSelectedParentKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
+import { pushHistory } from '../HistoryControls/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -72,11 +72,11 @@ export const loadModel = (model) => (dispatch, getState) => {
     dispatch(changePageRoute(pageList[0].pagePath));
 };
 
-export const addNewPage = () => (dispatch, getState) => {
+export const addNewPage = (pageName, pagePath) => (dispatch, getState) => {
     try{
+        dispatch(pushHistory());
         let pageModel = utilsStore.getTemplatePageModel();
-        let pageList = graphApi.getPages();
-        pageList = graphApi.addNewPage(pageModel, pageModel.pagePath + pageList.length, pageModel.pageName + pageList.length);
+        let pageList = graphApi.addNewPage(pageModel, pagePath, pageName);
         dispatch(setPages(pageList));
         dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
         dispatch(success('New page was added successfully'));
@@ -85,9 +85,11 @@ export const addNewPage = () => (dispatch, getState) => {
     }
 };
 
-export const clonePage = (pagePath) => (dispatch, getState) => {
+export const clonePage = (pageName, pagePath) => (dispatch, getState) => {
     try{
-        let pageList = graphApi.duplicatePage(pagePath);
+        dispatch(pushHistory());
+        const { deskPage: {currentPagePath} } = getState();
+        let pageList = graphApi.duplicatePage(currentPagePath, pagePath, pageName);
         dispatch(setPages(pageList));
         dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
         dispatch(success('Page was cloned successfully'));
@@ -96,48 +98,46 @@ export const clonePage = (pagePath) => (dispatch, getState) => {
     }
 };
 
-export const changePageOptions = (options) => (dispatch, getState) => {
+export const changePageOptions = (pageName, pagePath) => (dispatch, getState) => {
 
-    let {pageName, pagePath, makeIndexRoute, currentPagePath, currentPageName} = options;
-
-    if(!pageName || pageName.length <= 0 || !validator.isAlphanumeric(pageName)){
-        dispatch(failed('Please enter alphanumeric value for page component name'));
-    } else if(!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/'){
-        dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
-    } else {
-        try{
+    const { deskPage: {currentPagePath, currentPageName} } = getState();
+    try {
+        if (pagePath !== currentPagePath || pageName !== currentPageName) {
+            dispatch(pushHistory());
             let pageList;
-            if(pagePath !== currentPagePath || pageName !== currentPageName){
-                var firstChar = pageName.charAt(0).toUpperCase();
-                pageName = firstChar + pageName.substr(1);
-                pageList = graphApi.changePagePathAndName(currentPagePath, pagePath, pageName);
-            }
-            if(makeIndexRoute){
-                pageList = graphApi.setIndexPage(pagePath);
-            }
-            if(pageList){
+            var firstChar = pageName.charAt(0).toUpperCase();
+            pageName = firstChar + pageName.substr(1);
+            pageList = graphApi.changePagePathAndName(currentPagePath, pagePath, pageName);
+            if (pageList) {
                 dispatch(setPages(pageList));
                 dispatch(changePageRoute(pagePath));
-                dispatch(success('Page options were changed successfully'));
+                dispatch(success('Page options were changed successfully.'));
             }
-            dispatch(hidePageOptionsModal());
-        } catch(e){
-            dispatch(failed(e.message ? e.message : e));
         }
+    } catch (e) {
+        dispatch(failed(e.message ? e.message : e));
     }
 };
 
-export const deletePage = (pagePath) => (dispatch, getState) => {
+export const setIndexPage = () => (dispatch, getState) => {
     try{
-        const { deskPage: {pages} } = getState();
-        let pageIndex;
-        for(let i = 0; i < pages.length; i++){
-            if(pages[i].pagePath === pagePath){
-                pageIndex = i;
-                break;
-            }
+        dispatch(pushHistory());
+        const { deskPage: {currentPagePath} } = getState();
+        let pageList = graphApi.setIndexPage(currentPagePath);
+        if(pageList){
+            dispatch(setPages(pageList));
+            dispatch(success('Route ' + currentPagePath + ' now is the index route.'));
         }
-        let pageList = graphApi.deletePage(pagePath);
+    } catch(e){
+        dispatch(failed(e.message ? e.message : e));
+    }
+};
+
+export const deletePage = () => (dispatch, getState) => {
+    try{
+        dispatch(pushHistory());
+        const { deskPage: {currentPagePath} } = getState();
+        let pageList = graphApi.deletePage(currentPagePath);
         if(pageList){
             dispatch(setPages(pageList));
             if(pageIndex === 0){
@@ -152,6 +152,11 @@ export const deletePage = (pagePath) => (dispatch, getState) => {
     } catch(e){
         dispatch(failed(e.message ? e.message : e));
     }
+};
+
+export const resetPages = () => (dispatch, getState) => {
+    let pageList = graphApi.getPages();
+    dispatch(setPages(pageList));
 };
 
 export const handleCompilerMessage = (message) => (dispatch, getState) => {
