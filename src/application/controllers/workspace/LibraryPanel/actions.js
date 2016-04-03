@@ -20,6 +20,7 @@ import { success, failed} from '../../app/AppMessage/actions.js';
 import { updateMarked, updatePage } from '../DeskPage/actions.js';
 import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
 import { setForNew } from '../ClipboardIndicator/actions.js';
+import { pushHistory } from '../HistoryControls/actions.js';
 
 export const LOAD_COMPONENTS = "LibraryPanel/LOAD_COMPONENTS";
 export const SET_COMPONENTS = "LibraryPanel/SET_COMPONENTS";
@@ -81,6 +82,7 @@ export const quickBefore = (componentName, selectedKey) => (dispatch, getState) 
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
+            dispatch(pushHistory());
             const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, selectedKey, false);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
@@ -97,6 +99,7 @@ export const quickAfter = (componentName, selectedKey) => (dispatch, getState) =
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
+            dispatch(pushHistory());
             const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, selectedKey, true);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
@@ -113,6 +116,7 @@ export const quickFirst = (componentName, selectedKey) => (dispatch, getState) =
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
+            dispatch(pushHistory());
             const newSelectedKey = graphApi.quickFirstOrLast(variantModel, selectedKey, true);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
@@ -129,6 +133,7 @@ export const quickLast = (componentName, selectedKey) => (dispatch, getState) =>
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
+            dispatch(pushHistory());
             const newSelectedKey = graphApi.quickFirstOrLast(variantModel, selectedKey, false);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
@@ -145,6 +150,7 @@ export const quickReplace = (componentName, selectedKey) => (dispatch, getState)
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
+            dispatch(pushHistory());
             const newSelectedKey = graphApi.quickReplace(variantModel, selectedKey);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
@@ -161,6 +167,7 @@ export const quickWrap = (componentName, selectedKey) => (dispatch, getState) =>
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
+            dispatch(pushHistory());
             const newSelectedKey = graphApi.quickWrap(variantModel, selectedKey);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());

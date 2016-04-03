@@ -18,7 +18,7 @@ import * as actions from './actions.js';
 
 const initialState = {
     pages: [],
-
+    currentPageIndex: -1,
     currentPageName: null,
     currentPagePath: null,
     reloadPageRequest: false,
@@ -41,29 +41,51 @@ export default (state = initialState, action = {}) => {
     }
 
     if(type === actions.CHANGE_PAGE_ROUTE){
-        const existingPaths = state.pages.filter(page => page.pagePath === payload );
-        if(existingPaths && existingPaths.length > 0){
+        let pageIndex = -1;
+        for(let i = 0; i < state.pages.length; i++){
+            if(state.pages[i].pagePath === payload){
+                pageIndex = i;
+                break;
+            }
+        }
+        if(pageIndex >= 0){
             return Object.assign({}, state, {
-                currentPagePath: existingPaths[0].pagePath,
-                currentPageName: existingPaths[0].pageName
+                currentPagePath: state.pages[pageIndex].pagePath,
+                currentPageName: state.pages[pageIndex].pageName,
+                currentPageIndex: pageIndex
             });
         }
     }
 
     if(type === actions.CHANGE_PAGE_ROUTE_FEEDBACK){
-        const existingPaths = state.pages.filter(page => page.pagePath === payload );
-        if(existingPaths && existingPaths.length > 0){
+        let pageIndex = -1;
+        for(let i = 0; i < state.pages.length; i++){
+            if(state.pages[i].pagePath === payload){
+                pageIndex = i;
+                break;
+            }
+        }
+        if(pageIndex >= 0){
             return Object.assign({}, state, {
-                currentPagePath: existingPaths[0].pagePath,
-                currentPageName: existingPaths[0].pageName
+                currentPagePath: state.pages[pageIndex].pagePath,
+                currentPageName: state.pages[pageIndex].pageName,
+                currentPageIndex: pageIndex
             });
         }
     }
 
     if(type === actions.SET_PAGES){
         if(payload && payload.length > 0){
+            let pageIndex = -1;
+            for(let i = 0; i < payload.length; i++){
+                if(payload[i].pagePath === state.currentPagePath){
+                    pageIndex = i;
+                    break;
+                }
+            }
             return Object.assign({}, state, {
-                pages: payload
+                pages: payload,
+                currentPageIndex: pageIndex
             });
         }
     }

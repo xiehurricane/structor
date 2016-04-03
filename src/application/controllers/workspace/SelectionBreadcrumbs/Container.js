@@ -114,40 +114,53 @@ class Container extends Component {
                     let item;
                     for(let i = lastIndex-restNumber; i >= 0; i--){
                         item = parentsList[i];
+
+                        const childrenMenuItems = [];
+                        const childrenOfActive = graphApi.getChildNodes(item.key);
+                        if(childrenOfActive && childrenOfActive.length > 0){
+                            childrenOfActive.forEach((child, index) => {
+                                childrenMenuItems.push(
+                                    <li key={'childMenuItem' + index}>
+                                        <a href="#"
+                                           style={{display: 'flex', alignItems: 'center'}}
+                                           data-key={child.key}
+                                           onClick={this.handleSetSelectedKey}
+                                           onMouseEnter={this.handleSetHighlightSelectedKey}
+                                           onMouseLeave={this.handleRemoveHighlightSelectedKey}>
+                                            {child.modelNode.type}
+                                        </a>
+                                    </li>
+                                );
+                            });
+                        }
+
                         if(i !== 0){
                             content.push(
-                                <li key={i}>
-
+                                <li key={i} >
                                     <a href="#"
-                                       title="Select component"
+                                       title="Click to select component"
                                        data-key={item.key}
                                        onMouseEnter={this.handleSetHighlightSelectedKey}
                                        onMouseLeave={this.handleRemoveHighlightSelectedKey}
                                        onClick={this.handleSetSelectedKey}>
                                         {item.modelNode.type}
                                     </a>
-
+                                    <span key={'menuMore'}
+                                          style={{margin: '0 0.5em', cursor: 'pointer'}}
+                                          title="Show nested components"
+                                          className="dropdown">
+                                        <span className="dropdown-toggle" data-toggle="dropdown">
+                                            <span className="caret"></span>
+                                        </span>
+                                        <ul className="dropdown-menu"
+                                            role="menu"
+                                            style={{overflowY: 'auto', maxHeight: '12em'}}>
+                                            {childrenMenuItems}
+                                        </ul>
+                                    </span>
                                 </li>
                             );
                         } else {
-                            const childrenMenuItems = [];
-                            const childrenOfActive = graphApi.getChildNodes(item.key);
-                            if(childrenOfActive && childrenOfActive.length > 0){
-                                childrenOfActive.forEach((child, index) => {
-                                    childrenMenuItems.push(
-                                        <li key={'childMenuItem' + index}>
-                                            <a href="#"
-                                               style={{display: 'flex', alignItems: 'center'}}
-                                               data-key={child.key}
-                                               onClick={this.handleSetSelectedKey}
-                                               onMouseEnter={this.handleSetHighlightSelectedKey}
-                                               onMouseLeave={this.handleRemoveHighlightSelectedKey}>
-                                                {child.modelNode.type}
-                                            </a>
-                                        </li>
-                                    );
-                                });
-                            }
                             if(childrenMenuItems.length > 0){
                                 content.push(
                                     <li key={i} active={true} >

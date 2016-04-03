@@ -139,18 +139,18 @@ export const setIndexPage = () => (dispatch, getState) => {
 export const deletePage = () => (dispatch, getState) => {
     try{
         dispatch(pushHistory());
-        const { deskPage: {currentPagePath} } = getState();
+        const { deskPage: {currentPagePath, currentPageIndex} } = getState();
         let pageList = graphApi.deletePage(currentPagePath);
         if(pageList){
             dispatch(setPages(pageList));
-            if(pageIndex === 0){
+            if(currentPageIndex === 0){
                 dispatch(changePageRoute(pageList[0].pagePath));
-            } else if(pageIndex > 0){
-                dispatch(changePageRoute(pageList[pageIndex - 1].pagePath));
+            } else if(currentPageIndex > 0){
+                dispatch(changePageRoute(pageList[currentPageIndex - 1].pagePath));
             }
             dispatch(resetClipboardKeys());
             dispatch(resetSelectedKeys());
-            dispatch(success('Route path ' + pagePath + ' were deleted successfully'));
+            dispatch(success('Route path ' + currentPagePath + ' were deleted successfully'));
         }
     } catch(e){
         dispatch(failed(e.message ? e.message : e));
