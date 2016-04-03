@@ -34,11 +34,12 @@ class Container extends Component {
 
     componentDidMount(){
         const domNode = ReactDOM.findDOMNode(this);
-        const {loadPage, pageLoaded} = this.props;
+        const { loadPage, pageLoaded } = this.props;
         const { setSelectedParentKey, setForCuttingKeys, setForCopyingKeys } = this.props;
-        const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap } = this.props;
+        const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap, pasteReplace } = this.props;
         const { cloneSelected, deleteSelected } = this.props;
-        const { pasteReplace, setDefaultVariant } = this.props;
+        const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
+        const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace, quickWrap } = this.props;
         loadPage();
         domNode.onload = ( () => {
 
@@ -101,6 +102,32 @@ class Container extends Component {
 
                     page.bindToState('setDefaultVariant', (componentName, key) => {
                         setDefaultVariant(componentName, key);
+                    });
+                    page.bindToState('selectVariant', (key) => { selectVariant(key); });
+                    page.bindToState('hidePreview', () => { hidePreviewComponent() });
+
+                    page.bindToState('getComponentsList', () => {
+                        const { libraryPanelModel: {componentsList}} = this.props;
+                        return componentsList;
+                    });
+
+                    page.bindToState('quickBefore', (componentName, selectedKey) => {
+                        quickBefore(componentName, selectedKey);
+                    });
+                    page.bindToState('quickAfter', (componentName, selectedKey) => {
+                        quickAfter(componentName, selectedKey);
+                    });
+                    page.bindToState('quickFirst', (componentName, selectedKey) => {
+                        quickFirst(componentName, selectedKey);
+                    });
+                    page.bindToState('quickLast', (componentName, selectedKey) => {
+                        quickLast(componentName, selectedKey);
+                    });
+                    page.bindToState('quickReplace', (componentName, selectedKey) => {
+                        quickReplace(componentName, selectedKey);
+                    });
+                    page.bindToState('quickWrap', (componentName, selectedKey) => {
+                        quickWrap(componentName, selectedKey);
                     });
 
                     const { componentModel } = this.props;

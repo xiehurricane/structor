@@ -364,3 +364,10 @@ body {
     z-index: 9055;
 }
 
+.library-panel-quick-copy-to-clipboard {
+    background-color: #cdcdcd;
+}
+
+.library-panel-quick-copy-to-clipboard:hover {
+    background-color: #35b3ee;
+}

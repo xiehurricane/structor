@@ -47,6 +47,14 @@ export function getWrappedModelForVariant(variantKey){
     return traverseGraph(variantKey);
 }
 
+export function getModelForVariant(variantKey){
+    let node = previewGraph.node(variantKey);
+    if(node){
+        return node.modelNode;
+    }
+    return undefined;
+}
+
 function traverseGraph(rootNodeKey, result){
     let rootNode = previewGraph.node(rootNodeKey);
     if(rootNode){

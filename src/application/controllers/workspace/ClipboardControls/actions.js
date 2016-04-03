@@ -18,7 +18,7 @@ import { bindActionCreators } from 'redux';
 import { graphApi } from '../../../api';
 import { updateMarked, updatePage } from '../DeskPage/actions.js';
 import { removeSelectedKeys, setSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
-import { removeClipboardKeys, CLIPBOARD_COPY, CLIPBOARD_CUT } from '../ClipboardIndicator/actions.js';
+import { removeClipboardKeys, CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_NEW } from '../ClipboardIndicator/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
 
 export const pasteBefore = (key) => (dispatch, getState) => {
@@ -30,6 +30,8 @@ export const pasteBefore = (key) => (dispatch, getState) => {
         dispatch(removeClipboardKeys());
     } else if(clipboardMode === CLIPBOARD_COPY){
         resultKeys = graphApi.copyPasteBeforeOrAfter(key, false);
+    } else if(clipboardMode === CLIPBOARD_NEW){
+        resultKeys = graphApi.fromBufferBeforeOrAfter(key, false);
     }
     if(resultKeys && resultKeys.length > 0){
         dispatch(setSelectedKeys(resultKeys));
@@ -46,6 +48,8 @@ export const pasteAfter = (key) => (dispatch, getState) => {
         dispatch(removeClipboardKeys());
     } else if(clipboardMode === CLIPBOARD_COPY){
         resultKeys = graphApi.copyPasteBeforeOrAfter(key, true);
+    } else if(clipboardMode === CLIPBOARD_NEW){
+        resultKeys = graphApi.fromBufferBeforeOrAfter(key, true);
     }
     if(resultKeys && resultKeys.length > 0){
         dispatch(setSelectedKeys(resultKeys));
@@ -62,6 +66,8 @@ export const pasteFirst = (key) => (dispatch, getState) => {
         dispatch(removeClipboardKeys());
     } else if(clipboardMode === CLIPBOARD_COPY){
         resultKeys = graphApi.copyPasteFirstOrLast(key, true);
+    } else if(clipboardMode === CLIPBOARD_NEW){
+        resultKeys = graphApi.fromBufferFirstOrLast(key, true);
     }
     if(resultKeys && resultKeys.length > 0){
         dispatch(setSelectedKeys(resultKeys));
@@ -78,6 +84,8 @@ export const pasteLast = (key) => (dispatch, getState) => {
         dispatch(removeClipboardKeys());
     } else if(clipboardMode === CLIPBOARD_COPY){
         resultKeys = graphApi.copyPasteFirstOrLast(key, false);
+    } else if(clipboardMode === CLIPBOARD_NEW){
+        resultKeys = graphApi.fromBufferFirstOrLast(key, false);
     }
     if(resultKeys && resultKeys.length > 0){
         dispatch(setSelectedKeys(resultKeys));
@@ -94,6 +102,8 @@ export const pasteReplace = (key) => (dispatch, getState) => {
         dispatch(removeClipboardKeys());
     } else if(clipboardMode === CLIPBOARD_COPY){
         resultKeys = graphApi.copyPasteReplace(key);
+    } else if(clipboardMode === CLIPBOARD_NEW){
+        resultKeys = graphApi.fromBufferReplace(key);
     }
     if(resultKeys && resultKeys.length > 0){
         dispatch(setSelectedKeys(resultKeys));
@@ -110,6 +120,8 @@ export const pasteWrap = (key) => (dispatch, getState) => {
         dispatch(removeClipboardKeys());
     } else if(clipboardMode === CLIPBOARD_COPY){
         resultKeys = graphApi.copyPasteWrap(key);
+    } else if(clipboardMode === CLIPBOARD_NEW){
+        resultKeys = graphApi.fromBufferWrap(key);
     }
     if(resultKeys && resultKeys.length > 0){
         dispatch(setSelectedKeys(resultKeys));

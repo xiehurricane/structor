@@ -30,21 +30,8 @@ class Container extends Component {
         this.handleChangeFind = this.handleChangeFind.bind(this);
         this.handleClearFind = this.handleClearFind.bind(this);
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
-    }
-
-    componentDidMount() {
-        //$(React.findDOMNode(this)).find('.panel-body').remove();
-    }
-
-    componentDidUpdate() {
-        //$(React.findDOMNode(this)).find('.panel-body').remove();
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        //PopoverComponentVariantActions.hide();
-    }
-
-    componentWillUnmount() {
+        this.handlePreviewComponent = this.handlePreviewComponent.bind(this);
+        this.handleQuickCopyToClipboard = this.handleQuickCopyToClipboard.bind(this);
     }
 
     handleChangeFind(e) {
@@ -67,10 +54,30 @@ class Container extends Component {
         this.setState({filter: ''});
     }
 
+    handlePreviewComponent(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const { previewComponent } = this.props;
+        const componentName = e.currentTarget.dataset.component;
+        if(previewComponent && componentName){
+            previewComponent(componentName);
+        }
+    }
+
+    handleQuickCopyToClipboard(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const { quickCopyToClipboard } = this.props;
+        const componentName = e.currentTarget.dataset.component;
+        if(quickCopyToClipboard && componentName){
+            quickCopyToClipboard(componentName);
+        }
+    }
+
     makeTitle(componentName){
         let titleComponentName = componentName;
         if(titleComponentName.length > 20){
-            titleComponentName = titleComponentName.substr(0, 20) + '...';
+            titleComponentName = titleComponentName.substr(0, 16) + '...';
         }
         return titleComponentName;
     }
@@ -102,8 +109,18 @@ class Container extends Component {
                                 <a key={componentName}
                                    className={componentInPreview === componentName ? 'list-group-item active' : 'list-group-item'}
                                    href="#"
-                                   onClick={(e) => {e.preventDefault(); e.stopPropagation(); previewComponent(componentName);}}>
+                                   title={componentName}
+                                   data-component={componentName}
+                                   onClick={this.handlePreviewComponent}>
                                     <span>{this.makeTitle(componentName)}</span>
+                                    <span className="badge"
+                                          title="Copy to clipboard"
+                                          data-component={componentName}
+                                          onClick={this.handleQuickCopyToClipboard}
+                                          style={{backgroundColor: '#cdcdcd'}}>
+                                        <i className="fa fa-clipboard library-panel-quick-copy-to-clipboard"></i>
+                                    </span>
+
                                 </a>
                             );
                         }
@@ -112,8 +129,16 @@ class Container extends Component {
                             <a key={componentName}
                                className={componentInPreview === componentName ? 'list-group-item active' : 'list-group-item'}
                                href="#"
-                               onClick={(e) => {e.preventDefault(); e.stopPropagation(); previewComponent(componentName);}}>
+                               title={componentName}
+                               data-component={componentName}
+                               onClick={this.handlePreviewComponent}>
                                 <span>{this.makeTitle(componentName)}</span>
+                                <span className="badge library-panel-quick-copy-to-clipboard"
+                                      title="Copy to clipboard"
+                                      data-component={componentName}
+                                      onClick={this.handleQuickCopyToClipboard}>
+                                    <i className="fa fa-clipboard"></i>
+                                </span>
                             </a>
                         );
                     }

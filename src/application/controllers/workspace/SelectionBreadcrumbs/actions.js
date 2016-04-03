@@ -31,8 +31,6 @@ export const setSelectedKey = (key, isModifier) => (dispatch, getState) => {
                 let graphNode = graphApi.getNode(selectedKey);
                 if (graphNode) {
                     graphNode.selected = undefined;
-                } else {
-                    dispatch(failed('Currently selected component with id \'' + key + '\' was not found'));
                 }
             });
             selectedKeys = [];

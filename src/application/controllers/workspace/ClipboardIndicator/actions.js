@@ -52,12 +52,19 @@ export const setForCopyingKeys = (keys) => (dispatch, getState) => {
     dispatch({type: RESET_KEYS, payload: {keys: newKeys, mode: CLIPBOARD_COPY}});
 };
 
+export const setForNew = (model) => (dispatch, getState) => {
+    dispatch(removeClipboardKeys());
+    const bufferKey = graphApi.setBuffer(model);
+    dispatch({type: RESET_KEYS, payload: {keys: [bufferKey], mode: CLIPBOARD_NEW}});
+};
+
 export const removeClipboardKeys = () => (dispatch, getState) => {
     const { clipboardIndicator: { clipboardKeys } } = getState();
     if(clipboardKeys && clipboardKeys.length > 0){
         clipboardKeys.forEach(key => {
             graphApi.removeClipboardMarks(key);
         });
+        graphApi.removeBuffer();
     }
     dispatch({type: RESET_KEYS, payload: {keys: [], mode: CLIPBOARD_EMPTY}});
     dispatch(updateMarked());

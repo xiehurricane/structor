@@ -15,8 +15,11 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { HtmlComponents, previewGraphApi } from '../../../api';
-import { updateMarked } from '../DeskPage/actions.js';
+import { HtmlComponents, previewGraphApi, graphApi } from '../../../api';
+import { success, failed} from '../../app/AppMessage/actions.js';
+import { updateMarked, updatePage } from '../DeskPage/actions.js';
+import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
+import { setForNew } from '../ClipboardIndicator/actions.js';
 
 export const LOAD_COMPONENTS = "LibraryPanel/LOAD_COMPONENTS";
 export const SET_COMPONENTS = "LibraryPanel/SET_COMPONENTS";
@@ -40,6 +43,7 @@ export const hidePreviewComponent = () => (dispatch, getState) => {
 export const setComponents = (components) => (dispatch, getState) => {
     let {componentsTree, componentDefaultsMap} = components;
     previewGraphApi.initGraph(componentDefaultsMap);
+
     dispatch({type: SET_COMPONENTS, payload: {componentsTree}});
 };
 
@@ -48,6 +52,142 @@ export const setDefaultVariant = (componentName, variant) => (dispatch, getState
     dispatch(updateMarked());
 };
 
+export const selectVariant = (variant) => (dispatch, getState) => {
+    const variantModel = previewGraphApi.getModelForVariant(variant);
+    if(variantModel){
+        dispatch(setForNew(variantModel));
+        dispatch(hidePreviewComponent());
+    } else {
+        console.error('Select variant: model for variant key was not found');
+    }
+};
+
+export const quickCopyToClipboard = (componentName) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            dispatch(setForNew(variantModel));
+        } else {
+            console.error('Quick copy to clipboard: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
+export const quickBefore = (componentName, selectedKey) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, selectedKey, false);
+            dispatch(setSelectedKey(newSelectedKey));
+            dispatch(updatePage());
+        } else {
+            console.error('Quick add before: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
+export const quickAfter = (componentName, selectedKey) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, selectedKey, true);
+            dispatch(setSelectedKey(newSelectedKey));
+            dispatch(updatePage());
+        } else {
+            console.error('Quick add after: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
+export const quickFirst = (componentName, selectedKey) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, selectedKey, true);
+            dispatch(setSelectedKey(newSelectedKey));
+            dispatch(updatePage());
+        } else {
+            console.error('Quick add as first: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
+export const quickLast = (componentName, selectedKey) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, selectedKey, false);
+            dispatch(setSelectedKey(newSelectedKey));
+            dispatch(updatePage());
+        } else {
+            console.error('Quick add as first: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
+export const quickReplace = (componentName, selectedKey) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            const newSelectedKey = graphApi.quickReplace(variantModel, selectedKey);
+            dispatch(setSelectedKey(newSelectedKey));
+            dispatch(updatePage());
+        } else {
+            console.error('Quick replace: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
+export const quickWrap = (componentName, selectedKey) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+    if(componentsList && componentsList.indexOf(componentName) >= 0){
+        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        if(variantModel){
+            const newSelectedKey = graphApi.quickWrap(variantModel, selectedKey);
+            dispatch(setSelectedKey(newSelectedKey));
+            dispatch(updatePage());
+        } else {
+            console.error('Quick wrap: model for variant key was not found');
+        }
+    } else {
+        dispatch(failed('Component ' + componentName + ' was not found.'))
+    }
+};
+
 export const containerActions = (dispatch) => bindActionCreators({
-    previewComponent
+    previewComponent, quickCopyToClipboard
 }, dispatch);
+
+function getVariantModel(defaultVariantMap, componentName){
+    let defaultVariant = defaultVariantMap[componentName];
+    let variantKey;
+    if(defaultVariant && defaultVariant.key){
+        variantKey = defaultVariant.key;
+    } else {
+        const variants = previewGraphApi.getVariantKeys(componentName);
+        if(variants && variants.length > 0){
+            variantKey = variants[0];
+        } else {
+            console.error('Quick add before: none of model variants is found for ' + componentName);
+        }
+    }
+    return previewGraphApi.getModelForVariant(variantKey);
+}

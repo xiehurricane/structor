@@ -23,7 +23,8 @@ import { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace, pasteWrap
 import { setSelectedKey, setSelectedParentKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 import { cloneSelected, deleteSelected } from '../SelectionControls/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
-import { setDefaultVariant } from '../LibraryPanel/actions.js';
+import { setDefaultVariant, hidePreviewComponent, selectVariant } from '../LibraryPanel/actions.js';
+import { quickBefore, quickAfter, quickFirst, quickLast, quickReplace, quickWrap } from '../LibraryPanel/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -183,5 +184,7 @@ export const containerActions = (dispatch) => bindActionCreators({
     setForCuttingKeys, setForCopyingKeys,
     pasteBefore, pasteAfter,
     pasteFirst, pasteLast, pasteReplace, pasteWrap,
-    cloneSelected, deleteSelected, setDefaultVariant
+    cloneSelected, deleteSelected,
+    setDefaultVariant, hidePreviewComponent, selectVariant,
+    quickBefore, quickAfter, quickFirst, quickLast, quickReplace, quickWrap
 }, dispatch);

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import {forOwn, isObject} from 'lodash';
 import * as actions from './actions.js';
 
 const initialState = {
     componentsTree: {},
+    componentsList: [],
     defaultVariantMap: {},
     componentInPreview: undefined,
     variantsInPreview: []
@@ -28,8 +30,18 @@ export default (state = initialState, action = {}) => {
     const {type, payload} = action;
 
     if(type === actions.SET_COMPONENTS){
+        const {componentsTree} = payload;
+        let componentsList = [];
+        forOwn(componentsTree, (group, groupName) => {
+            if (isObject(group)) {
+                forOwn(group, (componentTypeValue, componentName) => {
+                    componentsList.push(componentName);
+                });
+            }
+        });
         return Object.assign({}, state, {
-            componentsTree: payload.componentsTree
+            componentsTree: componentsTree,
+            componentsList: componentsList
         });
     }
 

@@ -21,6 +21,8 @@ import { getAvailableRoute } from './reactRouterApi.js';
 import { mapModel, makeNodeWrapper, traverseGraphBranch, adjustIndices } from './graphUtils.js';
 import { detachGraphNode, detachGraphNodes, copyGraphNode, copyGraphNodes } from './graphUtils.js';
 
+let bufferKey = undefined;
+
 let graphObject = {
     graph: undefined,
     model: undefined,
@@ -606,6 +608,212 @@ export function copyPasteWrap(nodeKey){
     } else {
         return [nodeKey];
     }
+}
+
+export function setBuffer(model){
+    const {graph} = graphObject;
+    if(bufferKey){
+        removeBuffer();
+    }
+    const newModel = fulex(model);
+    bufferKey = mapModel(graph, newModel, 0);
+    return bufferKey;
+}
+
+export function removeBuffer(){
+    const {graph} = graphObject;
+    let childNode;
+    if(bufferKey){
+        traverseGraphBranch(graph, bufferKey, childKey => {
+            childNode = graph.node(childKey);
+            if(childNode){
+                delete childNode.modelNode;
+                graph.removeNode(childKey);
+            }
+        });
+        bufferKey = undefined;
+    }
+}
+
+export function fromBufferBeforeOrAfter(nodeKey, isAfter, quickKey){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('From buffer to before or after node: node with key ' + nodeKey + ' was not found.');
+    }
+    if(!node.prop){
+        let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
+        if(detachedKey){
+            const parentKey = graph.parent(nodeKey);
+            if(parentKey){
+                let detachedModelNodes = [];
+                let detachedNode = graph.node(detachedKey);
+                if (detachedNode && detachedNode.modelNode) {
+                    graph.setParent(detachedKey, parentKey);
+                    detachedModelNodes.push(detachedNode.modelNode);
+                }
+                let parentNode = graph.node(parentKey);
+                let {modelNode} = parentNode;
+                modelNode.children = modelNode.children || [];
+                let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
+                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                adjustIndices(graph, parentKey);
+            }
+        }
+        return [detachedKey];
+    } else {
+        return [nodeKey];
+    }
+}
+
+export function quickBeforeOrAfter(model, nodeKey, isAfter){
+    const {graph} = graphObject;
+    let newModel = fulex(model);
+    let quickKey = mapModel(graph, newModel, 0);
+    const resultKeys = fromBufferBeforeOrAfter(nodeKey, isAfter, quickKey);
+    let childNode;
+    traverseGraphBranch(graph, quickKey, childKey => {
+        childNode = graph.node(childKey);
+        if(childNode){
+            delete childNode.modelNode;
+            graph.removeNode(childKey);
+        }
+    });
+    newModel = undefined;
+    quickKey = undefined;
+    return resultKeys;
+}
+
+export function fromBufferFirstOrLast(nodeKey, isFirst, quickKey){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('From buffer to first or last node: node with key ' + nodeKey + ' was not found.');
+    }
+    let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
+    if(detachedKey){
+
+        let detachedModelNodes = [];
+        let detachedNode = graph.node(detachedKey);
+        if (detachedNode && detachedNode.modelNode) {
+            graph.setParent(detachedKey, nodeKey);
+            detachedModelNodes.push(detachedNode.modelNode);
+        }
+        let {modelNode} = node;
+        modelNode.children = modelNode.children || [];
+        const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
+        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
+        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+        adjustIndices(graph, nodeKey);
+    }
+    return [detachedKey];
+}
+
+export function quickFirstOrLast(model, nodeKey, isFirst){
+    const {graph} = graphObject;
+    let newModel = fulex(model);
+    let quickKey = mapModel(graph, newModel, 0);
+    const resultKeys = fromBufferFirstOrLast(nodeKey, isFirst, quickKey);
+    let childNode;
+    traverseGraphBranch(graph, quickKey, childKey => {
+        childNode = graph.node(childKey);
+        if(childNode){
+            delete childNode.modelNode;
+            graph.removeNode(childKey);
+        }
+    });
+    newModel = undefined;
+    quickKey = undefined;
+    return resultKeys;
+}
+
+export function fromBufferReplace(nodeKey, quickKey){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('From buffer replace: node with key ' + nodeKey + ' was not found.');
+    }
+    if(!node.prop){
+        let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
+        if(detachedKey) {
+            const parentKey = graph.parent(nodeKey);
+            if(parentKey){
+                const nodeIndex = node.index;
+                traverseGraphBranch(graph, nodeKey, (key => {
+                    graph.removeNode(key);
+                }));
+                delete node.modelNode;
+                let detachedModelNodes = [];
+                let detachedNode = graph.node(detachedKey);
+                if (detachedNode && detachedNode.modelNode) {
+                    graph.setParent(detachedKey, parentKey);
+                    detachedModelNodes.push(detachedNode.modelNode);
+                }
+                let parentNode = graph.node(parentKey);
+                let {modelNode} = parentNode;
+                modelNode.children = modelNode.children || [];
+                let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
+                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                adjustIndices(graph, parentKey);
+            }
+        }
+        return [detachedKey];
+    } else {
+        return [nodeKey];
+    }
+}
+
+export function quickReplace(model, nodeKey){
+    const {graph} = graphObject;
+    let newModel = fulex(model);
+    let quickKey = mapModel(graph, newModel, 0);
+    const resultKeys = fromBufferReplace(nodeKey, quickKey);
+    let childNode;
+    traverseGraphBranch(graph, quickKey, childKey => {
+        childNode = graph.node(childKey);
+        if(childNode){
+            delete childNode.modelNode;
+            graph.removeNode(childKey);
+        }
+    });
+    newModel = undefined;
+    quickKey = undefined;
+    return resultKeys;
+}
+
+export function fromBufferWrap(nodeKey, quickKey){
+    const {graph} = graphObject;
+    const node = graph.node(nodeKey);
+    if(!node){
+        throw Error('From buffer wrap: node with key ' + nodeKey + ' was not found.');
+    }
+    if(!node.prop){
+        const pastedKeys = fromBufferBeforeOrAfter(nodeKey, false, quickKey);
+        setForCutting(nodeKey);
+        cutPasteFirstOrLast(pastedKeys[0], false);
+        removeForCutting(nodeKey);
+        return pastedKeys;
+    } else {
+        return [nodeKey];
+    }
+}
+
+export function quickWrap(model, nodeKey){
+    const {graph} = graphObject;
+    let newModel = fulex(model);
+    let quickKey = mapModel(graph, newModel, 0);
+    const resultKeys = fromBufferWrap(nodeKey, quickKey);
+    let childNode;
+    traverseGraphBranch(graph, quickKey, childKey => {
+        childNode = graph.node(childKey);
+        if(childNode){
+            delete childNode.modelNode;
+            graph.removeNode(childKey);
+        }
+    });
+    newModel = undefined;
+    quickKey = undefined;
+    return resultKeys;
 }
 
 export function cloneSelected(){
