@@ -18,12 +18,14 @@ import appContainerSaga from '../controllers/app/AppContainer/sagas.js';
 import appMessageSaga from '../controllers/app/AppMessage/sagas.js';
 import deskPageSaga from '../controllers/workspace/DeskPage/sagas.js';
 import libraryPanelSaga from '../controllers/workspace/LibraryPanel/sagas.js';
+import componentOptionsSaga from '../controllers/workspace/ComponentOptionsModal/sagas.js';
 
 export default function* mainSaga(){
     yield [
         fork(appContainerSaga),
         fork(appMessageSaga),
         fork(deskPageSaga),
-        fork(libraryPanelSaga)
+        fork(libraryPanelSaga),
+        fork(componentOptionsSaga)
     ];
 }

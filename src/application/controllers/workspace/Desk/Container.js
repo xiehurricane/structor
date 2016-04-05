@@ -25,6 +25,7 @@ import ToolbarTop from '../ToolbarTop';
 import PageTreeViewPanel from '../PageTreeViewPanel';
 import ToolbarSelection from '../ToolbarSelection';
 import LibraryPanel from '../LibraryPanel';
+import ComponentOptionsPanel from '../ComponentOptionsPanel';
 
 class Container extends Component {
 
@@ -52,8 +53,7 @@ class Container extends Component {
         let rightPanelInner = null;
         if(componentModel.isQuickOptionsActive && !deskPageModel.isLivePreviewModeOn){
             rightPanelWidth = 250;
-            rightPanelInner = (<div></div>);
-            //rightPanelInner = (<PanelOptions></PanelOptions>);
+            rightPanelInner = (<ComponentOptionsPanel />);
         }
 
         let leftPanelStyle = {
@@ -106,7 +106,6 @@ class Container extends Component {
                 right: '5px',
                 height: '3em'
             };
-            //breadcrumbsComponent = (<div style={breadcrumbsTopStyle}></div>);
             breadcrumbsComponent = (<ToolbarSelection style={breadcrumbsTopStyle}></ToolbarSelection>);
             topPanelHeight += 3;
 

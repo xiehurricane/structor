@@ -1,0 +1,143 @@
+/*
+ * Copyright 2015 Alexander Pustovalov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import validator from 'validator';
+import marked from 'marked';
+import { modelSelector } from './selectors.js';
+import { containerActions } from './actions.js';
+import { Modal, Tabs, Tab, Button, Input } from 'react-bootstrap';
+import AceEditor from '../../../views/workspace/AceEditor.js';
+
+class Container extends Component {
+
+    constructor(props) {
+        super(props);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+    }
+
+    handleClose(e){
+        e.stopPropagation();
+        e.preventDefault();
+        const {hideModal} = this.props;
+        hideModal();
+    }
+
+    handleSave(e){
+        e.stopPropagation();
+        e.preventDefault();
+        const {submitChanges} = this.props;
+        const {sourceCodeEditor, sourcePropsEditor, sourceTextInput} = this.refs;
+        const sourceCode = sourceCodeEditor ? sourceCodeEditor.getSourceCode() : undefined;
+        const sourceProps = sourcePropsEditor ? sourcePropsEditor.getSourceCode() : "{}";
+        const sourceText = sourceTextInput ? sourceTextInput.getValue() : undefined;
+        submitChanges({sourceCode, sourceProps, sourceText});
+    }
+
+
+    render(){
+
+        const {componentModel: {sourceCode, sourceFilePath, sourceProps, sourceText, readmeText, show}, hideModal} = this.props;
+        //console.log('Render ComponentOptionsModal: show ' + show);
+        const containerStyle={
+            marginTop: '1em',
+            width: '100%',
+            padding: '1em'
+        };
+        var tabPanes = [];
+
+        if(sourceText !== undefined){
+            tabPanes.push(
+                <Tab key={'text'} eventKey={tabPanes.length + 1} title='Text'>
+                    <div style={containerStyle}>
+                        <Input
+                            type="textarea"
+                            placeholder="Enter text"
+                            defaultValue={sourceText ? sourceText : ""}
+                            ref="sourceTextInput"
+                            style={{width: '100%', height: '400px', margin: '0px'}}/>
+                    </div>
+                </Tab>
+            );
+        }
+        tabPanes.push(
+            <Tab key={'properties'} eventKey={tabPanes.length + 1} title='Properties'>
+                <div style={containerStyle}>
+                    <AceEditor ref='sourcePropsEditor'
+                               sourceName='componentPropsScript'
+                               style={{width: '100%', height: '400px'}}
+                               sourceCode={sourceProps}/>
+
+                </div>
+            </Tab>
+        );
+        if(!!sourceCode){
+            tabPanes.push(
+                <Tab key={'component'} eventKey={tabPanes.length + 1} title='Component'>
+                    <div style={containerStyle}>
+                        <p><strong>File:&nbsp;</strong><span>{sourceFilePath}</span></p>
+
+                        <AceEditor ref='sourceCodeEditor'
+                                   sourceName='componentSource'
+                                   mode='ace/mode/jsx'
+                                   style={{width: '100%', height: '400px'}}
+                                   sourceCode={sourceCode}/>
+
+                    </div>
+                </Tab>
+            );
+        }
+        if(!!readmeText){
+            //console.log(readmeText);
+            tabPanes.push(
+                <Tab key={'readMe'} eventKey={tabPanes.length + 1} title='Read Me'>
+                    <div style={{height: '400px', marginTop: '1em', width: '100%', padding: '1em', overflow: 'auto'}}>
+
+                            <div dangerouslySetInnerHTML={{__html: marked(readmeText)}} >
+                            </div>
+
+                    </div>
+                </Tab>
+            );
+        }
+
+        return (
+            <Modal show={show}
+                   onHide={() => {hideModal();}}
+                   dialogClassName='umy-modal-overlay'
+                   backdrop={true}
+                   keyboard={true}
+                   bsSize='large'
+                   ref='dialog'
+                   animation={true}>
+                <Modal.Body>
+                    <Tabs defaultActiveKey={1}>
+                        {tabPanes}
+                    </Tabs>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={this.handleClose}>Cancel</Button>
+                    <Button onClick={this.handleSave} bsStyle="primary">Save changes</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
+}
+
+export default connect(modelSelector, containerActions)(Container);

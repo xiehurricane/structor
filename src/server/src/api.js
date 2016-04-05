@@ -75,6 +75,9 @@ class Api {
             let data = req.body.data || {};
             this[methodName](data)
                 .then( response => {
+                    if(response === undefined){
+                        response = null;
+                    }
                     res.send({ data: response });
                 })
                 .catch( err => {

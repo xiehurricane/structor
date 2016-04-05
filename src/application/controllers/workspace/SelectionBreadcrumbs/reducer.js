@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { utils } from '../../../api';
 import * as actions from './actions.js';
 
 const initialState = {
@@ -26,7 +26,7 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.SET_SELECTED_KEY){
         return Object.assign({}, state, {
-            selectedKeys: payload
+            selectedKeys: utils.fulex(payload)
             //selectedUpdateCounter: state.selectedUpdateCounter + 1
         });
     }

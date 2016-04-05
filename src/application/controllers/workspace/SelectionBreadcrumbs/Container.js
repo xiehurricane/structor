@@ -60,6 +60,14 @@ class Container extends Component {
         setSelectedKey(key, true);
     }
 
+    makeTitle(componentName){
+        let titleComponentName = componentName;
+        if(titleComponentName.length > 20){
+            titleComponentName = titleComponentName.substr(0, 16) + '...';
+        }
+        return titleComponentName;
+    }
+
     render(){
 
         const { componentModel: {selectedKeys}, removeSelectedKeys } = this.props;
@@ -114,7 +122,6 @@ class Container extends Component {
                     let item;
                     for(let i = lastIndex-restNumber; i >= 0; i--){
                         item = parentsList[i];
-
                         const childrenMenuItems = [];
                         const childrenOfActive = graphApi.getChildNodes(item.key);
                         if(childrenOfActive && childrenOfActive.length > 0){
@@ -133,17 +140,18 @@ class Container extends Component {
                                 );
                             });
                         }
-
+                        let componentTitle = this.makeTitle(item.modelNode.type);
                         if(i !== 0){
+
                             content.push(
                                 <li key={i} >
                                     <a href="#"
-                                       title="Click to select component"
+                                       title={"Click to select " + item.modelNode.type}
                                        data-key={item.key}
                                        onMouseEnter={this.handleSetHighlightSelectedKey}
                                        onMouseLeave={this.handleRemoveHighlightSelectedKey}
                                        onClick={this.handleSetSelectedKey}>
-                                        {item.modelNode.type}
+                                        {componentTitle}
                                     </a>
                                     <span key={'menuMore'}
                                           style={{margin: '0 0.5em', cursor: 'pointer'}}
@@ -152,7 +160,7 @@ class Container extends Component {
                                         <span className="dropdown-toggle" data-toggle="dropdown">
                                             <span className="caret"></span>
                                         </span>
-                                        <ul className="dropdown-menu"
+                                        <ul className="dropdown-menu dropdown-menu-right"
                                             role="menu"
                                             style={{overflowY: 'auto', maxHeight: '12em'}}>
                                             {childrenMenuItems}
@@ -172,7 +180,7 @@ class Container extends Component {
                                         <span className="dropdown-toggle" data-toggle="dropdown">
                                             <span>{item.modelNode.type}&nbsp;</span><span className="caret"></span>
                                         </span>
-                                        <ul className="dropdown-menu"
+                                        <ul className="dropdown-menu dropdown-menu-right"
                                             role="menu"
                                             style={{overflowY: 'auto', maxHeight: '12em'}}>
                                             {childrenMenuItems}
@@ -185,9 +193,10 @@ class Container extends Component {
                                     <li key={i} active={true} >
                                     <span style={activeStyle}
                                           data-key={item.key}
+                                          title={item.modelNode.type}
                                           onMouseEnter={this.handleSetHighlightSelectedKey}
                                           onMouseLeave={this.handleRemoveHighlightSelectedKey}>
-                                        {item.modelNode.type}
+                                        {componentTitle}
                                     </span>
                                     </li>
                                 );
@@ -213,20 +222,22 @@ class Container extends Component {
                 );
                 const lastShowIndex = selectedKeys.length > 5 ? 5 : selectedKeys.length;
                 let graphNode;
+                let componentTitle;
                 for(let i = 0; i < lastShowIndex; i++){
                     graphNode = graphApi.getNode(selectedKeys[i]);
                     if(graphNode && graphNode.modelNode){
+                        componentTitle = this.makeTitle(graphNode.modelNode.type);
                         content.push(
                             <span key={i}
                                   style={activeStyle}
                                   data-key={selectedKeys[i]}
-                                  title="Remove from selection list"
+                                  title={"Remove " + graphNode.modelNode.type + " from selection list"}
                                   onMouseEnter={this.handleSetHighlightSelectedKey}
                                   onMouseLeave={this.handleRemoveHighlightSelectedKey}
                                   onClick={this.handleRemoveSelectedKey}>
                                 <i className="fa fa-times-circle fa-fw"
                                    style={{opacity: '0.6'}}></i>
-                                {graphNode.modelNode.type}
+                                {componentTitle}
                             </span>
                         );
                         if(i < lastShowIndex - 1){
@@ -264,7 +275,7 @@ class Container extends Component {
                             <span className="dropdown-toggle" data-toggle="dropdown">
                                 <span>More...&nbsp;</span><span className="caret"></span>
                             </span>
-                          <ul className="dropdown-menu"
+                          <ul className="dropdown-menu dropdown-menu-right"
                               role="menu"
                               style={{overflowY: 'auto', maxHeight: '12em'}}>
                               {menuItems}

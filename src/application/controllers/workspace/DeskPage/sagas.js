@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
+import { SagaCancellationException } from 'redux-saga';
 import { serverApi, graphApi, utils } from '../../../api';
 import * as actions from './actions.js';
 import * as spinnerActions from '../../app/AppSpinner/actions.js';
@@ -28,16 +29,18 @@ function* preserveModel(){
     }
 }
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out'), ms));
 
 function* delayForCompiler(){
     try{
-        yield call(delay, 30000);
+        yield call(delay, 20000);
         yield put(messageActions.timeout('The source code compiling timeout. Look at console output or reload the browser page.'));
         yield put(actions.setReloadPageRequest());
         yield put(actions.compilerTimeout());
-    } catch(error) {
-        // do nothing
+    } catch(e) {
+        if (e instanceof SagaCancellationException) {
+            // do nothing
+        }
     }
 }
 
@@ -55,11 +58,14 @@ function* waitForCompiler(){
 function* delayForPageLoaded(){
     try{
         yield call(delay, 30000);
-        yield put(messageActions.timeout('Page loading timeout. Look at console output or reload the browser page.'));
+        yield put(messageActions.timeout('Page loading timeout. Look at the console output and try to fix error. ' +
+            'Page will be reloaded automatically after successful compiling.'));
         yield put(actions.setReloadPageRequest());
         yield put(actions.pageLoadTimeout());
     } catch(e){
-        // do nothing
+        if (e instanceof SagaCancellationException) {
+            // do nothing
+        }
     }
 }
 

@@ -77,13 +77,13 @@ export const quickCopyToClipboard = (componentName) => (dispatch, getState) => {
     }
 };
 
-export const quickBefore = (componentName, selectedKey) => (dispatch, getState) => {
+export const quickBefore = (componentName) => (dispatch, getState) => {
     const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
             dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, selectedKey, false);
+            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, false);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
         } else {
@@ -94,13 +94,13 @@ export const quickBefore = (componentName, selectedKey) => (dispatch, getState) 
     }
 };
 
-export const quickAfter = (componentName, selectedKey) => (dispatch, getState) => {
+export const quickAfter = (componentName) => (dispatch, getState) => {
     const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
             dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, selectedKey, true);
+            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, true);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
         } else {
@@ -111,13 +111,13 @@ export const quickAfter = (componentName, selectedKey) => (dispatch, getState) =
     }
 };
 
-export const quickFirst = (componentName, selectedKey) => (dispatch, getState) => {
+export const quickFirst = (componentName) => (dispatch, getState) => {
     const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
             dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, selectedKey, true);
+            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, true);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
         } else {
@@ -128,13 +128,13 @@ export const quickFirst = (componentName, selectedKey) => (dispatch, getState) =
     }
 };
 
-export const quickLast = (componentName, selectedKey) => (dispatch, getState) => {
+export const quickLast = (componentName) => (dispatch, getState) => {
     const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
             dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, selectedKey, false);
+            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, false);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
         } else {
@@ -145,13 +145,13 @@ export const quickLast = (componentName, selectedKey) => (dispatch, getState) =>
     }
 };
 
-export const quickReplace = (componentName, selectedKey) => (dispatch, getState) => {
+export const quickReplace = (componentName) => (dispatch, getState) => {
     const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
     if(componentsList && componentsList.indexOf(componentName) >= 0){
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
             dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickReplace(variantModel, selectedKey);
+            const newSelectedKey = graphApi.quickReplace(variantModel);
             dispatch(setSelectedKey(newSelectedKey));
             dispatch(updatePage());
         } else {
@@ -162,22 +162,22 @@ export const quickReplace = (componentName, selectedKey) => (dispatch, getState)
     }
 };
 
-export const quickWrap = (componentName, selectedKey) => (dispatch, getState) => {
-    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
-    if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
-        if(variantModel){
-            dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickWrap(variantModel, selectedKey);
-            dispatch(setSelectedKey(newSelectedKey));
-            dispatch(updatePage());
-        } else {
-            console.error('Quick wrap: model for variant key was not found');
-        }
-    } else {
-        dispatch(failed('Component ' + componentName + ' was not found.'))
-    }
-};
+//export const quickWrap = (componentName, selectedKey) => (dispatch, getState) => {
+//    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
+//    if(componentsList && componentsList.indexOf(componentName) >= 0){
+//        const variantModel = getVariantModel(defaultVariantMap, componentName);
+//        if(variantModel){
+//            dispatch(pushHistory());
+//            const newSelectedKey = graphApi.quickWrap(variantModel, selectedKey);
+//            dispatch(setSelectedKey(newSelectedKey));
+//            dispatch(updatePage());
+//        } else {
+//            console.error('Quick wrap: model for variant key was not found');
+//        }
+//    } else {
+//        dispatch(failed('Component ' + componentName + ' was not found.'))
+//    }
+//};
 
 export const containerActions = (dispatch) => bindActionCreators({
     previewComponent, quickCopyToClipboard

@@ -100,3 +100,25 @@ export function loadComponentsTree(){
             return Promise.resolve(result);
         });
 }
+
+export function loadComponentOptions(componentName, sourceCodeFilePath){
+    let result = {};
+    return makeRequest('readComponentDocument', {componentName})
+        .then(response => {
+            console.log('loadComponentOptions Response: ' + JSON.stringify(response));
+            result.readmeText = response;
+            if(sourceCodeFilePath){
+                return makeRequest('readComponentCode', {filePath: sourceCodeFilePath})
+                    .then(response => {
+                        result.sourceCode = response;
+                        return result;
+                    });
+            } else {
+                return result;
+            }
+        });
+}
+
+export function writeComponentSource(sourceCodeFilePath, sourceCode){
+    return makeRequest('rewriteComponentCode', {filePath: sourceCodeFilePath, sourceCode});
+}

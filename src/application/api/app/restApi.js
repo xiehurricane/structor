@@ -42,7 +42,8 @@ export function makeRequest(method, options = {}){
 
                 return response.text()
                     .then(responseText => {
-                        let jsonData = {};
+                        //console.log('Server response: ' + responseText);
+                        let jsonData = undefined;
                         try{
                             jsonData = JSON.parse(responseText);
                         } catch(e){
@@ -57,7 +58,7 @@ export function makeRequest(method, options = {}){
                                 errorText = JSON.stringify(jsonData.errors);
                             }
                             throw Error(errorText);
-                        } else if(jsonData.data){
+                        } else if(jsonData.data !== undefined){
                             jsonData = jsonData.data;
                         }
                         return jsonData;

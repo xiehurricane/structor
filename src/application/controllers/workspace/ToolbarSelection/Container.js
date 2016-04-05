@@ -22,6 +22,7 @@ import SelectionControls from '../SelectionControls';
 import ClipboardControls from '../ClipboardControls';
 import ClipboardIndicator from '../ClipboardIndicator';
 import HistoryControls from '../HistoryControls';
+import ComponentControls from '../ComponentControls';
 
 class Container extends Component {
 
@@ -60,6 +61,7 @@ class Container extends Component {
             <div {...this.props}>
                 <div style={containerStyle}>
                     <HistoryControls style={controlsGroupStyle} />
+                    <ComponentControls style={controlsGroupStyle} />
                     <ClipboardControls style={controlsGroupStyle} />
                     <SelectionControls style={controlsGroupStyle} />
                     <ClipboardIndicator style={controlsGroupStyle} />

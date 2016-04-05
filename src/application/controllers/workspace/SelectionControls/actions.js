@@ -38,9 +38,10 @@ export const moveSelected = (isUp) => (dispatch, getState) => {
 
 export const deleteSelected = () => (dispatch, getState) => {
     dispatch(pushHistory());
-    graphApi.deleteSelected();
+    const resultKeys = graphApi.deleteSelected();
     dispatch(resetClipboardKeys());
     dispatch(removeSelectedKeys());
+    dispatch(setSelectedKeys(resultKeys));
     dispatch(updatePage());
 };
 

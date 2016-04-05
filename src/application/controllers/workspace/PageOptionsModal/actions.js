@@ -41,7 +41,7 @@ export const change = (options, mode) => (dispatch, getState) => {
     } else if (!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/') {
         dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
     } else {
-        console.log('Mode is: ' + mode);
+        //console.log('Mode is: ' + mode);
         if (mode === CHANGE_OPTIONS) {
             dispatch(changePageOptions(pageName, pagePath));
             if (makeIndexRoute) {

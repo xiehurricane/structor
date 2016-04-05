@@ -15,33 +15,39 @@
  */
 
 import * as actions from './actions.js';
-import { utilsStore, HtmlComponents } from '../../api/index.js';
 
 const initialState = {
-    packageConfig: {},
-    projectDirectoryStatus: null
+    selectedKey: undefined,
+    sourceCode: undefined,
+    sourceFilePath: undefined,
+    sourceProps: undefined,
+    sourceText: undefined,
+    readmeText: undefined,
+    show: false
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    if(type === actions.GET_PROJECT_INFO_DONE){
-
-        let { model, componentsTree} = payload.projectData;
-
-        // force to have at least one page
-        if (!model.pages || model.pages.length <= 0) {
-            let pageModel = utilStore.getTemplatePageModel();
-            model.pages = [pageModel];
-        }
-        componentsTree['Html'] = HtmlComponents.getSortedHtmlComponents();
-
+    if(type === actions.HIDE_MODAL){
         return Object.assign({}, state, {
-            packageConfig: payload.packageConfig,
-            projectDirectoryStatus: payload.projectDirectoryStatus,
-            projectData: payload.projectData
+            selectedKey: undefined,
+            sourceCode: undefined,
+            sourceFilePath: undefined,
+            sourceProps: undefined,
+            sourceText: undefined,
+            readmeText: undefined,
+            show: false
         });
     }
+
+    if(type === actions.SHOW_MODAL){
+        let newState = Object.assign({}, state, { ...payload, show: true});
+        //console.log(JSON.stringify(newState, null, 4));
+        return newState;
+    }
+
+    return state;
 }
 

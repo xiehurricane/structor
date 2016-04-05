@@ -98,7 +98,7 @@ class Container extends Component {
         let counter = 0;
 
         const filterString = filter ? filter.toUpperCase() : null;
-        console.log('Component in preview: ' + componentInPreview);
+        //console.log('Component in preview: ' + componentInPreview);
         forOwn(componentTreeModel, (group, groupName) => {
             if(isObject(group)){
                 let components = [];

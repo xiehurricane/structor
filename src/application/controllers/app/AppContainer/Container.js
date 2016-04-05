@@ -23,6 +23,7 @@ import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
 import Desk from '../../workspace/Desk';
 import PageOptionsModal from '../../workspace/PageOptionsModal';
+import ComponentOptionsModal from '../../workspace/ComponentOptionsModal';
 
 class Container extends Component {
 
@@ -76,6 +77,7 @@ class Container extends Component {
                 <div ref='appBody' style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0'}}>
                     {content}
                     <PageOptionsModal />
+                    <ComponentOptionsModal />
                 </div>
             </div>
         );

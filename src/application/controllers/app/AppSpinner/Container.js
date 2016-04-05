@@ -60,7 +60,7 @@ class Container extends Component {
                 tasksList.push(
                     <h5 key={key} style={itemStyle}>
                         <i className="fa fa-spinner fa-pulse"></i>
-                        <span style={{marginLeft: '0.5em'}}>{key + ', stage: ' + value.stage + ', count: ' + value.counter}</span>
+                        <span style={{marginLeft: '0.5em'}}>{key}</span>
                     </h5>
                 );
             });

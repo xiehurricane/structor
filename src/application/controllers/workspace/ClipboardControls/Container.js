@@ -33,8 +33,7 @@ class Container extends Component {
         e.stopPropagation();
         const func = this.props[e.currentTarget.dataset.func];
         if(func){
-            const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
-            func(selectedKeys[0]);
+            func();
         }
     }
 
@@ -46,12 +45,14 @@ class Container extends Component {
             margin: '0 0.5em'
         };
 
-        let disabledCommon = selectedKeys.length !== 1
+        let disabledCommon =
+            (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
             || clipboardKeys.length <= 0
             || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
-        let disabledSingle = selectedKeys.length !== 1
-            || clipboardKeys.length !== 1
-            || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
+        //let disabledSingle =
+        //    (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
+        //    || clipboardKeys.length !== 1
+        //    || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
 
         let controlGroup = (
             <div className="btn-group" role="group">
@@ -95,14 +96,14 @@ class Container extends Component {
                     title="Replace selected component with components from clipboard">
                     <span style={wideButtonLabelStyle}>Replace</span>
                 </button>
-                <button
+                {/*<button
                     className="btn btn-default btn-xs"
                     disabled={disabledSingle}
                     data-func="pasteWrap"
                     onClick={this.handleButtonClick}
                     title="Wrap selected component with single component from clipboard">
                     <span style={wideButtonLabelStyle}>Wrap</span>
-                </button>
+                </button>*/}
             </div>
         );
         return (

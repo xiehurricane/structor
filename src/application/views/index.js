@@ -24,11 +24,13 @@ import MainFrame from './app/MainFrame.js';
 import PageComponentForm from './workspace/PageComponentForm.js';
 import PageTreeViewItem from './workspace/PageTreeViewItem.js';
 import PageTreeViewItemText from './workspace/PageTreeViewItemText.js';
+import AceEditor from './workspace/AceEditor.js';
 
 export {
     ContentEditable,
     MainFrame,
     PageComponentForm,
     PageTreeViewItem,
-    PageTreeViewItemText
+    PageTreeViewItemText,
+    AceEditor
 }

@@ -354,261 +354,302 @@ export function isCutPasteAvailable(nodeKey){
     return !!(childNode && !childNode.isForCuttingChild && !childNode.isForCutting);
 }
 
-export function cutPasteBeforeOrAfter(nodeKey, isAfter){
-    if(!isCutPasteAvailable(nodeKey)){
-        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+export function cutPasteBeforeOrAfter(isAfter){
+    const {selected} = getAllMarkedKeys();
+    let resultKeys = [];
+    if(selected && selected.length === 1 && isCutPasteAvailable(selected[0])) {
+        const {graph} = graphObject;
+        const nodeKey = selected[0];
+        const node = graph.node(nodeKey);
+        if(!node){
+            console.error('Cut & paste before or after node: node with key ' + nodeKey + ' was not found.');
+        } else if(!node.prop){
+            let detachedKeys = getDetachedKeysForCutting();
+            if(detachedKeys.length > 0){
+                const parentKey = graph.parent(nodeKey);
+                if(parentKey){
+                    let detachedModelNodes = [];
+                    let detachedNode;
+                    detachedKeys.forEach(detachedKey => {
+                        detachedNode = graph.node(detachedKey);
+                        if(detachedNode && detachedNode.modelNode){
+                            graph.setParent(detachedKey, parentKey);
+                            detachedModelNodes.push(detachedNode.modelNode);
+                        }
+                    });
+                    let parentNode = graph.node(parentKey);
+                    let {modelNode} = parentNode;
+                    let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
+                    modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                    adjustIndices(graph, parentKey);
+                }
+            }
+            resultKeys = resultKeys.concat(detachedKeys);
+        } else {
+            resultKeys.push(nodeKey);
+        }
+    } else {
+        console.error('Cut & paste before or after node: pasting can not be provided for the same component or its children, or a multiple selection');
     }
-    const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Cut & paste before or after node: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        let detachedKeys = getDetachedKeysForCutting();
-        if(detachedKeys.length > 0){
-            const parentKey = graph.parent(nodeKey);
-            if(parentKey){
+    return resultKeys;
+}
+
+export function cutPasteFirstOrLast(isFirst){
+    const {selected} = getAllMarkedKeys();
+    let resultKeys = [];
+    if(selected && selected.length === 1 && isCutPasteAvailable(selected[0])) {
+        const {graph} = graphObject;
+        const nodeKey = selected[0];
+        const node = graph.node(nodeKey);
+        if(!node){
+            console.error('Cut & paste first or last node: node with key ' + nodeKey + ' was not found.');
+        } else {
+            let detachedKeys = getDetachedKeysForCutting();
+            if(detachedKeys.length > 0){
                 let detachedModelNodes = [];
                 let detachedNode;
                 detachedKeys.forEach(detachedKey => {
                     detachedNode = graph.node(detachedKey);
                     if(detachedNode && detachedNode.modelNode){
-                        graph.setParent(detachedKey, parentKey);
+                        graph.setParent(detachedKey, nodeKey);
                         detachedModelNodes.push(detachedNode.modelNode);
                     }
                 });
-                let parentNode = graph.node(parentKey);
-                let {modelNode} = parentNode;
-                let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
+                let {modelNode} = node;
+                modelNode.children = modelNode.children || [];
+                const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
+                let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
                 modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
+                adjustIndices(graph, nodeKey);
             }
+            resultKeys = resultKeys.concat(detachedKeys);
         }
-        return detachedKeys;
     } else {
-        return [nodeKey];
+        console.error('Cut & paste first or last node: pasting can not be provided for the same component or its children, or a multiple selection');
     }
+    return resultKeys;
 }
 
-export function cutPasteFirstOrLast(nodeKey, isFirst){
-    if(!isCutPasteAvailable(nodeKey)){
-        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+export function cutPasteReplace(){
+    const {selected} = getAllMarkedKeys();
+    let resultKeys = [];
+    if(selected && selected.length === 1 && isCutPasteAvailable(selected[0])){
+        const {graph} = graphObject;
+        const nodeKey = selected[0];
+        const node = graph.node(nodeKey);
+        if(!node){
+            console.error('Cut & paste replace: node with key ' + nodeKey + ' was not found.');
+        } else if(!node.prop){
+            let detachedKeys = getDetachedKeysForCutting();
+            if(detachedKeys.length > 0) {
+                const parentKey = graph.parent(nodeKey);
+                if(parentKey){
+                    const nodeIndex = node.index;
+                    traverseGraphBranch(graph, nodeKey, (key => {
+                        graph.removeNode(key);
+                    }));
+                    delete node.modelNode;
+                    let detachedModelNodes = [];
+                    let detachedNode;
+                    detachedKeys.forEach(detachedKey => {
+                        detachedNode = graph.node(detachedKey);
+                        if(detachedNode && detachedNode.modelNode){
+                            graph.setParent(detachedKey, parentKey);
+                            detachedModelNodes.push(detachedNode.modelNode);
+                        }
+                    });
+                    let parentNode = graph.node(parentKey);
+                    let {modelNode} = parentNode;
+                    modelNode.children = modelNode.children || [];
+                    let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
+                    modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                    adjustIndices(graph, parentKey);
+                }
+            }
+            resultKeys = resultKeys.concat(detachedKeys);
+        } else {
+            resultKeys.push(nodeKey);
+        }
+    } else {
+        console.error('Cut & paste replace: replacing can not be provided for the same component or a multiple selection');
     }
+    return resultKeys;
+}
+
+//export function cutPasteWrap(nodeKey){
+//    if(!isCutPasteAvailable(nodeKey)){
+//        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
+//    }
+//    const {graph} = graphObject;
+//    const node = graph.node(nodeKey);
+//    if(!node){
+//        throw Error('Cut & paste wrap: node with key ' + nodeKey + ' was not found.');
+//    }
+//    if(!node.prop){
+//        const { forCutting } = getAllMarkedKeys();
+//        if(forCutting.length !== 1){
+//            throw Error('Cut & paste wrap: wrapping can be applied only for single component');
+//        }
+//        const pastedKeys = cutPasteBeforeOrAfter(nodeKey, false);
+//        removeForCutting(pastedKeys[0]);
+//        setForCutting(nodeKey);
+//        cutPasteFirstOrLast(pastedKeys[0], false);
+//        removeForCutting(nodeKey);
+//        return pastedKeys;
+//    } else {
+//        return [nodeKey];
+//    }
+//}
+
+export function copyPasteBeforeOrAfter(isAfter){
+    const {selected} = getAllMarkedKeys();
     const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Cut & paste first or last node: node with key ' + nodeKey + ' was not found.');
-    }
-    let detachedKeys = getDetachedKeysForCutting();
-    if(detachedKeys.length > 0){
-        let detachedModelNodes = [];
-        let detachedNode;
-        detachedKeys.forEach(detachedKey => {
-            detachedNode = graph.node(detachedKey);
-            if(detachedNode && detachedNode.modelNode){
-                graph.setParent(detachedKey, nodeKey);
-                detachedModelNodes.push(detachedNode.modelNode);
+    let resultKeys = [];
+    if(selected && selected.length > 0){
+        selected.forEach(nodeKey => {
+            const node = graph.node(nodeKey);
+            if(!node){
+                console.error('Copy & paste before or after node: node with key ' + nodeKey + ' was not found.');
+            } else if(!node.prop){
+                let detachedKeys = getDetachedKeysForCopying();
+                if(detachedKeys.length > 0){
+                    const parentKey = graph.parent(nodeKey);
+                    if(parentKey){
+                        let detachedModelNodes = [];
+                        let detachedNode;
+                        detachedKeys.forEach(detachedKey => {
+                            detachedNode = graph.node(detachedKey);
+                            if(detachedNode && detachedNode.modelNode){
+                                graph.setParent(detachedKey, parentKey);
+                                detachedModelNodes.push(detachedNode.modelNode);
+                            }
+                        });
+                        let parentNode = graph.node(parentKey);
+                        let {modelNode} = parentNode;
+                        modelNode.children = modelNode.children || [];
+                        let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
+                        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                        adjustIndices(graph, parentKey);
+                    }
+                }
+                resultKeys = resultKeys.concat(detachedKeys);
+            } else {
+                resultKeys.push(nodeKey);
             }
         });
-        let {modelNode} = node;
-        modelNode.children = modelNode.children || [];
-        const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
-        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
-        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-        adjustIndices(graph, nodeKey);
     }
-    return detachedKeys;
+    return resultKeys;
 }
 
-export function cutPasteReplace(nodeKey){
-    if(!isCutPasteAvailable(nodeKey)){
-        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
-    }
+export function copyPasteFirstOrLast(isFirst){
+    const {selected} = getAllMarkedKeys();
     const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Cut & paste replace: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        let detachedKeys = getDetachedKeysForCutting();
-        if(detachedKeys.length > 0) {
-            const parentKey = graph.parent(nodeKey);
-            if(parentKey){
-                const nodeIndex = node.index;
-                traverseGraphBranch(graph, nodeKey, (key => {
-                    graph.removeNode(key);
-                }));
-                delete node.modelNode;
-                let detachedModelNodes = [];
-                let detachedNode;
-                detachedKeys.forEach(detachedKey => {
-                    detachedNode = graph.node(detachedKey);
-                    if(detachedNode && detachedNode.modelNode){
-                        graph.setParent(detachedKey, parentKey);
-                        detachedModelNodes.push(detachedNode.modelNode);
-                    }
-                });
-                let parentNode = graph.node(parentKey);
-                let {modelNode} = parentNode;
-                modelNode.children = modelNode.children || [];
-                let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
-                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
-            }
-        }
-        return detachedKeys;
-    } else {
-        return [nodeKey];
-    }
-}
+    let resultKeys = [];
+    if(selected && selected.length > 0){
+        selected.forEach(nodeKey => {
+            const node = graph.node(nodeKey);
+            if(!node){
+                console.error('Copy & paste first or last node: node with key ' + nodeKey + ' was not found.');
+            } else {
+                let detachedKeys = getDetachedKeysForCopying();
+                if(detachedKeys.length > 0){
 
-export function cutPasteWrap(nodeKey){
-    if(!isCutPasteAvailable(nodeKey)){
-        throw Error('Node with key ' + nodeKey + ' is not available to cut & paste operation.');
-    }
-    const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Cut & paste wrap: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        const { forCutting } = getAllMarkedKeys();
-        if(forCutting.length !== 1){
-            throw Error('Cut & paste wrap: wrapping can be applied only for single component');
-        }
-        const pastedKeys = cutPasteBeforeOrAfter(nodeKey, false);
-        removeForCutting(pastedKeys[0]);
-        setForCutting(nodeKey);
-        cutPasteFirstOrLast(pastedKeys[0], false);
-        removeForCutting(nodeKey);
-        return pastedKeys;
-    } else {
-        return [nodeKey];
-    }
-}
-
-export function copyPasteBeforeOrAfter(nodeKey, isAfter){
-    const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Copy & paste before or after node: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        let detachedKeys = getDetachedKeysForCopying();
-        if(detachedKeys.length > 0){
-            const parentKey = graph.parent(nodeKey);
-            if(parentKey){
-                let detachedModelNodes = [];
-                let detachedNode;
-                detachedKeys.forEach(detachedKey => {
-                    detachedNode = graph.node(detachedKey);
-                    if(detachedNode && detachedNode.modelNode){
-                        graph.setParent(detachedKey, parentKey);
-                        detachedModelNodes.push(detachedNode.modelNode);
-                    }
-                });
-                let parentNode = graph.node(parentKey);
-                let {modelNode} = parentNode;
-                modelNode.children = modelNode.children || [];
-                let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
-                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
-            }
-        }
-        return detachedKeys;
-    } else {
-        return [nodeKey];
-    }
-}
-
-export function copyPasteFirstOrLast(nodeKey, isFirst){
-    const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Copy & paste first or last node: node with key ' + nodeKey + ' was not found.');
-    }
-    let detachedKeys = getDetachedKeysForCopying();
-    if(detachedKeys.length > 0){
-
-        let detachedModelNodes = [];
-        let detachedNode;
-        detachedKeys.forEach(detachedKey => {
-            detachedNode = graph.node(detachedKey);
-            if(detachedNode && detachedNode.modelNode){
-                graph.setParent(detachedKey, nodeKey);
-                detachedModelNodes.push(detachedNode.modelNode);
+                    let detachedModelNodes = [];
+                    let detachedNode;
+                    detachedKeys.forEach(detachedKey => {
+                        detachedNode = graph.node(detachedKey);
+                        if(detachedNode && detachedNode.modelNode){
+                            graph.setParent(detachedKey, nodeKey);
+                            detachedModelNodes.push(detachedNode.modelNode);
+                        }
+                    });
+                    let {modelNode} = node;
+                    modelNode.children = modelNode.children || [];
+                    const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
+                    let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
+                    modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                    adjustIndices(graph, nodeKey);
+                }
+                resultKeys = resultKeys.concat(detachedKeys);
             }
         });
-        let {modelNode} = node;
-        modelNode.children = modelNode.children || [];
-        const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
-        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
-        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-        adjustIndices(graph, nodeKey);
     }
-    return detachedKeys;
-
+    return resultKeys;
 }
 
-export function copyPasteReplace(nodeKey){
+export function copyPasteReplace(){
+    const {selected, forCopying} = getAllMarkedKeys();
     const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Copy & paste replace: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        let detachedKeys = getDetachedKeysForCopying();
-        if(detachedKeys.length > 0) {
-            const parentKey = graph.parent(nodeKey);
-            if(parentKey){
-                const nodeIndex = node.index;
-                traverseGraphBranch(graph, nodeKey, (key => {
-                    graph.removeNode(key);
-                }));
-                delete node.modelNode;
-                let detachedModelNodes = [];
-                let detachedNode;
-                detachedKeys.forEach(detachedKey => {
-                    detachedNode = graph.node(detachedKey);
-                    if(detachedNode && detachedNode.modelNode){
-                        graph.setParent(detachedKey, parentKey);
-                        detachedModelNodes.push(detachedNode.modelNode);
+    let resultKeys = [];
+    if(selected && selected.length > 0) {
+        selected.forEach(nodeKey => {
+            if(forCopying.indexOf(nodeKey) < 0){
+                const node = graph.node(nodeKey);
+                if(!node){
+                    throw Error('Copy & paste replace: node with key ' + nodeKey + ' was not found.');
+                } else if(!node.prop){
+                    let detachedKeys = getDetachedKeysForCopying();
+                    if(detachedKeys.length > 0) {
+                        const parentKey = graph.parent(nodeKey);
+                        if(parentKey){
+                            const nodeIndex = node.index;
+                            traverseGraphBranch(graph, nodeKey, (key => {
+                                graph.removeNode(key);
+                                const removedIndex = resultKeys.indexOf(key);
+                                if(removedIndex >= 0){
+                                    resultKeys.splice(removedIndex, 1);
+                                }
+                            }));
+                            delete node.modelNode;
+                            let detachedModelNodes = [];
+                            let detachedNode;
+                            detachedKeys.forEach(detachedKey => {
+                                detachedNode = graph.node(detachedKey);
+                                if(detachedNode && detachedNode.modelNode){
+                                    graph.setParent(detachedKey, parentKey);
+                                    detachedModelNodes.push(detachedNode.modelNode);
+                                }
+                            });
+                            let parentNode = graph.node(parentKey);
+                            let {modelNode} = parentNode;
+                            modelNode.children = modelNode.children || [];
+                            let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
+                            modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                            adjustIndices(graph, parentKey);
+                        }
                     }
-                });
-                let parentNode = graph.node(parentKey);
-                let {modelNode} = parentNode;
-                modelNode.children = modelNode.children || [];
-                let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
-                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
+                    resultKeys = resultKeys.concat(detachedKeys);
+                } else {
+                    resultKeys.push(nodeKey);
+                }
+            } else {
+                console.warn('Copy & paste replace: replacing can not be provided for the same component.');
             }
-        }
-        return detachedKeys;
-    } else {
-        return [nodeKey];
+        });
     }
+    return resultKeys;
 }
 
-export function copyPasteWrap(nodeKey){
-    const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('Copy & paste wrap: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        const { forCopying } = getAllMarkedKeys();
-        if(forCopying.length !== 1){
-            throw Error('Copy & paste wrap: wrapping can be applied only for single component');
-        }
-        const pastedKeys = copyPasteBeforeOrAfter(nodeKey, false);
-        setForCutting(nodeKey);
-        cutPasteFirstOrLast(pastedKeys[0], false);
-        removeForCutting(nodeKey);
-        return pastedKeys;
-    } else {
-        return [nodeKey];
-    }
-}
+//export function copyPasteWrap(nodeKey){
+//    const {graph} = graphObject;
+//    const node = graph.node(nodeKey);
+//    if(!node){
+//        throw Error('Copy & paste wrap: node with key ' + nodeKey + ' was not found.');
+//    }
+//    if(!node.prop){
+//        const { forCopying } = getAllMarkedKeys();
+//        if(forCopying.length !== 1){
+//            throw Error('Copy & paste wrap: wrapping can be applied only for single component');
+//        }
+//        const pastedKeys = copyPasteBeforeOrAfter(nodeKey, false);
+//        setForCutting(nodeKey);
+//        cutPasteFirstOrLast(pastedKeys[0], false);
+//        removeForCutting(nodeKey);
+//        return pastedKeys;
+//    } else {
+//        return [nodeKey];
+//    }
+//}
 
 export function setBuffer(model){
     const {graph} = graphObject;
@@ -635,42 +676,48 @@ export function removeBuffer(){
     }
 }
 
-export function fromBufferBeforeOrAfter(nodeKey, isAfter, quickKey){
+export function fromBufferBeforeOrAfter(isAfter, quickKey){
+    const {selected} = getAllMarkedKeys();
     const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('From buffer to before or after node: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
-        if(detachedKey){
-            const parentKey = graph.parent(nodeKey);
-            if(parentKey){
-                let detachedModelNodes = [];
-                let detachedNode = graph.node(detachedKey);
-                if (detachedNode && detachedNode.modelNode) {
-                    graph.setParent(detachedKey, parentKey);
-                    detachedModelNodes.push(detachedNode.modelNode);
+    let resultKeys = [];
+    if(selected && selected.length > 0) {
+        selected.forEach(nodeKey => {
+            const node = graph.node(nodeKey);
+            if(!node){
+                console.error('From buffer to before or after node: node with key ' + nodeKey + ' was not found.');
+            } else if(!node.prop){
+                let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
+                if(detachedKey){
+                    const parentKey = graph.parent(nodeKey);
+                    if(parentKey){
+                        let detachedModelNodes = [];
+                        let detachedNode = graph.node(detachedKey);
+                        if (detachedNode && detachedNode.modelNode) {
+                            graph.setParent(detachedKey, parentKey);
+                            detachedModelNodes.push(detachedNode.modelNode);
+                        }
+                        let parentNode = graph.node(parentKey);
+                        let {modelNode} = parentNode;
+                        modelNode.children = modelNode.children || [];
+                        let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
+                        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                        adjustIndices(graph, parentKey);
+                    }
                 }
-                let parentNode = graph.node(parentKey);
-                let {modelNode} = parentNode;
-                modelNode.children = modelNode.children || [];
-                let modelNodesArgs = [node.index + (isAfter ? 1 : 0), 0].concat(detachedModelNodes);
-                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
+                resultKeys.push(detachedKey);
+            } else {
+                resultKeys.push(nodeKey);
             }
-        }
-        return [detachedKey];
-    } else {
-        return [nodeKey];
+        });
     }
+    return resultKeys;
 }
 
-export function quickBeforeOrAfter(model, nodeKey, isAfter){
+export function quickBeforeOrAfter(model, isAfter){
     const {graph} = graphObject;
     let newModel = fulex(model);
     let quickKey = mapModel(graph, newModel, 0);
-    const resultKeys = fromBufferBeforeOrAfter(nodeKey, isAfter, quickKey);
+    const resultKeys = fromBufferBeforeOrAfter(isAfter, quickKey);
     let childNode;
     traverseGraphBranch(graph, quickKey, childKey => {
         childNode = graph.node(childKey);
@@ -685,89 +732,43 @@ export function quickBeforeOrAfter(model, nodeKey, isAfter){
 }
 
 export function fromBufferFirstOrLast(nodeKey, isFirst, quickKey){
+    const {selected} = getAllMarkedKeys();
     const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('From buffer to first or last node: node with key ' + nodeKey + ' was not found.');
-    }
-    let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
-    if(detachedKey){
+    let resultKeys = [];
+    if(selected && selected.length > 0) {
+        selected.forEach(nodeKey => {
+            const node = graph.node(nodeKey);
+            if(!node){
+                console.error('From buffer to first or last node: node with key ' + nodeKey + ' was not found.');
+            } else {
+                let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
+                if(detachedKey){
 
-        let detachedModelNodes = [];
-        let detachedNode = graph.node(detachedKey);
-        if (detachedNode && detachedNode.modelNode) {
-            graph.setParent(detachedKey, nodeKey);
-            detachedModelNodes.push(detachedNode.modelNode);
-        }
-        let {modelNode} = node;
-        modelNode.children = modelNode.children || [];
-        const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
-        let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
-        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-        adjustIndices(graph, nodeKey);
-    }
-    return [detachedKey];
-}
-
-export function quickFirstOrLast(model, nodeKey, isFirst){
-    const {graph} = graphObject;
-    let newModel = fulex(model);
-    let quickKey = mapModel(graph, newModel, 0);
-    const resultKeys = fromBufferFirstOrLast(nodeKey, isFirst, quickKey);
-    let childNode;
-    traverseGraphBranch(graph, quickKey, childKey => {
-        childNode = graph.node(childKey);
-        if(childNode){
-            delete childNode.modelNode;
-            graph.removeNode(childKey);
-        }
-    });
-    newModel = undefined;
-    quickKey = undefined;
-    return resultKeys;
-}
-
-export function fromBufferReplace(nodeKey, quickKey){
-    const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('From buffer replace: node with key ' + nodeKey + ' was not found.');
-    }
-    if(!node.prop){
-        let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
-        if(detachedKey) {
-            const parentKey = graph.parent(nodeKey);
-            if(parentKey){
-                const nodeIndex = node.index;
-                traverseGraphBranch(graph, nodeKey, (key => {
-                    graph.removeNode(key);
-                }));
-                delete node.modelNode;
-                let detachedModelNodes = [];
-                let detachedNode = graph.node(detachedKey);
-                if (detachedNode && detachedNode.modelNode) {
-                    graph.setParent(detachedKey, parentKey);
-                    detachedModelNodes.push(detachedNode.modelNode);
+                    let detachedModelNodes = [];
+                    let detachedNode = graph.node(detachedKey);
+                    if (detachedNode && detachedNode.modelNode) {
+                        graph.setParent(detachedKey, nodeKey);
+                        detachedModelNodes.push(detachedNode.modelNode);
+                    }
+                    let {modelNode} = node;
+                    modelNode.children = modelNode.children || [];
+                    const lastIndex = modelNode.children.length > 0 ? modelNode.children.length : 0;
+                    let modelNodesArgs = [(isFirst ? 0 : lastIndex), 0].concat(detachedModelNodes);
+                    modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                    adjustIndices(graph, nodeKey);
                 }
-                let parentNode = graph.node(parentKey);
-                let {modelNode} = parentNode;
-                modelNode.children = modelNode.children || [];
-                let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
-                modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
-                adjustIndices(graph, parentKey);
+                resultKeys.push(detachedKey);
             }
-        }
-        return [detachedKey];
-    } else {
-        return [nodeKey];
+        });
     }
+    return resultKeys;
 }
 
-export function quickReplace(model, nodeKey){
+export function quickFirstOrLast(model, isFirst){
     const {graph} = graphObject;
     let newModel = fulex(model);
     let quickKey = mapModel(graph, newModel, 0);
-    const resultKeys = fromBufferReplace(nodeKey, quickKey);
+    const resultKeys = fromBufferFirstOrLast(isFirst, quickKey);
     let childNode;
     traverseGraphBranch(graph, quickKey, childKey => {
         childNode = graph.node(childKey);
@@ -781,28 +782,53 @@ export function quickReplace(model, nodeKey){
     return resultKeys;
 }
 
-export function fromBufferWrap(nodeKey, quickKey){
+export function fromBufferReplace(quickKey){
+    const {selected} = getAllMarkedKeys();
     const {graph} = graphObject;
-    const node = graph.node(nodeKey);
-    if(!node){
-        throw Error('From buffer wrap: node with key ' + nodeKey + ' was not found.');
+    let resultKeys = [];
+    if(selected && selected.length > 0) {
+        selected.forEach(nodeKey => {
+            const node = graph.node(nodeKey);
+            if(!node){
+                console.error('From buffer replace: node with key ' + nodeKey + ' was not found.');
+            } else if(!node.prop){
+                let detachedKey = copyGraphNode(graph, quickKey ? quickKey : bufferKey);
+                if(detachedKey) {
+                    const parentKey = graph.parent(nodeKey);
+                    if(parentKey){
+                        const nodeIndex = node.index;
+                        traverseGraphBranch(graph, nodeKey, (key => {
+                            graph.removeNode(key);
+                        }));
+                        delete node.modelNode;
+                        let detachedModelNodes = [];
+                        let detachedNode = graph.node(detachedKey);
+                        if (detachedNode && detachedNode.modelNode) {
+                            graph.setParent(detachedKey, parentKey);
+                            detachedModelNodes.push(detachedNode.modelNode);
+                        }
+                        let parentNode = graph.node(parentKey);
+                        let {modelNode} = parentNode;
+                        modelNode.children = modelNode.children || [];
+                        let modelNodesArgs = [nodeIndex, 1].concat(detachedModelNodes);
+                        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+                        adjustIndices(graph, parentKey);
+                    }
+                }
+                resultKeys.push(detachedKey);
+            } else {
+                resultKeys.push(nodeKey);
+            }
+        });
     }
-    if(!node.prop){
-        const pastedKeys = fromBufferBeforeOrAfter(nodeKey, false, quickKey);
-        setForCutting(nodeKey);
-        cutPasteFirstOrLast(pastedKeys[0], false);
-        removeForCutting(nodeKey);
-        return pastedKeys;
-    } else {
-        return [nodeKey];
-    }
+    return resultKeys;
 }
 
-export function quickWrap(model, nodeKey){
+export function quickReplace(model){
     const {graph} = graphObject;
     let newModel = fulex(model);
     let quickKey = mapModel(graph, newModel, 0);
-    const resultKeys = fromBufferWrap(nodeKey, quickKey);
+    const resultKeys = fromBufferReplace(quickKey);
     let childNode;
     traverseGraphBranch(graph, quickKey, childKey => {
         childNode = graph.node(childKey);
@@ -815,6 +841,41 @@ export function quickWrap(model, nodeKey){
     quickKey = undefined;
     return resultKeys;
 }
+
+//export function fromBufferWrap(nodeKey, quickKey){
+//    const {graph} = graphObject;
+//    const node = graph.node(nodeKey);
+//    if(!node){
+//        throw Error('From buffer wrap: node with key ' + nodeKey + ' was not found.');
+//    }
+//    if(!node.prop){
+//        const pastedKeys = fromBufferBeforeOrAfter(nodeKey, false, quickKey);
+//        setForCutting(nodeKey);
+//        cutPasteFirstOrLast(pastedKeys[0], false);
+//        removeForCutting(nodeKey);
+//        return pastedKeys;
+//    } else {
+//        return [nodeKey];
+//    }
+//}
+
+//export function quickWrap(model, nodeKey){
+//    const {graph} = graphObject;
+//    let newModel = fulex(model);
+//    let quickKey = mapModel(graph, newModel, 0);
+//    const resultKeys = fromBufferWrap(nodeKey, quickKey);
+//    let childNode;
+//    traverseGraphBranch(graph, quickKey, childKey => {
+//        childNode = graph.node(childKey);
+//        if(childNode){
+//            delete childNode.modelNode;
+//            graph.removeNode(childKey);
+//        }
+//    });
+//    newModel = undefined;
+//    quickKey = undefined;
+//    return resultKeys;
+//}
 
 export function cloneSelected(){
     const {graph} = graphObject;
@@ -847,7 +908,7 @@ export function cloneSelected(){
                     let modelNodesArgs = [selectedNode.index + 1, 0].concat(detachedModelNodes);
                     modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
                     adjustIndices(graph, parentKey);
-                    pastedKeys.push(newNodeKey);
+                    pastedKeys.push(newKey);
                 }
 
             }
@@ -913,10 +974,41 @@ export function deleteSelected(){
     const {graph, pageNodes} = graphObject;
     const testFunc = node => node.selected;
     let detachedKeys = [];
+    let resultKeys = [];
     pageNodes.forEach(pNode => {
+        traverseGraphBranch(graph, pNode.pageKey, (key => {
+            let childNode = graph.node(key);
+            if(childNode.selected){
+                const parentKey = graph.parent(key);
+                if(parentKey){
+                    //const parentNode = graph.node(parentKey);
+                    const childKeys = graph.children(parentKey);
+                    if(childKeys && childKeys.length > 1){
+                        let children = [];
+                        childKeys.forEach(childKey => {
+                            children.push({ key: childKey, node: graph.node(childKey) });
+                        });
+                        children.sort((a, b) => a.node.index - b.node.index);
+                        if(childNode.index === 0){
+                            resultKeys.push(children[1].key);
+                        } else {
+                            resultKeys.push(children[childNode.index - 1].key);
+                        }
+                    } else {
+                        resultKeys.push(parentKey);
+                    }
+                }
+            }
+        }));
         detachGraphNodes(graph, pNode.pageKey, testFunc, detachedKeys);
     });
+    let newResultKeys = [];
     if(detachedKeys.length > 0){
+        resultKeys.forEach(key => {
+            if(detachedKeys.indexOf(key) < 0){
+                newResultKeys.push(key);
+            }
+        });
         let childNode;
         detachedKeys.forEach(key => {
             traverseGraphBranch(graph, key, childKey => {
@@ -928,6 +1020,7 @@ export function deleteSelected(){
             });
         });
     }
+    return newResultKeys;
 }
 
 export function setForCutting(nodeKey){
@@ -998,11 +1091,11 @@ export function getMarkedKeys(rootKey){
             }
         }
     }));
-    console.log('Get marked keys, root: ' + rootKey +
-        ', selected: ' + selected.length +
-        ', highlighted: ' + highlighted.length +
-        ', forCutting: ' + forCutting.length +
-        ', forCopying: ' + forCopying.length);
+    //console.log('Get marked keys, root: ' + rootKey +
+    //    ', selected: ' + selected.length +
+    //    ', highlighted: ' + highlighted.length +
+    //    ', forCutting: ' + forCutting.length +
+    //    ', forCopying: ' + forCopying.length);
     return { selected, highlighted, forCutting, forCopying };
 }
 

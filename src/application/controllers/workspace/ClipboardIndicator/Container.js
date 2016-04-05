@@ -104,7 +104,7 @@ class Container extends Component {
                         <span className="dropdown-toggle" data-toggle="dropdown">
                             <span>Multiple...&nbsp;</span><span className="caret"></span>
                         </span>
-                        <ul className="dropdown-menu"
+                        <ul className="dropdown-menu dropdown-menu-right"
                             role="menu"
                             style={{overflowY: 'auto', maxHeight: '12em'}}>
                             {childrenMenuItems}

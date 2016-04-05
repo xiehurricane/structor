@@ -24,7 +24,7 @@ export const SET_SELECTED_KEY = "SelectionBreadcrumbs/SET_SELECTED_KEY";
 export const setSelectedKey = (key, isModifier) => (dispatch, getState) => {
     let { selectionBreadcrumbs: { selectedKeys } } = getState();
     let filtered = selectedKeys.filter(selectedKey => key === selectedKey);
-    console.log('Filtered size: ' + filtered.length);
+    //console.log('Filtered size: ' + filtered.length);
     if(filtered.length === 0){
         if (selectedKeys.length > 0 && !isModifier) {
             selectedKeys.forEach(selectedKey => {

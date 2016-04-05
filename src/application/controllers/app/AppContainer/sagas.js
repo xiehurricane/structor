@@ -24,7 +24,7 @@ import * as deskPageActions from '../../workspace/DeskPage/actions.js';
 import { loadComponents } from '../../workspace/LibraryPanel/actions.js';
 import { serverApi, cookies } from '../../../api';
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out'), ms));
 
 function* signInByToken(){
     let tokenFromCookies = cookies.getItem("structor-market-token");
@@ -89,7 +89,7 @@ function* loadProject(){
             yield put(actions.getProjectInfoDone({packageConfig, projectDirectoryStatus}));
             yield put(loadComponents());
 
-        } else {
+        } else if(timeout) {
             yield put(messageActions.timeout('Project initialization timeout.'));
         }
     } catch(error) {

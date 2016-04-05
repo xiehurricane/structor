@@ -34,6 +34,9 @@ import clipboardControlsReducer from '../controllers/workspace/ClipboardControls
 import clipboardIndicatorReducer from '../controllers/workspace/ClipboardIndicator/reducer.js';
 import historyControlsReducer from '../controllers/workspace/HistoryControls/reducer.js';
 import libraryPanelReducer from '../controllers/workspace/LibraryPanel/reducer.js';
+import componentOptionsModalReducer from '../controllers/workspace/ComponentOptionsModal/reducer.js';
+import componentControlsReducer from '../controllers/workspace/ComponentControls/reducer.js';
+import componentOptionsPanelReducer from '../controllers/workspace/ComponentOptionsPanel/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -53,7 +56,10 @@ const reducer = combineReducers({
     clipboardControls: clipboardControlsReducer,
     clipboardIndicator: clipboardIndicatorReducer,
     historyControls: historyControlsReducer,
-    libraryPanel: libraryPanelReducer
+    libraryPanel: libraryPanelReducer,
+    componentOptionsModal: componentOptionsModalReducer,
+    componentControls: componentControlsReducer,
+    componentOptionsPanel: componentOptionsPanelReducer
 });
 
 export default reducer;

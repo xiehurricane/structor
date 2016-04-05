@@ -78,7 +78,7 @@ class Container extends Component {
                     page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key); });
                     page.bindToState('onLast', (key, isModifier) => { pasteLast(key); });
                     page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key); });
-                    page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key); });
+                    //page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key); });
 
                     page.bindToState('isMultipleSelection', () => {
                         const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
@@ -95,10 +95,10 @@ class Container extends Component {
                         return !clipboardKeys || clipboardKeys.length <= 0;
                     });
 
-                    page.bindToState('isAvailableToWrap', key => {
-                        const { clipboardIndicatorModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
-                        return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
-                    });
+                    //page.bindToState('isAvailableToWrap', key => {
+                    //    const { clipboardIndicatorModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+                    //    return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
+                    //});
 
                     page.bindToState('setDefaultVariant', (componentName, key) => {
                         setDefaultVariant(componentName, key);
@@ -126,9 +126,9 @@ class Container extends Component {
                     page.bindToState('quickReplace', (componentName, selectedKey) => {
                         quickReplace(componentName, selectedKey);
                     });
-                    page.bindToState('quickWrap', (componentName, selectedKey) => {
-                        quickWrap(componentName, selectedKey);
-                    });
+                    //page.bindToState('quickWrap', (componentName, selectedKey) => {
+                    //    quickWrap(componentName, selectedKey);
+                    //});
 
                     const { componentModel } = this.props;
                     page.updatePageModel({
@@ -145,7 +145,7 @@ class Container extends Component {
 
     componentWillUpdate(nextProps, nextState){
 
-        console.log('DeskPage will update...');
+        //console.log('DeskPage will update...');
 
         this.doUpdatePageModel = false;
         this.doUpdateMarks = false;
@@ -157,7 +157,7 @@ class Container extends Component {
             var domNode = ReactDOM.findDOMNode(this);
             domNode.src = '/deskpage' + componentModel.currentPagePath;
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
-            console.log('Switching to path: ' + newComponentModel.currentPagePath);
+            //console.log('Switching to path: ' + newComponentModel.currentPagePath);
             this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
         } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
@@ -183,14 +183,14 @@ class Container extends Component {
         if(this.page){
             if(this.doUpdatePageModel){
                 const { componentModel } = this.props;
-                console.log('Updating page model: ' + componentModel.currentPagePath);
+                //console.log('Updating page model: ' + componentModel.currentPagePath);
                 this.page.updatePageModel({
                     pathname: componentModel.currentPagePath,
                     isEditModeOn: componentModel.isEditModeOn
                 });
             }
             if(this.doUpdateMarks){
-                console.log('Updating marked only');
+                //console.log('Updating marked only');
                 this.page.updateMarks();
             }
         }
