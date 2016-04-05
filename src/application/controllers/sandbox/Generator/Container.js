@@ -15,9 +15,12 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
+
+import EncapsulatedFrame from '../../../profiles/encapsulated/GeneratorFrame';
 
 class Container extends Component {
 
@@ -26,31 +29,31 @@ class Container extends Component {
     }
 
     render(){
-        const { currentComponent, loadOptions, showGeneratorFrame } = this.props;
-        const buttonLabelStyle = {
-            margin: '0 0.5em'
+
+        const { componentModel: {sandboxProfile} } = this.props;
+
+        let frameStyle = {
+            display: 'block',
+            width : "90%",
+            minWidth : "320px",
+            margin : "0px",
+            padding : "0px"
         };
+        let content = null;
+        if(sandboxProfile === 'encapsulated'){
+            content = (<EncapsulatedFrame />);
+        }
+
         return (
-            <div {...this.props} className="btn-group" role="group">
-                <button
-                    className="btn btn-default btn-xs"
-                    disabled={!currentComponent}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); loadOptions(currentComponent); }}
-                    title="Show selected component options">
-                    <span style={buttonLabelStyle} className="fa fa-gears"></span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    disabled={!currentComponent}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); showGeneratorFrame(); }}
-                    title="Generate the source code for a new component">
-                    <span style={buttonLabelStyle}>New component</span>
-                </button>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}>
+                <div style={frameStyle}>
+                    {content}
+                </div>
             </div>
         );
     }
-}
 
+}
 
 export default connect(modelSelector, containerActions)(Container);
 

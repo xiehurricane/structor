@@ -14,10 +14,22 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { showGeneratorFrame } from '../../app/AppContainer/actions.js';
+import * as actions from './actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, showGeneratorFrame
-}, dispatch);
+const initialState = {
+    sandboxProfile: 'encapsulated'
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    //if(type === actions.RELOAD_PAGE){
+    //    return Object.assign({}, state, {
+    //        reloadPageCounter: state.reloadPageCounter + 1
+    //    });
+    //}
+
+    return state;
+}
+

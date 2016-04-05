@@ -35,11 +35,12 @@ class Container extends Component {
     componentDidMount(){
         const domNode = ReactDOM.findDOMNode(this);
         const { loadPage, pageLoaded } = this.props;
-        const { setSelectedParentKey, setForCuttingKeys, setForCopyingKeys } = this.props;
+        const { setForCuttingKeys, setForCopyingKeys } = this.props;
         const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap, pasteReplace } = this.props;
         const { cloneSelected, deleteSelected } = this.props;
         const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
         const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace, quickWrap } = this.props;
+        const { loadOptions } = this.props;
         loadPage();
         domNode.onload = ( () => {
 
@@ -66,7 +67,10 @@ class Container extends Component {
                         }
                     });
 
-                    page.bindToState('onSelectParent', setSelectedParentKey);
+                    page.bindToState('onLoadOptions', (key, isModifier) => {
+                        const { currentComponent } = this.props;
+                        loadOptions(currentComponent);
+                    });
 
                     page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
                     page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]) });

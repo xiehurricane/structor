@@ -15,10 +15,12 @@
  */
 
 import { createStructuredSelector } from 'reselect';
+import { currentComponentSelector } from '../ComponentControls/selectors.js';
 
 export const modelSelector = createStructuredSelector({
     componentModel: state => state.deskPage,
     clipboardIndicatorModel: state => state.clipboardIndicator,
     selectionBreadcrumbsModel: state => state.selectionBreadcrumbs,
-    libraryPanelModel: state => state.libraryPanel
+    libraryPanelModel: state => state.libraryPanel,
+    currentComponent: currentComponentSelector
 });

@@ -18,11 +18,11 @@
 
 import 'babel-polyfill';
 
-import './assets/bootstrap/css/custom/bootstrap.css';
-import './assets/bootstrap/js/bootstrap.js';
-import './assets/font-awesome/css/font-awesome.css';
-import './assets/react-widgets/css/react-widgets.css';
-import './assets/app/css/umyproto.deskpage.css';
+import '../assets/bootstrap/css/custom/bootstrap.css';
+import '../assets/bootstrap/js/bootstrap.js';
+import '../assets/font-awesome/css/font-awesome.css';
+//import './assets/react-widgets/css/react-widgets.css';
+import '../assets/app/css/umyproto.deskpage.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -34,7 +34,7 @@ import thunk from 'redux-thunk';
 import reducer from './redux/reducer.js';
 import mainSaga from './sagas/saga.js';
 import myMiddleware from './redux/middleware.js';
-import { handleCompilerMessage } from './controllers/workspace/DeskPage/actions.js';
+import { handleCompilerMessage, saveModel } from './controllers/workspace/DeskPage/actions.js';
 
 import { MainFrame } from './views/index.js';
 
@@ -51,9 +51,9 @@ socket.on( 'compiler.message', stats => {
     store.dispatch(handleCompilerMessage(stats));
 });
 
-//window.onbeforeunload = function(e) {
-//    store.dispatch(saveProject());
-//};
+window.onbeforeunload = function(e) {
+    store.dispatch(saveModel());
+};
 
 ReactDOM.render(
     <Provider store={store}>

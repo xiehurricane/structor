@@ -21,6 +21,7 @@ export const CHANGE_VIEWPORT_WIDTH = "Desk/CHANGE_VIEWPORT_WIDTH";
 export const TOGGLE_LIBRARY_PANEL = "Desk/TOGGLE_LIBRARY_PANEL";
 export const TOGGLE_PAGE_TREEVIEW = "Desk/TOGGLE_PAGE_TREEVIEW";
 export const TOGGLE_QUICK_OPTIONS = "Desk/TOGGLE_QUICK_OPTIONS";
+//export const
 
 export const togglePageTreeview = () => ({ type: TOGGLE_PAGE_TREEVIEW });
 export const toggleQuickOptions = () => ({ type: TOGGLE_QUICK_OPTIONS });

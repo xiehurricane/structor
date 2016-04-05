@@ -16,6 +16,8 @@
 
 import {combineReducers} from 'redux';
 
+import profilesReducer from '../profiles/reducer.js';
+
 import appContainerReducer from '../controllers/app/AppContainer/reducer.js';
 import appSpinnerReducer from '../controllers/app/AppSpinner/reducer.js';
 import appMessageReducer from '../controllers/app/AppMessage/reducer.js';
@@ -37,8 +39,10 @@ import libraryPanelReducer from '../controllers/workspace/LibraryPanel/reducer.j
 import componentOptionsModalReducer from '../controllers/workspace/ComponentOptionsModal/reducer.js';
 import componentControlsReducer from '../controllers/workspace/ComponentControls/reducer.js';
 import componentOptionsPanelReducer from '../controllers/workspace/ComponentOptionsPanel/reducer.js';
+import generatorReducer from '../controllers/sandbox/Generator/reducer.js';
 
 const reducer = combineReducers({
+    profiles: profilesReducer,
     appContainer: appContainerReducer,
     appSpinner: appSpinnerReducer,
     appMessage: appMessageReducer,
@@ -59,7 +63,8 @@ const reducer = combineReducers({
     libraryPanel: libraryPanelReducer,
     componentOptionsModal: componentOptionsModalReducer,
     componentControls: componentControlsReducer,
-    componentOptionsPanel: componentOptionsPanelReducer
+    componentOptionsPanel: componentOptionsPanelReducer,
+    generator: generatorReducer
 });
 
 export default reducer;

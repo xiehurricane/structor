@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { showGeneratorFrame } from '../../app/AppContainer/actions.js';
-
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, showGeneratorFrame
-}, dispatch);
+// main saga
+export default function* mainSaga() {
+};

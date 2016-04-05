@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { showGeneratorFrame } from '../../app/AppContainer/actions.js';
+import {combineReducers} from 'redux';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, showGeneratorFrame
-}, dispatch);
+import generatorFrameReducer from './encapsulated/GeneratorFrame/reducer.js';
+
+const encapsulatedReducer = combineReducers({
+    generatorFrame: generatorFrameReducer
+});
+
+const reducer = combineReducers({
+    encapsulated: encapsulatedReducer
+});
+
+export default reducer;
+

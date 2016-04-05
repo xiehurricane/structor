@@ -21,9 +21,11 @@ import { containerActions } from './actions.js';
 
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
+import FrameOverlay from '../../../views/sandbox/FrameOverlay.js';
 import Desk from '../../workspace/Desk';
 import PageOptionsModal from '../../workspace/PageOptionsModal';
 import ComponentOptionsModal from '../../workspace/ComponentOptionsModal';
+import Generator from '../../sandbox/Generator';
 
 class Container extends Component {
 
@@ -38,11 +40,13 @@ class Container extends Component {
 
     render() {
 
-        const { componentModel: {packageConfig, projectDirectoryStatus, projectData, workspaceMode} } = this.props;
+        const { componentModel: {packageConfig, workspaceMode} } = this.props;
 
         let content = null;
-        if(workspaceMode === 'desk'){
+        if(workspaceMode === 'desk') {
             content = (<Desk />);
+        } else if(workspaceMode === 'generator'){
+            content = (<Generator />);
         } else {
             content = (
                 <Navbar

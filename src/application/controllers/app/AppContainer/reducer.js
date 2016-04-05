@@ -30,7 +30,8 @@ const initialState = {
     },
     packageConfig: {},
     projectDirectoryStatus: null,
-    workspaceMode: null
+    workspaceMode: null,
+    isGeneratorFrameShown: false
 };
 
 export default (state = initialState, action = {}) => {
@@ -78,6 +79,18 @@ export default (state = initialState, action = {}) => {
     if(type === actions.SIGN_OUT){
         return Object.assign({}, state, {
             userAccount: initialState.userAccount
+        });
+    }
+
+    if(type === actions.SHOW_GENERATOR){
+        return Object.assign({}, state, {
+            workspaceMode: 'generator'
+        });
+    }
+
+    if(type === actions.HIDE_GENERATOR){
+        return Object.assign({}, state, {
+            workspaceMode: 'desk'
         });
     }
 
