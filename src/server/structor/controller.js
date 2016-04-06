@@ -16,7 +16,7 @@
 
 import * as config from '../commons/configuration.js';
 import * as storageManager from './storageManager.js';
-import * as middlewareCompilerManager from './MiddlewareCompilerManager.js';
+import * as middlewareCompilerManager from './MiddlewareCompilerManager1.js';
 
 let serverRef = undefined;
 let isMiddlewareInitialized = false;
