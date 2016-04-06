@@ -29,7 +29,7 @@ const initialState = {
         error: null
     },
     packageConfig: {},
-    projectDirectoryStatus: null,
+    projectStatus: null,
     workspaceMode: null,
     isGeneratorFrameShown: false
 };
@@ -46,8 +46,8 @@ export default (state = initialState, action = {}) => {
         //componentsTree['Html'] = HtmlComponents.getSortedHtmlComponents();
 
         return Object.assign({}, state, {
-            packageConfig: payload.packageConfig,
-            projectDirectoryStatus: payload.projectDirectoryStatus,
+            packageConfig: payload.projectConfig.server.packageConf,
+            projectStatus: payload.projectConfig.status,
 
             //componentsTree: componentsTree,
             workspaceMode: 'desk'

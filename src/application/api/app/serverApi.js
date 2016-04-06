@@ -15,44 +15,37 @@
  */
 
 import {forOwn, isObject} from 'lodash';
-import { makeRequest } from './restApi.js';
+import { invokeStructor, invokeSandbox } from './restApi.js';
 import HtmlComponents, {getSortedHtmlComponents} from '../utils/HtmlComponents.js';
 
 export function getProjectInfo(){
-    let result = {};
-    return makeRequest('getPackageConfig')
-        .then(packageConfig => {
-            result.packageConfig = packageConfig;
-            return makeRequest('checkProjectDir');
-        })
-        .then(projectDirectoryStatus => {
-            result.projectDirectoryStatus = projectDirectoryStatus;
-            if(projectDirectoryStatus === 'ready-to-go'){
-                return makeRequest('openLocalProject')
-                    .then(projectData => {
-                        result.projectData = projectData;
-                        return result;
-                    });
-            }
-            return result;
-        })
+    return invokeStructor('getConfig')
+        .then(config => {
+            return {projectConfig: config, projectStatus: config.status};
+        });
 }
 
 export function initUserCredentialsByToken(token){
-    return makeRequest('initUserCredentialsByToken', {token: token});
+    return invokeStructor('initUserCredentialsByToken', {token: token});
 }
 
 export function initUserCredentials(email, password){
-    return makeRequest('initUserCredentials', { username: email, password: password });
+    return invokeStructor('initUserCredentials', { username: email, password: password });
+}
+
+export function getProjectModel(){
+    return invokeStructor('initMiddleware').then(() => {
+        return invokeStructor('getModel');
+    });
 }
 
 export function saveProjectModel(model){
-    return makeRequest('saveProjectModel', { model: model });
+    return invokeStructor('saveProjectModel', { model: model });
 }
 
 export function loadComponentsTree(){
     let result = {};
-    return makeRequest('getComponentsTree', {})
+    return invokeStructor('getComponentsTree', {})
         .then(response => {
             if(response){
                 const {componentsTree} = response;

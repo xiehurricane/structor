@@ -31,7 +31,7 @@ function* loadComponents(){
             yield put(actions.setComponents(response));
 
         } catch(error) {
-            yield put(messageActions.failed('Project initialization error. ' + (error.message ? error.message : error.toString())));
+            yield put(messageActions.failed('Components loading has an error. ' + (error.message ? error.message : error.toString())));
         }
         yield put(spinnerActions.done('Loading components'));
     }

@@ -21,6 +21,20 @@ import * as spinnerActions from '../../app/AppSpinner/actions.js';
 import * as messageActions from '../../app/AppMessage/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
 
+function* getModel(){
+    while(true){
+        yield take(actions.GET_MODEL);
+        yield put(spinnerActions.started('Loading model'));
+        try{
+            const model = serverApi.getProjectModel();
+            yield put(actions.loadModel(model));
+        } catch(e){
+            yield put(messageActions.failed('Model loading has an error. ' + (error.message ? error.message : error)));
+        }
+        yield put(spinnerActions.done('Loading model'));
+    }
+}
+
 function* preserveModel(){
     while(true){
         yield take(actions.SAVE_MODEL);
@@ -34,7 +48,7 @@ const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out')
 function* delayForCompiler(){
     try{
         yield call(delay, 20000);
-        yield put(messageActions.timeout('The source code compiling timeout. Look at console output or reload the browser page.'));
+        yield put(messageActions.timeout('The source code compiling is timed out. Look at console output or reload the browser page.'));
         yield put(actions.setReloadPageRequest());
         yield put(actions.compilerTimeout());
     } catch(e) {
@@ -47,18 +61,18 @@ function* delayForCompiler(){
 function* waitForCompiler(){
     while(true){
         yield take(actions.COMPILER_START);
-        yield put(spinnerActions.started('The source code compiling'));
+        yield put(spinnerActions.started('Compiling the source code'));
         const delayTask = yield fork(delayForCompiler);
         yield take([actions.COMPILER_DONE, actions.COMPILER_TIMEOUT]);
         yield cancel(delayTask);
-        yield put(spinnerActions.done('The source code compiling'));
+        yield put(spinnerActions.done('Compiling the source code'));
     }
 }
 
 function* delayForPageLoaded(){
     try{
         yield call(delay, 30000);
-        yield put(messageActions.timeout('Page loading timeout. Look at the console output and try to fix error. ' +
+        yield put(messageActions.timeout('Page loading is timed out. Look at the console output and try to fix error. ' +
             'Page will be reloaded automatically after successful compiling.'));
         yield put(actions.setReloadPageRequest());
         yield put(actions.pageLoadTimeout());
@@ -72,11 +86,11 @@ function* delayForPageLoaded(){
 function* waitForPageLoaded(){
     while(true){
         yield take([actions.LOAD_PAGE, actions.RELOAD_PAGE]);
-        yield put(spinnerActions.started('Page loading'));
+        yield put(spinnerActions.started('Loading page'));
         const delayTask = yield fork(delayForPageLoaded);
         yield take([actions.PAGE_LOADED, actions.PAGE_LOAD_TIMEOUT]);
         yield cancel(delayTask);
-        yield put(spinnerActions.done('Page loading'));
+        yield put(spinnerActions.done('Loading page'));
     }
 }
 
@@ -85,6 +99,7 @@ export default function* mainSaga() {
     yield [
         fork(waitForPageLoaded),
         fork(waitForCompiler),
+        fork(getModel),
         fork(preserveModel)
     ];
 };

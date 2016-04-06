@@ -43,6 +43,7 @@ export const COMPILER_TIMEOUT = "DeskPage/COMPILER_TIMEOUT";
 export const CHANGE_PAGE_ROUTE_FEEDBACK = "DeskPage/CHANGE_PAGE_ROUTE_FEEDBACK";
 export const UPDATE_PAGE = "DeskPage/UPDATE_PAGE";
 export const UPDATE_MARKED = "DeskPage/UPDATE_MARKED";
+export const GET_MODEL = "DeskPage/GET_MODEL";
 export const SAVE_MODEL = "DeskPage/SAVE_MODEL";
 
 export const setPages = (pages) => ({type: SET_PAGES, payload: pages});
@@ -61,6 +62,7 @@ export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 export const updatePage = () => ({type: UPDATE_PAGE});
 export const updateMarked = () => ({type: UPDATE_MARKED});
+export const getModel = () => ({type: GET_MODEL});
 export const saveModel = () => ({type: SAVE_MODEL});
 
 export const loadModel = (model) => (dispatch, getState) => {

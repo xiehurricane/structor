@@ -36,10 +36,10 @@ class Container extends Component {
         const domNode = ReactDOM.findDOMNode(this);
         const { loadPage, pageLoaded } = this.props;
         const { setForCuttingKeys, setForCopyingKeys } = this.props;
-        const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteWrap, pasteReplace } = this.props;
+        const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace } = this.props;
         const { cloneSelected, deleteSelected } = this.props;
         const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
-        const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace, quickWrap } = this.props;
+        const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } = this.props;
         const { loadOptions } = this.props;
         loadPage();
         domNode.onload = ( () => {

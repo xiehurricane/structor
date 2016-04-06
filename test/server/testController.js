@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /*
  * Copyright 2015 Alexander Pustovalov
  *
@@ -17,11 +15,8 @@
  */
 
 require('babel-register');
-var minimist = require('minimist');
-var path = require('path');
 var io = require('socket.io');
-//var api = require('./server/api.js');
-var controller = require('./src/server/controller.js');
+var controller = require('../../src/server/controller.js');
 
 process.on('uncaughtException',
     function(err){
@@ -33,24 +28,8 @@ process.on('uncaughtException',
     }
 );
 
-var argv = minimist(process.argv.slice(2));
-
 var portNumber = 2222;
-if(argv['p']){
-    var tryPort = parseInt(argv['p']);
-    if(tryPort && tryPort > 1024 && tryPort < 65000){
-        portNumber = tryPort;
-    }
-}
+var workingDir = '/Volumes/Development/projects/structor/structor-github-boilerplates/bootstrap-prepack';
+var serverDir = '/Volumes/Development/projects/structor/structor-github/structor';
 
-var workingDir = process.cwd();
-if(argv['d']){
-    if(path.isAbsolute(argv['d'])){
-        workingDir = argv['d'];
-    } else {
-        workingDir = path.resolve(workingDir, argv['d']);
-    }
-}
-
-//api.initServer({ dirname: __dirname, workingDirname: workingDir, portNumber: portNumber, io: io });
-controller.initServer({ serverDir: __dirname, projectDir: workingDir, portNumber: portNumber, io: io });
+controller.initServer({ serverDir: serverDir, projectDir: workingDir, portNumber: portNumber, io: io});

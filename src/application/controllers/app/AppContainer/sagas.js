@@ -66,34 +66,35 @@ function* loadProjectInfo(){
         return yield call(serverApi.getProjectInfo);
     } catch(error){
         if(error instanceof SagaCancellationException){
-            yield put(messageActions.failed('Project initialization canceled.'));
+            yield put(messageActions.failed('Project loading was canceled.'));
         } else {
-            yield put(messageActions.failed('Project initialization error. ' + (error.message ? error.message : error)));
+            yield put(messageActions.failed('Project loading has an error. ' + (error.message ? error.message : error)));
         }
     }
 }
 
 function* loadProject(){
     yield take(actions.GET_PROJECT_INFO);
+    yield put(spinnerActions.started('Loading project'));
     try {
-        yield put(spinnerActions.started('Loading project'));
         yield call(signInByToken);
         const {timeout, response} = yield race({
             response: call(loadProjectInfo),
             timeout: call(delay, 30000)
         });
         if(response){
-            const {projectData: {model}, packageConfig, projectDirectoryStatus} = response;
-
-            yield put(deskPageActions.loadModel(model));
-            yield put(actions.getProjectInfoDone({packageConfig, projectDirectoryStatus}));
-            yield put(loadComponents());
+            const {projectConfig, projectStatus} = response;
+            if(projectStatus === 'ready-to-go'){
+                yield put(deskPageActions.getModel());
+                yield put(loadComponents());
+            }
+            yield put(actions.getProjectInfoDone({projectConfig}));
 
         } else if(timeout) {
-            yield put(messageActions.timeout('Project initialization timeout.'));
+            yield put(messageActions.timeout('Project loading is timed out.'));
         }
     } catch(error) {
-        yield put(messageActions.failed('Project loading error. ' + (error.message ? error.message : error)));
+        yield put(messageActions.failed('Project loading has an error. ' + (error.message ? error.message : error)));
     }
     yield put(spinnerActions.done('Loading project'));
 }

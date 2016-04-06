@@ -17,7 +17,7 @@
 import _ from 'lodash';
 import 'isomorphic-fetch';
 
-export function makeRequest(method, options = {}){
+export function makeRequest(url, method, options = {}){
 
     let fetchOptions = {
         method: 'POST',
@@ -32,7 +32,7 @@ export function makeRequest(method, options = {}){
             data: options
         });
     }
-    return fetch('/invoke', fetchOptions)
+    return fetch(url, fetchOptions)
         .then( response => {
             //console.log('Received response: ' + JSON.stringify(response, null, 4));
             //console.log('Received response: ' + response.status);
@@ -68,4 +68,12 @@ export function makeRequest(method, options = {}){
             }
         });
 
+}
+
+export function invokeStructor(method, options){
+    return makeRequest('/invoke', method, options);
+}
+
+export function invokeSandbox(method, options){
+    return makeRequest('/sandbox', method, options);
 }
