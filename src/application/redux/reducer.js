@@ -40,6 +40,7 @@ import componentOptionsModalReducer from '../controllers/workspace/ComponentOpti
 import componentControlsReducer from '../controllers/workspace/ComponentControls/reducer.js';
 import componentOptionsPanelReducer from '../controllers/workspace/ComponentOptionsPanel/reducer.js';
 import generatorReducer from '../controllers/sandbox/Generator/reducer.js';
+import projectsGalleryReducer from '../controllers/projects/ProjectsGallery/reducer.js';
 
 const reducer = combineReducers({
     profiles: profilesReducer,
@@ -64,7 +65,8 @@ const reducer = combineReducers({
     componentOptionsModal: componentOptionsModalReducer,
     componentControls: componentControlsReducer,
     componentOptionsPanel: componentOptionsPanelReducer,
-    generator: generatorReducer
+    generator: generatorReducer,
+    projectsGallery: projectsGalleryReducer
 });
 
 export default reducer;

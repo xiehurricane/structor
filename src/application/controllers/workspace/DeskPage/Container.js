@@ -178,7 +178,7 @@ class Container extends Component {
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
             if(this.contentWindow){
                 // only when page is already loaded
-                console.log('Switching to path: ' + newComponentModel.currentPagePath);
+                //console.log('Switching to path: ' + newComponentModel.currentPagePath);
                 this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
             }
         } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {

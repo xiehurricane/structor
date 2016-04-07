@@ -22,6 +22,8 @@ export const SERVICE_DIR = '.structor';
 export const READY = 'ready-to-go';
 export const EMPTY = 'dir-is-empty';
 
+export const SERVICE_URL = 'http://localhost';
+
 let config = {
     status: undefined,
     project: {
@@ -247,4 +249,12 @@ export function componentDefaultsDirPath(){
 
 export function docsComponentsDirPath(){
     return config.project.paths.docsComponentsDirPath;
+}
+
+export function projectName(){
+    return config.project.conf.projectName;
+}
+
+export function projectId(){
+    return config.project.conf.projectId;
 }

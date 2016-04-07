@@ -46,7 +46,6 @@ export const currentComponentSelector = createSelector(
                 });
             }
         }
-        console.log('ComponentControls selector: ' + JSON.stringify(result, null, 4));
         return result;
     }
 );

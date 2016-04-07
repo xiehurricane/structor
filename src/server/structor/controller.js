@@ -17,6 +17,7 @@ import express from 'express';
 import rewrite from 'express-urlrewrite';
 import * as config from '../commons/configuration.js';
 import * as indexManager from '../commons/indexManager.js';
+import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as middlewareCompilerManager from './middlewareCompilerManager.js';
 
@@ -84,4 +85,12 @@ export function writeComponentSourceCode(options){
 
 export function saveProjectModel(options){
     return storageManager.writeProjectJsonModel(options.model);
+}
+
+export function initUserCredentialsByToken(options){
+    return clientManager.initUserCredentialsByToken(options.token);
+}
+
+export function getProjectsGallery(){
+    return clientManager.getAllProjects();
 }

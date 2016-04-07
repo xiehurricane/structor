@@ -86,8 +86,9 @@ function* loadProject(){
             const {projectConfig, projectStatus} = response;
             if(projectStatus === 'ready-to-go'){
                 const model = yield call(serverApi.getProjectModel);
+                const componentsTree = yield call(serverApi.loadComponentsTree);
+                yield put(libraryPanelActions.setComponents(componentsTree));
                 yield put(deskPageActions.loadModel(model || {}));
-                yield put(libraryPanelActions.loadComponents());
             }
             yield put(actions.getProjectInfoDone({projectConfig}));
 

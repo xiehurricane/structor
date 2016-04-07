@@ -24,7 +24,7 @@ import { setSelectedKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actio
 import { cloneSelected, deleteSelected } from '../SelectionControls/actions.js';
 import { loadOptions } from '../ComponentOptionsModal/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
-import { setDefaultVariant, hidePreviewComponent, selectVariant } from '../LibraryPanel/actions.js';
+import { loadComponents, setDefaultVariant, hidePreviewComponent, selectVariant } from '../LibraryPanel/actions.js';
 import { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } from '../LibraryPanel/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
@@ -173,6 +173,7 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
             });
             dispatch(setReloadPageRequest());
         } else {
+            dispatch(loadComponents());
             dispatch(executeReloadPageRequest());
         }
         dispatch(compilerDone());

@@ -731,7 +731,7 @@ export function quickBeforeOrAfter(model, isAfter){
     return resultKeys;
 }
 
-export function fromBufferFirstOrLast(nodeKey, isFirst, quickKey){
+export function fromBufferFirstOrLast(isFirst, quickKey){
     const {selected} = getAllMarkedKeys();
     const {graph} = graphObject;
     let resultKeys = [];
