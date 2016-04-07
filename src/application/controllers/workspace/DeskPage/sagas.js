@@ -21,20 +21,6 @@ import * as spinnerActions from '../../app/AppSpinner/actions.js';
 import * as messageActions from '../../app/AppMessage/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
 
-function* getModel(){
-    while(true){
-        yield take(actions.GET_MODEL);
-        yield put(spinnerActions.started('Loading model'));
-        try{
-            const model = serverApi.getProjectModel();
-            yield put(actions.loadModel(model));
-        } catch(e){
-            yield put(messageActions.failed('Model loading has an error. ' + (error.message ? error.message : error)));
-        }
-        yield put(spinnerActions.done('Loading model'));
-    }
-}
-
 function* preserveModel(){
     while(true){
         yield take(actions.SAVE_MODEL);
@@ -99,7 +85,6 @@ export default function* mainSaga() {
     yield [
         fork(waitForPageLoaded),
         fork(waitForCompiler),
-        fork(getModel),
         fork(preserveModel)
     ];
 };

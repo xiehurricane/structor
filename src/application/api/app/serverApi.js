@@ -18,48 +18,48 @@ import {forOwn, isObject} from 'lodash';
 import { invokeStructor, invokeSandbox } from './restApi.js';
 import HtmlComponents, {getSortedHtmlComponents} from '../utils/HtmlComponents.js';
 
-export function getProjectInfo(){
+export function getProjectInfo() {
     return invokeStructor('getConfig')
         .then(config => {
             return {projectConfig: config, projectStatus: config.status};
         });
 }
 
-export function initUserCredentialsByToken(token){
+export function initUserCredentialsByToken(token) {
     return invokeStructor('initUserCredentialsByToken', {token: token});
 }
 
-export function initUserCredentials(email, password){
-    return invokeStructor('initUserCredentials', { username: email, password: password });
+export function initUserCredentials(email, password) {
+    return invokeStructor('initUserCredentials', {username: email, password: password});
 }
 
-export function getProjectModel(){
+export function getProjectModel() {
     return invokeStructor('initMiddleware').then(() => {
         return invokeStructor('getModel');
     });
 }
 
-export function saveProjectModel(model){
-    return invokeStructor('saveProjectModel', { model: model });
+export function saveProjectModel(model) {
+    return invokeStructor('saveProjectModel', {model: model});
 }
 
-export function loadComponentsTree(){
+export function loadComponentsTree() {
     let result = {};
     return invokeStructor('getComponentsTree', {})
         .then(response => {
-            if(response){
-                const {componentsTree} = response;
-                if(componentsTree){
-                    componentsTree['Html'] = getSortedHtmlComponents();
-                    let componentDefaultsMap = new Map();
-                    let sequence = Promise.resolve();
-                    forOwn(componentsTree, (group, groupName) => {
-                        if(isObject(group)){
-                            forOwn(group, (componentTypeValue, componentName) => {
-                                sequence = sequence.then(() => {
-                                    return makeRequest('loadComponentDefaults', {componentName})
+            if (response) {
+                let componentsTree = response;
+                componentsTree['Html'] = getSortedHtmlComponents();
+                let componentDefaultsMap = new Map();
+                let sequence = Promise.resolve();
+                forOwn(componentsTree, (group, groupName) => {
+                    if (isObject(group)) {
+                        forOwn(group, (componentTypeValue, componentName) => {
+                            sequence = sequence
+                                .then(() => {
+                                    return invokeStructor('getComponentDefaults', {componentName})
                                         .then(response => {
-                                            if(!response || response.length <= 0){
+                                            if (!response || response.length <= 0) {
                                                 let htmlDefaults = HtmlComponents[componentName];
                                                 response = [];
                                                 if (htmlDefaults) {
@@ -79,29 +79,30 @@ export function loadComponentsTree(){
                                             }
                                             componentDefaultsMap.set(componentName, response);
                                         });
+                                })
+                                .catch(e => {
+                                    console.error(e);
                                 });
-                            });
-                        }
-                    });
-                    return sequence.then(() => {
-                        result.componentDefaultsMap = componentDefaultsMap;
-                        result.componentsTree = componentsTree;
-                        return result;
-                    });
-                }
+                        });
+                    }
+                });
+                return sequence.then(() => {
+                    result.componentDefaultsMap = componentDefaultsMap;
+                    result.componentsTree = componentsTree;
+                    return result;
+                });
             }
             return Promise.resolve(result);
         });
 }
 
-export function loadComponentOptions(componentName, sourceCodeFilePath){
+export function loadComponentOptions(componentName, sourceCodeFilePath) {
     let result = {};
-    return makeRequest('readComponentDocument', {componentName})
+    return invokeStructor('getComponentNotes', {componentName})
         .then(response => {
-            console.log('loadComponentOptions Response: ' + JSON.stringify(response));
             result.readmeText = response;
-            if(sourceCodeFilePath){
-                return makeRequest('readComponentCode', {filePath: sourceCodeFilePath})
+            if (sourceCodeFilePath) {
+                return invokeStructor('getComponentSourceCode', {filePath: sourceCodeFilePath})
                     .then(response => {
                         result.sourceCode = response;
                         return result;
@@ -112,6 +113,6 @@ export function loadComponentOptions(componentName, sourceCodeFilePath){
         });
 }
 
-export function writeComponentSource(sourceCodeFilePath, sourceCode){
-    return makeRequest('rewriteComponentCode', {filePath: sourceCodeFilePath, sourceCode});
+export function writeComponentSource(sourceCodeFilePath, sourceCode) {
+    return invokeStructor('writeComponentSourceCode', {filePath: sourceCodeFilePath, sourceCode});
 }

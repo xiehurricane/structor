@@ -14,9 +14,57 @@
  * limitations under the License.
  */
 
+import path from 'path';
 import * as config from '../commons/configuration.js';
 import * as fileManager from '../commons/fileManager.js';
+import * as validator from '../commons/validator.js';
+
+function isFirstCharacterInUpperCase(text){
+    if (text && text.length > 0) {
+        let firstChar = text.charAt(0);
+        let firstCharUpperCase = firstChar.toUpperCase();
+        return firstChar === firstCharUpperCase;
+    }
+    return false;
+}
 
 export function readProjectJsonModel(){
     return fileManager.readJson(config.deskModelFilePath());
+}
+
+export function readDefaults(componentName){
+    let lookupComponentName =
+        isFirstCharacterInUpperCase(componentName) ? componentName : ('html-' + componentName);
+    let filePath = path.join(config.componentDefaultsDirPath(), lookupComponentName + '.json');
+    return fileManager.readJson(filePath)
+        .catch( err => {
+            return [];
+        });
+}
+
+export function readComponentDocument(componentName){
+    const componentNoteFilePath = path.join(config.docsComponentsDirPath(), componentName + '.md');
+    return fileManager.readFile(componentNoteFilePath)
+        .then( fileData => {
+            fileData = fileData || 'Component does not have notes';
+            return fileData;
+        })
+        .catch(e => {
+            return 'Component does not have notes';
+        });
+}
+
+export function readComponentSourceCode(filePath){
+    return fileManager.readFile(filePath);
+}
+
+export function writeComponentSourceCode(filePath, sourceCode){
+    return validator.validateJSCode(sourceCode)
+        .then(() => {
+            return fileManager.writeFile(filePath, sourceCode, false);
+        });
+}
+
+export function writeProjectJsonModel(jsonObj){
+    return fileManager.writeJson(config.deskModelFilePath(), jsonObj);
 }

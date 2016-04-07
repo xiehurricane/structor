@@ -19,9 +19,9 @@ import { fork, take, call, put, race } from 'redux-saga/effects';
 import * as actions from './actions.js';
 import * as spinnerActions from '../AppSpinner/actions.js';
 import * as messageActions from '../AppMessage/actions.js';
-//import * as deskActions from '../../workspace/Desk/actions.js';
+import * as deskActions from '../../workspace/Desk/actions.js';
 import * as deskPageActions from '../../workspace/DeskPage/actions.js';
-import { loadComponents } from '../../workspace/LibraryPanel/actions.js';
+import * as libraryPanelActions from '../../workspace/LibraryPanel/actions.js';
 import { serverApi, cookies } from '../../../api';
 
 const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out'), ms));
@@ -85,8 +85,9 @@ function* loadProject(){
         if(response){
             const {projectConfig, projectStatus} = response;
             if(projectStatus === 'ready-to-go'){
-                yield put(deskPageActions.getModel());
-                yield put(loadComponents());
+                const model = yield call(serverApi.getProjectModel);
+                yield put(deskPageActions.loadModel(model || {}));
+                yield put(libraryPanelActions.loadComponents());
             }
             yield put(actions.getProjectInfoDone({projectConfig}));
 

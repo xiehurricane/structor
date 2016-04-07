@@ -96,6 +96,7 @@ function* loadComponentOptions(componentName, sourceFilePath){
 function* loadOptions(){
     while(true){
         const { payload } = yield take(actions.LOAD_OPTIONS);
+        console.log(JSON.stringify(payload, null, 4));
         yield put(spinnerActions.started('Loading component options'));
         try {
             const {sourceFilePath, componentName} = payload;

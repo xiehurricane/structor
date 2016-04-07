@@ -24,6 +24,19 @@ import { containerActions } from './actions.js';
 import { utilsStore, graphApi, previewGraphApi } from '../../../api/index.js';
 import { CLIPBOARD_CUT } from '../ClipboardControls/actions.js';
 
+let lastWaitTimer = undefined;
+const wait = (testFunc, launchFunc) => {
+    if(lastWaitTimer){
+        clearTimeout(lastWaitTimer);
+        lastWaitTimer = undefined;
+    }
+    if(!testFunc()){
+        lastWaitTimer = setTimeout(() => { wait(testFunc, launchFunc); }, 3000);
+    } else {
+        launchFunc();
+    }
+};
+
 class Container extends Component {
 
     constructor(props) {
@@ -42,12 +55,11 @@ class Container extends Component {
         const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } = this.props;
         const { loadOptions } = this.props;
         loadPage();
+        this.contentDocument = domNode.contentDocument;
+        this.contentWindow = domNode.contentWindow;
         domNode.onload = ( () => {
 
-            this.contentDocument = domNode.contentDocument;
-            this.contentWindow = domNode.contentWindow;
-            if(this.contentWindow.pageReadyState !== 'initialized'){
-
+            const initPage = () => {
                 this.contentWindow.onPageDidMount = (page, pathname) => {
                     this.page = page;
 
@@ -142,10 +154,13 @@ class Container extends Component {
                 };
 
                 this.contentWindow.__createPageDesk();
-            }
-            pageLoaded();
+                wait(() => this.contentWindow.pageReadyState === 'initialized', pageLoaded);
+                //pageLoaded();
+            };
+            wait(() => this.contentWindow.pageReadyState === 'ready', initPage);
         });
     }
+
 
     componentWillUpdate(nextProps, nextState){
 
@@ -161,8 +176,11 @@ class Container extends Component {
             var domNode = ReactDOM.findDOMNode(this);
             domNode.src = '/deskpage' + componentModel.currentPagePath;
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
-            //console.log('Switching to path: ' + newComponentModel.currentPagePath);
-            this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
+            if(this.contentWindow){
+                // only when page is already loaded
+                console.log('Switching to path: ' + newComponentModel.currentPagePath);
+                this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
+            }
         } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
         } else if(newComponentModel.markedUpdateCounter !== componentModel.markedUpdateCounter) {

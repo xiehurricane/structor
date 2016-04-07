@@ -46,17 +46,22 @@ function printError(message, error){
 function callControllerMethod(controller, req, res){
     let methodName = req.body.methodName;
     let data = req.body.data || {};
-    controller[methodName](data)
-        .then( response => {
-            if(response === undefined){
-                response = null;
-            }
-            res.send({ data: response });
-        })
-        .catch( err => {
-            let errorMessage = err.message ? err.message : err.toString();
-            res.send({ error: true, errors: [errorMessage] });
-        });
+    console.log('Call controller method: ' + methodName);
+    if(controller[methodName]){
+        controller[methodName](data)
+            .then( response => {
+                if(response === undefined){
+                    response = null;
+                }
+                res.send({ data: response });
+            })
+            .catch( err => {
+                let errorMessage = err.message ? err.message : err.toString();
+                res.send({ error: true, errors: [errorMessage] });
+            });
+    } else {
+        res.send({ error: true, errors: ['Server does not have method: ' + methodName] });
+    }
 }
 
 export function initServer(options){

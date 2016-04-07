@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import express from 'express';
+import rewrite from 'express-urlrewrite';
 import * as config from '../commons/configuration.js';
+import * as indexManager from '../commons/indexManager.js';
 import * as storageManager from './storageManager.js';
 import * as middlewareCompilerManager from './middlewareCompilerManager.js';
 
@@ -42,17 +44,44 @@ export function getConfig(){
 }
 
 export function initMiddleware(){
-    if(serverRef && !isMiddlewareInitialized){
-        const {app, ioSocketClient} = serverRef;
-        app.use(middlewareCompilerManager.getDevMiddleware());
-        app.use(middlewareCompilerManager.getHotMiddleware());
-        app.use(middlewareCompilerManager.getBuilderMiddleware({
-            callback: stats => {
-                ioSocketClient.emit('compiler.message', stats);
-            }
-        }));
-        app.use(rewrite('/deskpage/*', '/desk/index.html'));
-        app.use('/desk', express.static(config.deskDirPath()));
-        isMiddlewareInitialized = true;
-    }
+    return new Promise((resolve, reject) => {
+        if(serverRef && !isMiddlewareInitialized){
+            const {app, ioSocketClient} = serverRef;
+            app.use(middlewareCompilerManager.getDevMiddleware());
+            app.use(middlewareCompilerManager.getHotMiddleware());
+            app.use(middlewareCompilerManager.getBuilderMiddleware({
+                callback: stats => {
+                    ioSocketClient.emit('compiler.message', stats);
+                }
+            }));
+            app.use(rewrite('/deskpage/*', '/desk/index.html'));
+            app.use('/desk', express.static(config.deskDirPath()));
+            isMiddlewareInitialized = true;
+        }
+        resolve();
+    });
+}
+
+export function getComponentsTree(){
+    return indexManager.getComponentsTree();
+}
+
+export function getComponentDefaults(options){
+    return storageManager.readDefaults(options.componentName);
+}
+
+export function getComponentNotes(options){
+    return storageManager.readComponentDocument(options.componentName);
+}
+
+export function getComponentSourceCode(options){
+    return storageManager.readComponentSourceCode(options.filePath);
+}
+
+export function writeComponentSourceCode(options){
+    return storageManager.writeComponentSourceCode(options.filePath, options.sourceCode);
+}
+
+export function saveProjectModel(options){
+    return storageManager.writeProjectJsonModel(options.model);
 }
