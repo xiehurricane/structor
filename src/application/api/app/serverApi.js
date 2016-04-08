@@ -116,3 +116,7 @@ export function loadComponentOptions(componentName, sourceCodeFilePath) {
 export function writeComponentSource(sourceCodeFilePath, sourceCode) {
     return invokeStructor('writeComponentSourceCode', {filePath: sourceCodeFilePath, sourceCode});
 }
+
+export function getAvailableGeneratorsList(){
+    return invokeStructor('getAvailableGeneratorsList');
+}

@@ -17,18 +17,15 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    sandboxProfile: 'encapsulated'
+    stage: 'step1',
+
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    //if(type === actions.RELOAD_PAGE){
-    //    return Object.assign({}, state, {
-    //        reloadPageCounter: state.reloadPageCounter + 1
-    //    });
-    //}
+
 
     return state;
 }

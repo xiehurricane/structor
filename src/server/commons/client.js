@@ -20,7 +20,7 @@ import request from 'request';
 let authenticationToken = null;
 
 export function setAuthenticationToken(token) {
-    this.authenticationToken = token;
+    authenticationToken = token;
 }
 
 export function post(url, requestBody) {

@@ -15,13 +15,17 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { hideGeneratorFrame } from '../../app/AppContainer/actions.js';
-import { started, done } from '../../app/AppSpinner/actions.js';
+import { hideGenerator } from '../../app/AppContainer/actions.js';
+//import { started, done } from '../../app/AppSpinner/actions.js';
 
-export const hideFrame = () => (dispatch, getState) => {
-    dispatch(hideGeneratorFrame());
+export const LOAD_GENERATORS = "Generator/LOAD_GENERATORS";
+
+export const loadGenerators = () => ({type: LOAD_GENERATORS});
+
+export const hide = () => (dispatch, getState) => {
+    dispatch(hideGenerator());
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hideGeneratorFrame, started, done
+    hide
 }, dispatch);

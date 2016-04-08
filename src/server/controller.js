@@ -50,10 +50,13 @@ function callControllerMethod(controller, req, res){
     if(controller[methodName]){
         controller[methodName](data)
             .then( response => {
-                if(response === undefined){
-                    response = null;
+                if (response === undefined) {
+                    res.send({data: null});
+                } else if (response.error) {
+                    res.send({ error: true, errors: response.errors });
+                } else {
+                    res.send({data: response});
                 }
-                res.send({ data: response });
             })
             .catch( err => {
                 let errorMessage = err.message ? err.message : err.toString();

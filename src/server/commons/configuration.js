@@ -36,11 +36,11 @@ let config = {
     }
 };
 
-function setupProjectPaths(rootDirPath){
+function setupProjectPaths(rootDirPath) {
     const absRoot = path.join(rootDirPath, SERVICE_DIR);
     config.project.paths = {
         dir: rootDirPath,
-        configFilePath: path.join(absRoot, 'config.js'),
+        configFilePath: path.join(absRoot, 'config.json'),
         webpackConfigFilePath: path.join(absRoot, 'webpack.config.js'),
         templatesDirPath: path.join(absRoot, 'templates'),
         deskSourceDirPath: path.join(absRoot, 'src'),
@@ -58,7 +58,7 @@ function setupProjectPaths(rootDirPath){
     };
 }
 
-function setupServerPaths(rootDirPath){
+function setupServerPaths(rootDirPath) {
     config.server.paths = {
         dir: rootDirPath,
         packageFilePath: path.join(rootDirPath, 'package.json'),
@@ -66,7 +66,7 @@ function setupServerPaths(rootDirPath){
     };
 }
 
-function checkPaths(confObj){
+function checkPaths(confObj) {
     let sequence = Promise.resolve([]);
     forOwn(confObj, (value, prop) => {
         sequence = sequence.then(errors => {
@@ -83,98 +83,70 @@ function checkPaths(confObj){
     return sequence;
 }
 
-function checkProjectDir(){
+function checkProjectDir() {
     return checkPaths(config.project.paths);
 }
 
-function rewriteProjectConfigOption(optionString){
-    return fileManager.readFile(config.project.paths.configFilePath)
-        .then( data => {
-            if(!data){
-                throw Error('Project config file is empty.');
+function loadProjectConfig() {
+    return fileManager.readJson(config.project.paths.configFilePath)
+        .then(jsonData => {
+            let newPaths = {};
+            if (jsonData.paths) {
+                forOwn(jsonData.paths, (value, prop) => {
+                    newPaths[prop] = path.join(config.project.paths.dir, value);
+                });
+            } else {
+                throw Error('The paths section is missing in the current project configuration.');
             }
-            try{
-                return fileParser.getFileAst(data);
-            } catch(e){
-                throw Error(e.message + '. File path: ' + config.project.paths.configFilePath);
+            let newFiles = {};
+            if (jsonData.files) {
+                forOwn(jsonData.files, (value, prop) => {
+                    newFiles[prop] = path.join(config.project.paths.dir, value);
+                });
+            } else {
+                throw Error('The files section is missing in the current project configuration.');
             }
-        })
-        .then(ast => {
-            var newAst = fileParser.getFileAst('var c = {' + optionString + '}');
-            var newPart = null;
-            fileParser.traverse(newAst, node => {
-                if(node.type === 'VariableDeclarator' && node.id.name === 'c'){
-                    newPart = node.init.properties[0];
-                }
-            });
-
-            if (ast.body[0].declaration && ast.body[0].declaration.properties) {
-                let properties = ast.body[0].declaration.properties;
-                let index = -1;
-                if (properties.length > 0) {
-                    index = _.findIndex(properties, (o) => {
-                        return (o.key && o.key.type === 'Identifier' && o.key.name === newPart.key.name);
-                    });
-                }
-                if (index >= 0) {
-                    ast.body[0].declaration.properties[index] = newPart;
-                } else {
-                    ast.body[0].declaration.properties.push(
-                        newPart
-                    );
-                }
-            }
-            return fileManager.writeFile(
-                config.project.paths.configFilePath, this.fileGenerator.generateFileFromAst(ast), false);
+            config.project.conf = {
+                paths: newPaths,
+                files: newFiles
+            };
         });
 }
 
-function loadProjectConfig(){
-    return new Promise((resolve, reject) => {
-        try{
-            delete require.cache[config.project.paths.configFilePath];
-            config.project.conf = require(config.project.paths.configFilePath);
-            resolve();
-        } catch(e){
-            reject('Could not load project config file. Error: ' + (e.message ? e.message : e));
-        }
-    });
-}
-
-function loadServerConfig(){
+function loadServerConfig() {
     return fileManager.readJson(config.server.paths.packageFilePath)
         .then(jsonData => {
-            try{
+            try {
                 config.server.packageConf = JSON.stringify(jsonData);
-            } catch(e){
+            } catch (e) {
                 throw Error('Could not parse JSON file: ' + config.server.paths.packageFilePath);
             }
         });
 }
 
-export function serverDir(value){
-    if(arguments.length > 0){
+export function serverDir(value) {
+    if (arguments.length > 0) {
         setupServerPaths(value);
     } else {
         return config.server.paths.dir;
     }
 }
 
-export function projectDir(value){
-    if(arguments.length > 0){
+export function projectDir(value) {
+    if (arguments.length > 0) {
         setupProjectPaths(value);
     } else {
         return config.project.paths.dir;
     }
 }
 
-export function reinit(){
+export function reinit() {
     const serverDirPath = serverDir();
     const projectDirPath = projectDir();
     return init(serverDirPath, projectDirPath);
 }
 
-export function init(serverDirPath, projectDirPath){
+export function init(serverDirPath, projectDirPath) {
     config.status = undefined;
     serverDir(serverDirPath);
     return loadServerConfig()
@@ -188,8 +160,8 @@ export function init(serverDirPath, projectDirPath){
                     projectDir(projectDirPath);
                     return checkProjectDir()
                         .then(errors => {
-                            if(errors.length > 0){
-                                let  messages = '';
+                            if (errors.length > 0) {
+                                let messages = '';
                                 errors.forEach(error => {
                                     messages += error + '\n';
                                 });
@@ -207,54 +179,62 @@ export function init(serverDirPath, projectDirPath){
         });
 }
 
-export function status(){
+export function status() {
     return config.status;
 }
 
-export function asObject(){
+export function asObject() {
     return Object.assign({}, config);
 }
 
-export function serverNodeModulesDirPath(){
+export function serverNodeModulesDirPath() {
     return config.server.paths.nodeModulesDirPath;
 }
 
-export function webpackConfigFilePath(){
+export function webpackConfigFilePath() {
     return config.project.paths.webpackConfigFilePath;
 }
 
-export function deskEntryPointFilePath(){
+export function deskEntryPointFilePath() {
     return config.project.paths.deskEntryPointFilePath;
 }
 
-export function deskDirPath(){
+export function deskDirPath() {
     return config.project.paths.deskDirPath;
 }
 
-export function deskModelFilePath(){
+export function deskModelFilePath() {
     return config.project.paths.deskModelFilePath;
 }
 
-export function deskIndexFilePath(){
+export function deskSourceDirPath(){
+    return config.project.paths.deskSourceDirPath;
+}
+
+export function deskIndexFilePath() {
     return config.project.paths.deskIndexFilePath;
 }
 
-export function nodeModulesDirPath(){
+export function nodeModulesDirPath() {
     return config.project.paths.nodeModulesDirPath;
 }
 
-export function componentDefaultsDirPath(){
+export function componentDefaultsDirPath() {
     return config.project.paths.componentDefaultsDirPath;
 }
 
-export function docsComponentsDirPath(){
+export function docsComponentsDirPath() {
     return config.project.paths.docsComponentsDirPath;
 }
 
-export function projectName(){
+export function projectName() {
     return config.project.conf.projectName;
 }
 
-export function projectId(){
+export function projectId() {
     return config.project.conf.projectId;
+}
+
+export function getProjectConfig() {
+    return config.project.conf;
 }

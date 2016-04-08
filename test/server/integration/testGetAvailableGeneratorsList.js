@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
+require('babel-register');
+var restApi = require('../../../src/application/api/app/restApi.js');
+var url1 = 'http://localhost:2222/invoke';
+var method = 'getAvailableGeneratorsList';
+var taskList = [
+    restApi.makeRequest(url1, method)
+        .then(response => {
+            const responseText = JSON.stringify(response, null, 4);
+            console.log(`From ${url1}: ${responseText}`);
+        })
+        .catch(e => {
+            console.error(e);
+        })
+];
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions
-}, dispatch);
+Promise.all(taskList)
+    .then(() => {
+        console.log('Done.');
+    });

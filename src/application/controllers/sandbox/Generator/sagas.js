@@ -14,9 +14,31 @@
  * limitations under the License.
  */
 
-//import { fork, take, call, put, cancel } from 'redux-saga/effects';
-//import { SagaCancellationException } from 'redux-saga';
+import { fork, take, call, put, cancel } from 'redux-saga/effects';
+import { SagaCancellationException } from 'redux-saga';
+import * as actions from './actions.js';
+import * as spinnerActions from '../AppSpinner/actions.js';
+import * as messageActions from '../AppMessage/actions.js';
+import * as generatorListActions from '../GeneratorsList/actions.js';
+import * as appContainerActions from '../../app/AppContainer/actions.js';
+import { serverApi, cookies } from '../../../api';
+
+function* loadGenerators(){
+    while(true){
+        yield take(actions.LOAD_GENERATORS);
+        yield put(spinnerActions.started('Loading available generators'));
+        try {
+            const generatorsList = yield call(serverApi.getAvailableGeneratorsList);
+            yield put(generatorListActions.setGenerators(generatorsList));
+            yield put(appContainerActions.showGenerator());
+        } catch(error) {
+            yield put(messageActions.failed('Generators loading has an error. ' + (error.message ? error.message : error)));
+        }
+        yield put(spinnerActions.done('Loading available generators'));
+    }
+}
 
 // main saga
 export default function* mainSaga() {
+    yield [fork(loadGenerators)];
 };

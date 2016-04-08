@@ -17,7 +17,7 @@
 require('babel-register');
 var config = require('../../src/server/commons/configuration.js');
 
-var projectDir = '/Volumes/Development/projects/structor/structor-github-boilerplates/bootstrap-prepack';
+var projectDir = '/Volumes/Development/projects/structor/structor-github-boilerplates/bootstrap-prepack-probe';
 var serverDir = '/Volumes/Development/projects/structor/structor-github/structor';
 
 config.init(serverDir, projectDir)

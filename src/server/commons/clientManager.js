@@ -24,16 +24,12 @@ export function getAllProjects() {
     return client.get(SERVICE_URL + '/sm/public/gallery/list');
 }
 
-export function invokePreGenerationOnline(options) {
-    return this.client.post(SERVICE_URL +
-        '/sm/gengine/preprocess?generatorKey=' + options.generatorKey + '&projectId=' + options.projectId,
-        options.data);
+export function invokePreGeneration(generatorId, version, data) {
+    return client.post(SERVICE_URL + '/sm/gengine/preprocess?generatorId=' + generatorId + '&version=' + version, data);
 }
 
-export function invokeGenerationOnline(options) {
-    return client.post(SERVICE_URL +
-        '/sm/gengine/process?generatorKey=' + options.generatorKey + '&projectId=' + options.projectId,
-        options.data);
+export function invokeGeneration(generatorId, version, data) {
+    return client.post(SERVICE_URL + '/sm/gengine/process?generatorId=' + generatorId + '&version=' + version, data);
 }
 
 export function initUserCredentialsByToken(token) {
@@ -43,6 +39,7 @@ export function initUserCredentialsByToken(token) {
             return Object.assign({}, userAccount, {token});
         })
         .catch(err => {
+            console.error(err);
             console.log('Authentication token is invalid or was expired');
             return {};
         });
@@ -51,7 +48,10 @@ export function initUserCredentialsByToken(token) {
 export function initUserCredentials(username, password) {
     return client.post(SERVICE_URL + '/sm/auth', {username, password})
         .then(response => {
-            return initUserCredentialsByToken(response);
+            if(response.token){
+                return initUserCredentialsByToken(response.token);
+            }
+            throw Error('Token is missing in response.');
         })
         .catch(error => {
             throw Error('Account credentials are not valid.');
@@ -91,7 +91,7 @@ export function getGeneratorBriefText(generatorKey) {
     throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
 }
 
-export function getAvailableGeneratorList() {
+export function getAvailableGeneratorsList() {
     if (config.projectId()) {
         return client.get(SERVICE_URL + '/sm/public/generator/map?projectId=' + config.projectId());
     }

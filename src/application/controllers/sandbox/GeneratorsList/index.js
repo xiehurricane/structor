@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions
-}, dispatch);
+export {
+    reducer,
+    mainSaga
+}
+
+export default Container;

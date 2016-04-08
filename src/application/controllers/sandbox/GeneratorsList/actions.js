@@ -15,8 +15,12 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
+//import { hideGeneratorFrame } from '../../app/AppContainer/actions.js';
+//import { started, done } from '../../app/AppSpinner/actions.js';
+
+export const SET_GENERATORS = "Generator/SET_GENERATORS";
+
+export const setGenerators = (generatorsList) => ({type: SET_GENERATORS, payload: generatorsList});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions
 }, dispatch);

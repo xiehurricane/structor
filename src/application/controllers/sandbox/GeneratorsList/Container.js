@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
-import GeneratorsList from '../GeneratorsList';
+import EncapsulatedFrame from '../../../profiles/encapsulated/GeneratorFrame';
 
 class Container extends Component {
 
@@ -30,7 +30,7 @@ class Container extends Component {
 
     render(){
 
-        const { componentModel: {stage} } = this.props;
+        const { componentModel: {} } = this.props;
 
         let frameStyle = {
             display: 'block',
@@ -40,9 +40,7 @@ class Container extends Component {
             padding : "0px"
         };
         let content = null;
-        if(stage === 'step1'){
-            content = (<GeneratorsList />);
-        }
+
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}>
                 <div style={frameStyle}>

@@ -30,8 +30,8 @@ export const signIn = (email, password, staySignedIn) => ({type: SIGN_IN, payloa
 export const signInDone = (payload) => ({type: SIGN_IN_DONE, payload});
 export const signInFailed = (error) => ({type: SIGN_IN_FAILED, payload: error});
 export const signOut = () => ({type: SIGN_OUT});
-export const showGeneratorFrame = () => ({type: SHOW_GENERATOR});
-export const hideGeneratorFrame = () => ({type: HIDE_GENERATOR});
+export const showGenerator = () => ({type: SHOW_GENERATOR});
+export const hideGenerator = () => ({type: HIDE_GENERATOR});
 
 export const containerActions = (dispatch) => bindActionCreators({
     getProjectInfo, getProjectInfoDone, signIn, signInDone, signInFailed, signOut

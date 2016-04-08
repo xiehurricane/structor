@@ -20,6 +20,7 @@ import * as indexManager from '../commons/indexManager.js';
 import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as middlewareCompilerManager from './middlewareCompilerManager.js';
+import * as generatorManager from './generatorManager.js';
 
 let serverRef = undefined;
 let isMiddlewareInitialized = false;
@@ -91,6 +92,35 @@ export function initUserCredentialsByToken(options){
     return clientManager.initUserCredentialsByToken(options.token);
 }
 
+export function initUserCredentials(options){
+    return clientManager.initUserCredentials(options.username, options.password);
+}
+
 export function getProjectsGallery(){
     return clientManager.getAllProjects();
+}
+
+export function getAvailableGeneratorsList(){
+    return clientManager.getAvailableGeneratorsList();
+}
+
+export function pregenerate(options){
+    const {generatorId, version, groupName, componentName, model} = options;
+    return generatorManager.initGeneratorData(groupName, componentName, model)
+        .then(generatorData => {
+            return clientManager.invokePreGeneration(generatorId, version, generatorData);
+        });
+}
+
+export function generate(options){
+    const {generatorId, version, groupName, componentName, model, metadata} = options;
+    return generatorManager.initGeneratorData(groupName, componentName, model, metadata)
+        .then(generatorData => {
+            return clientManager.invokeGeneration(generatorId, version, generatorData);
+        });
+}
+
+export function saveGenerated(options){
+    const {groupName, componentName, files} = options;
+    return generatorManager.saveGenerated(groupName, componentName, files);
 }

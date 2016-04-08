@@ -1,0 +1,1134 @@
+{
+  "type": "Row",
+  "children": [
+    {
+      "type": "Col",
+      "props": {
+        "xs": 3,
+        "md": 3,
+        "sm": 3,
+        "lg": 3,
+        "data-umyid": "31"
+      },
+      "children": [
+        {
+          "type": "Panel",
+          "props": {
+            "bsStyle": "primary",
+            "heading": "Test"
+          },
+          "children": [
+            {
+              "variantName": "Unsaved variant",
+              "type": "div",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty div"
+                },
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "text",
+                    "hasFeedback": true,
+                    "placeholder": "Enter value",
+                    "label": "Label for input",
+                    "help": "Help for input"
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ],
+          "graphRef": {
+            "key": 32
+          },
+          "text": ""
+        },
+        {
+          "variantName": "formatted",
+          "type": "DateTimePickerWrapper",
+          "props": {
+            "format": "MM/DD/YYYY HH:mm:ss"
+          },
+          "children": []
+        },
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "32"
+          },
+          "children": [
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 255
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 254
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 253
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 258
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 257
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 256
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 252
+          }
+        },
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "32"
+          },
+          "children": [
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 255
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 254
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 253
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 258
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 257
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 256
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 252
+          }
+        }
+      ],
+      "graphRef": {
+        "key": 31
+      }
+    },
+    {
+      "type": "Col",
+      "props": {
+        "xs": 3,
+        "md": 3,
+        "sm": 3,
+        "lg": 3,
+        "data-umyid": "39"
+      },
+      "children": [
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "36"
+          },
+          "children": [
+            {
+              "variantName": "Unsaved variant",
+              "type": "div",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "",
+                  "props": {
+                  }
+                },
+                {
+                  "type": "Input",
+                  "props": {
+                    "type": "text",
+                    "hasFeedback": true,
+                    "placeholder": "Enter value",
+                    "label": "Label for input",
+                    "help": "Help for input"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "66"
+                  },
+                  "graphRef": {
+                    "key": 40
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "65"
+              },
+              "graphRef": {
+                "key": 39
+              }
+            },
+            {
+              "variantName": "Unsaved variant",
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty p"
+                }
+              ]
+            },
+            {
+              "type": "Button",
+              "props": {
+                "bsStyle": "default"
+              },
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Default",
+                  "props": {
+                  },
+                  "componentName": null
+                }
+              ],
+              "componentName": null
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 255
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 254
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 253
+              }
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "66"
+                  },
+                  "graphRef": {
+                    "key": 237
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "65"
+              },
+              "graphRef": {
+                "key": 236
+              }
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "68"
+                  },
+                  "graphRef": {
+                    "key": 42
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "67"
+              },
+              "graphRef": {
+                "key": 41
+              }
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "70"
+                  },
+                  "graphRef": {
+                    "key": 44
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "69"
+              },
+              "graphRef": {
+                "key": 43
+              }
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "38"
+                  },
+                  "graphRef": {
+                    "key": 38
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "37"
+              },
+              "graphRef": {
+                "key": 37
+              }
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "38"
+                  },
+                  "graphRef": {
+                    "key": 38
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "37"
+              },
+              "graphRef": {
+                "key": 37
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 36
+          }
+        }
+      ],
+      "graphRef": {
+        "key": 45
+      }
+    },
+    {
+      "type": "Col",
+      "props": {
+        "xs": 3,
+        "md": 3,
+        "sm": 3,
+        "lg": 3,
+        "data-umyid": "35"
+      },
+      "children": [
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "40"
+          },
+          "children": [
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "72"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "73"
+                      },
+                      "graphRef": {
+                        "key": 49
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 48
+                  }
+                },
+                "data-umyid": "71"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 47
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "72"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "73"
+                      },
+                      "graphRef": {
+                        "key": 243
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 242
+                  }
+                },
+                "data-umyid": "71"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 241
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 55
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 54
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 53
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 246
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 245
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 244
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "81"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "82"
+                      },
+                      "graphRef": {
+                        "key": 58
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 57
+                  }
+                },
+                "data-umyid": "80"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 56
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "81"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "82"
+                      },
+                      "graphRef": {
+                        "key": 249
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 248
+                  }
+                },
+                "data-umyid": "80"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 247
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 46
+          }
+        }
+      ],
+      "graphRef": {
+        "key": 35
+      }
+    },
+    {
+      "type": "Col",
+      "props": {
+        "xs": 3,
+        "md": 3,
+        "sm": 3,
+        "lg": 3,
+        "data-umyid": "43"
+      },
+      "children": [
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "44"
+          },
+          "children": [
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "75"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "76"
+                      },
+                      "graphRef": {
+                        "key": 240
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 239
+                  }
+                },
+                "data-umyid": "74"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 238
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "75"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "76"
+                      },
+                      "graphRef": {
+                        "key": 240
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 239
+                  }
+                },
+                "data-umyid": "74"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 238
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "75"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "76"
+                      },
+                      "graphRef": {
+                        "key": 52
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 51
+                  }
+                },
+                "data-umyid": "74"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 50
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 232
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 231
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 230
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 235
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 234
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 233
+              }
+            },
+            {
+              "type": "Button",
+              "props": {
+                "bsStyle": "danger"
+              },
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Danger",
+                  "props": {
+                  },
+                  "componentName": null
+                }
+              ],
+              "componentName": null
+            }
+          ],
+          "graphRef": {
+            "key": 60
+          }
+        },
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "44"
+          },
+          "children": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "46"
+                  },
+                  "graphRef": {
+                    "key": 62
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "45"
+              },
+              "graphRef": {
+                "key": 61
+              }
+            },
+            {
+              "type": "p",
+              "children": [
+                {
+                  "type": "span",
+                  "text": "Empty Panel",
+                  "props": {
+                    "data-umyid": "46"
+                  },
+                  "graphRef": {
+                    "key": 251
+                  }
+                }
+              ],
+              "props": {
+                "data-umyid": "45"
+              },
+              "graphRef": {
+                "key": 250
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 60
+          }
+        },
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "32"
+          },
+          "children": [
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 255
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 254
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 253
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 258
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 257
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 256
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 252
+          }
+        },
+        {
+          "type": "Panel",
+          "props": {
+            "data-umyid": "32"
+          },
+          "children": [
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 255
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 254
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 253
+              }
+            },
+            {
+              "type": "Input",
+              "props": {
+                "type": "text",
+                "placeholder": "Enter value",
+                "addonBefore": "$",
+                "buttonAfter": {
+                  "type": "Button",
+                  "props": {
+                    "bsStyle": "default",
+                    "data-umyid": "78"
+                  },
+                  "children": [
+                    {
+                      "type": "span",
+                      "text": "Default",
+                      "props": {
+                        "data-umyid": "79"
+                      },
+                      "graphRef": {
+                        "key": 258
+                      }
+                    }
+                  ],
+                  "graphRef": {
+                    "key": 257
+                  }
+                },
+                "data-umyid": "77"
+              },
+              "children": [],
+              "graphRef": {
+                "key": 256
+              }
+            }
+          ],
+          "graphRef": {
+            "key": 252
+          }
+        }
+      ],
+      "graphRef": {
+        "key": 59
+      }
+    }
+  ],
+  "props": {
+    "data-umyid": "30"
+  },
+  "graphRef": {
+    "key": 30
+  }
+}
