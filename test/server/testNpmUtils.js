@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 require('babel-register');
-var io = require('socket.io');
-var controller = require('../../src/server/controller.js');
-
-process.on('uncaughtException',
-    function(err){
-        if(err.code === 'EADDRINUSE'){
-            console.error('Port is already in use, you can precise one with -p YOUR_PORT.');
-        } else {
-            console.log(err);
-        }
-    }
-);
-
-var portNumber = 2222;
+var _ = require('lodash');
+var npmUtils = require('../../src/server/commons/npmUtils.js');
 var workingDir = '/Volumes/Development/projects/structor/structor-github-boilerplates/bootstrap-prepack';
-var serverDir = '/Volumes/Development/projects/structor/structor-github/structor';
 
-controller.initServer({ serverDir: serverDir, projectDir: workingDir, portNumber: portNumber, io: io});
+npmUtils.getPackageAbsolutePath('lodash', workingDir)
+    .then(result => {
+        console.log(_.isBoolean(result));
+        console.log(_.isString(result));
+        console.log(result);
+
+        //return npmUtils.getPackageAbsolutePath('lodash', workingDir)
+        //    .then(result => {
+        //        console.log(result);
+        //    });
+
+    })
+    .catch(err => {
+        console.error(err);
+    });

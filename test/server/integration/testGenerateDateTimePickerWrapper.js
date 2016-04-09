@@ -28,7 +28,7 @@ restApi.makeRequest(url1, authMethod, {username: 'apustovalov@gmail.com', passwo
     })
     .then(model => {
         return restApi.makeRequest(url1, method, {
-            generatorId: 17,
+            generatorId: 21,
             version: '0001',
             groupName: 'TestGroup',
             componentName: 'TestComponent',

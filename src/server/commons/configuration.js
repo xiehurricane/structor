@@ -236,5 +236,5 @@ export function projectId() {
 }
 
 export function getProjectConfig() {
-    return config.project.conf;
+    return config.project;
 }

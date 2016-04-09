@@ -116,11 +116,14 @@ export function generate(options){
     const {generatorId, version, groupName, componentName, model, metadata} = options;
     return generatorManager.initGeneratorData(groupName, componentName, model, metadata)
         .then(generatorData => {
+            //console.log('Generator data: ' + JSON.stringify(generatorData, null, 4));
             return clientManager.invokeGeneration(generatorId, version, generatorData);
         });
 }
 
 export function saveGenerated(options){
-    const {groupName, componentName, files} = options;
-    return generatorManager.saveGenerated(groupName, componentName, files);
+    const {groupName, componentName, files, dependencies} = options;
+    return generatorManager.installDependencies(dependencies).then(() => {
+        return generatorManager.saveGenerated(groupName, componentName, files);
+    });
 }

@@ -124,17 +124,64 @@ export function copyFiles(options){
     );
 }
 
-export function copyFile(srcFilePath, destFilePath, rewrite = true){
+
+export function copyFile(srcFilePath, destFilePath){
     return new Promise( (resolve, reject) => {
-        fs.copy(srcFilePath, destFilePath, function(err){
+        fs.stat(srcFilePath, (err, stat) => {
             if(err){
                 reject(err);
-            } else {
-                resolve();
+            } else if(stat) {
+                if (stat.isDirectory()) {
+                    fs.ensureDir(srcFilePath, err => {
+                        if(err){
+                            reject(err);
+                        } else {
+                            fs.copy(srcFilePath, destFilePath, function(err){
+                                if(err){
+                                    reject(err);
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }
+                    });
+                } else if(stat.isFile()) {
+                    fs.ensureFile(srcFilePath, err => {
+                        if(err){
+                            reject(err);
+                        } else {
+                            fs.copy(srcFilePath, destFilePath, function(err){
+                                if(err){
+                                    reject(err);
+                                } else {
+                                    resolve();
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     });
 }
+
+//export function copyFile(srcFilePath, destFilePath){
+//    return new Promise((resolve, reject) => {
+//        fs.ensureFile(destFilePath, err => {
+//            if(err){
+//                reject(err);
+//            } else {
+//                fs.copy(srcFilePath, destFilePath, err => {
+//                    if(err){
+//                        reject(err);
+//                    } else {
+//                        resolve();
+//                    }
+//                });
+//            }
+//        });
+//    });
+//}
 
 export function traverseDirTree(tree, callback){
     if(tree){
