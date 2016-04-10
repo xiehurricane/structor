@@ -19,8 +19,10 @@ import { hideGenerator } from '../../app/AppContainer/actions.js';
 //import { started, done } from '../../app/AppSpinner/actions.js';
 
 export const LOAD_GENERATORS = "Generator/LOAD_GENERATORS";
+export const SELECT_GENERATOR = "Generator/SELECT_GENERATOR";
 
 export const loadGenerators = () => ({type: LOAD_GENERATORS});
+export const selectGenerator = (generatorId, version) => ({type: SELECT_GENERATOR, payload: {generatorId, version}});
 
 export const hide = () => (dispatch, getState) => {
     dispatch(hideGenerator());

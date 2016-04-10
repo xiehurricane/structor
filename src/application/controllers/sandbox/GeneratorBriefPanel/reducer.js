@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../sandbox/Generator/actions.js';
+import * as actions from './actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators
-}, dispatch);
+const initialState = {
+    infos: {}
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    if(type === actions.SET_GENERATOR_INFO){
+        let newInfos = state.infos;
+        newInfos[payload.generatorId] = payload.info;
+        return Object.assign({}, state, { infos: newInfos });
+    }
+
+    return state;
+
+}
+
+

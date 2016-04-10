@@ -16,7 +16,7 @@
 
 import _ from 'lodash';
 import path from 'path';
-import esprima from 'esprima-fb';
+import esprima from 'esprima';
 import FileManager from './FileManager.js';
 import * as fileParser from './FileParser.js';
 

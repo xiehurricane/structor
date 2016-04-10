@@ -15,9 +15,17 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../sandbox/Generator/actions.js';
+//import { hideGeneratorFrame } from '../../app/AppContainer/actions.js';
+//import { started, done } from '../../app/AppSpinner/actions.js';
+
+export const ALL_GROUP_KEY = 'All';
+
+export const SET_GENERATORS = "Generator/SET_GENERATORS";
+export const SET_FILTER = "Generator/SET_FILTER";
+
+export const setGenerators = (generators) => ({type: SET_GENERATORS, payload: generators});
+export const setFilter = (filter) => ({type: SET_FILTER, payload: filter});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators
+    setFilter
 }, dispatch);

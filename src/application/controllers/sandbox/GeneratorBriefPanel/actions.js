@@ -15,9 +15,17 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../sandbox/Generator/actions.js';
+
+import { selectGenerator } from '../Generator/actions.js';
+
+export const GET_GENERATOR_INFO = "GeneratorBriefPanel/GET_GENERATOR_INFO";
+export const SET_GENERATOR_INFO = "GeneratorBriefPanel/SET_GENERATOR_INFO";
+
+export const getGeneratorInfo = (projectId, userId, generatorId) =>
+    ({type: GET_GENERATOR_INFO, payload: {generatorId, userId, projectId}});
+export const setGeneratorInfo = (projectId, userId, generatorId, info) =>
+    ({type: SET_GENERATOR_INFO, payload: {projectId, userId, generatorId, info}});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators
+    getGeneratorInfo, selectGenerator
 }, dispatch);

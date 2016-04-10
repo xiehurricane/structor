@@ -29,7 +29,7 @@ process.on('uncaughtException',
 );
 
 var portNumber = 2222;
-var workingDir = '/Volumes/Development/projects/structor/structor-github-boilerplates/bootstrap-prepack';
+var workingDir = '/Volumes/Development/projects/structor/structor-github-boilerplates/bootstrap-prepack-probe';
 var serverDir = '/Volumes/Development/projects/structor/structor-github/structor';
 
 controller.initServer({ serverDir: serverDir, projectDir: workingDir, portNumber: portNumber, io: io});

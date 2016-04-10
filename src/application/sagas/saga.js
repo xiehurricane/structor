@@ -19,6 +19,8 @@ import appMessageSaga from '../controllers/app/AppMessage/sagas.js';
 import deskPageSaga from '../controllers/workspace/DeskPage/sagas.js';
 import libraryPanelSaga from '../controllers/workspace/LibraryPanel/sagas.js';
 import componentOptionsSaga from '../controllers/workspace/ComponentOptionsModal/sagas.js';
+import generatorSaga from '../controllers/sandbox/Generator/sagas.js';
+import generatorBriefPanelSaga from '../controllers/sandbox/GeneratorBriefPanel/sagas.js';
 
 export default function* mainSaga(){
     yield [
@@ -28,4 +30,6 @@ export default function* mainSaga(){
         fork(libraryPanelSaga),
         fork(componentOptionsSaga)
     ];
+    yield fork(generatorSaga);
+    yield fork(generatorBriefPanelSaga);
 }

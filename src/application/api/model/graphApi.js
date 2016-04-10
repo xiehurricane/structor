@@ -296,6 +296,11 @@ export function setIndexPage(pagePath){
 
 export function deletePage(pagePath){
     let { graph, model, pageNodes } = graphObject;
+
+    if(model.pages && model.pages.length === 1){
+        throw Error('The current page is the only page in the project and can not be deleted.');
+    }
+
     const pageNode = pageNodes.find(pNode => {
         return pNode.pagePath === pagePath;
     });

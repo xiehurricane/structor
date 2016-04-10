@@ -59,8 +59,8 @@ class Container extends Component {
             };
             const buttonStyle = {
                 position: 'absolute',
-                top: '0',
-                right: '0',
+                top: '0px',
+                right: '0px',
                 width: '1em',
                 height: '1em',
                 color: '#fff',

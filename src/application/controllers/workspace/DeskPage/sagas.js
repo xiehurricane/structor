@@ -29,6 +29,21 @@ function* preserveModel(){
     }
 }
 
+function* exportModel(){
+    while(true){
+        yield take(actions.EXPORT_MODEL);
+        yield put(spinnerActions.started('Exporting the project model'));
+        try{
+            const model = graphApi.getModel();
+            yield call(serverApi.exportProjectModel, model);
+            yield put(messageActions.success('Project model has been exported successfully.'));
+        } catch(e){
+            yield put(messageActions.failed('Project model exporting has an error. ' + (error.message ? error.message : error)));
+        }
+        yield put(spinnerActions.done('Exporting the project model'));
+    }
+}
+
 const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out'), ms));
 
 function* delayForCompiler(){
@@ -87,4 +102,5 @@ export default function* mainSaga() {
         fork(waitForCompiler),
         fork(preserveModel)
     ];
+    yield fork(exportModel);
 };

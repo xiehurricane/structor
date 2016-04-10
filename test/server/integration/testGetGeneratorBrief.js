@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-import {forOwn, isObject} from 'lodash';
-import { createStructuredSelector } from 'reselect';
+require('babel-register');
+var restApi = require('../../../src/application/api/app/restApi.js');
+var url1 = 'http://localhost:2222/invoke';
+var method = 'getGeneratorBrief';
+var taskList = [
+    restApi.makeRequest(url1, method, {projectId: 173, userId: 83, generatorId: 1})
+        .then(response => {
+            const responseText = JSON.stringify(response, null, 4);
+            console.log(`From ${url1}: ${responseText}`);
+        })
+        .catch(e => {
+            console.error(e);
+        })
+];
 
-
-export const modelSelector = createStructuredSelector({
-    componentModel: state => state.projectsGallery
-    //userAccountModel: state => state.appContainer.userAccount,
-});
-
+Promise.all(taskList)
+    .then(() => {
+        console.log('Done.');
+    });

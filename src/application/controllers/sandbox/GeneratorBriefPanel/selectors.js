@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../sandbox/Generator/actions.js';
+import { createStructuredSelector } from 'reselect';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators
-}, dispatch);
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.generatorBriefPanel
+});
+

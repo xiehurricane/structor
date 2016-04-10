@@ -17,16 +17,16 @@
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import { SagaCancellationException } from 'redux-saga';
 import * as actions from './actions.js';
-import * as spinnerActions from '../AppSpinner/actions.js';
-import * as messageActions from '../AppMessage/actions.js';
-import * as generatorListActions from '../GeneratorsList/actions.js';
+import * as spinnerActions from '../../app/AppSpinner/actions.js';
+import * as messageActions from '../../app/AppMessage/actions.js';
+import * as generatorListActions from '../GeneratorList/actions.js';
 import * as appContainerActions from '../../app/AppContainer/actions.js';
 import { serverApi, cookies } from '../../../api';
 
 function* loadGenerators(){
     while(true){
         yield take(actions.LOAD_GENERATORS);
-        yield put(spinnerActions.started('Loading available generators'));
+        yield put(spinnerActions.started('Loading generators'));
         try {
             const generatorsList = yield call(serverApi.getAvailableGeneratorsList);
             yield put(generatorListActions.setGenerators(generatorsList));
@@ -34,7 +34,7 @@ function* loadGenerators(){
         } catch(error) {
             yield put(messageActions.failed('Generators loading has an error. ' + (error.message ? error.message : error)));
         }
-        yield put(spinnerActions.done('Loading available generators'));
+        yield put(spinnerActions.done('Loading generators'));
     }
 }
 

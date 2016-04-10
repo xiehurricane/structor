@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
+import {forOwn, isObject} from 'lodash';
 import { createStructuredSelector } from 'reselect';
 
+
 export const modelSelector = createStructuredSelector({
-    componentModel: state => state.generatorsList
+    componentModel: state => state.projectGallery
+    //userAccountModel: state => state.appContainer.userAccount,
 });
+

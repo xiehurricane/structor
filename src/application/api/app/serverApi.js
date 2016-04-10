@@ -43,6 +43,12 @@ export function saveProjectModel(model) {
     return invokeStructor('saveProjectModel', {model: model});
 }
 
+export function exportProjectModel(model){
+    return invokeStructor('saveProjectModel', {model: model}).then(() => {
+        return invokeStructor('exportPages', {model: model});
+    });
+}
+
 export function loadComponentsTree() {
     let result = {};
     return invokeStructor('getComponentsTree', {})
@@ -119,4 +125,8 @@ export function writeComponentSource(sourceCodeFilePath, sourceCode) {
 
 export function getAvailableGeneratorsList(){
     return invokeStructor('getAvailableGeneratorsList');
+}
+
+export function getGeneratorBriefInfo(projectId, userId, generatorId){
+    return invokeStructor('getGeneratorBrief', {projectId, userId, generatorId});
 }

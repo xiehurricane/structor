@@ -25,7 +25,7 @@ class FrameOverlay extends Component {
     render() {
         if (this.props.show) {
             return (
-                <div style={{position: 'fixed', top: '0', left: '0', right: '0', bottom: '0', zIndex: '9999', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
+                <div style={{position: 'fixed', top: '0px', left: '0px', right: '0px', bottom: '0px', zIndex: '9999', backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}>
                         {this.props.children}
                     </div>

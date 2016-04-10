@@ -37,6 +37,8 @@ class Container extends Component {
             togglePageTreeview,
             toggleQuickOptions,
             setLivePreviewModeOn,
+            saveProject,
+            exportModel,
             setEditModeOn,
             reloadPage
             } = this.props;
@@ -67,11 +69,11 @@ class Container extends Component {
                             <span className="fa fa-bars" style={{fontSize: 32}} />
                         </a>
                         <ul className="dropdown-menu" role="menu">
-                            <li><a href="#" onClick={ () => { this.props.saveProject(); } }>
+                            <li><a href="#" onClick={ () => { saveProject(); } }>
                                 <span className="fa fa-save fa-fw" />&nbsp;Save project</a>
                             </li>
                             <li className="divider" />
-                            <li><a href="#" onClick={ () => { this.props.exportApplication(); } }>
+                            <li><a href="#" onClick={ () => { exportModel(); } }>
                                 <span className="fa fa-gift fa-fw" />&nbsp;Export project</a>
                             </li>
                             <li className="divider" />

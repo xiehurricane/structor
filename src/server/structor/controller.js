@@ -21,6 +21,7 @@ import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as middlewareCompilerManager from './middlewareCompilerManager.js';
 import * as generatorManager from './generatorManager.js';
+import * as exportManager from './exportManager.js';
 
 let serverRef = undefined;
 let isMiddlewareInitialized = false;
@@ -126,4 +127,16 @@ export function saveGenerated(options){
     return generatorManager.installDependencies(dependencies).then(() => {
         return generatorManager.saveGenerated(groupName, componentName, files);
     });
+}
+
+export function exportPages(options){
+    const {model} = options;
+    return exportManager.doGeneration(model).then(generatedObject => {
+        return exportManager.commitGeneration(generatedObject);
+    });
+}
+
+export function getGeneratorBrief(options){
+    const {projectId, userId, generatorId} = options;
+    return clientManager.getGeneratorBriefText(projectId, userId, generatorId);
 }

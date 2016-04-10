@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-//import { hideGeneratorFrame } from '../../app/AppContainer/actions.js';
-//import { started, done } from '../../app/AppSpinner/actions.js';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
+import * as actions from './actions.js';
 
-export const SET_GENERATORS = "Generator/SET_GENERATORS";
+export {
+    reducer,
+    mainSaga,
+    models,
+    actions
+}
 
-export const setGenerators = (generatorsList) => ({type: SET_GENERATORS, payload: generatorsList});
-
-export const containerActions = (dispatch) => bindActionCreators({
-}, dispatch);
+export default Container;

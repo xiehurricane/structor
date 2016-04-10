@@ -44,7 +44,15 @@ class Container extends Component {
 
         let content = null;
         if(workspaceMode === 'desk') {
-            content = (<Desk />);
+            content = (
+                <div style={{overflow: 'hidden'}}>
+                    <div ref='appBody' style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px'}}>
+                        <Desk />
+                        <PageOptionsModal />
+                        <ComponentOptionsModal />
+                    </div>
+                </div>
+            );
         } else if(workspaceMode === 'generator'){
             content = (<Generator />);
         } else {
@@ -54,7 +62,7 @@ class Container extends Component {
                     fixedTop={true}>
                     <Navbar.Header>
                         <Navbar.Brand>
-                            <div className='umy-logo' style={{position: 'absolute', left: 'calc(50% - 20px)', top: '0'}}></div>
+                            <div className='umy-logo' style={{position: 'absolute', left: 'calc(50% - 20px)', top: '0px'}}></div>
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
@@ -76,15 +84,7 @@ class Container extends Component {
             );
         }
 
-        return (
-            <div style={{overflow: 'hidden'}}>
-                <div ref='appBody' style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0'}}>
-                    {content}
-                    <PageOptionsModal />
-                    <ComponentOptionsModal />
-                </div>
-            </div>
-        );
+        return content;
     }
 }
 

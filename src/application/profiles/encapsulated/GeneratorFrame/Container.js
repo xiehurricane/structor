@@ -43,7 +43,7 @@ class Container extends Component {
         );
         return (
             <div style={{overflow: 'hidden'}}>
-                <div ref='appBody' style={{position: 'absolute', top: '0', left: '0', right: '0', bottom: '0'}}>
+                <div ref='appBody' style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px'}}>
                     {content}
                 </div>
             </div>

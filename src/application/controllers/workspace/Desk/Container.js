@@ -58,7 +58,7 @@ class Container extends Component {
 
         let leftPanelStyle = {
             position: 'absolute',
-            top: 0,
+            top: '0px',
             left: '4em',
             bottom: '0px',
             width: leftPanelWidth + "px",
@@ -76,7 +76,7 @@ class Container extends Component {
 
         let rightPanelStyle = {
             position: 'absolute',
-            top: 0,
+            top: '0px',
             right: '0px',
             bottom: '5px',
             width: rightPanelWidth + "px",
@@ -91,7 +91,7 @@ class Container extends Component {
         if(!deskPageModel.isLivePreviewModeOn){
             let toolbarTopStyle = {
                 position: 'absolute',
-                top: 0,
+                top: '0px',
                 left: 'calc(4em + ' + leftPanelWidth + 'px)',
                 right: '5px',
                 height: '3em'
@@ -125,12 +125,12 @@ class Container extends Component {
 
         let bodyStyle = {
             position: 'absolute',
-            top: 0,
-            left: 0,
+            top: '0px',
+            left: '0px',
             //bottom: 'calc(5px + ' + bottomPanelHeight + 'px)',
             overflowX: 'auto',
             overflowY: 'hidden',
-            bottom: 0,
+            bottom: '0px',
             WebkitOverflowScrolling: 'touch',
             right: rightPanelWidth + 'px'
         };
@@ -146,9 +146,9 @@ class Container extends Component {
             //"height" : "100%",
             "width" : iframeWidth,
             "minWidth" : "320px",
-            "margin" : "0",
+            "margin" : "0px",
             //"marginRight": marginRight,
-            "padding" : "0",
+            "padding" : "0px",
             "border" : "1px solid #000000"
         };
 

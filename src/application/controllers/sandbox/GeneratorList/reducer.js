@@ -14,10 +14,33 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../sandbox/Generator/actions.js';
+import * as actions from './actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators
-}, dispatch);
+const initialState = {
+    generators: {},
+    filter: {
+        groupKey: actions.ALL_GROUP_KEY,
+        groupName: actions.ALL_GROUP_KEY,
+        groupNameBack: null
+    }
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    if(type === actions.SET_GENERATORS){
+        return Object.assign({}, state, {
+            generators: payload
+        });
+    }
+
+    if(type === actions.SET_FILTER){
+        return Object.assign({}, state, {
+            filter: payload
+        });
+    }
+
+    return state;
+}
+

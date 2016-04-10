@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
-import { reloadPage, setEditModeOn, setLivePreviewModeOn } from '../DeskPage/actions.js';
+import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
+import { reloadPage, setEditModeOn, setLivePreviewModeOn, saveModel, exportModel } from '../DeskPage/actions.js';
 import { toggleLibraryPanel, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
 
+export const saveProject = () => (dispatch, getState) => {
+    dispatch(saveModel());
+    dispatch(success('Project has been saved successfully.'));
+};
+
 export const containerActions = (dispatch) => bindActionCreators({
-    reloadPage, setEditModeOn, setLivePreviewModeOn,
+    reloadPage, setEditModeOn, setLivePreviewModeOn, saveProject, exportModel,
     toggleLibraryPanel, toggleQuickOptions, togglePageTreeview
 }, dispatch);

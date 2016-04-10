@@ -21,7 +21,6 @@ import 'babel-polyfill';
 import '../assets/bootstrap/css/custom/bootstrap.css';
 import '../assets/bootstrap/js/bootstrap.js';
 import '../assets/font-awesome/css/font-awesome.css';
-//import './assets/react-widgets/css/react-widgets.css';
 import '../assets/app/css/umyproto.deskpage.css';
 
 import React from 'react';

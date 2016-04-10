@@ -106,10 +106,10 @@ function loadProjectConfig() {
             } else {
                 throw Error('The files section is missing in the current project configuration.');
             }
-            config.project.conf = {
+            config.project.conf = Object.assign({}, jsonData, {
                 paths: newPaths,
                 files: newFiles
-            };
+            });
         });
 }
 
@@ -225,6 +225,10 @@ export function componentDefaultsDirPath() {
 
 export function docsComponentsDirPath() {
     return config.project.paths.docsComponentsDirPath;
+}
+
+export function templatesDirPath(){
+    return config.project.paths.templatesDirPath;
 }
 
 export function projectName() {

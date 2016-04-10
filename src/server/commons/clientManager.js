@@ -77,23 +77,17 @@ export function downloadGalleryFile(downloadUrl) {
 //    throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
 //}
 
-export function getGeneratorBriefText(generatorKey) {
-    if (config.projectName()) {
-        return client.getText(SERVICE_URL + '/genclient/' +
-            config.projectName() + '/' + generatorKey.replace(/\./g, '/') + '/brief.md')
-            .then(text => {
-                return {
-                    briefText: text
-                }
-            });
+export function getGeneratorBriefText(projectId, userId, generatorId) {
+        return client.getText(SERVICE_URL + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/brief.md')
+}
 
-    }
-    throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
+export function getGeneratorReadmeText(projectId, userId, generatorId) {
+        return client.getText(SERVICE_URL + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/readme.md')
 }
 
 export function getAvailableGeneratorsList() {
     if (config.projectId()) {
         return client.get(SERVICE_URL + '/sm/public/generator/map?projectId=' + config.projectId());
     }
-    throw Error('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
+    return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }
