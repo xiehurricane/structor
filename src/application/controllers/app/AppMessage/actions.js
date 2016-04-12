@@ -16,15 +16,17 @@
 
 import { bindActionCreators } from 'redux';
 
+let messageCounter = 0;
+
 export const SUCCESS = "AppMessage/SUCCESS";
 export const FAILED = "AppMessage/FAILED";
 export const TIMEOUT = "AppMessage/TIMEOUT";
 
 export const CLOSE = "AppMessage/CLOSE";
 
-export const success = (text) => ({ type: SUCCESS, payload: {text, timestamp: Date.now()} });
-export const failed = (text) => ({ type: FAILED, payload: {text, timestamp: Date.now()} });
-export const timeout = (text) => ({ type: TIMEOUT, payload: {text, timestamp: Date.now()} });
+export const success = (text) => ({ type: SUCCESS, payload: {text, timestamp: Date.now() + ++messageCounter} });
+export const failed = (text) => ({ type: FAILED, payload: {text, timestamp: Date.now() + ++messageCounter} });
+export const timeout = (text) => ({ type: TIMEOUT, payload: {text, timestamp: Date.now() + ++messageCounter} });
 export const close = (key) => ({ type: CLOSE, payload: key });
 
 export const containerActions = (dispatch) => bindActionCreators({

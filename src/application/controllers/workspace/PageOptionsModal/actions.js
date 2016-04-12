@@ -34,12 +34,17 @@ export const showModal = (mode) => ({type: SHOW_MODAL, payload: mode});
 export const change = (options, mode) => (dispatch, getState) => {
 
     let {pageName, pagePath, makeIndexRoute} = options;
-    const { deskPage: {pages} } = getState();
+    const { deskPage: {pages}, libraryPanel:{componentsList} } = getState();
+
+    var firstChar = pageName.charAt(0).toUpperCase();
+    pageName = firstChar + pageName.substr(1);
 
     if (!pageName || pageName.length <= 0 || !validator.isAlphanumeric(pageName)) {
         dispatch(failed('Please enter alphanumeric value for page component name'));
     } else if (!pagePath || pagePath.length <= 0 || pagePath.charAt(0) !== '/') {
         dispatch(failed('Please enter non empty value for route path which starts with \'/\' character'));
+    } else if (componentsList.indexOf(pageName) >= 0) {
+        dispatch(failed('There is a component in the project library with name: ' + pageName));
     } else {
         //console.log('Mode is: ' + mode);
         if (mode === CHANGE_OPTIONS) {

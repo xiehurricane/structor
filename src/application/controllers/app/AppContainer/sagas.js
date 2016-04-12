@@ -15,7 +15,7 @@
  */
 import validator from 'validator';
 import { SagaCancellationException } from 'redux-saga';
-import { fork, take, call, put, race } from 'redux-saga/effects';
+import { fork, take, call, put, race, cancel } from 'redux-saga/effects';
 import * as actions from './actions.js';
 import * as signInModalActions from '../SignInModal/actions.js';
 import * as spinnerActions from '../AppSpinner/actions.js';
@@ -75,6 +75,30 @@ function* signOut(){
     }
 }
 
+function* delayForCompiler(){
+    try{
+        yield call(delay, 20000);
+        yield put(messageActions.timeout('The source code compiling is timed out. Look at console output or reload the browser page.'));
+        yield put(deskPageActions.setReloadPageRequest());
+        yield put(actions.compilerTimeout());
+    } catch(e) {
+        if (e instanceof SagaCancellationException) {
+            // do nothing
+        }
+    }
+}
+
+function* waitForCompiler(){
+    while(true){
+        yield take(actions.COMPILER_START);
+        yield put(spinnerActions.started('Compiling the source code'));
+        const delayTask = yield fork(delayForCompiler);
+        yield take([actions.COMPILER_DONE, actions.COMPILER_TIMEOUT]);
+        yield cancel(delayTask);
+        yield put(spinnerActions.done('Compiling the source code'));
+    }
+}
+
 function* loadProjectInfo(){
     try{
         return yield call(serverApi.getProjectInfo);
@@ -120,5 +144,5 @@ export default function* mainSaga() {
     yield fork(loadProject);
     yield fork(signIn);
     yield fork(signOut);
-
+    yield fork(waitForCompiler)
 };

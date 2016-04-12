@@ -37,9 +37,6 @@ export const SET_LIVE_PREVIEW_MODE_ON = "DeskPage/SET_LIVE_PREVIEW_MODE_ON";
 export const SET_EDIT_MODE_ON = "DeskPage/SET_EDIT_MODE_ON";
 export const SET_RELOAD_PAGE_REQUEST = "DeskPage/SET_RELOAD_PAGE_REQUEST";
 export const EXECUTE_RELOAD_PAGE_REQUEST = "DeskPage/EXECUTE_RELOAD_PAGE_REQUEST";
-export const COMPILER_START = "DeskPage/COMPILER_START";
-export const COMPILER_DONE = "DeskPage/COMPILER_DONE";
-export const COMPILER_TIMEOUT = "DeskPage/COMPILER_TIMEOUT";
 export const CHANGE_PAGE_ROUTE_FEEDBACK = "DeskPage/CHANGE_PAGE_ROUTE_FEEDBACK";
 export const UPDATE_PAGE = "DeskPage/UPDATE_PAGE";
 export const UPDATE_MARKED = "DeskPage/UPDATE_MARKED";
@@ -56,9 +53,7 @@ export const setLivePreviewModeOn = () => ({ type: SET_LIVE_PREVIEW_MODE_ON });
 export const setEditModeOn = () => ({ type: SET_EDIT_MODE_ON });
 export const setReloadPageRequest = () => ({ type: SET_RELOAD_PAGE_REQUEST });
 export const executeReloadPageRequest = () => ({ type: EXECUTE_RELOAD_PAGE_REQUEST });
-export const compilerStart = () => ({ type: COMPILER_START });
-export const compilerDone = () => ({ type: COMPILER_DONE });
-export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
+
 export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 export const updatePage = () => ({type: UPDATE_PAGE});
 export const updateMarked = () => ({type: UPDATE_MARKED});
@@ -163,23 +158,6 @@ export const deletePage = () => (dispatch, getState) => {
 export const resetPages = () => (dispatch, getState) => {
     let pageList = graphApi.getPages();
     dispatch(setPages(pageList));
-};
-
-export const handleCompilerMessage = (message) => (dispatch, getState) => {
-    if(message.status === 'start'){
-        dispatch(compilerStart());
-    } else if(message.status === 'done') {
-        if(message.errors && message.errors.length > 0){
-            message.errors.forEach( error => {
-                dispatch(failed(String(error)));
-            });
-            dispatch(setReloadPageRequest());
-        } else {
-            dispatch(loadComponents());
-            dispatch(executeReloadPageRequest());
-        }
-        dispatch(compilerDone());
-    }
 };
 
 export const containerActions = (dispatch) => bindActionCreators({

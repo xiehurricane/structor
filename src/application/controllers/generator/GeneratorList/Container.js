@@ -30,6 +30,7 @@ class Container extends Component {
         super(props);
         this.handleChangeCatalog = this.handleChangeCatalog.bind(this);
         this.handleChangeBackCatalog = this.handleChangeBackCatalog.bind(this);
+        this.handleTabSelect = this.handleTabSelect.bind(this);
         this.groupsHistory = [];
     }
 
@@ -70,78 +71,128 @@ class Container extends Component {
         }
     }
 
+    handleTabSelect(key){
+        this.props.setSelectedTab(key);
+    }
+
     render(){
 
-        const { componentModel: {generators, filter} } = this.props;
+        const { componentModel: {generators, recentGenerators, selectedTabKey, filter} } = this.props;
+        const { groupKey, groupName, groupNameBack } = filter;
 
         let generatorGroupCatalogs = [];
         let headGroupItems = [];
-        const { groupKey, groupName, groupNameBack } = filter;
-        const generatorGroup = generators[groupKey];
-        headGroupItems.push(
-            <ListGroupItem href="#"
-                           key={'allFiles'}
-                           data-catalog="All"
-                           data-catalog-name="All"
-                           style={{position: 'relative'}}
-                           onClick={this.handleChangeCatalog}>
-                <span>Reset filter</span>
+        let generatorGroup;
+        let generatorPanelList = [];
+
+        if(selectedTabKey === 1){
+            generatorGroup = generators[ALL_GROUP_KEY];
+            if (generatorGroup.files && generatorGroup.files.length > 0
+                && recentGenerators && recentGenerators.length > 0) {
+                let tempGeneratorPanelList = [];
+                let sortIndex;
+                generatorGroup.files.forEach((item, index) => {
+                    sortIndex = recentGenerators.indexOf(item.generatorId);
+                    if(sortIndex >= 0){
+                        tempGeneratorPanelList.push({
+                            index: sortIndex,
+                            element: <GeneratorBriefPanel key={ item.generatorId }
+                                                                     generatorKey={item.dirNamePath}
+                                                                     projectId={item.projectId}
+                                                                     userId={item.userId}
+                                                                     generatorId={item.generatorId}
+                                                                     versions={item.versions}/>
+                        });
+                    }
+                });
+                tempGeneratorPanelList.sort((a, b) => a.index - b.index);
+                tempGeneratorPanelList.forEach(item => {
+                    generatorPanelList.push(item.element);
+                });
+            }
+        } else if(selectedTabKey === 2){
+            generatorGroup = generators[groupKey];
+            headGroupItems.push(
+                <ListGroupItem href="#"
+                               key={'allFiles'}
+                               data-catalog="All"
+                               data-catalog-name="All"
+                               style={{position: 'relative'}}
+                               onClick={this.handleChangeCatalog}>
+                    <span>Reset filter</span>
                 <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
                     <span className="fa fa-reply-all"></span>
                 </span>
-            </ListGroupItem>
-        );
-        if(this.groupsHistory.length > 0){
-            headGroupItems.push(
-                <ListGroupItem href="#"
-                               key={'backNavigation'}
-                               style={{position: 'relative'}}
-                               onClick={this.handleChangeBackCatalog}>
-                    <span>{groupNameBack}</span>
+                </ListGroupItem>
+            );
+            if(this.groupsHistory.length > 0){
+                headGroupItems.push(
+                    <ListGroupItem href="#"
+                                   key={'backNavigation'}
+                                   style={{position: 'relative'}}
+                                   onClick={this.handleChangeBackCatalog}>
+                        <span>{groupNameBack}</span>
                         <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
                             <span className="fa fa-reply"></span>
                         </span>
 
-                </ListGroupItem>
-            );
-        }
-        let generatorPanelList = [];
-        if(generatorGroup){
-            if(generatorGroup.catalogs && generatorGroup.catalogs.length > 0){
-                generatorGroup.catalogs.forEach( (catalog, index) => {
-                    generatorGroupCatalogs.push(
-                        <ListGroupItem href="#"
-                                       className="list-group-item"
-                                       key={'catalog' + index}
-                                       style={{position: 'relative'}}
-                                       data-catalog={catalog.dirNamePath}
-                                       data-catalog-name={catalog.dirName}
-                                       onClick={this.handleChangeCatalog}>
-                            <span>{catalog.dirName}</span>
+                    </ListGroupItem>
+                );
+            }
+            if(generatorGroup){
+                if(generatorGroup.catalogs && generatorGroup.catalogs.length > 0){
+                    generatorGroup.catalogs.forEach( (catalog, index) => {
+                        generatorGroupCatalogs.push(
+                            <ListGroupItem href="#"
+                                           className="list-group-item"
+                                           key={'catalog' + index}
+                                           style={{position: 'relative'}}
+                                           data-catalog={catalog.dirNamePath}
+                                           data-catalog-name={catalog.dirName}
+                                           onClick={this.handleChangeCatalog}>
+                                <span>{catalog.dirName}</span>
                                 <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
                                     <span className="fa fa-chevron-right"></span>
                                 </span>
-                        </ListGroupItem>
-                    );
-                });
-            }
-            if (generatorGroup.files && generatorGroup.files.length > 0) {
-                generatorGroup.files.forEach((item, index) => {
-                    generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
-                                                                 generatorKey={item.dirNamePath}
-                                                                 projectId={item.projectId}
-                                                                 userId={item.userId}
-                                                                 generatorId={item.generatorId}
-                                                                 versions={item.versions}/>);
-                });
-            }
+                            </ListGroupItem>
+                        );
+                    });
+                }
+                if (generatorGroup.files && generatorGroup.files.length > 0) {
+                    generatorGroup.files.forEach((item, index) => {
+                        generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
+                                                                     generatorKey={item.dirNamePath}
+                                                                     projectId={item.projectId}
+                                                                     userId={item.userId}
+                                                                     generatorId={item.generatorId}
+                                                                     versions={item.versions}/>);
+                    });
+                }
 
+            }
         }
+
         return (
-            <Tabs defaultActiveKey={1}>
-                <Tab key={'favoriteGenerators'} eventKey={1} title='Recently used'>
+            <Tabs activeKey={selectedTabKey}
+                  onSelect={this.handleTabSelect}
+                  animation={false}>
+                <Tab key={'favoriteGenerators'}
+                     eventKey={1}
+                     title='Recently used'>
+                    <Grid fluid={ true }>
+                        <Row style={ { minHeight: "40em", position: 'relative'} }>
+                            <Col xs={ 12 } md={ 8 } sm={ 12 } lg={ 8 } mdOffset={2} lgOffset={2}>
+                                <div style={{marginTop: '2em'}}>
+                                    {generatorPanelList}
+                                </div>
+                            </Col>
+                        </Row>
+                    </Grid>
+
                 </Tab>
-                <Tab key={'allAvailableGenerators'} eventKey={2} title='All available generators'>
+                <Tab key={'allAvailableGenerators'}
+                     eventKey={2}
+                     title='All available generators'>
                     <div>
                         <h5 className='text-center'>
                             <small>{'Category:  '}</small>

@@ -14,33 +14,10 @@
  * limitations under the License.
  */
 
-import * as actions from './actions.js';
+import { createStructuredSelector } from 'reselect';
 
-const initialState = {
-    generatedData: {
-        files: [],
-        dependencies: {}
-    },
-    stage: actions.STAGE1
-
-};
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    if(type === actions.STEP_TO_STAGE){
-        return Object.assign({}, state, {
-            stage: payload
-        });
-    }
-
-    if(type === actions.SET_GENERATED_DATA){
-        return Object.assign({}, state, {
-            generatedData: payload
-        });
-    }
-
-    return state;
-}
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.sourceFilesList,
+    generatorModel: state => state.generator
+});
 

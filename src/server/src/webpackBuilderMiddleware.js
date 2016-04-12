@@ -15,13 +15,17 @@
  * limitations under the License.
  */
 
-module.exports = function webpackBuilderMiddleware(compiler, opts){
+let callback = undefined;
+
+export default function webpackBuilderMiddleware(compiler, opts){
+
+    callback = opts.callback;
 
     compiler.plugin('done', stats => {
-        if(opts.callback){
+        if(callback){
             stats = stats.toJson();
             //console.log('Compiler done: ' + JSON.stringify(stats, null, 4));
-            opts.callback({
+            callback({
                 status: 'done',
                 time: stats.time,
                 hash: stats.hash,
@@ -33,8 +37,8 @@ module.exports = function webpackBuilderMiddleware(compiler, opts){
 
     compiler.plugin('compilation', (c, params) => {
         //console.log('Compiler start compilation');
-        if(opts.callback){
-            opts.callback({ status: 'start' });
+        if(callback){
+            callback({ status: 'start' });
         }
     });
 

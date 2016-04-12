@@ -45,6 +45,7 @@ import generatorBriefPanelReducer from '../controllers/generator/GeneratorBriefP
 import metadataFormReducer from '../controllers/generator/MetadataForm/reducer.js';
 import projectGalleryReducer from '../controllers/projects/ProjectGallery/reducer.js';
 import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
+import sourceFilesListReducer from '../controllers/generator/SourceFilesList/reducer.js';
 
 const reducer = combineReducers({
     profiles: profilesReducer,
@@ -74,7 +75,8 @@ const reducer = combineReducers({
     generatorBriefPanel: generatorBriefPanelReducer,
     metadataForm: metadataFormReducer,
     projectGallery: projectGalleryReducer,
-    signInModal: signInModalReducer
+    signInModal: signInModalReducer,
+    sourceFilesList: sourceFilesListReducer
 });
 
 export default reducer;

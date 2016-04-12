@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 import { bindActionCreators } from 'redux';
+import { success, failed, timeout, close} from '../AppMessage/actions.js';
+import { setReloadPageRequest, executeReloadPageRequest } from '../../workspace/DeskPage/actions.js';
+import { loadComponents } from '../../workspace/LibraryPanel/actions.js';
 
 export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
 export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
@@ -23,6 +26,9 @@ export const SIGN_IN_FAILED = "AppContainer/SIGN_IN_FAILED";
 export const SIGN_IN_CLEAN = "AppContainer/SIGN_IN_CLEAN";
 export const SIGN_OUT = "AppContainer/SIGN_OUT";
 export const SIGN_OUT_DONE = "AppContainer/SIGN_OUT_DONE";
+export const COMPILER_START = "AppContainer/COMPILER_START";
+export const COMPILER_DONE = "AppContainer/COMPILER_DONE";
+export const COMPILER_TIMEOUT = "AppContainer/COMPILER_TIMEOUT";
 export const SHOW_GENERATOR = "AppContainer/SHOW_GENERATOR";
 export const HIDE_GENERATOR = "AppContainer/HIDE_GENERATOR";
 
@@ -34,8 +40,28 @@ export const signInFailed = (error) => ({type: SIGN_IN_FAILED, payload: error});
 export const signInClean = () => ({type: SIGN_IN_CLEAN});
 export const signOut = () => ({type: SIGN_OUT});
 export const signOutDone = () => ({type: SIGN_OUT_DONE});
+export const compilerStart = () => ({ type: COMPILER_START });
+export const compilerDone = () => ({ type: COMPILER_DONE });
+export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const showGenerator = () => ({type: SHOW_GENERATOR});
 export const hideGenerator = () => ({type: HIDE_GENERATOR});
+
+export const handleCompilerMessage = (message) => (dispatch, getState) => {
+    if(message.status === 'start'){
+        dispatch(compilerStart());
+    } else if(message.status === 'done') {
+        if(message.errors && message.errors.length > 0){
+            message.errors.forEach( error => {
+                dispatch(failed(error.message ? error.message : error));
+            });
+            dispatch(setReloadPageRequest());
+        } else {
+            dispatch(loadComponents());
+            dispatch(executeReloadPageRequest());
+        }
+        dispatch(compilerDone());
+    }
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
     getProjectInfo, getProjectInfoDone, signIn, signInDone, signInFailed, signOut

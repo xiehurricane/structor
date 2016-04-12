@@ -24,12 +24,21 @@ import { ButtonGroup, Button } from 'react-bootstrap';
 
 import GeneratorList from '../GeneratorList';
 import MetadataForm from '../MetadataForm';
+import SourceFilesList from '../SourceFilesList';
 
 class Container extends Component {
 
     constructor(props) {
         super(props);
         this.handleOnStep = this.handleOnStep.bind(this);
+    }
+
+    componentDidMount(){
+        this.refs.containerElement.scrollTop = 0;
+    }
+
+    componentDidUpdate(){
+        this.refs.containerElement.scrollTop = 0;
     }
 
     handleOnStep(e){
@@ -92,7 +101,7 @@ class Container extends Component {
                 <h5 className="text-muted text-center">Select component generator</h5>
             );
             nextStepLabel = (
-                <h5 className="text-muted text-center">Preview the generated source code</h5>
+                <h5 className="text-muted text-center">Preview generated source code</h5>
             );
             toolbar = (
                 <ButtonGroup bsSize="xs">
@@ -102,9 +111,25 @@ class Container extends Component {
             );
             header = (<h4 className="text-center">Enter component metadata</h4>);
             content = (<MetadataForm />);
+        } else if(stage === STAGE3){
+            backStepLabel = (
+                <h5 className="text-muted text-center">Enter component metadata</h5>
+            );
+            nextStepLabel = (
+                <h5 className="text-muted text-center">Install generated source code</h5>
+            );
+            toolbar = (
+                <ButtonGroup bsSize="xs">
+                    <Button data-stage={STAGE2} onClick={this.handleOnStep} ><span style={toolbarLabelStyle}>Back</span></Button>
+                    {closeButton}
+                </ButtonGroup>
+            );
+            header = (<h4 className="text-center">Preview generated source code</h4>);
+            content = (<SourceFilesList />);
         }
         return (
-            <div style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px', overflow: 'auto'}}>
+            <div ref="containerElement"
+                 style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px', overflow: 'auto'}}>
                 <div style={{width: '100%', position: 'fixed', zIndex: '100', padding: '0 2em'}}>
                     <div style={{backgroundColor: '#f5f5f5', borderBottom: '1px solid #ffffff'}}>
                         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>

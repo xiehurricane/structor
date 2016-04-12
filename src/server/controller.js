@@ -16,6 +16,7 @@
 
 import _ from 'lodash';
 import express from 'express';
+import http from 'http';
 import rewrite from 'express-urlrewrite';
 import path from 'path';
 import bodyParser from 'body-parser';
@@ -83,19 +84,21 @@ export function initServer(options){
                     callControllerMethod(sandboxController, req, res);
                 });
 
-                server.appServer = server.app.listen(portNumber, () => {
+                server.appServer = http.createServer(server.app);
+                if(io){
+                    server.ioSocket = io(server.appServer);
+                    server.ioSocket.on('connection', socket => {
+                        server.ioSocketClient = socket;
+                        server.ioSocketClient.emit('invitation', 'Hello from server.');
+                    });
+                }
+
+                server.appServer.listen(portNumber, () => {
                     console.log('Structor is ready to work');
                     if(status === config.READY){
                         console.log(`Open address: http://localhost:${portNumber}/structor in the browser.`);
                     } else if(server.status === config.EMPTY){
                         console.log(`Open address: http://localhost:${portNumber}/structor in the browser and download a Structor project from Structor Market.`)
-                    }
-                    if(io){
-                        server.ioSocket = io(server.appServer);
-                        server.ioSocket.on('connection', socket => {
-                            server.ioSocketClient = socket;
-                            server.ioSocketClient.emit('invitation', 'Hello from server.');
-                        });
                     }
                 });
 

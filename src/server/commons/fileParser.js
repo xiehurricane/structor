@@ -16,7 +16,7 @@
  */
 
 import _ from 'lodash';
-import esprima from 'esprima';
+import esprima from 'esprima-fb';
 
 // Executes visitor on the object and its children (recursively).
 export function traverse(object, visitor) {
@@ -37,7 +37,7 @@ export function getFileAst(fileData){
     //console.log(fileData);
     let result = null;
     try{
-        result = esprima.parse(fileData, {tolerant: true, range: true, comment: true});
+        result = esprima.parse(fileData, {tolerant: true, range: true, comment: true, jsx: true});
     } catch(e){
         throw Error('Can not parse file, error: ' + e.message);
     }
@@ -46,7 +46,7 @@ export function getFileAst(fileData){
 
 export function validateSourceCode(fileData){
     try{
-        esprima.parse(fileData, { tolerant: true });
+        esprima.parse(fileData, { tolerant: true, jsx: true });
     } catch(e){
         throw Error('File is not valid, error: ' + e.message);
     }

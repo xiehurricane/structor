@@ -125,7 +125,7 @@ export function getHotMiddleware() {
             {
                 log: console.log,
                 path: '/desk/a',
-                heartbeat: 10 * 500
+                heartbeat: 10 * 1000
             }
         );
     }

@@ -24,7 +24,6 @@ import * as generatorManager from './generatorManager.js';
 import * as exportManager from './exportManager.js';
 
 let serverRef = undefined;
-let isMiddlewareInitialized = false;
 
 export function loopback(options){
     return Promise.resolve('Response: ' + options.message);
@@ -36,6 +35,15 @@ export function error(options){
 
 export function setServer(server){
     serverRef = server;
+    serverRef.app.use(middlewareCompilerManager.getDevMiddleware());
+    serverRef.app.use(middlewareCompilerManager.getHotMiddleware());
+    serverRef.app.use(middlewareCompilerManager.getBuilderMiddleware({
+        callback: stats => {
+            serverRef.ioSocketClient.emit('compiler.message', stats);
+        }
+    }));
+    serverRef.app.use(rewrite('/deskpage/*', '/desk/index.html'));
+    serverRef.app.use('/desk', express.static(config.deskDirPath()));
 }
 
 export function getModel(){
@@ -44,25 +52,6 @@ export function getModel(){
 
 export function getConfig(){
     return Promise.resolve(config.asObject());
-}
-
-export function initMiddleware(){
-    return new Promise((resolve, reject) => {
-        if(serverRef && !isMiddlewareInitialized){
-            const {app, ioSocketClient} = serverRef;
-            app.use(middlewareCompilerManager.getDevMiddleware());
-            app.use(middlewareCompilerManager.getHotMiddleware());
-            app.use(middlewareCompilerManager.getBuilderMiddleware({
-                callback: stats => {
-                    ioSocketClient.emit('compiler.message', stats);
-                }
-            }));
-            app.use(rewrite('/deskpage/*', '/desk/index.html'));
-            app.use('/desk', express.static(config.deskDirPath()));
-            isMiddlewareInitialized = true;
-        }
-        resolve();
-    });
 }
 
 export function getComponentsTree(){

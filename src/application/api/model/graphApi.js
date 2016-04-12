@@ -1028,6 +1028,25 @@ export function deleteSelected(){
     return newResultKeys;
 }
 
+export function changeModelNodeType(nodeKey, newType){
+    const {graph} = graphObject;
+    let node = graph.node(nodeKey);
+    if(node){
+        traverseGraphBranch(graph, nodeKey, childKey => {
+            if(childKey !== nodeKey){
+                let childNode = graph.node(childKey);
+                if(childNode){
+                    delete childNode.modelNode;
+                    graph.removeNode(childKey);
+                }
+            }
+        });
+        node.modelNode.children = [];
+        node.modelNode.type = newType;
+        node.modelNode.props = {};
+    }
+}
+
 export function setForCutting(nodeKey){
     const {graph} = graphObject;
     let node = graph.node(nodeKey);

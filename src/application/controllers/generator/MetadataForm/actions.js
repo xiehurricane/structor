@@ -16,8 +16,23 @@
 
 import { bindActionCreators } from 'redux';
 
-import { hideFrame } from '../../../controllers/generator/Generator/actions.js';
+import { failed } from '../../app/AppMessage/actions.js';
+import {generate} from '../Generator/actions.js';
+
+export const SET_SELECTED_GENERATOR = "MetadataForm/SET_SELECTED_GENERATOR";
+export const SET_COMPONENT_METADATA = "MetadataForm/SET_COMPONENT_METADATA";
+
+export const setSelectedGenerator = (generatorData) => ({type: SET_SELECTED_GENERATOR, payload: generatorData});
+export const startGeneration = (groupName, componentName, metaData) => (dispatch, getState) => {
+    try{
+        let metaDataObject = JSON.parse(metaData);
+        dispatch(generate(groupName, componentName, metaDataObject));
+        dispatch({type: SET_COMPONENT_METADATA, payload: {groupName, componentName, metaData: metaDataObject}});
+    } catch(e){
+        dispatch(failed('Parsing metadata error. ' + e));
+    }
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hideFrame
+    startGeneration
 }, dispatch);

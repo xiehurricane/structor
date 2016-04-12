@@ -38,9 +38,7 @@ export function removeUserCredentials(){
 }
 
 export function getProjectModel() {
-    return invokeStructor('initMiddleware').then(() => {
-        return invokeStructor('getModel');
-    });
+    return invokeStructor('getModel');
 }
 
 export function saveProjectModel(model) {
@@ -137,4 +135,11 @@ export function getGeneratorBriefInfo(projectId, userId, generatorId){
 
 export function pregenerate(generatorId, version, groupName, componentName, model){
     return invokeStructor('pregenerate', {generatorId, version, groupName, componentName, model});
+}
+export function generate(generatorId, version, groupName, componentName, model, metadata){
+    return invokeStructor('generate', {generatorId, version, groupName, componentName, model, metadata});
+}
+
+export function saveGenerated(groupName, componentName, files, dependencies){
+    return invokeStructor('saveGenerated', {groupName, componentName, files, dependencies});
 }

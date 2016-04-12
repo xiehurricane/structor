@@ -14,33 +14,17 @@
  * limitations under the License.
  */
 
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
 import * as actions from './actions.js';
 
-const initialState = {
-    generatedData: {
-        files: [],
-        dependencies: {}
-    },
-    stage: actions.STAGE1
-
-};
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    if(type === actions.STEP_TO_STAGE){
-        return Object.assign({}, state, {
-            stage: payload
-        });
-    }
-
-    if(type === actions.SET_GENERATED_DATA){
-        return Object.assign({}, state, {
-            generatedData: payload
-        });
-    }
-
-    return state;
+export {
+    reducer,
+    mainSaga,
+    models,
+    actions
 }
 
+export default Container;

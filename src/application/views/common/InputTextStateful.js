@@ -43,22 +43,33 @@ class InputTextStateful extends Component {
     focus(){
         ReactDOM.findDOMNode(this.refs.inputElement).focus();
     }
+    validate(value){
+        const {validateFunc} = this.props;
+        if(validateFunc){
+            return validateFunc(value) ? 'success' : 'error';
+        }
+    }
     render() {
         const {value} = this.state;
+        const {validateFunc} = this.props;
         return (
             <Input
                 {...this.props}
+                bsStyle={this.validate(value)}
                 ref="inputElement"
+                hasFeedback={!!validateFunc}
                 value={ value }
                 onChange={ this.handleOnChange }/>
         );
     }
 }
 InputTextStateful.defaultProps = {
-    value: ''
+    value: '',
+    validateFunc: undefined
 };
 InputTextStateful.propTypes = {
-    value: PropTypes.any
+    value: PropTypes.any,
+    validateFunc: PropTypes.func
 };
 
 export default InputTextStateful;

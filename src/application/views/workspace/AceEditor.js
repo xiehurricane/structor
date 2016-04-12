@@ -46,7 +46,6 @@ class AceEditor extends Component {
             console.log('Editor is initialized');
         }
         if (sourceCode) {
-            console.log('Source code: ' + sourceCode);
             this.editor.getSession().setValue(sourceCode);
         }
         //this.editor.focus();

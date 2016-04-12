@@ -33,7 +33,7 @@ import thunk from 'redux-thunk';
 import reducer from './redux/reducer.js';
 import mainSaga from './sagas/saga.js';
 import myMiddleware from './redux/middleware.js';
-import { handleCompilerMessage, saveModel } from './controllers/workspace/DeskPage/actions.js';
+import { handleCompilerMessage } from './controllers/app/AppContainer/actions.js';
 
 import { MainFrame } from './views/index.js';
 

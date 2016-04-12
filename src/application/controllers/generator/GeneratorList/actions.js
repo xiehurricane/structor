@@ -21,11 +21,15 @@ import { bindActionCreators } from 'redux';
 export const ALL_GROUP_KEY = 'All';
 
 export const SET_GENERATORS = "Generator/SET_GENERATORS";
+export const SET_RECENT_GENERATORS = "Generator/SET_RECENT_GENERATORS";
 export const SET_FILTER = "Generator/SET_FILTER";
+export const SET_SELECTED_TAB = "Generator/SET_SELECTED_TAB";
 
-export const setGenerators = (generators) => ({type: SET_GENERATORS, payload: generators});
 export const setFilter = (filter) => ({type: SET_FILTER, payload: filter});
+export const setGenerators = (generators, recentGenerators) => ({type: SET_GENERATORS, payload: {generators, recentGenerators}});
+export const setRecentGenerators = (recentGenerators) => ({type: SET_RECENT_GENERATORS, payload: recentGenerators});
+export const setSelectedTab = (tabKey) => ({type: SET_SELECTED_TAB, payload: tabKey});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setFilter
+    setFilter, setSelectedTab
 }, dispatch);

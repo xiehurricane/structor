@@ -46,30 +46,6 @@ function* exportModel(){
 
 const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out'), ms));
 
-function* delayForCompiler(){
-    try{
-        yield call(delay, 20000);
-        yield put(messageActions.timeout('The source code compiling is timed out. Look at console output or reload the browser page.'));
-        yield put(actions.setReloadPageRequest());
-        yield put(actions.compilerTimeout());
-    } catch(e) {
-        if (e instanceof SagaCancellationException) {
-            // do nothing
-        }
-    }
-}
-
-function* waitForCompiler(){
-    while(true){
-        yield take(actions.COMPILER_START);
-        yield put(spinnerActions.started('Compiling the source code'));
-        const delayTask = yield fork(delayForCompiler);
-        yield take([actions.COMPILER_DONE, actions.COMPILER_TIMEOUT]);
-        yield cancel(delayTask);
-        yield put(spinnerActions.done('Compiling the source code'));
-    }
-}
-
 function* delayForPageLoaded(){
     try{
         yield call(delay, 30000);
@@ -99,7 +75,6 @@ function* waitForPageLoaded(){
 export default function* mainSaga() {
     yield [
         fork(waitForPageLoaded),
-        fork(waitForCompiler),
         fork(preserveModel)
     ];
     yield fork(exportModel);
