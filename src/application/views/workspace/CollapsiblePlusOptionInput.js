@@ -58,12 +58,6 @@ class CollapsiblePlusOptionInput extends Component {
         }
     }
 
-    componentDidUpdate(){
-        if(this.state.open){
-            this.refs.inputPath.focus();
-        }
-    }
-
     render(){
 
         let addInputStyle = {
@@ -92,7 +86,7 @@ class CollapsiblePlusOptionInput extends Component {
                     </button>
                 </div>
 
-                <Collapse in={this.state.open}>
+                <Collapse in={this.state.open} onEntered={() => {this.refs.inputPath.focus();}}>
                     <div style={{position: 'relative'}}>
                         <form onSubmit={this.handleCommit}>
                             <Panel>

@@ -33,6 +33,10 @@ export function initUserCredentials(email, password) {
     return invokeStructor('initUserCredentials', {username: email, password: password});
 }
 
+export function removeUserCredentials(){
+    return invokeStructor('removeUserCredentials', {});
+}
+
 export function getProjectModel() {
     return invokeStructor('initMiddleware').then(() => {
         return invokeStructor('getModel');
@@ -129,4 +133,8 @@ export function getAvailableGeneratorsList(){
 
 export function getGeneratorBriefInfo(projectId, userId, generatorId){
     return invokeStructor('getGeneratorBrief', {projectId, userId, generatorId});
+}
+
+export function pregenerate(generatorId, version, groupName, componentName, model){
+    return invokeStructor('pregenerate', {generatorId, version, groupName, componentName, model});
 }

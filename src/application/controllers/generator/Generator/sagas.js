@@ -23,6 +23,26 @@ import * as generatorListActions from '../GeneratorList/actions.js';
 import * as appContainerActions from '../../app/AppContainer/actions.js';
 import { serverApi, cookies } from '../../../api';
 
+function* pregenerate(){
+    while(true){
+        const {payload: {generatorId, version, model}} = yield take(actions.PREGENERATE);
+        yield put(spinnerActions.started('Retrieving metadata'));
+        try {
+            const pregeneratedData = yield call(serverApi.pregenerate, generatorId, version, undefined, undefined, model);
+            yield put(actions.setSelectedGenerator({
+                generatorId,
+                version,
+                metaData: pregeneratedData.metaData,
+                metaHelp: pregeneratedData.metaHelp
+            }));
+            yield put(actions.stepToStage(actions.STAGE2));
+        } catch(error) {
+            yield put(messageActions.failed('Metadata retrieving has an error. ' + (error.message ? error.message : error)));
+        }
+        yield put(spinnerActions.done('Retrieving metadata'));
+    }
+}
+
 function* loadGenerators(){
     while(true){
         yield take(actions.LOAD_GENERATORS);
@@ -40,5 +60,6 @@ function* loadGenerators(){
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(loadGenerators)];
+    yield fork(loadGenerators);
+    yield fork(pregenerate)
 };

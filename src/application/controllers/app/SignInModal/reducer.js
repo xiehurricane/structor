@@ -17,12 +17,22 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    pathInProps: undefined
+    show: false
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
+
+    if(type === actions.HIDE_MODAL){
+        return Object.assign({}, state, {
+            show: false
+        });
+    }
+
+    if(type === actions.SHOW_MODAL){
+        return Object.assign({}, state, {show: true});
+    }
 
     return state;
 }

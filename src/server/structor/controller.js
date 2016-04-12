@@ -97,6 +97,10 @@ export function initUserCredentials(options){
     return clientManager.initUserCredentials(options.username, options.password);
 }
 
+export function removeUserCredentials(options){
+    return clientManager.removeAuthToken();
+}
+
 export function getProjectsGallery(){
     return clientManager.getAllProjects();
 }
@@ -117,7 +121,6 @@ export function generate(options){
     const {generatorId, version, groupName, componentName, model, metadata} = options;
     return generatorManager.initGeneratorData(groupName, componentName, model, metadata)
         .then(generatorData => {
-            //console.log('Generator data: ' + JSON.stringify(generatorData, null, 4));
             return clientManager.invokeGeneration(generatorId, version, generatorData);
         });
 }

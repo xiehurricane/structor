@@ -16,16 +16,14 @@
 
 import { bindActionCreators } from 'redux';
 
-import { selectGenerator } from '../Generator/actions.js';
+import { signIn, signInClean } from '../AppContainer/actions.js';
 
-export const GET_GENERATOR_INFO = "GeneratorBriefPanel/GET_GENERATOR_INFO";
-export const SET_GENERATOR_INFO = "GeneratorBriefPanel/SET_GENERATOR_INFO";
+export const HIDE_MODAL = "SignInModal/HIDE_MODAL";
+export const SHOW_MODAL = "SignInModal/SHOW_MODAL";
 
-export const getGeneratorInfo = (projectId, userId, generatorId) =>
-    ({type: GET_GENERATOR_INFO, payload: {generatorId, userId, projectId}});
-export const setGeneratorInfo = (projectId, userId, generatorId, info) =>
-    ({type: SET_GENERATOR_INFO, payload: {projectId, userId, generatorId, info}});
+export const showModal = () => ({type: SHOW_MODAL});
+export const hideModal = () => ({type: HIDE_MODAL});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    getGeneratorInfo, selectGenerator
+    hideModal, signIn, signInClean
 }, dispatch);

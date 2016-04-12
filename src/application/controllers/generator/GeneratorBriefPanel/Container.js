@@ -41,9 +41,9 @@ class Container extends Component {
     handleOnSelect(e){
         e.preventDefault();
         e.stopPropagation();
-        const { generatorId, selectGenerator } = this.props;
+        const { generatorId, pregenerate } = this.props;
         const version = e.currentTarget.dataset.version;
-        selectGenerator(generatorId, version);
+        pregenerate(generatorId, version);
     }
 
     render() {

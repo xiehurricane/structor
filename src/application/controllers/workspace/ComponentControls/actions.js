@@ -16,7 +16,7 @@
 
 import { bindActionCreators } from 'redux';
 import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../sandbox/Generator/actions.js';
+import { loadGenerators } from '../../generator/Generator/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
     loadOptions, loadGenerators

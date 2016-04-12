@@ -17,12 +17,36 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    pathInProps: undefined
+    selectedGenerator: {
+        id: undefined,
+        version: undefined,
+        metaData: undefined,
+        metaHelp: undefined
+    },
+    stage: actions.STAGE1
+
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
+
+    if(type === actions.SET_SELECTED_GENERATOR){
+        return Object.assign({}, state, {
+            selectedGenerator:{
+                id: payload.generatorId,
+                version: payload.version,
+                metaData: payload.metaData,
+                metaHelp: payload.metaHelp
+            }
+        });
+    }
+
+    if(type === actions.STEP_TO_STAGE){
+        return Object.assign({}, state, {
+            stage: payload
+        });
+    }
 
     return state;
 }

@@ -28,20 +28,10 @@ class Container extends Component {
 
     render(){
 
-        const {
-            componentModel,
-            userAccountModel,
-            deskPageModel,
-            deskModel,
-            toggleLibraryPanel,
-            togglePageTreeview,
-            toggleQuickOptions,
-            setLivePreviewModeOn,
-            saveProject,
-            exportModel,
-            setEditModeOn,
-            reloadPage
-            } = this.props;
+        const { componentModel,  userAccountModel, deskPageModel, deskModel } = this.props;
+        const { toggleLibraryPanel, togglePageTreeview, toggleQuickOptions } = this.props;
+        const { setLivePreviewModeOn, setEditModeOn, reloadPage } = this.props;
+        const { saveProject, exportModel, signOut, showModal } = this.props;
 
         var leftSideStyle = {
             'position': 'absolute',
@@ -85,16 +75,12 @@ class Container extends Component {
                                 <span className="fa fa-paperclip fa-flip-vertical fa-fw"></span>&nbsp;Project documentation</a>
                             </li>
                             <li className="divider" />
-                            <li><a href="/structor/generators.html" target="_blank">
-                                <span className="fa fa-list fa-fw"></span>&nbsp;Generators</a>
-                            </li>
-                            <li className="divider" />
                             { userAccountModel.email ?
-                                <li><a href="#" onClick={() => {this.props.signOut()}}>
+                                <li><a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); signOut(); }}>
                                     <span className="fa fa-sign-out fa-fw" />&nbsp;{'Sign out ' + userAccountModel.email}</a>
                                 </li>
                                 :
-                                <li><a href="#" onClick={() => { this.props.showModalSignIn(); }}>
+                                <li><a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); showModal(); }}>
                                     <span className="fa fa-sign-in fa-fw" />&nbsp;Sign in to Structor Market</a>
                                 </li>
                             }

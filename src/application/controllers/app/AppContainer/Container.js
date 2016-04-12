@@ -25,7 +25,8 @@ import FrameOverlay from '../../../views/sandbox/FrameOverlay.js';
 import Desk from '../../workspace/Desk';
 import PageOptionsModal from '../../workspace/PageOptionsModal';
 import ComponentOptionsModal from '../../workspace/ComponentOptionsModal';
-import Generator from '../../sandbox/Generator';
+import SignInModal from '../SignInModal';
+import Generator from '../../generator/Generator';
 
 class Container extends Component {
 
@@ -50,11 +51,17 @@ class Container extends Component {
                         <Desk />
                         <PageOptionsModal />
                         <ComponentOptionsModal />
+                        <SignInModal />
                     </div>
                 </div>
             );
         } else if(workspaceMode === 'generator'){
-            content = (<Generator />);
+            content = (
+                <div style={{width: '100%', height: '100%'}}>
+                    <Generator />
+                    <SignInModal />
+                </div>
+            );
         } else {
             content = (
                 <Navbar

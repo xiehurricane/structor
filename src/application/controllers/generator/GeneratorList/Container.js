@@ -21,7 +21,7 @@ import { modelSelector } from './selectors.js';
 import { containerActions, ALL_GROUP_KEY } from './actions.js';
 
 import { Button, Grid, Row, Col } from 'react-bootstrap';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Tabs, Tab } from 'react-bootstrap';
 import GeneratorBriefPanel from '../GeneratorBriefPanel';
 
 class Container extends Component {
@@ -138,40 +138,46 @@ class Container extends Component {
 
         }
         return (
-            <div>
-                <h5 className='text-center'>
-                    <small>{'Category:  '}</small>
-                    <span>{groupKey}</span>
-                </h5>
-                <Grid fluid={ true }>
-                    <Row style={ { minHeight: "40em", position: 'relative'} }>
-                        <Col
-                            xs={ 12 }
-                            md={ 3 }
-                            sm={ 3 }
-                            lg={ 3 }>
+            <Tabs defaultActiveKey={1}>
+                <Tab key={'favoriteGenerators'} eventKey={1} title='Recently used'>
+                </Tab>
+                <Tab key={'allAvailableGenerators'} eventKey={2} title='All available generators'>
+                    <div>
+                        <h5 className='text-center'>
+                            <small>{'Category:  '}</small>
+                            <span>{groupKey}</span>
+                        </h5>
+                        <Grid fluid={ true }>
+                            <Row style={ { minHeight: "40em", position: 'relative'} }>
+                                <Col
+                                    xs={ 12 }
+                                    md={ 3 }
+                                    sm={ 3 }
+                                    lg={ 3 }>
 
-                            <ListGroup>
-                                {headGroupItems}
-                                <ListGroupItem active={true}>
-                                    <span>{groupName}</span>
-                                </ListGroupItem>
-                                {generatorGroupCatalogs}
-                            </ListGroup>
+                                    <ListGroup>
+                                        {headGroupItems}
+                                        <ListGroupItem active={true}>
+                                            <span>{groupName}</span>
+                                        </ListGroupItem>
+                                        {generatorGroupCatalogs}
+                                    </ListGroup>
 
-                        </Col>
-                        <Col
-                            xs={ 12 }
-                            md={ 9 }
-                            sm={ 9 }
-                            lg={ 9 }>
+                                </Col>
+                                <Col
+                                    xs={ 12 }
+                                    md={ 9 }
+                                    sm={ 9 }
+                                    lg={ 9 }>
 
-                            {generatorPanelList}
+                                    {generatorPanelList}
 
-                        </Col>
-                    </Row>
-                </Grid>
-            </div>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </div>
+                </Tab>
+            </Tabs>
         );
 
     }

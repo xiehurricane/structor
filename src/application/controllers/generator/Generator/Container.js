@@ -18,22 +18,34 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
-import { containerActions } from './actions.js';
+import { containerActions, STAGE1, STAGE2, STAGE3, STAGE4 } from './actions.js';
 
 import { ButtonGroup, Button } from 'react-bootstrap';
 
 import GeneratorList from '../GeneratorList';
+import MetadataForm from '../MetadataForm';
 
 class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.handleOnStep = this.handleOnStep.bind(this);
+    }
+
+    handleOnStep(e){
+        e.stopPropagation();
+        e.preventDefault();
+        const stage = e.currentTarget.dataset.stage;
+        if(stage){
+            const {stepToStage} = this.props;
+            stepToStage(e.currentTarget.dataset.stage);
+        }
     }
 
     render(){
 
         const { componentModel: {stage}, hide } = this.props;
-
+        console.log('Stage is: ' + stage);
         const toolbarLabelStyle = {
             margin: '0 1em'
         };
@@ -64,32 +76,44 @@ class Container extends Component {
         let toolbar = null;
         let header = null;
         let content = null;
-        if(stage === 'step1'){
+        if(stage === STAGE1){
             nextStepLabel = (
-                <h5 className="text-muted text-center">Set component name</h5>
-            );
-            backStepLabel = (
-                <h5 className="text-muted text-center">Set component name</h5>
+                <h5 className="text-muted text-center">Enter component metadata</h5>
             );
             toolbar = (
                 <ButtonGroup bsSize="xs">
-                    <Button><span style={toolbarLabelStyle}>Back</span></Button>
-                    <Button><span style={toolbarLabelStyle}>Next</span></Button>
                     {closeButton}
                 </ButtonGroup>
             );
             header = (<h4 className="text-center">Select component source code generator</h4>);
             content = (<GeneratorList />);
+        } else if(stage === STAGE2){
+            backStepLabel = (
+                <h5 className="text-muted text-center">Select component generator</h5>
+            );
+            nextStepLabel = (
+                <h5 className="text-muted text-center">Preview the generated source code</h5>
+            );
+            toolbar = (
+                <ButtonGroup bsSize="xs">
+                    <Button data-stage={STAGE1} onClick={this.handleOnStep} ><span style={toolbarLabelStyle}>Back</span></Button>
+                    {closeButton}
+                </ButtonGroup>
+            );
+            header = (<h4 className="text-center">Enter component metadata</h4>);
+            content = (<MetadataForm />);
         }
         return (
             <div style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px', overflow: 'auto'}}>
-                <div style={{width: '100%', position: 'fixed', zIndex: '100', backgroundColor: '#f5f5f5', borderBottom: '1px solid #ffffff'}}>
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                        <div style={labelSectionStyle} >{backStepLabel}</div>
-                        <div style={centerSectionStyle} >{header}</div>
-                        <div style={labelSectionStyle} >{nextStepLabel}</div>
+                <div style={{width: '100%', position: 'fixed', zIndex: '100', padding: '0 2em'}}>
+                    <div style={{backgroundColor: '#f5f5f5', borderBottom: '1px solid #ffffff'}}>
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                            <div style={labelSectionStyle} >{backStepLabel}</div>
+                            <div style={centerSectionStyle} >{header}</div>
+                            <div style={labelSectionStyle} >{nextStepLabel}</div>
+                        </div>
+                        <div style={toolbarSectionStyle}>{toolbar}</div>
                     </div>
-                    <div style={toolbarSectionStyle}>{toolbar}</div>
                 </div>
                 <div style={{marginTop: '6em', padding: '2em 2em 2em 2em' }}>
                     {content}

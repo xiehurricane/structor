@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-import * as actions from './actions.js';
-
-const initialState = {
-    pathInProps: undefined
+// main saga
+export default function* mainSaga() {
 };
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    return state;
-}
-

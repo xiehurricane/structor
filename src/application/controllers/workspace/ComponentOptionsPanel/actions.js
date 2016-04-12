@@ -31,7 +31,7 @@ export const deleteOption = (componentObject, optionPath) => (dispatch, getState
     let node = graphApi.getNode(key);
     if (node) {
         let oldProps = node.modelNode.props || {};
-        let newProps = utils.delex(oldProps, optionPath);
+        let newProps = utils.delex(utils.fulex(oldProps), optionPath);
         dispatch(pushHistory());
         node.modelNode.props = newProps;
         dispatch(setSelectedKey(key));
@@ -55,13 +55,6 @@ export const changeOption = (componentObject, optionObject) => (dispatch, getSta
         dispatch(failed('Component with key ' + key + ' was not found.'));
     }
 };
-
-//export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
-//export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
-//
-//export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
-//export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
-
 
 export const containerActions = (dispatch) => bindActionCreators({
     deleteOption, changeOption

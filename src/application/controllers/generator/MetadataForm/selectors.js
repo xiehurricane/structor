@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-import * as actions from './actions.js';
+import { createStructuredSelector } from 'reselect';
 
-const initialState = {
-    pathInProps: undefined
-};
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    return state;
-}
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.metadataForm,
+    libraryPanelModel: state => state.libraryPanel,
+    generatorModel: state => state.generator
+});
 

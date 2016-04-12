@@ -39,10 +39,12 @@ import libraryPanelReducer from '../controllers/workspace/LibraryPanel/reducer.j
 import componentOptionsModalReducer from '../controllers/workspace/ComponentOptionsModal/reducer.js';
 import componentControlsReducer from '../controllers/workspace/ComponentControls/reducer.js';
 import componentOptionsPanelReducer from '../controllers/workspace/ComponentOptionsPanel/reducer.js';
-import generatorReducer from '../controllers/sandbox/Generator/reducer.js';
-import generatorListReducer from '../controllers/sandbox/GeneratorList/reducer.js';
-import generatorBriefPanelReducer from '../controllers/sandbox/GeneratorBriefPanel/reducer.js';
+import generatorReducer from '../controllers/generator/Generator/reducer.js';
+import generatorListReducer from '../controllers/generator/GeneratorList/reducer.js';
+import generatorBriefPanelReducer from '../controllers/generator/GeneratorBriefPanel/reducer.js';
+import metadataFormReducer from '../controllers/generator/MetadataForm/reducer.js';
 import projectGalleryReducer from '../controllers/projects/ProjectGallery/reducer.js';
+import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
 
 const reducer = combineReducers({
     profiles: profilesReducer,
@@ -70,7 +72,9 @@ const reducer = combineReducers({
     generator: generatorReducer,
     generatorList: generatorListReducer,
     generatorBriefPanel: generatorBriefPanelReducer,
-    projectGallery: projectGalleryReducer
+    metadataForm: metadataFormReducer,
+    projectGallery: projectGalleryReducer,
+    signInModal: signInModalReducer
 });
 
 export default reducer;

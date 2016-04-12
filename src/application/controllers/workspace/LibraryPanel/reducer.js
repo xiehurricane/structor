@@ -20,6 +20,7 @@ import * as actions from './actions.js';
 const initialState = {
     componentsTree: {},
     componentsList: [],
+    groupsList: [],
     defaultVariantMap: {},
     componentInPreview: undefined,
     variantsInPreview: []
@@ -32,8 +33,10 @@ export default (state = initialState, action = {}) => {
     if(type === actions.SET_COMPONENTS){
         const {componentsTree} = payload;
         let componentsList = [];
+        let groupsList = [];
         forOwn(componentsTree, (group, groupName) => {
             if (isObject(group)) {
+                groupsList.push(groupName);
                 forOwn(group, (componentTypeValue, componentName) => {
                     componentsList.push(componentName);
                 });
@@ -41,7 +44,8 @@ export default (state = initialState, action = {}) => {
         });
         return Object.assign({}, state, {
             componentsTree: componentsTree,
-            componentsList: componentsList
+            componentsList: componentsList,
+            groupsList: groupsList
         });
     }
 

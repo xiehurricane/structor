@@ -364,6 +364,10 @@ body {
     z-index: 9055;
 }
 
+.umy-modal-middlesize {
+    width: 500px;
+}
+
 .library-panel-quick-copy-to-clipboard {
     background-color: #cdcdcd;
 }

@@ -16,6 +16,8 @@
 
 // commons
 import ContentEditable from './common/ContentEditable.js';
+import InputTextStateful from './common/InputTextStateful.js';
+import CheckboxStateful from './common/CheckboxStateful.js';
 
 // app
 import MainFrame from './app/MainFrame.js';
@@ -32,5 +34,7 @@ export {
     PageComponentForm,
     PageTreeViewItem,
     PageTreeViewItemText,
-    AceEditor
+    AceEditor,
+    InputTextStateful,
+    CheckboxStateful
 }

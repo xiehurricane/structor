@@ -50,7 +50,8 @@ class Container extends Component {
             const style = {
                 position: 'relative',
                 color: '#ffffff',
-                borderRadius: '.3em',
+                borderRadius: '4px',
+                border: '1px solid #ffffff',
                 verticalAlign: 'middle',
                 textAlign: 'left',
                 padding: '1.5em',
@@ -108,7 +109,7 @@ class Container extends Component {
             const overlayStyle = {
                 position: 'fixed',
                 width: '30em',
-                padding: '0.5em',
+                padding: '.5em 1.5em .5em .5em',
                 right: '0px',
                 top: '0px',
                 zIndex: '9999'};

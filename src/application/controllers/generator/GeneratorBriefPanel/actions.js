@@ -15,19 +15,17 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { hideGenerator } from '../../app/AppContainer/actions.js';
-//import { started, done } from '../../app/AppSpinner/actions.js';
 
-export const LOAD_GENERATORS = "Generator/LOAD_GENERATORS";
-export const SELECT_GENERATOR = "Generator/SELECT_GENERATOR";
+import { pregenerate } from '../Generator/actions.js';
 
-export const loadGenerators = () => ({type: LOAD_GENERATORS});
-export const selectGenerator = (generatorId, version) => ({type: SELECT_GENERATOR, payload: {generatorId, version}});
+export const GET_GENERATOR_INFO = "GeneratorBriefPanel/GET_GENERATOR_INFO";
+export const SET_GENERATOR_INFO = "GeneratorBriefPanel/SET_GENERATOR_INFO";
 
-export const hide = () => (dispatch, getState) => {
-    dispatch(hideGenerator());
-};
+export const getGeneratorInfo = (projectId, userId, generatorId) =>
+    ({type: GET_GENERATOR_INFO, payload: {generatorId, userId, projectId}});
+export const setGeneratorInfo = (projectId, userId, generatorId, info) =>
+    ({type: SET_GENERATOR_INFO, payload: {projectId, userId, generatorId, info}});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hide
+    getGeneratorInfo, pregenerate
 }, dispatch);

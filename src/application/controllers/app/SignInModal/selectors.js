@@ -14,26 +14,10 @@
  * limitations under the License.
  */
 
-import * as actions from './actions.js';
+import { createStructuredSelector } from 'reselect';
 
-const initialState = {
-    selectedGeneratorId: undefined,
-    selectedGeneratorVersion: undefined,
-    stage: 'step1'
-
-};
-
-export default (state = initialState, action = {}) => {
-
-    const {type, payload} = action;
-
-    if(type === actions.SELECT_GENERATOR){
-        return Object.assign({}, state, {
-            selectedGeneratorId: payload.generatorId,
-            selectedGeneratorVersion: payload.version
-        });
-    }
-
-    return state;
-}
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.signInModal,
+    appContainerModel: state => state.appContainer
+});
 

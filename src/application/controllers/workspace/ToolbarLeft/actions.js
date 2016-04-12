@@ -17,6 +17,8 @@ import { bindActionCreators } from 'redux';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 import { reloadPage, setEditModeOn, setLivePreviewModeOn, saveModel, exportModel } from '../DeskPage/actions.js';
 import { toggleLibraryPanel, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
+import { signOut } from '../../app/AppContainer/actions.js'
+import { showModal } from '../../app/SignInModal/actions.js';
 
 export const saveProject = () => (dispatch, getState) => {
     dispatch(saveModel());
@@ -25,5 +27,5 @@ export const saveProject = () => (dispatch, getState) => {
 
 export const containerActions = (dispatch) => bindActionCreators({
     reloadPage, setEditModeOn, setLivePreviewModeOn, saveProject, exportModel,
-    toggleLibraryPanel, toggleQuickOptions, togglePageTreeview
+    toggleLibraryPanel, toggleQuickOptions, togglePageTreeview, showModal, signOut
 }, dispatch);

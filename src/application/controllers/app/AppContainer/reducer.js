@@ -26,7 +26,7 @@ const initialState = {
         subscriptionEndDate: null
     },
     authentication: {
-        error: null
+        error: undefined
     },
     packageConfig: {},
     projectStatus: null,
@@ -40,27 +40,20 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.GET_PROJECT_INFO_DONE){
 
-        //let { model, componentsTree} = payload.projectData;
-
-        // add Html components as additional group
-        //componentsTree['Html'] = HtmlComponents.getSortedHtmlComponents();
-
         return Object.assign({}, state, {
             packageConfig: payload.projectConfig.server.packageConf,
             projectStatus: payload.projectConfig.status,
-
-            //componentsTree: componentsTree,
             workspaceMode: 'desk'
         });
     }
 
-    if(type === actions.SIGN_IN){
-        return Object.assign({}, state, {
-            authentication: {
-                error: null
-            }
-        });
-    }
+    //if(type === actions.SIGN_IN){
+    //    return Object.assign({}, state, {
+    //        authentication: {
+    //            error: null
+    //        }
+    //    });
+    //}
 
     if(type === actions.SIGN_IN_DONE){
         return Object.assign({}, state, {
@@ -71,12 +64,20 @@ export default (state = initialState, action = {}) => {
     if(type === actions.SIGN_IN_FAILED){
         return Object.assign({}, state, {
             authentication: {
-                error: String(payload)
+                error: payload.message ? payload.message : payload
             }
         });
     }
 
-    if(type === actions.SIGN_OUT){
+    if(type === actions.SIGN_IN_CLEAN){
+        return Object.assign({}, state, {
+            authentication: {
+                error: undefined
+            }
+        });
+    }
+
+    if(type === actions.SIGN_OUT_DONE){
         return Object.assign({}, state, {
             userAccount: initialState.userAccount
         });

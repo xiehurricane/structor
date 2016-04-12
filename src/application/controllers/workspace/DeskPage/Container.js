@@ -148,7 +148,7 @@ class Container extends Component {
 
                     const { componentModel } = this.props;
                     page.updatePageModel({
-                        pathname: pathname,
+                        pathname: componentModel.currentPagePath ? componentModel.currentPagePath : pathname,
                         isEditModeOn: componentModel.isEditModeOn
                     });
                 };
@@ -229,6 +229,7 @@ class Container extends Component {
     }
 
     render(){
+        const { componentModel: {currentPagePath} } = this.props;
         return (<iframe {...this.props} src="/deskpage/" />);
     }
 

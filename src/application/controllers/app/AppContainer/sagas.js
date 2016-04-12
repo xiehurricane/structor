@@ -17,6 +17,7 @@ import validator from 'validator';
 import { SagaCancellationException } from 'redux-saga';
 import { fork, take, call, put, race } from 'redux-saga/effects';
 import * as actions from './actions.js';
+import * as signInModalActions from '../SignInModal/actions.js';
 import * as spinnerActions from '../AppSpinner/actions.js';
 import * as messageActions from '../AppMessage/actions.js';
 import * as deskActions from '../../workspace/Desk/actions.js';
@@ -41,23 +42,36 @@ function* signInByToken(){
 function* signIn(){
     while(true){
         const {payload: {email, password, staySignedIn}} = yield take(actions.SIGN_IN);
+        console.log('Receive signal sign in: ', email, password, staySignedIn);
         if(!email || email.length <= 0){
-            put(actions.signInFailed('Please enter e-mail address value'));
+            yield put(actions.signInFailed('Please enter e-mail address value'));
         } else if( !validator.isEmail(email) ){
-            put(actions.signInFailed('Please enter valid e-mail address value'));
+            yield put(actions.signInFailed('Please enter valid e-mail address value'));
         } else {
-            yield put(spinnerActions.started(actions.SIGN_IN));
+            yield put(spinnerActions.started('Signing in'));
             try{
                 const response = yield call(serverApi.initUserCredentials, email, password);
                 if(staySignedIn === true){
-                    docCookies.setItem("structor-market-token", response.token, 31536e3, "/");
+                    cookies.setItem("structor-market-token", response.token, 31536e3, "/");
                 }
-                yield put(actions.signInDone(response))
+                yield put(actions.signInDone(response));
+                yield put(signInModalActions.hideModal());
+                yield put(messageActions.success('Signing in to your account has been done successfully.'));
             } catch(e){
                 yield put(actions.signInFailed(e));
             }
-            yield put(spinnerActions.done(actions.SIGN_IN));
+            yield put(spinnerActions.done('Signing in'));
         }
+    }
+}
+
+function* signOut(){
+    while(true){
+        yield take(actions.SIGN_OUT);
+        yield call(serverApi.removeUserCredentials);
+        cookies.removeItem("structor-market-token", "/");
+        yield put(actions.signOutDone());
+        yield put(messageActions.success('Signing out has been done successfully.'));
     }
 }
 
@@ -103,6 +117,8 @@ function* loadProject(){
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(loadProject)];
+    yield fork(loadProject);
+    yield fork(signIn);
+    yield fork(signOut);
 
 };
