@@ -15,14 +15,14 @@ gulp.task('clean-server', function(){
 });
 
 gulp.task('build-server-dev', ['clean-server'], function() {
-    return gulp.src('../src/server/src/**/*.js')
-        .pipe(watch('../src/server/src/**/*.js'))
+    return gulp.src('../src/server/**/*.js')
+        .pipe(watch('../src/server/**/*.js'))
         .pipe(babel())
         .pipe(gulp.dest('../server'));
 });
 
 gulp.task('build-server', ['clean-server'], function() {
-    return gulp.src('../src/server/src/**/*.js')
+    return gulp.src('../src/server/**/*.js')
         .pipe(babel())
         .pipe(uglify())
         .pipe(gulp.dest('../server'));

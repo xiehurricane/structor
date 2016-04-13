@@ -39,7 +39,9 @@ export function setServer(server){
     serverRef.app.use(middlewareCompilerManager.getHotMiddleware());
     serverRef.app.use(middlewareCompilerManager.getBuilderMiddleware({
         callback: stats => {
-            serverRef.ioSocketClient.emit('compiler.message', stats);
+            if(serverRef.ioSocketClient){
+                serverRef.ioSocketClient.emit('compiler.message', stats);
+            }
         }
     }));
     serverRef.app.use(rewrite('/deskpage/*', '/desk/index.html'));

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+import * as storageManager from './storageManager.js';
+import * as projectCompiler from './projectCompiler.js';
+
 let serverRef;
 
 export function loopback(options){
@@ -26,4 +29,16 @@ export function error(options){
 
 export function setServer(server){
     serverRef = server;
+}
+
+export function makeWorkingDirectory(options){
+    return storageManager.makeWorkingCopy();
+}
+
+export function removeWorkingDirectory(options){
+    return storageManager.deleteWorkingCopy();
+}
+
+export function compileWorkingDesk(options){
+    return projectCompiler.compileWorkingCopy();
 }

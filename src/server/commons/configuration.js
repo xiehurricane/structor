@@ -54,7 +54,9 @@ function setupProjectPaths(rootDirPath) {
         componentDefaultsDirPath: path.join(absRoot, 'defaults'),
         nodeModulesDirPath: path.join(rootDirPath, 'node_modules'),
         deskModelFilePath: path.join(absRoot, 'desk', 'model.json'),
-        deskDirPath: path.join(absRoot, 'desk')
+        deskDirPath: path.join(absRoot, 'desk'),
+        sandboxDirPath: path.join(absRoot, 'sandbox'),
+        sandboxTemplateDirPath: path.join(absRoot, 'sandbox', 'template')
     };
 }
 
@@ -241,4 +243,12 @@ export function projectId() {
 
 export function getProjectConfig() {
     return config.project;
+}
+
+export function sandboxDirPath(){
+    return config.project.paths.sandboxDirPath;
+}
+
+export function sandboxTemplateDirPath(){
+    return config.project.paths.sandboxTemplateDirPath;
 }

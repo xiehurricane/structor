@@ -21,7 +21,8 @@ var minimist = require('minimist');
 var path = require('path');
 var io = require('socket.io');
 //var api = require('./server/api.js');
-var controller = require('./src/server/controller.js');
+var controller = require('./server/controller.js');
+//var controller = require('./src/server/controller.js');
 
 process.on('uncaughtException',
     function(err){

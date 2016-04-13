@@ -95,7 +95,7 @@ export function writeBinaryFile(filePath, fileData){
 }
 
 export function placeInPosition(filePath, options){
-    return this.readFile(filePath)
+    return readFile(filePath)
         .then( data => {
             if(!data){
                 throw Error('Cannot place content into file. Cause: file is empty. File path: ' + filePath);
@@ -109,7 +109,7 @@ export function placeInPosition(filePath, options){
 
         })
         .then( fileData => {
-            return this.writeFile(filePath, fileData, options.format);
+            return writeFile(filePath, fileData, options.format);
         });
 }
 
@@ -117,7 +117,7 @@ export function copyFiles(options){
     return options.reduce(
         (sequence, valuePair) => {
             return sequence.then(() => {
-                return this.copyFile(valuePair.srcFilePath, valuePair.destFilePath);
+                return copyFile(valuePair.srcFilePath, valuePair.destFilePath);
             });
         },
         Promise.resolve()
@@ -188,7 +188,7 @@ export function traverseDirTree(tree, callback){
         if(tree.dirs && tree.dirs.length > 0){
             tree.dirs.forEach(dir => {
                 callback('dir', dir);
-                this.traverseDirTree(dir, callback);
+                traverseDirTree(dir, callback);
             });
         }
         if(tree.files && tree.files.length > 0){
@@ -234,7 +234,7 @@ export function readDirectoryTree(result, start, callback, testFileNames = undef
                         var dirNamePath = result.dirNamePath ? result.dirNamePath + '.' + fileName : fileName;
                         var resultDir = {dirName: fileName, dirNamePath: dirNamePath, dirPath: abspath, dirs:[], files: [] };
                         result.dirs.push(resultDir);
-                        this.readDirectoryTree(resultDir, abspath, err => {
+                        readDirectoryTree(resultDir, abspath, err => {
                             if(err){
                                 callback(err);
                             }
@@ -288,7 +288,7 @@ export function readDirectoryTree(result, start, callback, testFileNames = undef
 export function readDirectory(dirPath, testFileNames = undefined){
     return new Promise( (resolve, reject) => {
         let result = {dirs: [], files:[]};
-        this.readDirectoryTree(result, dirPath, err => {
+        readDirectoryTree(result, dirPath, err => {
             if(err){
                 reject(err);
             } else {
@@ -299,9 +299,9 @@ export function readDirectory(dirPath, testFileNames = undefined){
 }
 
 export function readDirectoryFiles(dirPath, testFileNames = undefined){
-    return this.readDirectory(dirPath, testFileNames).then(dirTree => {
+    return readDirectory(dirPath, testFileNames).then(dirTree => {
         let files = [];
-        this.traverseDirTree(dirTree, (type, obj) => {
+        traverseDirTree(dirTree, (type, obj) => {
             if(type === 'file'){
                 files.push(obj.filePath);
             }
