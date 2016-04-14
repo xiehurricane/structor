@@ -19,37 +19,35 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
+import { ListGroup, ListGroupItem, Tabs, Tab } from 'react-bootstrap';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
+
 class Container extends Component {
 
     constructor(props) {
         super(props);
-        this.handleOnClose = this.handleOnClose.bind(this);
     }
 
-    handleOnClose(e){
-        e.stopPropagation();
-        e.preventDefault();
-        const { hideFrame } = this.props;
-        hideFrame();
-    }
-
-    render() {
-
-        let content = (
-            <div>
-                <h3 className="text-primary">Hello from Sandbox !</h3>
-                <button className="btn btn-primary" onClick={this.handleOnClose}>Close</button>
-            </div>
-        );
+    render(){
+        const { componentModel: {templateObject} } = this.props;
+        const {templates, dependencies} = templateObject;
+        const buttonLabelStyle = {
+            margin: '0 0.5em'
+        };
         return (
-            <div style={{overflow: 'hidden'}}>
-                <div ref='appBody' style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px'}}>
-                    {content}
-                </div>
-            </div>
+            <Tabs defaultActiveKey={1} animation={false}>
+                <Tab key={'fileList'} eventKey={1} title="Source code templates">
+
+                </Tab>
+                <Tab key={'metadata'} eventKey={2} title="Metadata">
+                </Tab>
+                <Tab key={'dependencies'} eventKey={2} title="Dependencies">
+                </Tab>
+            </Tabs>
         );
     }
 }
 
-export default connect( modelSelector, containerActions)(Container);
+
+export default connect(modelSelector, containerActions)(Container);
 

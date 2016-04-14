@@ -27,6 +27,7 @@ import PageOptionsModal from '../../workspace/PageOptionsModal';
 import ComponentOptionsModal from '../../workspace/ComponentOptionsModal';
 import SignInModal from '../SignInModal';
 import Generator from '../../generator/Generator';
+import Sandbox from '../../sandbox/Sandbox';
 
 class Container extends Component {
 
@@ -59,6 +60,13 @@ class Container extends Component {
             content = (
                 <div style={{width: '100%', height: '100%'}}>
                     <Generator />
+                    <SignInModal />
+                </div>
+            );
+        } else if(workspaceMode === 'sandbox'){
+            content = (
+                <div style={{width: '100%', height: '100%'}}>
+                    <Sandbox />
                     <SignInModal />
                 </div>
             );

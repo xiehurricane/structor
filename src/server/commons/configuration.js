@@ -47,7 +47,6 @@ function setupProjectPaths(rootDirPath) {
         deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js'),
         deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js'),
         deskIndexFilePath: path.join(absRoot, 'src', 'index.js'),
-        generatorsDirPath: path.join(absRoot, 'generators'),
         docsDirPath: path.join(absRoot, 'docs'),
         docsReadmeFilePath: path.join(absRoot, 'docs', 'Readme.md'),
         docsComponentsDirPath: path.join(absRoot, 'docs', 'components'),

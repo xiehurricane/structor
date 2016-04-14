@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-import { fork, take } from 'redux-saga/effects';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
 
-export default function* mainSaga(){
-
+export {
+    reducer,
+    mainSaga
 }
+
+export default Container;

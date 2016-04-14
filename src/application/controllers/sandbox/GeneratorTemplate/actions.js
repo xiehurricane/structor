@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-// main saga
-export default function* mainSaga() {
-};
+import { bindActionCreators } from 'redux';
+
+export const SET_TEMPLATE = "GeneratorTemplateList/SET_TEMPLATE";
+
+export const setTemplate = (templateObject) => ({type: SET_TEMPLATE, payload: templateObject});
+
+export const containerActions = (dispatch) => bindActionCreators({
+}, dispatch);

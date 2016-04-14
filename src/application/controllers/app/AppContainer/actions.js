@@ -31,6 +31,8 @@ export const COMPILER_DONE = "AppContainer/COMPILER_DONE";
 export const COMPILER_TIMEOUT = "AppContainer/COMPILER_TIMEOUT";
 export const SHOW_GENERATOR = "AppContainer/SHOW_GENERATOR";
 export const HIDE_GENERATOR = "AppContainer/HIDE_GENERATOR";
+export const SHOW_SANDBOX = "AppContainer/SHOW_SANDBOX";
+export const HIDE_SANDBOX = "AppContainer/HIDE_SANDBOX";
 
 export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
 export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
@@ -45,6 +47,8 @@ export const compilerDone = () => ({ type: COMPILER_DONE });
 export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
 export const showGenerator = () => ({type: SHOW_GENERATOR});
 export const hideGenerator = () => ({type: HIDE_GENERATOR});
+export const showSandbox = () => ({type: SHOW_SANDBOX});
+export const hideSandbox = () => ({type: HIDE_SANDBOX});
 
 export const handleCompilerMessage = (message) => (dispatch, getState) => {
     if(message.status === 'start'){

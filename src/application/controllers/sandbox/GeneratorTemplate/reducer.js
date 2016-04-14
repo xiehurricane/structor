@@ -14,17 +14,22 @@
  * limitations under the License.
  */
 
-import {combineReducers} from 'redux';
+import * as actions from './actions.js';
 
-import generatorFrameReducer from './encapsulated/GeneratorFrame/reducer.js';
+const initialState = {
+    templateObject: {}
+};
 
-const encapsulatedReducer = combineReducers({
-    generatorFrame: generatorFrameReducer
-});
+export default (state = initialState, action = {}) => {
 
-const reducer = combineReducers({
-    encapsulated: encapsulatedReducer
-});
+    const {type, payload} = action;
 
-export default reducer;
+    if(type === actions.SET_TEMPLATE){
+        return Object.assign({}, state, {
+            templateObject: payload
+        });
+    }
+
+    return state;
+}
 

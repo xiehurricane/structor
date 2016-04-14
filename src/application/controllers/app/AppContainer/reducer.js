@@ -19,19 +19,19 @@ import { utilsStore, HtmlComponents } from '../../../api/index.js';
 
 const initialState = {
     userAccount: {
-        email: null,
-        regDate: null,
-        subscriptionDescription: null,
-        subscriptionStartDate: null,
-        subscriptionEndDate: null
+        userId: undefined,
+        email: undefined,
+        regDate: undefined,
+        subscriptionDescription: undefined,
+        subscriptionStartDate: undefined,
+        subscriptionEndDate: undefined
     },
     authentication: {
         error: undefined
     },
     packageConfig: {},
-    projectStatus: null,
-    workspaceMode: null,
-    isGeneratorFrameShown: false
+    projectStatus: undefined,
+    workspaceMode: undefined
 };
 
 export default (state = initialState, action = {}) => {
@@ -89,7 +89,13 @@ export default (state = initialState, action = {}) => {
         });
     }
 
-    if(type === actions.HIDE_GENERATOR){
+    if(type === actions.SHOW_SANDBOX){
+        return Object.assign({}, state, {
+            workspaceMode: 'sandbox'
+        });
+    }
+
+    if(type === actions.HIDE_GENERATOR || type === actions.HIDE_SANDBOX){
         return Object.assign({}, state, {
             workspaceMode: 'desk'
         });

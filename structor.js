@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-require('babel-register');
+//require('babel-register');
 var minimist = require('minimist');
 var path = require('path');
 var io = require('socket.io');

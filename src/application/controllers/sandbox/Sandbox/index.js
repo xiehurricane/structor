@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-import { createStructuredSelector } from 'reselect';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
 
-export const modelSelector = createStructuredSelector({
-    componentModel: state => state.sandboxFrame,
-});
+export {
+    reducer,
+    mainSaga
+}
+
+export default Container;

@@ -143,3 +143,20 @@ export function generate(generatorId, version, groupName, componentName, model, 
 export function saveGenerated(groupName, componentName, files, dependencies){
     return invokeStructor('saveGenerated', {groupName, componentName, files, dependencies});
 }
+
+export function getAvailableGeneratorSamplesList(){
+    return invokeSandbox('getGeneratorSamples');
+}
+
+export function prepareGeneratorSampleSandbox(sampleId){
+    return invokeSandbox('removeWorkingDirectory')
+        .then(() => {
+            return invokeSandbox('makeWorkingDirectory');
+        })
+        .then(() => {
+            return invokeSandbox('sandboxPrepare', {sampleId});
+        })
+        .then(() => {
+            return invokeSandbox('sandboxReadFiles', {sampleId});
+        });
+}

@@ -16,8 +16,6 @@
 
 import {combineReducers} from 'redux';
 
-import profilesReducer from '../profiles/reducer.js';
-
 import appContainerReducer from '../controllers/app/AppContainer/reducer.js';
 import appSpinnerReducer from '../controllers/app/AppSpinner/reducer.js';
 import appMessageReducer from '../controllers/app/AppMessage/reducer.js';
@@ -46,9 +44,11 @@ import metadataFormReducer from '../controllers/generator/MetadataForm/reducer.j
 import projectGalleryReducer from '../controllers/projects/ProjectGallery/reducer.js';
 import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
 import sourceFilesListReducer from '../controllers/generator/SourceFilesList/reducer.js';
+import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
+import generatorSampleListReducer from '../controllers/sandbox/GeneratorSampleList/reducer.js';
+import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
 
 const reducer = combineReducers({
-    profiles: profilesReducer,
     appContainer: appContainerReducer,
     appSpinner: appSpinnerReducer,
     appMessage: appMessageReducer,
@@ -76,7 +76,10 @@ const reducer = combineReducers({
     metadataForm: metadataFormReducer,
     projectGallery: projectGalleryReducer,
     signInModal: signInModalReducer,
-    sourceFilesList: sourceFilesListReducer
+    sourceFilesList: sourceFilesListReducer,
+    sandbox: sandboxReducer,
+    generatorSampleList: generatorSampleListReducer,
+    generatorTemplate: generatorTemplateReducer
 });
 
 export default reducer;

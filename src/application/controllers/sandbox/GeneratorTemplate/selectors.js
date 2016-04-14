@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
+import {forOwn, isObject} from 'lodash';
+import { createStructuredSelector } from 'reselect';
 
-import { hideFrame } from '../../../controllers/generator/Generator/actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    hideFrame
-}, dispatch);
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.generatorTemplate
+});
+

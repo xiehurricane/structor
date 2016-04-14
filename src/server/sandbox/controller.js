@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as projectCompiler from './projectCompiler.js';
+import * as generatorManager from './generatorManager.js';
 
 let serverRef;
 
@@ -41,4 +43,35 @@ export function removeWorkingDirectory(options){
 
 export function compileWorkingDesk(options){
     return projectCompiler.compileWorkingCopy();
+}
+
+export function getGeneratorSamples(options){
+    return clientManager.getGeneratorSamples();
+}
+
+export function sandboxPrepare(options){
+    return clientManager.sandboxPrepare(options.sampleId);
+}
+
+export function sandboxReadFiles(options){
+    return clientManager.sandboxReadFiles(options.sampleId);
+}
+
+export function sandboxWriteFiles(options){
+    return clientManager.sandboxWriteFiles(options.sampleId, options.filesObject);
+}
+
+export function sandboxGenerate(options){
+    const {sampleId, metadata} = options;
+    return generatorManager.initGeneratorData('TestGroup', 'TestComponent', metadata)
+        .then(generatorData => {
+            return clientManager.sandboxProcess(sampleId, generatorData);
+        });
+}
+
+export function saveSandboxGenerated(options){
+    const {files, dependencies} = options;
+    return generatorManager.installDependencies(dependencies).then(() => {
+        return generatorManager.saveGenerated(files);
+    });
 }

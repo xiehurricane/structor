@@ -14,25 +14,11 @@
  * limitations under the License.
  */
 
-require('babel-register');
-var restApi = require('../../../src/application/api/app/restApi.js');
-var url1 = 'http://localhost:2222/sandbox';
+import { bindActionCreators } from 'redux';
 
-return restApi.makeRequest(url1, 'compileWorkingDesk', {})
-    .then(() => {
-        console.log('Done.');
-    })
-    .catch(e => {
-        console.error(e);
-    });
+export const SET_GENERATOR_SAMPLES = "GeneratorSampleList/SET_GENERATOR_SAMPLES";
 
-//restApi.makeRequest(url1, 'makeWorkingDirectory', {})
-//    .then(() => {
-//        return restApi.makeRequest(url1, 'compileWorkingDesk', {});
-//    })
-//    .then(() => {
-//        console.log('Done.');
-//    })
-//    .catch(e => {
-//        console.error(e);
-//    });
+export const setGeneratorSamples = (list) => ({type: SET_GENERATOR_SAMPLES, payload: list});
+
+export const containerActions = (dispatch) => bindActionCreators({
+}, dispatch);

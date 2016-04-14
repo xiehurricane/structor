@@ -14,6 +14,23 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-export const containerActions = (dispatch) => bindActionCreators({
-}, dispatch);
+import * as actions from './actions.js';
+
+const initialState = {
+    sampleList:[],
+    selectedSampleId: undefined
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    if(type === actions.SET_GENERATOR_SAMPLES){
+        return Object.assign({}, state, {
+            sampleList: payload
+        });
+    }
+
+    return state;
+}
+

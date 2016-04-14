@@ -17,28 +17,25 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    //pages: [],
-    //currentPageIndex: -1,
-    //currentPageName: null,
-    //currentPagePath: null,
-    //reloadPageRequest: false,
-    //isEditModeOn: true,
-    //isLivePreviewModeOn: false,
-    //
-    //reloadPageCounter: 0,
-    //markedUpdateCounter: 0,
-    //modelUpdateCounter: 0
+    stage: actions.STAGE1,
+    generatorSampleId: undefined
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    //if(type === actions.RELOAD_PAGE){
-    //    return Object.assign({}, state, {
-    //        reloadPageCounter: state.reloadPageCounter + 1
-    //    });
-    //}
+    if(type === actions.STEP_TO_STAGE){
+        return Object.assign({}, state, {
+            stage: payload
+        });
+    }
+
+    if(type === actions.SET_GENERATOR_SAMPLE){
+        return Object.assign({}, state, {
+            generatorSampleId: payload
+        });
+    }
 
     return state;
 }

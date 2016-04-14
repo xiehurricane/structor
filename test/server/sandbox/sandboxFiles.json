@@ -1,0 +1,44 @@
+{
+  "templates": {
+    "component": "import React, { Component, PropTypes } from 'react';\n\nclass <%= componentName %> extends Component {\n\n    constructor(props, content) {\n        super(props, content);\n    }\n    render() {\n        return (\n            {content}\n        );\n    }\n}\n\nexport default <%= componentName %>;\n",
+    "docs": "### <%= componentName %>\n\n#### Descrition\n\n#### Properties\n\n#### Conclusion"
+  },
+  "metadata": {
+    "columns": [
+      {
+        "title": "Product Price",
+        "dataField": "id",
+        "dataSort": true,
+        "editable": false,
+        "hidden": false
+      }
+    ]
+  },
+  "dependencies": {
+    "packages": [
+      {
+        "name": "react-widgets",
+        "version": "",
+        "copy": [
+          {
+            "from": "dist/fonts",
+            "to": "react-widgets/fonts"
+          },
+          {
+            "from": "dist/img",
+            "to": "react-widgets/img"
+          },
+          {
+            "from": "dist/css/react-widgets.css",
+            "to": "react-widgets/css/react-widgets.css",
+            "isImport": true
+          }
+        ]
+      },
+      {
+        "name": "moment",
+        "version": ""
+      }
+    ]
+  }
+}
