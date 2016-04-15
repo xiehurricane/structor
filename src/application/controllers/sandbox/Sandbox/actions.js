@@ -26,14 +26,14 @@ export const STAGE3 = 'STAGE3';
 export const STAGE4 = 'STAGE4';
 
 export const STEP_TO_STAGE = "Sandbox/STEP_TO_STAGE";
-export const LOAD_GENERATOR_SAMPLES = "Sandbox/LOAD_GENERATOR_SAMPLES";
+//export const LOAD_GENERATOR_SAMPLES = "Sandbox/LOAD_GENERATOR_SAMPLES";
 export const SET_GENERATOR_SAMPLE = "Sandbox/SET_GENERATOR_SAMPLE";
 export const SAVE_AND_GENERATE_SANDBOX_COMPONENT = "Sandbox/SAVE_AND_GENERATE_SANDBOX_COMPONENT";
 
 export const stepToStage = (stage) => ({type: STEP_TO_STAGE, payload: stage});
-export const loadGeneratorSamples = () => ({type: LOAD_GENERATOR_SAMPLES});
-export const setGeneratorSample = (sampleId) => (dispatch, getState) => {
-    dispatch({type: SET_GENERATOR_SAMPLE, payload: sampleId});
+//export const loadGeneratorSamples = () => ({type: LOAD_GENERATOR_SAMPLES});
+export const setGeneratorSample = (generatorId, version) => (dispatch, getState) => {
+    dispatch({type: SET_GENERATOR_SAMPLE, payload: {generatorId, version}});
 };
 export const saveAndGenerateSandboxComponent = (templateObject) => (dispatch, getState) => {
     const {sandbox:{generatorSampleId}} = getState();

@@ -59,12 +59,12 @@ import { serverApi, utils, graphApi } from '../../../api';
 //
 function* prepareGeneratorSample(){
     while(true){
-        const {payload} = yield take(actions.SET_GENERATOR_SAMPLE);
+        const {payload:{generatorId, version}} = yield take(actions.SET_GENERATOR_SAMPLE);
         yield put(spinnerActions.started('Preparing generator sample'));
         try {
-            const generatorTemplate = yield call(serverApi.prepareGeneratorSampleSandbox, payload);
+            const generatorTemplate = yield call(serverApi.prepareGeneratorSampleSandbox, generatorId, version);
             yield put(generatorTemplateActions.setTemplate(generatorTemplate));
-            yield put(actions.stepToStage(actions.STAGE2));
+            yield put(appContainerActions.showSandbox());
         } catch(error) {
             yield put(messageActions.failed('Generator sample preparing has an error. ' + (error.message ? error.message : error)));
         }
@@ -79,7 +79,7 @@ function* saveAndGenerateComponent(){
         try {
             const generatedData = yield call(serverApi.saveAndGenerateSandboxComponent, sampleId, filesObject);
             yield put(sandboxFilesListActions.setGeneratedData(generatedData));
-            yield put(actions.stepToStage(actions.STAGE3));
+            yield put(actions.stepToStage(actions.STAGE2));
             yield put(messageActions.success('Test component source code has been compiled successfully.'));
         } catch(error) {
             yield put(messageActions.failed('Generator sample compiling has an error. ' + (error.message ? error.message : error)));
@@ -104,25 +104,25 @@ function* saveAndGenerateComponent(){
 //        yield put(spinnerActions.done('Installing & saving the source code'));
 //    }
 //}
-
-function* loadGeneratorSamples(){
-    while(true){
-        yield take(actions.LOAD_GENERATOR_SAMPLES);
-        yield put(spinnerActions.started('Loading list of samples'));
-        try {
-            const samplesList = yield call(serverApi.getAvailableGeneratorSamplesList);
-            yield put(generatorSampleListActions.setGeneratorSamples(samplesList));
-            yield put(appContainerActions.showSandbox());
-        } catch(error) {
-            yield put(messageActions.failed('Samples loading has an error. ' + (error.message ? error.message : error)));
-        }
-        yield put(spinnerActions.done('Loading list of samples'));
-    }
-}
+//
+//function* loadGeneratorSamples(){
+//    while(true){
+//        yield take(actions.LOAD_GENERATOR_SAMPLES);
+//        yield put(spinnerActions.started('Loading list of samples'));
+//        try {
+//            const samplesList = yield call(serverApi.getAvailableGeneratorSamplesList);
+//            yield put(generatorSampleListActions.setGeneratorSamples(samplesList));
+//            yield put(appContainerActions.showSandbox());
+//        } catch(error) {
+//            yield put(messageActions.failed('Samples loading has an error. ' + (error.message ? error.message : error)));
+//        }
+//        yield put(spinnerActions.done('Loading list of samples'));
+//    }
+//}
 
 // main saga
 export default function* mainSaga() {
-    yield fork(loadGeneratorSamples);
+    //yield fork(loadGeneratorSamples);
     yield fork(prepareGeneratorSample);
     yield fork(saveAndGenerateComponent);
     //yield fork(pregenerate);

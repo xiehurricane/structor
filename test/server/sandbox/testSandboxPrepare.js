@@ -25,7 +25,7 @@ var metadata = {};
 restApi.makeRequest('http://localhost:2222/invoke', authMethod, {username: 'apustovalov@gmail.com', password: 'dadada'})
     .then(userAccount => {
         console.log(JSON.stringify(userAccount));
-        return restApi.makeRequest(url1, method, {sampleId: 1})
+        return restApi.makeRequest(url1, method, {generatorId: 21, version: '0001'})
             .then(response => {
                 const responseText = JSON.stringify(response, null, 4);
                 console.log(`From ${url1}: ${responseText}`);

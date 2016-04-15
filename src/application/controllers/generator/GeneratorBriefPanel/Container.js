@@ -27,6 +27,7 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleOnClone = this.handleOnClone.bind(this);
     }
 
     componentDidMount(){
@@ -46,6 +47,14 @@ class Container extends Component {
         pregenerate(generatorId, version);
     }
 
+    handleOnClone(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const { generatorId, setGeneratorSample } = this.props;
+        const version = e.currentTarget.dataset.version;
+        setGeneratorSample(generatorId, version);
+    }
+
     render() {
         const { projectId, userId, generatorId, versions} = this.props;
         const { componentModel: {infos}, generatorKey } = this.props;
@@ -56,9 +65,11 @@ class Container extends Component {
             imgUrl = window.serviceUrl + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/screenshot.png';
         }
         let selectButton = null;
+        let cloneButton = null;
         if(versions){
             const versionsList = versions.split(',');
             let menuItems = [];
+            let cloneMenuItems = [];
             if(versionsList && versionsList.length > 0){
                 versionsList.forEach((item, index) => {
                     menuItems.push(
@@ -69,14 +80,31 @@ class Container extends Component {
                             {'Version ' + item}
                         </MenuItem>
                     );
+                    cloneMenuItems.push(
+                        <MenuItem key={index}
+                                  eventKey={index + 1}
+                                  data-version={item}
+                                  onClick={this.handleOnClone}>
+                            {'Version ' + item}
+                        </MenuItem>
+                    );
                 });
                 selectButton = (
                     <SplitButton id="selectButton"
                                  data-version={versionsList[versionsList.length-1]}
                                  onClick={this.handleOnSelect}
-                                 title="Invoke generator"
+                                 title="Run generator"
                                  bsStyle="primary">
                         {menuItems}
+                    </SplitButton>
+                );
+                cloneButton = (
+                    <SplitButton id="cloneButton"
+                                 data-version={versionsList[versionsList.length-1]}
+                                 onClick={this.handleOnClone}
+                                 title="Fork generator"
+                                 bsStyle="primary">
+                        {cloneMenuItems}
                     </SplitButton>
                 );
             }
@@ -100,6 +128,7 @@ class Container extends Component {
                                         style={ {    "width": "100%"} } />
                                     <div style={{marginTop: '1em'}}>
                                         {selectButton}
+                                        {cloneButton}
                                     </div>
                                 </div>
                             </Col>

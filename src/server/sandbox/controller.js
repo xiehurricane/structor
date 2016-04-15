@@ -56,7 +56,7 @@ export function getGeneratorSamples(options){
 }
 
 export function sandboxPrepare(options){
-    return clientManager.sandboxPrepare(options.sampleId);
+    return clientManager.sandboxPrepare(options.generatorId, options.version);
 }
 
 export function sandboxReadFiles(options){
@@ -68,8 +68,8 @@ export function sandboxWriteFiles(options){
 }
 
 export function sandboxGenerate(options){
-    const {sampleId, metadata} = options;
-    return generatorManager.initGeneratorData('TestGroup', 'TestComponent', metadata)
+    const {sampleId, metadata, model} = options;
+    return generatorManager.initGeneratorData('TestGroup', 'TestComponent', model, metadata)
         .then(generatorData => {
             return clientManager.sandboxProcess(sampleId, generatorData);
         });

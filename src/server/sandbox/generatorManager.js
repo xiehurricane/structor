@@ -19,8 +19,9 @@ import path from 'path';
 import * as fileManager from '../commons/fileManager.js';
 import * as config from '../commons/configuration.js';
 import * as sandboxConfig from './configuration.js';
-import * as indexManager from '../commons/indexManager.js';
+import * as sandboxIndexManager from './indexManager.js';
 import * as npmUtils from '../commons/npmUtils.js';
+//import * as modelParser from '../commons/modelParser.js';
 
 function repairPath(path){
     if(path.substr(0, 1) !== '.'){
@@ -29,9 +30,35 @@ function repairPath(path){
     return path;
 }
 
-export function initGeneratorData(groupName, componentName, metadata) {
+export function initGeneratorData(groupName, componentName, model, metadata) {
     return sandboxConfig.init(path.join(config.sandboxDirPath(), 'work'))
         .then(() => {
+            return sandboxIndexManager.initIndex();
+        })
+        .then(index => {
+            //let componentsNames = [];
+            //if (index && index.groups) {
+            //    forOwn(index.groups, (group, prop) => {
+            //        if (group.components && group.components.length > 0) {
+            //            group.components.forEach(component => {
+            //                componentsNames.push(component.name);
+            //            });
+            //        }
+            //    });
+            //}
+            //let modelMap = modelParser.getModelComponentMap(model);
+            //let modelComponentCount = 0;
+            //let indexComponentCount = 0;
+            //forOwn(modelMap, (value, prop) => {
+            //    modelComponentCount++;
+            //    if(componentsNames.indexOf(prop) >= 0){
+            //        indexComponentCount++;
+            //    }
+            //});
+            //if(indexComponentCount !== modelComponentCount){
+            //    throw Error('Chosen model for test generation has components which were not found in default components library');
+            //}
+
             let fileReaders = [];
             let project = sandboxConfig.getProjectConfig();
             let fileSources = {};
@@ -43,10 +70,11 @@ export function initGeneratorData(groupName, componentName, metadata) {
                         })
                 );
             });
+
             return Promise.all(fileReaders)
                 .then(() => {
                     project.conf.sources = fileSources;
-                    return {groupName, componentName, metadata, project};
+                    return {groupName, componentName, model, metadata, project, index};
                 });
         });
 }

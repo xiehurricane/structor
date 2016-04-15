@@ -148,16 +148,16 @@ export function getAvailableGeneratorSamplesList(){
     return invokeSandbox('getGeneratorSamples');
 }
 
-export function prepareGeneratorSampleSandbox(sampleId){
+export function prepareGeneratorSampleSandbox(generatorId, version){
     return invokeSandbox('removeWorkingDirectory')
         .then(() => {
             return invokeSandbox('makeWorkingDirectory');
         })
         .then(() => {
-            return invokeSandbox('sandboxPrepare', {sampleId});
+            return invokeSandbox('sandboxPrepare', {generatorId, version});
         })
         .then(() => {
-            return invokeSandbox('sandboxReadFiles', {sampleId});
+            return invokeSandbox('sandboxReadFiles', {sampleId: generatorId});
         });
 }
 

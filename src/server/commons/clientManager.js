@@ -99,8 +99,8 @@ export function getGeneratorSamples(){
     return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }
 
-export function sandboxPrepare(sampleId){
-    return client.post(SERVICE_URL + '/sm/gengine/sandbox/prepare?sampleId=' + sampleId, {});
+export function sandboxPrepare(generatorId, version){
+    return client.post(SERVICE_URL + '/sm/gengine/sandbox/prepare?generatorId=' + generatorId + '&version=' + version, {});
 }
 
 export function sandboxReadFiles(sampleId){
