@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import {setGeneratorSample} from '../Sandbox/actions.js';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
+import * as actions from './actions.js';
 
+export {
+    reducer,
+    mainSaga,
+    models,
+    actions
+}
 
-export const SET_GENERATOR_SAMPLES = "GeneratorSampleList/SET_GENERATOR_SAMPLES";
-
-export const setGeneratorSamples = (list) => ({type: SET_GENERATOR_SAMPLES, payload: list});
-
-export const containerActions = (dispatch) => bindActionCreators({
-    setGeneratorSample
-}, dispatch);
+export default Container;

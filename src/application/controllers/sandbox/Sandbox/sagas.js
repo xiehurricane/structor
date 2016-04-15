@@ -21,6 +21,7 @@ import * as spinnerActions from '../../app/AppSpinner/actions.js';
 import * as messageActions from '../../app/AppMessage/actions.js';
 import * as generatorSampleListActions from '../GeneratorSampleList/actions.js';
 import * as generatorTemplateActions from '../GeneratorTemplate/actions.js';
+import * as sandboxFilesListActions from '../SandboxFilesList/actions.js';
 //import * as generatorListActions from '../GeneratorList/actions.js';
 //import * as metadataFormActions from '../MetadataForm/actions.js';
 import * as appContainerActions from '../../app/AppContainer/actions.js';
@@ -70,6 +71,22 @@ function* prepareGeneratorSample(){
         yield put(spinnerActions.done('Preparing generator sample'));
     }
 }
+
+function* saveAndGenerateComponent(){
+    while(true){
+        const {payload:{sampleId, filesObject}} = yield take(actions.SAVE_AND_GENERATE_SANDBOX_COMPONENT);
+        yield put(spinnerActions.started('Saving and compiling source code'));
+        try {
+            const generatedData = yield call(serverApi.saveAndGenerateSandboxComponent, sampleId, filesObject);
+            yield put(sandboxFilesListActions.setGeneratedData(generatedData));
+            yield put(actions.stepToStage(actions.STAGE3));
+            yield put(messageActions.success('Test component source code has been compiled successfully.'));
+        } catch(error) {
+            yield put(messageActions.failed('Generator sample compiling has an error. ' + (error.message ? error.message : error)));
+        }
+        yield put(spinnerActions.done('Saving and compiling source code'));
+    }
+}
 //
 //
 //function* saveGenerated(){
@@ -107,6 +124,7 @@ function* loadGeneratorSamples(){
 export default function* mainSaga() {
     yield fork(loadGeneratorSamples);
     yield fork(prepareGeneratorSample);
+    yield fork(saveAndGenerateComponent);
     //yield fork(pregenerate);
     //yield fork(generate);
     //yield fork(saveGenerated);

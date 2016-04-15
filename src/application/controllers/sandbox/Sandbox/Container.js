@@ -23,6 +23,8 @@ import { containerActions, STAGE1, STAGE2, STAGE3, STAGE4 } from './actions.js';
 import { ButtonGroup, Button } from 'react-bootstrap';
 
 import GeneratorSampleList from '../GeneratorSampleList';
+import GeneratorTemplate from '../GeneratorTemplate';
+import SandboxFilesList from '../SandboxFilesList';
 
 class Container extends Component {
 
@@ -93,6 +95,30 @@ class Container extends Component {
             );
             header = (<h4 className="text-center">Choose generator sample</h4>);
             content = (<GeneratorSampleList />);
+        } else if(stage === STAGE2){
+            nextStepLabel = (
+                <h5 className="text-muted text-center">Preview generated component</h5>
+            );
+            toolbar = (
+                <ButtonGroup bsSize="xs">
+                    <Button data-stage={STAGE1} onClick={this.handleOnStep} ><span style={toolbarLabelStyle}>Back</span></Button>
+                    {closeButton}
+                </ButtonGroup>
+            );
+            header = (<h4 className="text-center">Edit generator sample</h4>);
+            content = (<GeneratorTemplate />);
+        } else if(stage === STAGE3){
+            nextStepLabel = (
+                <h5 className="text-muted text-center">Publish generator</h5>
+            );
+            toolbar = (
+                <ButtonGroup bsSize="xs">
+                    <Button data-stage={STAGE2} onClick={this.handleOnStep} ><span style={toolbarLabelStyle}>Back</span></Button>
+                    {closeButton}
+                </ButtonGroup>
+            );
+            header = (<h4 className="text-center">Preview source code and component</h4>);
+            content = (<SandboxFilesList />);
         }
         return (
             <div ref="containerElement"

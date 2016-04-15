@@ -33,7 +33,7 @@ function setupProjectPaths(rootDirPath) {
         dir: rootDirPath,
         configFilePath: path.join(absRoot, 'config.json'),
         deskSourceDirPath: path.join(absRoot, 'src'),
-        deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js'),
+        //deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js'),
         deskPageTemplatePath: path.join(absRoot, 'src', 'PageForDesk.tpl'),
         deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js'),
         deskDirPath: path.join(absRoot, 'desk'),
@@ -130,9 +130,9 @@ export function deskSourceDirPath(){
     return config.project.paths.deskSourceDirPath;
 }
 
-export function deskPageFilePath(){
-    return config.project.paths.deskPageFilePath;
-}
+//export function deskPageFilePath(){
+//    return config.project.paths.deskPageFilePath;
+//}
 
 export function deskPageTemplatePath(){
     return config.project.paths.deskPageTemplatePath;

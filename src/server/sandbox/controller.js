@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
+import path from 'path';
+import express from 'express';
 import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as projectCompiler from './projectCompiler.js';
 import * as generatorManager from './generatorManager.js';
+import * as config from '../commons/configuration.js';
 
 let serverRef;
 
@@ -31,6 +34,9 @@ export function error(options){
 
 export function setServer(server){
     serverRef = server;
+    if(serverRef){
+        serverRef.app.use('/sandbox-preview', express.static(path.join(config.sandboxDirPath(), 'work', '.structor', 'desk')));
+    }
 }
 
 export function makeWorkingDirectory(options){

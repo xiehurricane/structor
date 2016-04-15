@@ -25,16 +25,17 @@ class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.handleSelectSample = this.handleSelectSample.bind(this);
     }
 
     handleSelectSample(e){
         e.preventDefault();
         e.stopPropagation();
-
+        this.props.setGeneratorSample(e.currentTarget.dataset.sampleid);
     }
 
     render(){
-        const { componentModel: {sampleList} } = this.props;
+        const { componentModel: {sampleList}} = this.props;
         const cellBoxStyle = {
             display: 'flex',
             alignItems: 'center',

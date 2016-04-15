@@ -15,13 +15,12 @@
  */
 
 import { bindActionCreators } from 'redux';
-import {setGeneratorSample} from '../Sandbox/actions.js';
 
+//import { saveGenerated } from '../Generator/actions.js';
 
-export const SET_GENERATOR_SAMPLES = "GeneratorSampleList/SET_GENERATOR_SAMPLES";
-
-export const setGeneratorSamples = (list) => ({type: SET_GENERATOR_SAMPLES, payload: list});
+export const SET_GENERATED_DATA = "SandboxFilesList/SET_GENERATED_DATA";
+export const setGeneratedData = (generatedData) => ({type: SET_GENERATED_DATA, payload: generatedData});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setGeneratorSample
+    //saveGenerated
 }, dispatch);

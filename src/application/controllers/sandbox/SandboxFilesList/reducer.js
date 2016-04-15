@@ -14,14 +14,27 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import {setGeneratorSample} from '../Sandbox/actions.js';
+import * as actions from './actions.js';
+
+const initialState = {
+    generatedData: {
+        files: [],
+        dependencies: {}
+    }
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    if(type === actions.SET_GENERATED_DATA){
+        return Object.assign({}, state, {
+            generatedData: payload
+        });
+    }
+
+    return state;
+
+}
 
 
-export const SET_GENERATOR_SAMPLES = "GeneratorSampleList/SET_GENERATOR_SAMPLES";
-
-export const setGeneratorSamples = (list) => ({type: SET_GENERATOR_SAMPLES, payload: list});
-
-export const containerActions = (dispatch) => bindActionCreators({
-    setGeneratorSample
-}, dispatch);

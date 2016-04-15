@@ -136,7 +136,11 @@ export function saveGenerated(files) {
                 const indexFileDirPath = sandboxConfig.deskSourceDirPath();
                 const componentRelativePath = path.relative(indexFileDirPath, componentFilePath).replace(/\\/g, '/');
                 const pageForDeskTemplate = template(pageForDeskTemplateText);
-                return fileManager.writeFile(sandboxConfig.deskPageFilePath(), pageForDeskTemplate({componentRelativePath}), false);
+                return fileManager.writeFile(
+                    path.join(sandboxConfig.deskSourceDirPath(), 'PageForDesk.js'),
+                    pageForDeskTemplate({componentRelativePath}),
+                    false
+                );
             }
     });
 }

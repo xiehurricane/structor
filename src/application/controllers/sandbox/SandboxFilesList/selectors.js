@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import {setGeneratorSample} from '../Sandbox/actions.js';
+import { createStructuredSelector } from 'reselect';
 
+export const modelSelector = createStructuredSelector({
+    componentModel: state => state.sandboxFilesList
+});
 
-export const SET_GENERATOR_SAMPLES = "GeneratorSampleList/SET_GENERATOR_SAMPLES";
-
-export const setGeneratorSamples = (list) => ({type: SET_GENERATOR_SAMPLES, payload: list});
-
-export const containerActions = (dispatch) => bindActionCreators({
-    setGeneratorSample
-}, dispatch);

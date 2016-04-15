@@ -17,7 +17,8 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    templateObject: {}
+    templateObject: {},
+    activeTemplate: 'component'
 };
 
 export default (state = initialState, action = {}) => {
@@ -27,6 +28,32 @@ export default (state = initialState, action = {}) => {
     if(type === actions.SET_TEMPLATE){
         return Object.assign({}, state, {
             templateObject: payload
+        });
+    }
+
+    if(type === actions.CHANGE_ACTIVE_TEMPLATE_TEXT){
+        const {nextTemplate, prevTemplate, prevTemplateText} = payload;
+        let templateObject = Object.assign({}, state.templateObject);
+        templateObject.templates[prevTemplate] = prevTemplateText;
+        return Object.assign({}, state, {
+            templateObject,
+            activeTemplate: nextTemplate
+        });
+    }
+
+    if(type === actions.CHANGE_METAHELP_TEXT){
+        let templateObject = Object.assign({}, state.templateObject);
+        templateObject.metahelp = payload;
+        return Object.assign({}, state, {
+            templateObject
+        });
+    }
+
+    if(type === actions.CHANGE_README_TEXT){
+        let templateObject = Object.assign({}, state.templateObject);
+        templateObject.readme = payload;
+        return Object.assign({}, state, {
+            templateObject
         });
     }
 

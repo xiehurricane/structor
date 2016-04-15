@@ -14,11 +14,61 @@
  * limitations under the License.
  */
 
+import {forOwn, template} from 'lodash';
 import { bindActionCreators } from 'redux';
 
+import {saveAndGenerateSandboxComponent} from '../Sandbox/actions.js';
+import { failed } from '../../app/AppMessage/actions.js';
+
 export const SET_TEMPLATE = "GeneratorTemplateList/SET_TEMPLATE";
+export const CHANGE_ACTIVE_TEMPLATE_TEXT = "GeneratorTemplateList/CHANGE_ACTIVE_TEMPLATE_TEXT";
+export const CHANGE_METAHELP_TEXT = "GeneratorTemplateList/CHANGE_METAHELP_TEXT";
+export const CHANGE_README_TEXT = "GeneratorTemplateList/CHANGE_README_TEXT";
 
 export const setTemplate = (templateObject) => ({type: SET_TEMPLATE, payload: templateObject});
+export const changeActiveTemplateText = (nextTemplate, prevTemplate, prevTemplateText) => (
+    {type: CHANGE_ACTIVE_TEMPLATE_TEXT, payload: {nextTemplate, prevTemplate, prevTemplateText}}
+);
+export const changeMetahelpText = (metahelpText) => ({type: CHANGE_METAHELP_TEXT, payload: metahelpText});
+export const changeReadmeText = (readmeText) => ({type: CHANGE_README_TEXT, payload: readmeText});
+
+export const saveAndGenerate = (options) => (dispatch, getState) => {
+    const {activeTemplateText, metadataSource, metahelp, dependenciesSource, readme} = options;
+    const {generatorTemplate: {templateObject, activeTemplate}} = getState();
+    let newTemplateObject = Object.assign({}, templateObject);
+
+    let canProceed = true;
+    try{
+        newTemplateObject.dependencies = JSON.parse(dependenciesSource);
+    } catch(e){
+        dispatch(failed('The dependencies has to be a valid JSON object. ' + e));
+        canProceed = false;
+    }
+    try{
+        newTemplateObject.metadata = JSON.parse(metadataSource);
+    } catch(e){
+        dispatch(failed('The metadata has to be a valid JSON object. ' + e));
+        canProceed = false;
+    }
+
+    newTemplateObject.templates[activeTemplate] = activeTemplateText;
+    forOwn(newTemplateObject.templates, (text, tmpl) => {
+        try{
+            template(text);
+        } catch(e){
+            dispatch(failed('Template \'' + tmpl + '\' has a syntax error: ' + e));
+            canProceed = false;
+        }
+    });
+
+    if(canProceed){
+        newTemplateObject.metahelp = metahelp;
+        newTemplateObject.readme = readme;
+        dispatch(setTemplate(newTemplateObject));
+        dispatch(saveAndGenerateSandboxComponent(newTemplateObject));
+    }
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
+    changeActiveTemplateText, changeMetahelpText, changeReadmeText, saveAndGenerate
 }, dispatch);

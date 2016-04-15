@@ -160,3 +160,23 @@ export function prepareGeneratorSampleSandbox(sampleId){
             return invokeSandbox('sandboxReadFiles', {sampleId});
         });
 }
+
+export function saveAndGenerateSandboxComponent(sampleId, filesObject){
+    let resultGeneratedData;
+    return invokeSandbox('sandboxWriteFiles', {sampleId, filesObject})
+        .then(() => {
+            console.log('Files where written');
+            return invokeSandbox('sandboxGenerate', {sampleId, metadata: filesObject.metadata});
+        })
+        .then(generatedData => {
+            resultGeneratedData = generatedData;
+            console.log(JSON.stringify(resultGeneratedData, null, 4));
+            return invokeSandbox('saveSandboxGenerated', generatedData);
+        })
+        .then(() => {
+            return invokeSandbox('compileWorkingDesk');
+        })
+        .then(() => {
+            return resultGeneratedData;
+        });
+}

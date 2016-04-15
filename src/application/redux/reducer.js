@@ -47,6 +47,7 @@ import sourceFilesListReducer from '../controllers/generator/SourceFilesList/red
 import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
 import generatorSampleListReducer from '../controllers/sandbox/GeneratorSampleList/reducer.js';
 import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
+import sandboxFilesListReducer from '../controllers/sandbox/SandboxFilesList/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -79,7 +80,8 @@ const reducer = combineReducers({
     sourceFilesList: sourceFilesListReducer,
     sandbox: sandboxReducer,
     generatorSampleList: generatorSampleListReducer,
-    generatorTemplate: generatorTemplateReducer
+    generatorTemplate: generatorTemplateReducer,
+    sandboxFilesList: sandboxFilesListReducer
 });
 
 export default reducer;
