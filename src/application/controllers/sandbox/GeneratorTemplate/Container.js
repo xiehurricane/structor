@@ -39,6 +39,16 @@ class Container extends Component {
         this.handleSaveAndGenerateSandboxComponent = this.handleSaveAndGenerateSandboxComponent.bind(this);
     }
 
+    componentDidMount(){
+        hljs.highlightBlock(this.refs.sampleModelCode);
+    }
+
+    //componentDidUpdate(){
+    //    $(this.refs.sourceCodePane).children('pre').each((i, block) => {
+    //        hljs.highlightBlock(block);
+    //    });
+    //}
+
     handleChangeTemplateText(e){
         e.stopPropagation();
         e.preventDefault();
@@ -79,7 +89,8 @@ class Container extends Component {
 
     render(){
         const { componentModel: {templateObject, activeTemplate} } = this.props;
-        const {templates, dependencies, metadata, metahelp, readme} = templateObject;
+        const {templates, dependencies, metadata, metahelp, readme, model} = templateObject;
+        console.log(JSON.stringify(model, null, 4));
         const cellBoxStyle = {
             display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'
         };
@@ -261,6 +272,25 @@ class Container extends Component {
                                                 <div dangerouslySetInnerHTML={{__html: readmePreview}}></div>
                                             </Tab>
                                         </Tabs>
+                                    </div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </Tab>
+                <Tab key={'sampleModel'} eventKey={5} title="Sample model">
+                    <Grid fluid={ true } style={{marginTop: '1em'}}>
+                        <Row style={ { position: 'relative'} }>
+                            <Col
+                                xs={ 12 }
+                                md={ 12 }
+                                sm={ 12 }
+                                lg={ 12 }>
+                                <div style={cellBoxStyle}>
+                                    <div style={{paddingTop: '2em'}} >
+                                        <pre ref="sampleModelCode"><code>
+                                            {JSON.stringify(model, null, 4)}
+                                        </code></pre>
                                     </div>
                                 </div>
                             </Col>

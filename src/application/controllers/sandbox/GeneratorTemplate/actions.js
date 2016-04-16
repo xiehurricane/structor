@@ -17,6 +17,7 @@
 import {forOwn, template} from 'lodash';
 import { bindActionCreators } from 'redux';
 
+import { graphApi } from '../../../api';
 import {saveAndGenerateSandboxComponent} from '../Sandbox/actions.js';
 import { failed } from '../../app/AppMessage/actions.js';
 
@@ -25,7 +26,16 @@ export const CHANGE_ACTIVE_TEMPLATE_TEXT = "GeneratorTemplateList/CHANGE_ACTIVE_
 export const CHANGE_METAHELP_TEXT = "GeneratorTemplateList/CHANGE_METAHELP_TEXT";
 export const CHANGE_README_TEXT = "GeneratorTemplateList/CHANGE_README_TEXT";
 
-export const setTemplate = (templateObject) => ({type: SET_TEMPLATE, payload: templateObject});
+export const setTemplate = (templateObject) => (dispatch, getState) => {
+    let { selectionBreadcrumbs: { selectedKeys } } = getState();
+    if(selectedKeys && selectedKeys.length > 0){
+        let graphNode = graphApi.getNode(selectedKeys[0]);
+        if(graphNode && graphNode.modelNode){
+            templateObject.model = graphNode.modelNode;
+        }
+    }
+    dispatch({type: SET_TEMPLATE, payload: templateObject});
+};
 export const changeActiveTemplateText = (nextTemplate, prevTemplate, prevTemplateText) => (
     {type: CHANGE_ACTIVE_TEMPLATE_TEXT, payload: {nextTemplate, prevTemplate, prevTemplateText}}
 );

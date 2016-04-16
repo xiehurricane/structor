@@ -20,7 +20,8 @@ const initialState = {
     generatedData: {
         files: [],
         dependencies: {}
-    }
+    },
+    isAvailableToPublish: false
 };
 
 export default (state = initialState, action = {}) => {
@@ -29,7 +30,14 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.SET_GENERATED_DATA){
         return Object.assign({}, state, {
-            generatedData: payload
+            generatedData: payload,
+            isAvailableToPublish: false
+        });
+    }
+
+    if(type === actions.SET_AVAILABLE_TO_PUBLISH){
+        return Object.assign({}, state, {
+            isAvailableToPublish: payload
         });
     }
 

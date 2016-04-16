@@ -19,7 +19,7 @@ import { SagaCancellationException } from 'redux-saga';
 import * as actions from './actions.js';
 import * as spinnerActions from '../../app/AppSpinner/actions.js';
 import * as messageActions from '../../app/AppMessage/actions.js';
-import * as generatorSampleListActions from '../GeneratorSampleList/actions.js';
+import * as generatorSampleListActions from '../GeneratorCard/actions.js';
 import * as generatorTemplateActions from '../GeneratorTemplate/actions.js';
 import * as sandboxFilesListActions from '../SandboxFilesList/actions.js';
 //import * as generatorListActions from '../GeneratorList/actions.js';
@@ -80,7 +80,7 @@ function* saveAndGenerateComponent(){
             const generatedData = yield call(serverApi.saveAndGenerateSandboxComponent, sampleId, filesObject);
             yield put(sandboxFilesListActions.setGeneratedData(generatedData));
             yield put(actions.stepToStage(actions.STAGE2));
-            yield put(messageActions.success('Test component source code has been compiled successfully.'));
+            //yield put(messageActions.success('Test component source code has been compiled successfully.'));
         } catch(error) {
             yield put(messageActions.failed('Generator sample compiling has an error. ' + (error.message ? error.message : error)));
         }
@@ -105,24 +105,9 @@ function* saveAndGenerateComponent(){
 //    }
 //}
 //
-//function* loadGeneratorSamples(){
-//    while(true){
-//        yield take(actions.LOAD_GENERATOR_SAMPLES);
-//        yield put(spinnerActions.started('Loading list of samples'));
-//        try {
-//            const samplesList = yield call(serverApi.getAvailableGeneratorSamplesList);
-//            yield put(generatorSampleListActions.setGeneratorSamples(samplesList));
-//            yield put(appContainerActions.showSandbox());
-//        } catch(error) {
-//            yield put(messageActions.failed('Samples loading has an error. ' + (error.message ? error.message : error)));
-//        }
-//        yield put(spinnerActions.done('Loading list of samples'));
-//    }
-//}
 
 // main saga
 export default function* mainSaga() {
-    //yield fork(loadGeneratorSamples);
     yield fork(prepareGeneratorSample);
     yield fork(saveAndGenerateComponent);
     //yield fork(pregenerate);

@@ -25,6 +25,7 @@ import { ButtonGroup, Button } from 'react-bootstrap';
 //import GeneratorSampleList from '../GeneratorSampleList';
 import GeneratorTemplate from '../GeneratorTemplate';
 import SandboxFilesList from '../SandboxFilesList';
+import GeneratorCard from '../GeneratorCard';
 
 class Container extends Component {
 
@@ -53,7 +54,7 @@ class Container extends Component {
 
     render(){
 
-        const { componentModel: {stage}, hide } = this.props;
+        const { componentModel: {stage}, hide, showGenerator } = this.props;
         const toolbarLabelStyle = {
             margin: '0 1em'
         };
@@ -90,6 +91,9 @@ class Container extends Component {
             );
             toolbar = (
                 <ButtonGroup bsSize="xs">
+                    <Button onClick={(e) => {e.stopPropagation(); e.preventDefault(); showGenerator(); }} >
+                        <span style={toolbarLabelStyle}>Back</span>
+                    </Button>
                     {closeButton}
                 </ButtonGroup>
             );
@@ -101,12 +105,25 @@ class Container extends Component {
             );
             toolbar = (
                 <ButtonGroup bsSize="xs">
-                    <Button data-stage={STAGE1} onClick={this.handleOnStep} ><span style={toolbarLabelStyle}>Back</span></Button>
+                    <Button data-stage={STAGE1} onClick={this.handleOnStep} >
+                        <span style={toolbarLabelStyle}>Back</span>
+                    </Button>
                     {closeButton}
                 </ButtonGroup>
             );
             header = (<h4 className="text-center">The source code and component live preview</h4>);
             content = (<SandboxFilesList />);
+        } else if(stage === STAGE3){
+            toolbar = (
+                <ButtonGroup bsSize="xs">
+                    <Button data-stage={STAGE2} onClick={this.handleOnStep} >
+                        <span style={toolbarLabelStyle}>Back</span>
+                    </Button>
+                    {closeButton}
+                </ButtonGroup>
+            );
+            header = (<h4 className="text-center">Publishing generator</h4>);
+            content = (<GeneratorCard />);
         }
         return (
             <div ref="containerElement"

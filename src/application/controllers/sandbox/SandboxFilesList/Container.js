@@ -39,6 +39,14 @@ class Container extends Component {
         $(this.refs.sourceCodePane).children('pre').each((i, block) => {
             hljs.highlightBlock(block);
         });
+        const contentWindow = this.refs.livePreviewFrame.contentWindow;
+        contentWindow.onPageDidMount = () => {
+            console.log('Live preview page was mounted');
+            this.props.setAvailableToPublish(true);
+            this.props.success('Test component source code has been compiled successfully. Look at the live preview.');
+        };
+        //this.refs.livePreviewFrame.onload = (() => {
+        //});
     }
 
     componentDidUpdate(){
@@ -50,7 +58,7 @@ class Container extends Component {
     handleOnSubmit(e) {
         e.stopPropagation();
         e.preventDefault();
-
+        this.props.showGeneratorCard();
     }
 
     handleChangePreview(e){
@@ -63,7 +71,7 @@ class Container extends Component {
 
     render() {
 
-        const { componentModel: {generatedData} } = this.props;
+        const { componentModel: {generatedData, isAvailableToPublish} } = this.props;
         let { activeFile } = this.state;
         const {files, dependencies} = generatedData;
 
@@ -163,8 +171,15 @@ class Container extends Component {
                                         </div> : null }
                                         <div style={{marginTop: '2em', display: 'flex', justifyContent: 'center'}}>
                                             <Button bsStyle="primary"
+                                                    disabled={!isAvailableToPublish}
                                                     onClick={this.handleOnSubmit}>Publish generator</Button>
                                         </div>
+                                        { isAvailableToPublish ? null :
+                                            <h5 className="text-danger">
+                                                <p>There were runtime errors during the rendering of the live preview.</p>
+                                                <p>Look at the console output to find the issue.</p>
+                                            </h5>
+                                        }
                                     </div>
                                 </div>
 
@@ -190,7 +205,7 @@ class Container extends Component {
                     </Grid>
                 </Tab>
                 <Tab key={'livePreview'} eventKey={2} title="Live component preview">
-                    <iframe style={iframeStyle} frameBorder="0" src="/sandbox-preview/index.html" />
+                    <iframe ref="livePreviewFrame" style={iframeStyle} frameBorder="0" src="/sandbox-preview/index.html" />
                 </Tab>
             </Tabs>
         );

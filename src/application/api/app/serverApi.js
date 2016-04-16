@@ -162,11 +162,12 @@ export function prepareGeneratorSampleSandbox(generatorId, version){
 }
 
 export function saveAndGenerateSandboxComponent(sampleId, filesObject){
+    console.log('Writing files: ' + sampleId);
     let resultGeneratedData;
     return invokeSandbox('sandboxWriteFiles', {sampleId, filesObject})
         .then(() => {
-            console.log('Files where written');
-            return invokeSandbox('sandboxGenerate', {sampleId, metadata: filesObject.metadata});
+            console.log('Files where written: ' + sampleId);
+            return invokeSandbox('sandboxGenerate', {sampleId, metadata: filesObject.metadata, model: filesObject.model});
         })
         .then(generatedData => {
             resultGeneratedData = generatedData;

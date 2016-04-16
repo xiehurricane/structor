@@ -19,7 +19,8 @@ import { createStructuredSelector } from 'reselect';
 
 
 export const modelSelector = createStructuredSelector({
-    componentModel: state => state.generatorSampleList
-    //userAccountModel: state => state.appContainer.userAccount,
+    componentModel: state => state.generatorCard,
+    sandboxModel: state => state.sandbox,
+    generatorTemplateModel: state => state.generatorTemplate
 });
 

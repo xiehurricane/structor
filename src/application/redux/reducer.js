@@ -45,7 +45,7 @@ import projectGalleryReducer from '../controllers/projects/ProjectGallery/reduce
 import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
 import sourceFilesListReducer from '../controllers/generator/SourceFilesList/reducer.js';
 import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
-import generatorSampleListReducer from '../controllers/sandbox/GeneratorSampleList/reducer.js';
+import generatorCardReducer from '../controllers/sandbox/GeneratorCard/reducer.js';
 import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
 import sandboxFilesListReducer from '../controllers/sandbox/SandboxFilesList/reducer.js';
 
@@ -79,7 +79,7 @@ const reducer = combineReducers({
     signInModal: signInModalReducer,
     sourceFilesList: sourceFilesListReducer,
     sandbox: sandboxReducer,
-    generatorSampleList: generatorSampleListReducer,
+    generatorCard: generatorCardReducer,
     generatorTemplate: generatorTemplateReducer,
     sandboxFilesList: sandboxFilesListReducer
 });

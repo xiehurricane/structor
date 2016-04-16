@@ -16,11 +16,19 @@
 
 import { bindActionCreators } from 'redux';
 
-//import { saveGenerated } from '../Generator/actions.js';
+import { stepToStage, STAGE3 } from '../Sandbox/actions.js';
+import {success, failed} from '../../app/AppMessage/actions.js';
 
 export const SET_GENERATED_DATA = "SandboxFilesList/SET_GENERATED_DATA";
+export const SET_AVAILABLE_TO_PUBLISH = "SandboxFilesList/SET_AVAILABLE_TO_PUBLISH";
+
 export const setGeneratedData = (generatedData) => ({type: SET_GENERATED_DATA, payload: generatedData});
+export const setAvailableToPublish = (flag) => ({type: SET_AVAILABLE_TO_PUBLISH, payload: flag});
+
+export const showGeneratorCard = () => (dispatch, getState) => {
+    dispatch(stepToStage(STAGE3));
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    //saveGenerated
+    setAvailableToPublish, success, failed, showGeneratorCard
 }, dispatch);

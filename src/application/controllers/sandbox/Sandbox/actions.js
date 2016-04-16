@@ -17,7 +17,7 @@
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import { graphApi, serverApi } from '../../../api';
-import { hideSandbox } from '../../app/AppContainer/actions.js';
+import { hideSandbox, showGenerator } from '../../app/AppContainer/actions.js';
 //import { failed } from '../../app/AppMessage/actions.js';
 
 export const STAGE1 = 'STAGE1';
@@ -32,8 +32,8 @@ export const SAVE_AND_GENERATE_SANDBOX_COMPONENT = "Sandbox/SAVE_AND_GENERATE_SA
 
 export const stepToStage = (stage) => ({type: STEP_TO_STAGE, payload: stage});
 //export const loadGeneratorSamples = () => ({type: LOAD_GENERATOR_SAMPLES});
-export const setGeneratorSample = (generatorId, version) => (dispatch, getState) => {
-    dispatch({type: SET_GENERATOR_SAMPLE, payload: {generatorId, version}});
+export const setGeneratorSample = (generatorId, version, generatorKey, userId) => (dispatch, getState) => {
+    dispatch({type: SET_GENERATOR_SAMPLE, payload: {generatorId, version, generatorKey, userId}});
 };
 export const saveAndGenerateSandboxComponent = (templateObject) => (dispatch, getState) => {
     const {sandbox:{generatorSampleId}} = getState();
@@ -46,5 +46,5 @@ export const hide = () => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hide, stepToStage
+    hide, stepToStage, showGenerator
 }, dispatch);

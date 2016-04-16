@@ -50,9 +50,9 @@ class Container extends Component {
     handleOnClone(e){
         e.preventDefault();
         e.stopPropagation();
-        const { generatorId, setGeneratorSample } = this.props;
+        const { generatorId, setGeneratorSample, userId, generatorKey } = this.props;
         const version = e.currentTarget.dataset.version;
-        setGeneratorSample(generatorId, version);
+        setGeneratorSample(generatorId, version, generatorKey, userId);
     }
 
     render() {

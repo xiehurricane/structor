@@ -18,7 +18,10 @@ import * as actions from './actions.js';
 
 const initialState = {
     stage: actions.STAGE1,
-    generatorSampleId: undefined
+    generatorSampleId: undefined,
+    generatorSampleVersion: undefined,
+    generatorSampleKey: undefined,
+    generatorSampleUserId: undefined
 };
 
 export default (state = initialState, action = {}) => {
@@ -33,7 +36,10 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.SET_GENERATOR_SAMPLE){
         return Object.assign({}, state, {
-            generatorSampleId: payload
+            generatorSampleId: payload.generatorId,
+            generatorSampleVersion: payload.version,
+            generatorSampleKey: payload.generatorKey,
+            generatorSampleUserId: payload.userId
         });
     }
 
