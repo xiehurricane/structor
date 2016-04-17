@@ -36,15 +36,18 @@ class PageTreeViewItem extends Component {
 
         let content = null;
 
-        const { isSelected, itemKey } = this.props;
+        const { isSelected, isForCutting, isForCopying, itemKey } = this.props;
 
-        var className = isSelected ? 'umy-treeview-list-item-selected' : 'umy-treeview-list-item';
-        //if(isCopyMark){
-        //    className += ' umy-grid-basic-border-copy';
-        //}
-        //if(isCutMark){
-        //    className += ' umy-grid-basic-border-cut';
-        //}
+        let className;
+        if(isSelected){
+            className = 'umy-treeview-list-item-selected';
+        } else if(isForCopying){
+            className = 'umy-treeview-list-item-for-copying';
+        } else if(isForCutting){
+            className = 'umy-treeview-list-item-for-cutting';
+        } else {
+            className = 'umy-treeview-list-item';
+        }
 
         const linkStyle = {outline: 'none', color: '#2185D0'};
         const propsStyle = {margin: '0 0 0 0.5em'};

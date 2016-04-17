@@ -115,6 +115,7 @@ class Container extends Component{
                 <PageTreeViewItemText
                     itemKey={graphNode.key}
                     key={'text' + graphNode.key}
+                    onChangeText={(text) => {this.props.changeText(text, graphNode.key);}}
                     textValue={modelNode.text} />
             )
         }
@@ -135,6 +136,8 @@ class Container extends Component{
                 key={'treeItem' + graphNode.key}
                 itemKey={graphNode.key}
                 isSelected={graphNode.selected}
+                isForCutting={graphNode.isForCutting}
+                isForCopying={graphNode.isForCopying}
                 type={modelNode.type}
                 modelProps={modelNode.props}
                 onSelect={this.props.setSelectedKey}>

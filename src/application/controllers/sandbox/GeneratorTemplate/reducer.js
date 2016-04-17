@@ -49,6 +49,22 @@ export default (state = initialState, action = {}) => {
         });
     }
 
+    if(type === actions.CHANGE_METADATA){
+        let templateObject = Object.assign({}, state.templateObject);
+        templateObject.metadata = payload;
+        return Object.assign({}, state, {
+            templateObject
+        });
+    }
+
+    if(type === actions.CHANGE_DEPENDENCIES){
+        let templateObject = Object.assign({}, state.templateObject);
+        templateObject.dependencies = payload;
+        return Object.assign({}, state, {
+            templateObject
+        });
+    }
+
     if(type === actions.CHANGE_README_TEXT){
         let templateObject = Object.assign({}, state.templateObject);
         templateObject.readme = payload;

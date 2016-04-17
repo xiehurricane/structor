@@ -21,7 +21,7 @@ import * as HtmlComponents from './utils/HtmlComponents.js';
 import * as cookies from './utils/cookies.js';
 import * as graphApi from './model/graphApi.js';
 import * as previewGraphApi from './model/previewGraphApi.js';
-import * as imgStore from './utils/imgStore.js';
+import * as coockiesApi from './app/coockiesApi.js';
 
 export {
     restApi,
@@ -32,5 +32,5 @@ export {
     cookies,
     graphApi,
     previewGraphApi,
-    imgStore
+    coockiesApi
 };

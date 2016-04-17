@@ -28,7 +28,7 @@ class MainFrame extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{width: '100%', height: '100%'}}>
                 <AppContainer />
                 <AppSpinner />
                 <AppMessage />

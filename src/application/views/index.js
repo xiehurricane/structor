@@ -18,7 +18,7 @@
 import ContentEditable from './common/ContentEditable.js';
 import InputTextStateful from './common/InputTextStateful.js';
 import CheckboxStateful from './common/CheckboxStateful.js';
-
+import GeneratorKeyTitleView from './common/GeneratorKeyTitleView.js';
 // app
 import MainFrame from './app/MainFrame.js';
 
@@ -36,5 +36,6 @@ export {
     PageTreeViewItemText,
     AceEditor,
     InputTextStateful,
-    CheckboxStateful
+    CheckboxStateful,
+    GeneratorKeyTitleView
 }

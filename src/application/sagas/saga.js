@@ -22,6 +22,7 @@ import componentOptionsSaga from '../controllers/workspace/ComponentOptionsModal
 import generatorSaga from '../controllers/generator/Generator/sagas.js';
 import generatorBriefPanelSaga from '../controllers/generator/GeneratorBriefPanel/sagas.js';
 import sandboxSaga from '../controllers/sandbox/Sandbox/sagas.js';
+import generatorCardSaga from '../controllers/sandbox/GeneratorCard/sagas.js';
 
 export default function* mainSaga(){
     yield [
@@ -34,4 +35,5 @@ export default function* mainSaga(){
     yield fork(generatorSaga);
     yield fork(generatorBriefPanelSaga);
     yield fork(sandboxSaga);
+    yield fork(generatorCardSaga);
 }

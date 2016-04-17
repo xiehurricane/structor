@@ -25,17 +25,83 @@ import { ListGroup, ListGroupItem, Tabs, Tab } from 'react-bootstrap';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { AceEditor } from '../../../views';
 
+const templateHelp = marked(`
+##### Variables which can be used in templates
+
+\`componentName\` - component name entered by user
+
+   Example: \` <%= componentName %> \`
+
+\`groupName\` - group name entered by user
+
+   Example: \` <%= groupName %> \`
+
+\`metadata\` - metadata object
+
+   Example: \` <%= metadata.someObjectField %> \`
+
+\`model\` - a model tree of components which was selected for generator. Find sample structure in Sample model tab here.
+
+\`imports\` - an array of imports of components in model tree
+
+`);
+
+const depsHelp = marked(`
+##### Describe npm packages which should be installed into project
+
+* \`packages\` - list of npm packages where \`name\` is a name of package and \`version\` is an exact version if needed (can be empty).
+* \`copy\` - array of resources which will be copied from package directory after installation.
+* \`from\` - file or folder path which is relative to package source directory in ***node_modules***
+* \`to\` - file or folder path to which resources will be copied, path is cosidered as relative to \`{assetsDirPath}\`
+* \`isImport\` - tells Structor to include resource into \`{assetsIndexFilePath}\`
+
+**Note**: find ***assetsDirPath*** and ***assetsIndexFilePath*** in project config file in .structor folder
+
+Example:
+ \`\`\`
+{
+  "packages":[
+    {
+      "name": "react-widgets",
+      "version": "",
+      "copy": [
+        {
+          "from": "dist/fonts",
+          "to": "react-widgets/fonts"
+        },
+        {
+          "from": "dist/img",
+          "to": "react-widgets/img"
+        },
+        {
+          "from": "dist/css/react-widgets.css",
+          "to": "react-widgets/css/react-widgets.css",
+          "isImport": true
+        }
+      ]
+    },
+    {
+      "name": "moment",
+      "version": ""
+    }
+  ]
+}
+ \`\`\`
+`);
+
 class Container extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             activeMetahelpTabKey: 1,
-            activeReadmeTabKey: 1
+            activeReadmeTabKey: 1,
+            activeTopTabKey: 1
         };
         this.handleChangeTemplateText = this.handleChangeTemplateText.bind(this);
         this.handleMetahelpTabSelect = this.handleMetahelpTabSelect.bind(this);
         this.handleReadmeTabSelect = this.handleReadmeTabSelect.bind(this);
+        this.handleTopTabSelect = this.handleTopTabSelect.bind(this);
         this.handleSaveAndGenerateSandboxComponent = this.handleSaveAndGenerateSandboxComponent.bind(this);
     }
 
@@ -54,7 +120,6 @@ class Container extends Component {
         e.preventDefault();
         const {changeActiveTemplateText, componentModel: {activeTemplate}} = this.props;
         const nextTemplate = e.currentTarget.dataset.tmpl;
-        console.log(this.refs.templateTextEditor.getSourceCode());
         changeActiveTemplateText(nextTemplate, activeTemplate, this.refs.templateTextEditor.getSourceCode());
     }
 
@@ -63,6 +128,7 @@ class Container extends Component {
             activeMetahelpTabKey: key
         });
         this.props.changeMetahelpText(this.refs.metahelpEditor.getSourceCode());
+        this.props.changeMetadata(this.refs.metadataEditor.getSourceCode());
     }
 
     handleReadmeTabSelect(key){
@@ -70,6 +136,16 @@ class Container extends Component {
             activeReadmeTabKey: key
         });
         this.props.changeReadmeText(this.refs.readmeEditor.getSourceCode());
+    }
+
+    handleTopTabSelect(key){
+        const {changeActiveTemplateText, componentModel: {activeTemplate}} = this.props;
+        changeActiveTemplateText(activeTemplate, activeTemplate, this.refs.templateTextEditor.getSourceCode());
+        this.props.changeMetadata(this.refs.metadataEditor.getSourceCode());
+        this.props.changeDependencies(this.refs.dependenciesEditor.getSourceCode());
+        this.setState({
+            activeTopTabKey: key
+        });
     }
 
     handleSaveAndGenerateSandboxComponent(e){
@@ -123,7 +199,7 @@ class Container extends Component {
         });
 
         return (
-            <Tabs defaultActiveKey={1} animation={false}>
+            <Tabs activeKey={this.state.activeTopTabKey} animation={false} onSelect={this.handleTopTabSelect}>
                 <Tab key={'fileList'} eventKey={1} title="Source code templates">
                     <Grid fluid={ true } style={{marginTop: '1em'}}>
                         <Row style={ { position: 'relative'} }>
@@ -142,6 +218,11 @@ class Container extends Component {
                                             <Button bsStyle="primary"
                                                     onClick={this.handleSaveAndGenerateSandboxComponent}>Save &amp; Generate preview</Button>
                                         </div>
+                                    </div>
+                                </div>
+                                <div style={cellBoxStyle}>
+                                    <div style={{width: '100%', padding: '2em 1em 1em 1em'}}>
+                                        <div dangerouslySetInnerHTML={{__html: templateHelp }}></div>
                                     </div>
                                 </div>
 
@@ -224,7 +305,7 @@ class Container extends Component {
                                 lg={ 6 }>
                                 <div style={cellBoxStyle}>
                                     <div style={{width: '100%', paddingTop: '2em'}}>
-                                        <h4>Help text about what is deps and how it is used...</h4>
+                                        <div dangerouslySetInnerHTML={{__html: depsHelp }}></div>
                                     </div>
                                 </div>
 
@@ -249,7 +330,7 @@ class Container extends Component {
                         </Row>
                     </Grid>
                 </Tab>
-                <Tab key={'readme'} eventKey={4} title="Generator Readme">
+                <Tab key={'readme'} eventKey={4} title="Generator readme">
                     <Grid fluid={ true } style={{marginTop: '1em'}}>
                         <Row style={ { position: 'relative'} }>
                             <Col

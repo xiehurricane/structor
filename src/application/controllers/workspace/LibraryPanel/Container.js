@@ -85,7 +85,6 @@ class Container extends Component {
     render() {
 
         const { componentModel: {componentsTree : componentTreeModel, componentInPreview} } = this.props;
-        const { previewComponent, loadGeneratorSamples } = this.props;
 
         const { filter } = this.state;
 
@@ -201,11 +200,6 @@ class Container extends Component {
                         </button>
                     </span>
                 </div>
-                <button className="btn btn-default btn-block"
-                        style={style}
-                        onClick={(e) => {e.stopPropagation(); e.preventDefault(); loadGeneratorSamples();}}>
-                    <span>Create new generator</span>
-                </button>
                 <div ref='container' style={style}>
                     <div
                         className="panel-group"

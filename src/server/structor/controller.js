@@ -100,6 +100,10 @@ export function getAvailableGeneratorsList(){
     return clientManager.getAvailableGeneratorsList();
 }
 
+export function getAvailableGeneratorGenerics(){
+    return clientManager.getAvailableGeneratorGenerics();
+}
+
 export function pregenerate(options){
     const {generatorId, version, groupName, componentName, model} = options;
     return generatorManager.initGeneratorData(groupName, componentName, model)
@@ -133,4 +137,9 @@ export function exportPages(options){
 export function getGeneratorBrief(options){
     const {projectId, userId, generatorId} = options;
     return clientManager.getGeneratorBriefText(projectId, userId, generatorId);
+}
+
+export function getGeneratorReadme(options){
+    const {projectId, userId, generatorId} = options;
+    return clientManager.getGeneratorReadmeText(projectId, userId, generatorId);
 }

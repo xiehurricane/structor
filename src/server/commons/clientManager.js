@@ -92,6 +92,13 @@ export function getAvailableGeneratorsList() {
     return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }
 
+export function getAvailableGeneratorGenerics(){
+    if (config.projectId()) {
+        return client.get(SERVICE_URL + '/sm/public/generator/generics?projectId=' + config.projectId());
+    }
+    return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
+}
+
 export function getGeneratorSamples(){
     if (config.projectId()) {
         return client.get(SERVICE_URL + '/sm/gengine/samples?projectId=' + config.projectId());
@@ -113,4 +120,8 @@ export function sandboxWriteFiles(sampleId, filesObject){
 
 export function sandboxProcess(sampleId, data){
     return client.post(SERVICE_URL + '/sm/gengine/sandbox/process?sampleId=' + sampleId, data);
+}
+
+export function sandboxPublish(sampleId, generatorKey){
+    return client.post(SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey, {});
 }

@@ -18,6 +18,7 @@ import { bindActionCreators } from 'redux';
 
 import { pregenerate } from '../Generator/actions.js';
 import { setGeneratorSample } from '../../sandbox/Sandbox/actions.js';
+import { removeFromRecentGenerators } from '../GeneratorList/actions.js';
 
 export const GET_GENERATOR_INFO = "GeneratorBriefPanel/GET_GENERATOR_INFO";
 export const SET_GENERATOR_INFO = "GeneratorBriefPanel/SET_GENERATOR_INFO";
@@ -28,5 +29,5 @@ export const setGeneratorInfo = (projectId, userId, generatorId, info) =>
     ({type: SET_GENERATOR_INFO, payload: {projectId, userId, generatorId, info}});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    getGeneratorInfo, pregenerate, setGeneratorSample
+    getGeneratorInfo, pregenerate, setGeneratorSample, removeFromRecentGenerators
 }, dispatch);

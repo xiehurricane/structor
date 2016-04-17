@@ -21,7 +21,6 @@ import { containerActions } from './actions.js';
 
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 
-import FrameOverlay from '../../../views/sandbox/FrameOverlay.js';
 import Desk from '../../workspace/Desk';
 import PageOptionsModal from '../../workspace/PageOptionsModal';
 import ComponentOptionsModal from '../../workspace/ComponentOptionsModal';
@@ -47,7 +46,7 @@ class Container extends Component {
         let content = null;
         if(workspaceMode === 'desk') {
             content = (
-                <div style={{overflow: 'hidden'}}>
+                <div style={{overflow: 'hidden', width: '100%', height: '100%'}}>
                     <div ref='appBody' style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px'}}>
                         <Desk />
                         <PageOptionsModal />

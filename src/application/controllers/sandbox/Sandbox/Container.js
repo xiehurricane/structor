@@ -89,6 +89,9 @@ class Container extends Component {
             nextStepLabel = (
                 <h5 className="text-muted text-center">Preview generated component</h5>
             );
+            backStepLabel = (
+                <h5 className="text-muted text-center">Generator list</h5>
+            );
             toolbar = (
                 <ButtonGroup bsSize="xs">
                     <Button onClick={(e) => {e.stopPropagation(); e.preventDefault(); showGenerator(); }} >
@@ -97,11 +100,14 @@ class Container extends Component {
                     {closeButton}
                 </ButtonGroup>
             );
-            header = (<h4 className="text-center">Edit generator sample</h4>);
+            header = (<h4 className="text-center">Edit generator templates</h4>);
             content = (<GeneratorTemplate />);
         } else if(stage === STAGE2){
             nextStepLabel = (
                 <h5 className="text-muted text-center">Publish generator</h5>
+            );
+            backStepLabel = (
+                <h5 className="text-muted text-center">Edit generator templates</h5>
             );
             toolbar = (
                 <ButtonGroup bsSize="xs">
@@ -111,9 +117,12 @@ class Container extends Component {
                     {closeButton}
                 </ButtonGroup>
             );
-            header = (<h4 className="text-center">The source code and component live preview</h4>);
+            header = (<h4 className="text-center">Preview generated component</h4>);
             content = (<SandboxFilesList />);
         } else if(stage === STAGE3){
+            backStepLabel = (
+                <h5 className="text-muted text-center">Preview generated component</h5>
+            );
             toolbar = (
                 <ButtonGroup bsSize="xs">
                     <Button data-stage={STAGE2} onClick={this.handleOnStep} >

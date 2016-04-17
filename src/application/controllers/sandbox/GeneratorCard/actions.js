@@ -16,10 +16,14 @@
 
 import { bindActionCreators } from 'redux';
 
-//export const SET_GENERATOR_SAMPLES = "GeneratorSampleList/SET_GENERATOR_SAMPLES";
-//
-//export const setGeneratorSamples = (list) => ({type: SET_GENERATOR_SAMPLES, payload: list});
+import { publishGeneratorSample } from '../Sandbox/actions.js';
+
+export const UPLOAD_SCREENSHOT = "GeneratorCard/UPLOAD_SCREENSHOT";
+export const UPLOAD_SCREENSHOT_DONE = "GeneratorCard/UPLOAD_SCREENSHOT_DONE";
+
+export const uploadScreenshot = (formData) => ({type: UPLOAD_SCREENSHOT, payload: formData});
+export const uploadScreenshotDone = () => ({type: UPLOAD_SCREENSHOT_DONE});
 
 export const containerActions = (dispatch) => bindActionCreators({
-
+    uploadScreenshot, publishGeneratorSample
 }, dispatch);

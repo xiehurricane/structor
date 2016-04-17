@@ -20,16 +20,26 @@ var fileManager = require('../../../src/server/commons/fileManager.js');
 var url1 = 'http://localhost:2222/sandbox';
 var method = 'sandboxPrepare';
 var authMethod = 'initUserCredentials';
-//var model = {};
+var model = {
+    type: 'h3',
+    props: {
+        className: 'text-center'
+    },
+    children: [
+        {
+            type: 'span',
+            text: 'Hello World!!!'
+        }
+    ]
+};
 var metadata = {};
 restApi.makeRequest('http://localhost:2222/invoke', authMethod, {username: 'apustovalov@gmail.com', password: 'dadada'})
     .then(userAccount => {
         console.log(JSON.stringify(userAccount));
-        return restApi.makeRequest(url1, method, {generatorId: 17, version: '0001'})
+        return restApi.makeRequest(url1, 'sandboxPublish', {sampleId: 17, generatorKey: 'Scaffold.Views.TestView'})
             .then(response => {
                 const responseText = JSON.stringify(response, null, 4);
                 console.log(`From ${url1}: ${responseText}`);
-
             })
             .catch(e => {
                 console.error(e);

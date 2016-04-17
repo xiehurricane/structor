@@ -19,7 +19,8 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
-import { Grid, Row, Col, Panel, SplitButton, MenuItem, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Panel, SplitButton, MenuItem, Button, ButtonGroup } from 'react-bootstrap';
+import { GeneratorKeyTitleView } from '../../../views';
 import marked from 'marked';
 
 class Container extends Component {
@@ -56,8 +57,9 @@ class Container extends Component {
     }
 
     render() {
-        const { projectId, userId, generatorId, versions} = this.props;
+        const { projectId, userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
         const { componentModel: {infos}, generatorKey } = this.props;
+        const { appContainerModel: {userAccount: {userId: accountUserId}} } = this.props;
         const brief = infos[generatorId] ? marked(infos[generatorId].brief) : '';
 
         let imgUrl = null;
@@ -94,26 +96,45 @@ class Container extends Component {
                                  data-version={versionsList[versionsList.length-1]}
                                  onClick={this.handleOnSelect}
                                  title="Run generator"
-                                 bsStyle="primary">
+                                 bsStyle="primary" bsSize="xs">
                         {menuItems}
                     </SplitButton>
                 );
                 cloneButton = (
                     <SplitButton id="cloneButton"
+                                 style={{marginLeft: '0.5em'}}
                                  data-version={versionsList[versionsList.length-1]}
                                  onClick={this.handleOnClone}
-                                 title="Fork generator"
-                                 bsStyle="primary">
+                                 title={userId !== accountUserId ? "Fork generator" : "Fork version"}
+                                 bsStyle="default" bsSize="xs">
                         {cloneMenuItems}
                     </SplitButton>
                 );
             }
         }
+        const closeButtonStyle = {
+            position: 'absolute',
+            top: '-0.5em',
+            right: '-0.5em',
+            width: '1em',
+            height: '1em',
+            fontSize: '24px',
+            cursor: 'pointer',
+            zIndex: '100',
+            opacity: '0.5'
+        };
         return (<div {...this.props}>
                 <Panel>
+                    { isRecentPanel ?
+                        <i style={closeButtonStyle}
+                           title="Remove from recently used list"
+                           className="fa fa-times-circle"
+                           onClick={() => {removeFromRecentGenerators(generatorId);}}></i>
+                        : null
+                    }
                     <h5 style={ { marginBottom : "1.5em", position: 'relative'} }>
                         <small style={ {    "marginRight": "0.5em"} } >Key :</small>
-                        <span>{ generatorKey }</span>
+                        <GeneratorKeyTitleView generatorKey={generatorKey} />
                     </h5>
                     <Grid fluid={ true }>
                         <Row>
@@ -122,14 +143,10 @@ class Container extends Component {
                                 md={ 4 }
                                 sm={ 4 }
                                 lg={ 4 }>
-                                <div>
+                                <div style={{height: '10em', overflow: 'hidden', marginBottom: '1em'}}>
                                     <img
                                         src={imgUrl}
-                                        style={ {    "width": "100%"} } />
-                                    <div style={{marginTop: '1em'}}>
-                                        {selectButton}
-                                        {cloneButton}
-                                    </div>
+                                        style={ { "width": "100%"} } />
                                 </div>
                             </Col>
                             <Col
@@ -137,18 +154,29 @@ class Container extends Component {
                                 md={ 8 }
                                 sm={ 8 }
                                 lg={ 8 }>
-                                <div>
+                                <div style={{height: '10em', overflow: 'hidden', marginBottom: '1em'}}>
                                     <div dangerouslySetInnerHTML={{__html: brief}}></div>
                                 </div>
-                                {/*<p style={{ marginTop: '2em'}}>
-                                    <a target="__blank" href={window.serviceUrl + '/generator?key=' + generatorKey + '&repo=' + projectRepo}>
-                                        <i className="fa fa-external-link"></i>
-                                        <span style={{marginLeft: '0.5em'}}>Read more...</span>
-                                    </a>
-                                </p>*/}
                             </Col>
                         </Row>
                     </Grid>
+                    <div style={{marginTop: '1em', width: '100%'}}>
+                        <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                            <div style={{minWidth: '30em', flexGrow: '1'}}>
+                                {selectButton}
+                                {cloneButton}
+                            </div>
+                            <div style={{flexGrow: '2'}}>
+                                <div style={{width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'flex-end' }}>
+                                    <a target="__blank"
+                                       href="#">
+                                        <i className="fa fa-external-link"></i>
+                                        <span style={{marginLeft: '0.5em'}}>Read more...</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </Panel>
             </div>
         );
@@ -160,14 +188,16 @@ Container.defaultProps = {
     userId: undefined,
     generatorId: undefined,
     versions: undefined,
-    generatorKey: undefined
+    generatorKey: undefined,
+    isRecentPanel: undefined
 };
 Container.propTypes = {
     projectId: PropTypes.number.isRequired,
     userId: PropTypes.number.isRequired,
     generatorId: PropTypes.number.isRequired,
     versions: PropTypes.string.isRequired,
-    generatorKey: PropTypes.string.isRequired
+    generatorKey: PropTypes.string.isRequired,
+    isRecentPanel: PropTypes.bool
 };
 
 export default connect( modelSelector, containerActions)(Container);

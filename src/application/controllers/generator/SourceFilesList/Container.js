@@ -22,7 +22,7 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
-import { Grid, Row, Col, Button, ListGroup, ListGroupItem, ButtonGroup } from 'react-bootstrap';
+import { Grid, Row, Col, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 class Container extends Component {
 
@@ -155,11 +155,8 @@ class Container extends Component {
                                         </ListGroup>
                                     </div> : null }
                                     <div style={{marginTop: '2em', display: 'flex', justifyContent: 'center'}}>
-                                        <ButtonGroup>
-                                            <Button bsStyle="primary">Compile &amp; preview</Button>
-                                            <Button bsStyle="primary"
-                                                    onClick={(e) => {e.stopPropagation(); e.preventDefault(); saveGenerated(); }}>Install component</Button>
-                                        </ButtonGroup>
+                                        <Button bsStyle="primary"
+                                                onClick={(e) => {e.stopPropagation(); e.preventDefault(); saveGenerated(); }}>Install component</Button>
                                     </div>
                                 </div>
                             </div>

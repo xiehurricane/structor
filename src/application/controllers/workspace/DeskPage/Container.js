@@ -57,100 +57,101 @@ class Container extends Component {
         loadPage();
         this.contentDocument = domNode.contentDocument;
         this.contentWindow = domNode.contentWindow;
-        this.contentWindow.onPageDidMount = (page, pathname) => {
-            this.page = page;
-
-            page.bindOnComponentMouseDown(this.handleComponentClick);
-            page.bindOnPathnameChanged(this.handlePathnameChanged);
-            page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
-            page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
-
-            page.bindGetComponentInPreview(() => {
-                const { libraryPanelModel: {componentInPreview, variantsInPreview, defaultVariantMap}} = this.props;
-                if(componentInPreview){
-                    const defaultVariantKey = defaultVariantMap[componentInPreview].key;
-                    const previewModel = previewGraphApi.getWrappedModelForVariant(defaultVariantKey);
-                    return {componentInPreview, variantsInPreview, previewModel, defaultVariantKey};
-                } else {
-                    return undefined;
-                }
-            });
-
-            page.bindToState('onLoadOptions', (key, isModifier) => {
-                const { currentComponent } = this.props;
-                loadOptions(currentComponent);
-            });
-
-            page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
-            page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]) });
-            page.bindToState('onClone', (key, isModifier) => { cloneSelected() });
-            page.bindToState('onDelete', (key, isModifier) => { deleteSelected() });
-
-            page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key); });
-            page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key); });
-            page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key); });
-            page.bindToState('onLast', (key, isModifier) => { pasteLast(key); });
-            page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key); });
-            //page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key); });
-
-            page.bindToState('isMultipleSelection', () => {
-                const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
-                return selectedKeys && selectedKeys.length > 1;
-            });
-
-            page.bindToState('isAvailableToPaste', key => {
-                const { clipboardIndicatorModel: {clipboardMode} } = this.props;
-                return clipboardMode !== CLIPBOARD_CUT || graphApi.isCutPasteAvailable(key);
-            });
-
-            page.bindToState('isClipboardEmpty', () => {
-                const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
-                return !clipboardKeys || clipboardKeys.length <= 0;
-            });
-
-            //page.bindToState('isAvailableToWrap', key => {
-            //    const { clipboardIndicatorModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
-            //    return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
-            //});
-
-            page.bindToState('setDefaultVariant', (componentName, key) => {
-                setDefaultVariant(componentName, key);
-            });
-            page.bindToState('selectVariant', (key) => { selectVariant(key); });
-            page.bindToState('hidePreview', () => { hidePreviewComponent() });
-
-            page.bindToState('getComponentsList', () => {
-                const { libraryPanelModel: {componentsList}} = this.props;
-                return componentsList;
-            });
-
-            page.bindToState('quickBefore', (componentName, selectedKey) => {
-                quickBefore(componentName, selectedKey);
-            });
-            page.bindToState('quickAfter', (componentName, selectedKey) => {
-                quickAfter(componentName, selectedKey);
-            });
-            page.bindToState('quickFirst', (componentName, selectedKey) => {
-                quickFirst(componentName, selectedKey);
-            });
-            page.bindToState('quickLast', (componentName, selectedKey) => {
-                quickLast(componentName, selectedKey);
-            });
-            page.bindToState('quickReplace', (componentName, selectedKey) => {
-                quickReplace(componentName, selectedKey);
-            });
-            //page.bindToState('quickWrap', (componentName, selectedKey) => {
-            //    quickWrap(componentName, selectedKey);
-            //});
-
-            const { componentModel } = this.props;
-            page.updatePageModel({
-                pathname: componentModel.currentPagePath ? componentModel.currentPagePath : pathname,
-                isEditModeOn: componentModel.isEditModeOn
-            });
-        };
 
         domNode.onload = ( () => {
+
+            this.contentWindow.onPageDidMount = (page, pathname) => {
+                this.page = page;
+
+                page.bindOnComponentMouseDown(this.handleComponentClick);
+                page.bindOnPathnameChanged(this.handlePathnameChanged);
+                page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
+                page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
+
+                page.bindGetComponentInPreview(() => {
+                    const { libraryPanelModel: {componentInPreview, variantsInPreview, defaultVariantMap}} = this.props;
+                    if(componentInPreview){
+                        const defaultVariantKey = defaultVariantMap[componentInPreview].key;
+                        const previewModel = previewGraphApi.getWrappedModelForVariant(defaultVariantKey);
+                        return {componentInPreview, variantsInPreview, previewModel, defaultVariantKey};
+                    } else {
+                        return undefined;
+                    }
+                });
+
+                page.bindToState('onLoadOptions', (key, isModifier) => {
+                    const { currentComponent } = this.props;
+                    loadOptions(currentComponent);
+                });
+
+                page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
+                page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]) });
+                page.bindToState('onClone', (key, isModifier) => { cloneSelected() });
+                page.bindToState('onDelete', (key, isModifier) => { deleteSelected() });
+
+                page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key); });
+                page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key); });
+                page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key); });
+                page.bindToState('onLast', (key, isModifier) => { pasteLast(key); });
+                page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key); });
+                //page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key); });
+
+                page.bindToState('isMultipleSelection', () => {
+                    const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+                    return selectedKeys && selectedKeys.length > 1;
+                });
+
+                page.bindToState('isAvailableToPaste', key => {
+                    const { clipboardIndicatorModel: {clipboardMode} } = this.props;
+                    return clipboardMode !== CLIPBOARD_CUT || graphApi.isCutPasteAvailable(key);
+                });
+
+                page.bindToState('isClipboardEmpty', () => {
+                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    return !clipboardKeys || clipboardKeys.length <= 0;
+                });
+
+                //page.bindToState('isAvailableToWrap', key => {
+                //    const { clipboardIndicatorModel: {clipboardKeys}, selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+                //    return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
+                //});
+
+                page.bindToState('setDefaultVariant', (componentName, key) => {
+                    setDefaultVariant(componentName, key);
+                });
+                page.bindToState('selectVariant', (key) => { selectVariant(key); });
+                page.bindToState('hidePreview', () => { hidePreviewComponent() });
+
+                page.bindToState('getComponentsList', () => {
+                    const { libraryPanelModel: {componentsList}} = this.props;
+                    return componentsList;
+                });
+
+                page.bindToState('quickBefore', (componentName, selectedKey) => {
+                    quickBefore(componentName, selectedKey);
+                });
+                page.bindToState('quickAfter', (componentName, selectedKey) => {
+                    quickAfter(componentName, selectedKey);
+                });
+                page.bindToState('quickFirst', (componentName, selectedKey) => {
+                    quickFirst(componentName, selectedKey);
+                });
+                page.bindToState('quickLast', (componentName, selectedKey) => {
+                    quickLast(componentName, selectedKey);
+                });
+                page.bindToState('quickReplace', (componentName, selectedKey) => {
+                    quickReplace(componentName, selectedKey);
+                });
+                //page.bindToState('quickWrap', (componentName, selectedKey) => {
+                //    quickWrap(componentName, selectedKey);
+                //});
+
+                const { componentModel } = this.props;
+                page.updatePageModel({
+                    pathname: componentModel.currentPagePath ? componentModel.currentPagePath : pathname,
+                    isEditModeOn: componentModel.isEditModeOn
+                });
+            };
 
             const initPage = () => {
                 this.contentWindow.__createPageDesk();

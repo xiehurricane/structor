@@ -42,6 +42,7 @@ class ContentEditable extends Component {
     handleOnBlur(){
 
         if(this.props.onBlur){
+            console.log('OnBlur....');
             this.props.onBlur({
                 target: {
                     value: this.lastHtml
@@ -67,11 +68,13 @@ class ContentEditable extends Component {
         var node = this.refs.editableElement;
         if ( this.props.html !== node.innerHTML ) {
             node.innerHTML = this.props.html;
+            this.lastHtml = this.props.html;
         }
     }
 
     componentDidMount(){
         $(this.refs.editableElement).focus();
+        this.lastHtml = this.props.html;
     }
 
     render(){

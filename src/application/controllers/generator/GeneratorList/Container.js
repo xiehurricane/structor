@@ -23,6 +23,7 @@ import { containerActions, ALL_GROUP_KEY } from './actions.js';
 import { Button, Grid, Row, Col } from 'react-bootstrap';
 import { ListGroup, ListGroupItem, Tabs, Tab } from 'react-bootstrap';
 import GeneratorBriefPanel from '../GeneratorBriefPanel';
+import { GeneratorKeyTitleView } from '../../../views';
 
 class Container extends Component {
 
@@ -78,6 +79,7 @@ class Container extends Component {
     render(){
 
         const { componentModel: {generators, recentGenerators, selectedTabKey, filter} } = this.props;
+        const { generatorModel: {loadOptions}, toggleGenerics } = this.props;
         const { groupKey, groupName, groupNameBack } = filter;
 
         let generatorGroupCatalogs = [];
@@ -97,11 +99,12 @@ class Container extends Component {
                         tempGeneratorPanelList.push({
                             index: sortIndex,
                             element: <GeneratorBriefPanel key={ item.generatorId }
-                                                                     generatorKey={item.dirNamePath}
-                                                                     projectId={item.projectId}
-                                                                     userId={item.userId}
-                                                                     generatorId={item.generatorId}
-                                                                     versions={item.versions}/>
+                                                          generatorKey={item.dirNamePath}
+                                                          projectId={item.projectId}
+                                                          userId={item.userId}
+                                                          generatorId={item.generatorId}
+                                                          versions={item.versions}
+                                                          isRecentPanel={true}/>
                         });
                     }
                 });
@@ -144,7 +147,6 @@ class Container extends Component {
                     generatorGroup.catalogs.forEach( (catalog, index) => {
                         generatorGroupCatalogs.push(
                             <ListGroupItem href="#"
-                                           className="list-group-item"
                                            key={'catalog' + index}
                                            style={{position: 'relative'}}
                                            data-catalog={catalog.dirNamePath}
@@ -196,7 +198,7 @@ class Container extends Component {
                     <div>
                         <h5 className='text-center'>
                             <small>{'Category:  '}</small>
-                            <span>{groupKey}</span>
+                            <GeneratorKeyTitleView generatorKey={groupKey} />
                         </h5>
                         <Grid fluid={ true }>
                             <Row style={ { minHeight: "40em", position: 'relative'} }>
@@ -206,6 +208,13 @@ class Container extends Component {
                                     sm={ 3 }
                                     lg={ 3 }>
 
+                                    <ListGroup>
+                                        <ListGroupItem active={loadOptions.isOnlyGenerics}
+                                                       href="#"
+                                                       onClick={(e) => {e.stopPropagation(); e.preventDefault(); toggleGenerics(); }}>
+                                            <span>Only generic generators</span>
+                                        </ListGroupItem>
+                                    </ListGroup>
                                     <ListGroup>
                                         {headGroupItems}
                                         <ListGroupItem active={true}>

@@ -16,6 +16,7 @@
 
 import path from 'path';
 import express from 'express';
+import multer from 'multer';
 import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as projectCompiler from './projectCompiler.js';
@@ -35,7 +36,22 @@ export function error(options){
 export function setServer(server){
     serverRef = server;
     if(serverRef){
-        serverRef.app.use('/sandbox-preview', express.static(path.join(config.sandboxDirPath(), 'work', '.structor', 'desk')));
+        const sandboxDeskDirPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk');
+        serverRef.app.use('/sandbox-preview', express.static(sandboxDeskDirPath));
+        const screenshotStorage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, path.join(sandboxDeskDirPath, 'assets', 'img'));
+            },
+            filename: (req, file, cb) => {
+                cb(null, 'screenshot.png');
+            }
+        });
+        const upload = multer({storage: screenshotStorage});
+        serverRef.app.post('/sandbox-screenshot', upload.single('screenshot'), (req, res, next) => {
+            console.log('Uploaded...');
+            console.log(req.file);
+            res.status(204).end();
+        });
     }
 }
 
@@ -81,3 +97,8 @@ export function saveSandboxGenerated(options){
         return generatorManager.saveGenerated(files);
     });
 }
+
+export function sandboxPublish(options){
+    return clientManager.sandboxPublish(options.sampleId, options.generatorKey);
+}
+

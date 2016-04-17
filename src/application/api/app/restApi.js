@@ -77,3 +77,18 @@ export function invokeStructor(method, options){
 export function invokeSandbox(method, options){
     return makeRequest('/sandbox', method, options);
 }
+
+export function uploadScreenshot(formData){
+    return fetch('/sandbox-screenshot', {method: 'POST', body: formData})
+        .then( response => {
+            //console.log('Received response: ' + JSON.stringify(response, null, 4));
+            //console.log('Received response: ' + response.status);
+            //console.log('Received response: ' + response.statusText);
+            //console.log(response.headers.get('Content-Type'));
+            if (response.status >= 200 && response.status < 300) {
+                return response.text()
+            } else {
+                throw Error(response.statusText);
+            }
+        });
+}

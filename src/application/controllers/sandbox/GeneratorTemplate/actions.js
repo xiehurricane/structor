@@ -25,6 +25,8 @@ export const SET_TEMPLATE = "GeneratorTemplateList/SET_TEMPLATE";
 export const CHANGE_ACTIVE_TEMPLATE_TEXT = "GeneratorTemplateList/CHANGE_ACTIVE_TEMPLATE_TEXT";
 export const CHANGE_METAHELP_TEXT = "GeneratorTemplateList/CHANGE_METAHELP_TEXT";
 export const CHANGE_README_TEXT = "GeneratorTemplateList/CHANGE_README_TEXT";
+export const CHANGE_METADATA = "GeneratorTemplateList/CHANGE_METADATA";
+export const CHANGE_DEPENDENCIES = "GeneratorTemplateList/CHANGE_DEPENDENCIES";
 
 export const setTemplate = (templateObject) => (dispatch, getState) => {
     let { selectionBreadcrumbs: { selectedKeys } } = getState();
@@ -41,6 +43,24 @@ export const changeActiveTemplateText = (nextTemplate, prevTemplate, prevTemplat
 );
 export const changeMetahelpText = (metahelpText) => ({type: CHANGE_METAHELP_TEXT, payload: metahelpText});
 export const changeReadmeText = (readmeText) => ({type: CHANGE_README_TEXT, payload: readmeText});
+
+export const changeMetadata = (metadata) => (dispatch, getState) => {
+    try{
+        const newMetadata = JSON.parse(metadata);
+        dispatch({type: CHANGE_METADATA, payload: newMetadata});
+    } catch(e){
+        dispatch(failed('The metadata has to be a valid JSON object. ' + e));
+    }
+};
+
+export const changeDependencies = (dependencies) => (dispatch, getState) => {
+    try{
+        const newDependencies = JSON.parse(dependencies);
+        dispatch({type: CHANGE_DEPENDENCIES, payload: newDependencies});
+    } catch(e){
+        dispatch(failed('The dependencies has to be a valid JSON object. ' + e));
+    }
+};
 
 export const saveAndGenerate = (options) => (dispatch, getState) => {
     const {activeTemplateText, metadataSource, metahelp, dependenciesSource, readme} = options;
@@ -80,5 +100,7 @@ export const saveAndGenerate = (options) => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    changeActiveTemplateText, changeMetahelpText, changeReadmeText, saveAndGenerate
+    changeActiveTemplateText, changeMetahelpText, changeReadmeText,
+    changeMetadata, changeDependencies,
+    saveAndGenerate
 }, dispatch);

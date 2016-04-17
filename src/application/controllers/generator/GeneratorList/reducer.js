@@ -24,7 +24,7 @@ const initialState = {
         groupName: actions.ALL_GROUP_KEY,
         groupNameBack: null
     },
-    selectedTabKey: 1
+    selectedTabKey: 2
 };
 
 export default (state = initialState, action = {}) => {
@@ -33,14 +33,14 @@ export default (state = initialState, action = {}) => {
 
     if(type === actions.SET_GENERATORS){
         return Object.assign({}, state, {
-            generators: payload.generators,
-            recentGenerators: payload.recentGenerators
+            generators: payload.generators || {},
+            recentGenerators: payload.recentGenerators || {}
         });
     }
 
     if(type === actions.SET_RECENT_GENERATORS){
         return Object.assign({}, state, {
-            recentGenerators: payload
+            recentGenerators: payload || {}
         });
     }
 

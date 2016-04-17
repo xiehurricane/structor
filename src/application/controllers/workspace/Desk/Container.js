@@ -158,7 +158,7 @@ class Container extends Component {
         const leftBar = (<ToolbarLeft />);
 
         return (
-            <div>
+            <div style={{width: '100%', height: '100%'}}>
                 {leftBar}
                 <div style={leftPanelStyle}>
                     {leftPanelInner}

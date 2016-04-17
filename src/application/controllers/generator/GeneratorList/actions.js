@@ -15,21 +15,54 @@
  */
 
 import { bindActionCreators } from 'redux';
+import { coockiesApi } from '../../../api';
+import { loadGenerators } from '../Generator/actions.js';
 //import { hideGeneratorFrame } from '../../app/AppContainer/actions.js';
 //import { started, done } from '../../app/AppSpinner/actions.js';
 
 export const ALL_GROUP_KEY = 'All';
 
-export const SET_GENERATORS = "Generator/SET_GENERATORS";
-export const SET_RECENT_GENERATORS = "Generator/SET_RECENT_GENERATORS";
-export const SET_FILTER = "Generator/SET_FILTER";
-export const SET_SELECTED_TAB = "Generator/SET_SELECTED_TAB";
+export const SET_GENERATORS = "GeneratorList/SET_GENERATORS";
+export const SET_RECENT_GENERATORS = "GeneratorList/SET_RECENT_GENERATORS";
+export const SET_FILTER = "GeneratorList/SET_FILTER";
+export const SET_SELECTED_TAB = "GeneratorList/SET_SELECTED_TAB";
 
 export const setFilter = (filter) => ({type: SET_FILTER, payload: filter});
+export const setFilterByGeneratorKey = (generatorKey) => (dispatch, getState) => {
+    if(generatorKey && generatorKey.length > 0){
+        let parts = generatorKey.split('.');
+        if(parts && parts.length > 2){
+            let groupKey = '';
+            for(let i = 0; i < parts.length - 1; i++){
+                groupKey += parts[i] + '.';
+            }
+            const filter = {
+                groupKey: groupKey.substr(0, groupKey.length - 1),
+                groupName: parts[parts.length - 2],
+                groupNameBack: null
+            };
+            dispatch({type: SET_FILTER, payload: filter})
+        }
+    }
+};
+
 export const setGenerators = (generators, recentGenerators) => ({type: SET_GENERATORS, payload: {generators, recentGenerators}});
+
 export const setRecentGenerators = (recentGenerators) => ({type: SET_RECENT_GENERATORS, payload: recentGenerators});
+
 export const setSelectedTab = (tabKey) => ({type: SET_SELECTED_TAB, payload: tabKey});
 
+export const toggleGenerics = () => (dispatch, getState) => {
+    const {generator: {loadOptions}} = getState();
+    loadOptions.isOnlyGenerics = !loadOptions.isOnlyGenerics;
+    dispatch(loadGenerators(loadOptions));
+};
+
+export const removeFromRecentGenerators = (generatorId) => (dispatch, getState) => {
+    let recentGenerators = coockiesApi.removeFromRecentGenerators(generatorId);
+    dispatch(setRecentGenerators(recentGenerators));
+};
+
 export const containerActions = (dispatch) => bindActionCreators({
-    setFilter, setSelectedTab
+    setFilter, setSelectedTab, toggleGenerics
 }, dispatch);

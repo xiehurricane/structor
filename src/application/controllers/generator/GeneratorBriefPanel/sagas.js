@@ -23,7 +23,7 @@ import { serverApi, cookies } from '../../../api';
 //
 function* getInfo(projectId, userId, generatorId){
     try{
-        const textInfo = yield call(serverApi.getGeneratorBriefInfo, projectId, userId, generatorId);
+        const textInfo = yield call(serverApi.getGeneratorInfo, projectId, userId, generatorId);
         yield put(actions.setGeneratorInfo(projectId, userId, generatorId, {brief: textInfo}));
     } catch(e){
         console.warn(e.message ? e.message : e.toString());

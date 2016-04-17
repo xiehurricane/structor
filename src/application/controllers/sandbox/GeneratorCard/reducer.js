@@ -17,18 +17,18 @@
 import * as actions from './actions.js';
 
 const initialState = {
-
+    screenshotUrlCounter: 0
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    //if(type === actions.SET_GENERATOR_SAMPLES){
-    //    return Object.assign({}, state, {
-    //        sampleList: payload
-    //    });
-    //}
+    if(type === actions.UPLOAD_SCREENSHOT_DONE){
+        return Object.assign({}, state, {
+            screenshotUrlCounter: state.screenshotUrlCounter + 1
+        });
+    }
 
     return state;
 }

@@ -21,7 +21,6 @@ import { updateMarked, updatePage } from '../DeskPage/actions.js';
 import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
 import { setForNew } from '../ClipboardIndicator/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
-import { loadGeneratorSamples } from '../../sandbox/Sandbox/actions.js';
 
 export const LOAD_COMPONENTS = "LibraryPanel/LOAD_COMPONENTS";
 export const SET_COMPONENTS = "LibraryPanel/SET_COMPONENTS";
@@ -181,7 +180,7 @@ export const quickReplace = (componentName) => (dispatch, getState) => {
 //};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    previewComponent, quickCopyToClipboard, loadGeneratorSamples
+    previewComponent, quickCopyToClipboard
 }, dispatch);
 
 function getVariantModel(defaultVariantMap, componentName){

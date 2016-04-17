@@ -16,7 +16,19 @@
 import { bindActionCreators } from 'redux';
 import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
 import { togglePageTreeview} from '../Desk/actions.js';
+import { serverApi, graphApi } from '../../../api';
+import { pushHistory } from '../HistoryControls/actions.js';
+import { updatePage } from '../DeskPage/actions.js';
+
+export const changeText = (newText, selectedKey) => (dispatch, getState) => {
+    let node = graphApi.getNode(selectedKey);
+    if (node) {
+        dispatch(pushHistory());
+        node.modelNode.text = newText;
+        dispatch(updatePage());
+    }
+};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    togglePageTreeview, setSelectedKey
+    togglePageTreeview, setSelectedKey, changeText
 }, dispatch);

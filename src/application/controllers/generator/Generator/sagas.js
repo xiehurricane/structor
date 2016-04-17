@@ -23,7 +23,7 @@ import * as generatorListActions from '../GeneratorList/actions.js';
 import * as metadataFormActions from '../MetadataForm/actions.js';
 import * as appContainerActions from '../../app/AppContainer/actions.js';
 import * as deskPageActions from '../../workspace/DeskPage/actions.js';
-import { serverApi, utils, graphApi } from '../../../api';
+import { serverApi, graphApi, coockiesApi } from '../../../api';
 
 function* pregenerate(){
     while(true){
@@ -38,14 +38,7 @@ function* pregenerate(){
                 metaHelp: pregeneratedData.metaHelp
             }));
             yield put(actions.stepToStage(actions.STAGE2));
-            let recentGenerators = utils.retrieveCookiesObject("structor-recent-generators-list");
-            recentGenerators = recentGenerators || [];
-            const existingIndex = recentGenerators.indexOf(generatorId);
-            if(existingIndex >= 0){
-                recentGenerators.splice(existingIndex, 1);
-            }
-            recentGenerators.splice(0, 0, generatorId);
-            utils.saveCookiesObject("structor-recent-generators-list", recentGenerators);
+            let recentGenerators = coockiesApi.addToRecentGenerators(generatorId);
             yield put(generatorListActions.setRecentGenerators(recentGenerators));
         } catch(error) {
             yield put(messageActions.failed('Metadata retrieving has an error. ' + (error.message ? error.message : error)));
@@ -88,11 +81,21 @@ function* saveGenerated(){
 
 function* loadGenerators(){
     while(true){
-        yield take(actions.LOAD_GENERATORS);
+        const {payload: options} = yield take(actions.LOAD_GENERATORS);
         yield put(spinnerActions.started('Loading generators'));
         try {
-            const generatorsList = yield call(serverApi.getAvailableGeneratorsList);
-            const recentGenerators = utils.retrieveCookiesObject("structor-recent-generators-list");
+            let generatorsList;
+            if(options){
+                const {isOnlyGenerics} = options;
+                if(isOnlyGenerics){
+                    generatorsList = yield call(serverApi.getAvailableGeneratorGenerics);
+                } else {
+                    generatorsList = yield call(serverApi.getAvailableGeneratorsList);
+                }
+            } else {
+                generatorsList = yield call(serverApi.getAvailableGeneratorsList);
+            }
+            const recentGenerators = coockiesApi.getRecentGenerators();
             yield put(generatorListActions.setGenerators(generatorsList, recentGenerators));
             yield put(appContainerActions.showGenerator());
         } catch(error) {

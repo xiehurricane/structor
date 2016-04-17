@@ -34,7 +34,13 @@ export const GENERATE = "Generator/GENERATE";
 export const SAVE_GENERATED = "Generator/SAVE_GENERATED";
 
 export const stepToStage = (stage) => ({type: STEP_TO_STAGE, payload: stage});
-export const loadGenerators = () => ({type: LOAD_GENERATORS});
+export const loadGenerators = (options) => (dispatch, getState) => {
+    if(!options){
+        const {generator: {loadOptions}} = getState();
+        options = loadOptions;
+    }
+    dispatch({type: LOAD_GENERATORS, payload: options});
+};
 export const setGeneratedData = (generatedData) => ({type: SET_GENERATED_DATA, payload: generatedData});
 
 export const pregenerate = (generatorId, version) => (dispatch, getState) => {

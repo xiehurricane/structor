@@ -129,8 +129,12 @@ export function getAvailableGeneratorsList(){
     return invokeStructor('getAvailableGeneratorsList');
 }
 
-export function getGeneratorBriefInfo(projectId, userId, generatorId){
-    return invokeStructor('getGeneratorBrief', {projectId, userId, generatorId});
+export function getAvailableGeneratorGenerics(){
+    return invokeStructor('getAvailableGeneratorGenerics');
+}
+
+export function getGeneratorInfo(projectId, userId, generatorId){
+    return invokeStructor('getGeneratorReadme', {projectId, userId, generatorId});
 }
 
 export function pregenerate(generatorId, version, groupName, componentName, model){
@@ -162,11 +166,9 @@ export function prepareGeneratorSampleSandbox(generatorId, version){
 }
 
 export function saveAndGenerateSandboxComponent(sampleId, filesObject){
-    console.log('Writing files: ' + sampleId);
     let resultGeneratedData;
     return invokeSandbox('sandboxWriteFiles', {sampleId, filesObject})
         .then(() => {
-            console.log('Files where written: ' + sampleId);
             return invokeSandbox('sandboxGenerate', {sampleId, metadata: filesObject.metadata, model: filesObject.model});
         })
         .then(generatedData => {
@@ -180,4 +182,8 @@ export function saveAndGenerateSandboxComponent(sampleId, filesObject){
         .then(() => {
             return resultGeneratedData;
         });
+}
+
+export function publishSandboxGenerator(sampleId, generatorKey){
+    return invokeSandbox('sandboxPublish', {sampleId, generatorKey});
 }

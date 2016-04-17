@@ -19,8 +19,6 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
-import { imgStore } from '../../../api';
-
 import { Grid, Row, Col, Panel, Button, Input } from 'react-bootstrap';
 import marked from 'marked';
 
@@ -28,16 +26,24 @@ class Container extends Component {
 
     constructor(props) {
         super(props);
-        this.handleSelectSample = this.handleSelectSample.bind(this);
+        this.handlePublishSample = this.handlePublishSample.bind(this);
+        this.handleOnChangeScreenshotInput = this.handleOnChangeScreenshotInput.bind(this);
     }
 
-    handleSelectSample(e){
+    handlePublishSample(e){
         e.preventDefault();
         e.stopPropagation();
+        this.props.publishGeneratorSample(this.refs.generatorKeyInput.getValue());
     }
 
+    handleOnChangeScreenshotInput(e){
+        const formData = new FormData(this.refs.uploadForm);
+        this.props.uploadScreenshot(formData);
+    }
+
+
     render(){
-        const { sandboxModel:{generatorSampleKey}, generatorTemplateModel:{templateObject: {readme}} } = this.props;
+        const { componentModel: {screenshotUrlCounter}, sandboxModel:{generatorSampleKey}, generatorTemplateModel:{templateObject: {readme}} } = this.props;
         const cellBoxStyle = {
             display: 'flex',
             justifyContent: 'center',
@@ -49,13 +55,14 @@ class Container extends Component {
             <div style={{marginTop: '3em'}}>
                 <div style={cellBoxStyle}>
                     <Input defaultValue={generatorSampleKey}
+                           ref="generatorKeyInput"
                            type="text"
                            placeholder="Top.Group[.Group].Name"
                            label="Generator key"
                            help="Only numeric and characters from US-ASCII alphabet are accepted. Example: Top.Group.Name" />
                 </div>
                 <div style={cellBoxStyle}>
-                    <Button bsStyle="primary">Submit publishing</Button>
+                    <Button bsStyle="primary" onClick={this.handlePublishSample}>Submit publishing</Button>
                 </div>
                 <div style={cellBoxStyle}>
                     <Panel style={{width: '70%', minWidth: '400px'}}>
@@ -68,11 +75,16 @@ class Container extends Component {
                                     lg={ 4 }>
                                     <div>
                                         <img
-                                            src="/sandbox-preview/assets/img/screenshot.png"
-                                            style={ {    "width": "100%"} } />
+                                            src={"/sandbox-preview/assets/img/screenshot.png?" + screenshotUrlCounter}
+                                            style={{width: "100%"}} />
                                     </div>
-                                    <form method="POST" enctype="multipart/form-data" action="#">
-                                        <input type="file" name="screenshot" accept="image/png"/>
+                                    <form ref="uploadForm"
+                                          method="POST"
+                                          enctype="multipart/form-data">
+                                        <input type="file"
+                                               name="screenshot"
+                                               accept="image/png"
+                                               onChange={this.handleOnChangeScreenshotInput} style={{width: '100%'}} />
                                     </form>
 
                                 </Col>
