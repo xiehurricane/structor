@@ -27,6 +27,8 @@ import ComponentOptionsModal from '../../workspace/ComponentOptionsModal';
 import SignInModal from '../SignInModal';
 import Generator from '../../generator/Generator';
 import Sandbox from '../../sandbox/Sandbox';
+import ProxySetupModal from '../ProxySetupModal';
+import ProjectGallery from '../ProjectGallery';
 
 class Container extends Component {
 
@@ -35,8 +37,7 @@ class Container extends Component {
     }
 
     componentDidMount(){
-        const { getProjectInfo } = this.props;
-        getProjectInfo();
+        this.props.getProjectStatus();
     }
 
     render() {
@@ -52,6 +53,7 @@ class Container extends Component {
                         <PageOptionsModal />
                         <ComponentOptionsModal />
                         <SignInModal />
+                        <ProxySetupModal />
                     </div>
                 </div>
             );
@@ -67,6 +69,12 @@ class Container extends Component {
                 <div style={{width: '100%', height: '100%'}}>
                     <Sandbox />
                     <SignInModal />
+                </div>
+            );
+        } else if(workspaceMode === 'projects'){
+            content = (
+                <div style={{width: '100%', height: '100%'}}>
+                    <ProjectGallery />
                 </div>
             );
         } else {

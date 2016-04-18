@@ -77,7 +77,7 @@ function* signOut(){
 
 function* delayForCompiler(){
     try{
-        yield call(delay, 20000);
+        yield call(delay, 60000);
         yield put(messageActions.timeout('The source code compiling is timed out. Look at console output or reload the browser page.'));
         yield put(deskPageActions.setReloadPageRequest());
         yield put(actions.compilerTimeout());
@@ -99,49 +99,77 @@ function* waitForCompiler(){
     }
 }
 
-function* loadProjectInfo(){
-    try{
-        return yield call(serverApi.getProjectInfo);
-    } catch(error){
-        if(error instanceof SagaCancellationException){
-            yield put(messageActions.failed('Project loading was canceled.'));
-        } else {
-            yield put(messageActions.failed('Project loading has an error. ' + (error.message ? error.message : error)));
-        }
-    }
-}
+//function* loadProjectInfo(){
+//    try{
+//        return yield call(serverApi.getProjectInfo);
+//    } catch(error){
+//        if(error instanceof SagaCancellationException){
+//            yield put(messageActions.failed('Project loading was canceled.'));
+//        } else {
+//            yield put(messageActions.failed('Project loading has an error. ' + (error.message ? error.message : error)));
+//        }
+//    }
+//}
 
-function* loadProject(){
-    yield take(actions.GET_PROJECT_INFO);
-    yield put(spinnerActions.started('Loading project'));
-    try {
-        yield call(signInByToken);
-        const {timeout, response} = yield race({
-            response: call(loadProjectInfo),
-            timeout: call(delay, 30000)
-        });
-        if(response){
-            const {projectConfig, projectStatus} = response;
-            if(projectStatus === 'ready-to-go'){
+//function* loadProject(){
+//    yield take(actions.GET_PROJECT_INFO);
+//    yield put(spinnerActions.started('Loading project'));
+//    try {
+//        yield call(signInByToken);
+//        const {timeout, response} = yield race({
+//            response: call(loadProjectInfo),
+//            timeout: call(delay, 30000)
+//        });
+//        if(response){
+//            const {projectConfig, projectStatus} = response;
+//            if(projectStatus === 'ready-to-go'){
+//                const model = yield call(serverApi.getProjectModel);
+//                const componentsTree = yield call(serverApi.loadComponentsTree);
+//                yield put(libraryPanelActions.setComponents(componentsTree));
+//                yield put(deskPageActions.loadModel(model || {}));
+//            }
+//            yield put(actions.getProjectInfoDone({projectConfig}));
+//
+//        } else if(timeout) {
+//            yield put(messageActions.timeout('Project loading is timed out.'));
+//        }
+//    } catch(error) {
+//        yield put(messageActions.failed('Project loading has an error. ' + (error.message ? error.message : error)));
+//    }
+//    yield put(spinnerActions.done('Loading project'));
+//}
+
+function* getProjectStatus(){
+    while(true){
+        yield take(actions.GET_PROJECT_STATUS);
+        yield put(spinnerActions.started('Loading project'));
+        try{
+            yield call(signInByToken);
+            const status = yield call(serverApi.getProjectStatus);
+            if(status === 'ready-to-go'){
+
                 const model = yield call(serverApi.getProjectModel);
                 const componentsTree = yield call(serverApi.loadComponentsTree);
                 yield put(libraryPanelActions.setComponents(componentsTree));
                 yield put(deskPageActions.loadModel(model || {}));
-            }
-            yield put(actions.getProjectInfoDone({projectConfig}));
 
-        } else if(timeout) {
-            yield put(messageActions.timeout('Project loading is timed out.'));
+                const projectInfo = yield call(serverApi.getProjectInfo);
+                yield put(actions.setProjectInfo(projectInfo));
+
+                yield put(actions.showDesk());
+            } else {
+                yield put(actions.showProjects());
+            }
+        } catch(error) {
+            yield put(messageActions.failed('Obtaining project status error. ' + (error.message ? error.message : error)));
         }
-    } catch(error) {
-        yield put(messageActions.failed('Project loading has an error. ' + (error.message ? error.message : error)));
+        yield put(spinnerActions.done('Loading project'));
     }
-    yield put(spinnerActions.done('Loading project'));
 }
 
 // main saga
 export default function* mainSaga() {
-    yield fork(loadProject);
+    yield fork(getProjectStatus);
     yield fork(signIn);
     yield fork(signOut);
     yield fork(waitForCompiler)

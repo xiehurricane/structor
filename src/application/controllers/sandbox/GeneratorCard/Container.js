@@ -75,7 +75,7 @@ class Container extends Component {
                                     lg={ 4 }>
                                     <div>
                                         <img
-                                            src={"/sandbox-preview/assets/img/screenshot.png?" + screenshotUrlCounter}
+                                            src={"/structor-sandbox-preview/assets/img/screenshot.png?" + screenshotUrlCounter}
                                             style={{width: "100%"}} />
                                     </div>
                                     <form ref="uploadForm"

@@ -21,9 +21,6 @@ import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
 import { graphApi } from '../../../api';
-
-import { Button } from 'react-bootstrap';
-
 import { PageTreeViewItem, PageTreeViewItemText } from '../../../views/index.js';
 
 var scrollToSelected = function($frameWindow, key){
@@ -52,9 +49,8 @@ class Container extends Component{
 
     constructor(props) {
         super(props);
+        this.shouldScroll = true;
         this.scrollToSelected = this.scrollToSelected.bind(this);
-        //this.state = {};
-        //this.handleChangeInlineText = this.handleChangeInlineText.bind(this);
     }
 
     componentDidMount() {
@@ -81,18 +77,20 @@ class Container extends Component{
         );
     }
 
-    scrollToSelected(){
-        const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
-        if(selectedKeys && selectedKeys.length > 0){
-            scrollToSelected(this.$frameWindow, selectedKeys[selectedKeys.length - 1]);
-        }
+    componentWillUpdate(nextProps, nextState){
+        const { selectionBreadcrumbsModel: {selectedKeys: oldKeys} } = this.props;
+        const { selectionBreadcrumbsModel: {selectedKeys: nextKeys}} = nextProps;
+        this.shouldScroll = oldKeys !== nextKeys;
     }
 
-    //handleChangeInlineText(textValue){
-    //    this.props.rewriteModelNode({
-    //        text: _.unescape(textValue)
-    //    })
-    //}
+    scrollToSelected(){
+        if(this.shouldScroll === true){
+            const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+            if(selectedKeys && selectedKeys.length > 0){
+                scrollToSelected(this.$frameWindow, selectedKeys[selectedKeys.length - 1]);
+            }
+        }
+    }
 
     buildNode(graphNode) {
 
@@ -110,7 +108,7 @@ class Container extends Component{
             graphNode.children.forEach(node => {
                 children.push(this.buildNode(node));
             });
-        } else if(modelNode.text) {
+        } else if(modelNode.text !== undefined) {
             inner.push(
                 <PageTreeViewItemText
                     itemKey={graphNode.key}
@@ -148,7 +146,7 @@ class Container extends Component{
 
     render() {
 
-        const { deskPageModel, togglePageTreeview } = this.props;
+        const { deskPageModel } = this.props;
         const pageGraph = graphApi.getWrappedModelByPagePath(deskPageModel.currentPagePath);
 
         let style = {
@@ -166,33 +164,8 @@ class Container extends Component{
             });
         }
 
-        //let containerStyle = {
-        //    position: 'absolute',
-        //    left: '4em',
-        //    right: '4em',
-        //    top: '2px',
-        //    zIndex: 1030
-        //};
-        //let overlay = (<div style={containerStyle}><OverlayButtonsControl /></div>);
-
-        //
         return (
             <div ref="panelElement" style={style}>
-                <Button bsSize='xsmall'
-                        style={
-                            {
-                                padding: '0.2em',
-                                position: 'absolute',
-                                top: '2px',
-                                left: '2px',
-                                width: '2em',
-                                height: '2em',
-                                zIndex: '1030'
-                            }
-                        }
-                        onClick={togglePageTreeview}>
-                    <span className='fa fa-times fa-fw'></span>
-                </Button>
                 <ul className='umy-treeview-list' style={{border: 0}}>
                     {listItems}
                 </ul>

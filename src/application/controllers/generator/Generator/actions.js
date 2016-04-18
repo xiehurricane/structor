@@ -60,8 +60,10 @@ export const generate = (groupName, componentName, metaData) => (dispatch, getSt
 
     let canProceed = true;
 
-    var firstChar = componentName.charAt(0).toUpperCase();
+    let firstChar = componentName.charAt(0).toUpperCase();
     componentName = firstChar + componentName.substr(1);
+    firstChar = groupName.charAt(0).toUpperCase();
+    groupName = firstChar + groupName.substr(1);
 
     if(!groupName || groupName.length <= 0 || !validator.isAlphanumeric(groupName)){
         dispatch(failed('Please enter alphanumeric value for group name'));

@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
-import { serverApi, graphApi } from '../../../api';
-import { pushHistory } from '../HistoryControls/actions.js';
-import { updatePage } from '../DeskPage/actions.js';
 
-export const changeText = (newText, selectedKey) => (dispatch, getState) => {
-    let node = graphApi.getNode(selectedKey);
-    if (node) {
-        dispatch(pushHistory());
-        node.modelNode.text = newText;
-        dispatch(updatePage());
-    }
-};
+import { bindActionCreators } from 'redux';
+//import { loadOptions } from '../ComponentOptionsModal/actions.js';
+//import { showGeneratorFrame } from '../../app/AppContainer/actions.js';
+
+export const GET_PROJECT_GALLERY_LIST = "ProjectGallery/GET_PROJECT_GALLERY_LIST";
+export const SET_PROJECT_GALLERY_LIST = "ProjectGallery/SET_PROJECT_GALLERY_LIST";
+export const DOWNLOAD_PROJECT = "ProjectGallery/DOWNLOAD_PROJECT";
+
+export const getProjectGalleryList = () => ({type: GET_PROJECT_GALLERY_LIST});
+export const setProjectGalleryList = (list) => ({type: SET_PROJECT_GALLERY_LIST, payload: list});
+export const downloadProject = (url) => ({type: DOWNLOAD_PROJECT, payload: url});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setSelectedKey, changeText
+    getProjectGalleryList, downloadProject
 }, dispatch);

@@ -27,6 +27,7 @@ import * as fileManager from './commons/fileManager.js';
 
 import * as structorController from './structor/controller.js';
 import * as sandboxController from './sandbox/controller.js';
+import * as downloadController from './download/controller.js';
 
 let server = {
     io: undefined,
@@ -36,6 +37,9 @@ let server = {
     appServer: undefined,
     proxy: undefined
 };
+
+let serverDirPath = undefined;
+let projectDirPath = undefined;
 
 function printError(message, error){
     if(message){
@@ -47,7 +51,7 @@ function printError(message, error){
 function callControllerMethod(controller, req, res){
     let methodName = req.body.methodName;
     let data = req.body.data || {};
-    console.log('Call controller method: ' + methodName);
+    console.log('Calling controller method: ' + methodName);
     if(controller[methodName]){
         controller[methodName](data)
             .then( response => {
@@ -70,19 +74,14 @@ function callControllerMethod(controller, req, res){
 
 export function initServer(options){
     const { serverDir, projectDir, portNumber, io } = options;
+    serverDirPath = serverDir;
+    projectDirPath = projectDir;
     return config.init(serverDir, projectDir)
         .then(status => {
             if(status){
 
                 server.app = express();
-                server.app.use('/structor', express.static(path.join(config.serverDir(), 'static')));
-
-                server.app.post('/invoke', bodyParser.json({limit: '50mb'}), (req, res) => {
-                    callControllerMethod(structorController, req, res);
-                });
-                server.app.post('/sandbox', bodyParser.json({limit: '50mb'}), (req, res) => {
-                    callControllerMethod(sandboxController, req, res);
-                });
+                server.app.use('/structor', express.static(path.join(serverDirPath, 'static')));
 
                 server.appServer = http.createServer(server.app);
                 if(io){
@@ -97,16 +96,53 @@ export function initServer(options){
                     console.log('Structor is ready to work');
                     if(status === config.READY){
                         console.log(`Open address: http://localhost:${portNumber}/structor in the browser.`);
-                    } else if(server.status === config.EMPTY){
+                    } else if(status === config.EMPTY){
                         console.log(`Open address: http://localhost:${portNumber}/structor in the browser and download a Structor project from Structor Market.`)
                     }
                 });
 
-                structorController.setServer(server);
-                sandboxController.setServer(server);
-
+                initDownloadController();
+                if(status === config.READY){
+                    initStructorController();
+                    initSandboxController();
+                }
             }
         }).catch(e => {
             printError('Error happened during server initialization:', e);
         });
+}
+
+function reinitServer(){
+    return config.init(serverDirPath, projectDirPath)
+        .then(status => {
+            if(status === config.READY){
+                initStructorController();
+                initSandboxController();
+            } else {
+                throw Error('Server reinitialization should not be provided in empty directory.');
+            }
+            return "OK";
+        });
+}
+
+function initDownloadController(){
+    server.app.post('/structor-project-download', bodyParser.json({limit: '50mb'}), (req, res) => {
+        callControllerMethod(downloadController, req, res);
+    });
+    downloadController.setProjectDirPath(projectDirPath);
+    downloadController.setPostInstallationCallback(reinitServer);
+}
+
+function initStructorController(){
+    server.app.post('/structor-invoke', bodyParser.json({limit: '50mb'}), (req, res) => {
+        callControllerMethod(structorController, req, res);
+    });
+    structorController.setServer(server);
+}
+
+function initSandboxController(){
+    server.app.post('/structor-sandbox', bodyParser.json({limit: '50mb'}), (req, res) => {
+        callControllerMethod(sandboxController, req, res);
+    });
+    sandboxController.setServer(server);
 }

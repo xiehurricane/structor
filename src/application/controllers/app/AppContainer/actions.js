@@ -18,8 +18,9 @@ import { success, failed, timeout, close} from '../AppMessage/actions.js';
 import { setReloadPageRequest, executeReloadPageRequest } from '../../workspace/DeskPage/actions.js';
 import { loadComponents } from '../../workspace/LibraryPanel/actions.js';
 
-export const GET_PROJECT_INFO = "AppContainer/GET_PROJECT_INFO";
-export const GET_PROJECT_INFO_DONE = "AppContainer/GET_PROJECT_INFO_DONE";
+export const GET_PROJECT_STATUS = "AppContainer/GET_PROJECT_STATUS";
+export const SET_PROJECT_INFO = "AppContainer/SET_PROJECT_INFO";
+export const SET_PROJECT_PROXY_URL = "AppContainer/SET_PROJECT_PROXY_URL";
 export const SIGN_IN = "AppContainer/SIGN_IN";
 export const SIGN_IN_DONE = "AppContainer/SIGN_IN_DONE";
 export const SIGN_IN_FAILED = "AppContainer/SIGN_IN_FAILED";
@@ -29,13 +30,17 @@ export const SIGN_OUT_DONE = "AppContainer/SIGN_OUT_DONE";
 export const COMPILER_START = "AppContainer/COMPILER_START";
 export const COMPILER_DONE = "AppContainer/COMPILER_DONE";
 export const COMPILER_TIMEOUT = "AppContainer/COMPILER_TIMEOUT";
+
+export const SHOW_DESK = "AppContainer/SHOW_DESK";
+export const SHOW_PROJECTS = "AppContainer/SHOW_PROJECTS";
 export const SHOW_GENERATOR = "AppContainer/SHOW_GENERATOR";
 export const HIDE_GENERATOR = "AppContainer/HIDE_GENERATOR";
 export const SHOW_SANDBOX = "AppContainer/SHOW_SANDBOX";
 export const HIDE_SANDBOX = "AppContainer/HIDE_SANDBOX";
 
-export const getProjectInfo = () => ({ type: GET_PROJECT_INFO });
-export const getProjectInfoDone = (payload) => ({type: GET_PROJECT_INFO_DONE, payload});
+export const getProjectStatus = () => ({ type: GET_PROJECT_STATUS });
+export const setProjectInfo = (info) => ({ type: SET_PROJECT_INFO, payload: info });
+export const setProjectProxyURL = (proxyURL) => ({ type: SET_PROJECT_PROXY_URL, payload: proxyURL });
 export const signIn = (email, password, staySignedIn) => ({type: SIGN_IN, payload: {email, password, staySignedIn}});
 export const signInDone = (payload) => ({type: SIGN_IN_DONE, payload});
 export const signInFailed = (error) => ({type: SIGN_IN_FAILED, payload: error});
@@ -45,6 +50,9 @@ export const signOutDone = () => ({type: SIGN_OUT_DONE});
 export const compilerStart = () => ({ type: COMPILER_START });
 export const compilerDone = () => ({ type: COMPILER_DONE });
 export const compilerTimeout = () => ({ type: COMPILER_TIMEOUT });
+
+export const showDesk = () => ({type: SHOW_DESK});
+export const showProjects = () => ({type: SHOW_PROJECTS});
 export const showGenerator = () => ({type: SHOW_GENERATOR});
 export const hideGenerator = () => ({type: HIDE_GENERATOR});
 export const showSandbox = () => ({type: SHOW_SANDBOX});
@@ -68,5 +76,5 @@ export const handleCompilerMessage = (message) => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    getProjectInfo, getProjectInfoDone, signIn, signInDone, signInFailed, signOut
+    getProjectStatus, signIn, signInDone, signInFailed, signOut
 }, dispatch);

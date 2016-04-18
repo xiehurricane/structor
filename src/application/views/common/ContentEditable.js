@@ -42,7 +42,6 @@ class ContentEditable extends Component {
     handleOnBlur(){
 
         if(this.props.onBlur){
-            console.log('OnBlur....');
             this.props.onBlur({
                 target: {
                     value: this.lastHtml
@@ -82,10 +81,6 @@ class ContentEditable extends Component {
             <span
                 ref="editableElement"
                 className='umy-grid-text-editable'
-                style={{
-                    whiteSpace: 'pre-wrap',
-                    wordWrap: 'break-word'
-                }}
                 onInput={this.emitChange}
                 onBlur={this.handleOnBlur}
                 onKeyDown={this.handleOnKeyDown}

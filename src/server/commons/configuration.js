@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import path from 'path';
-import {forOwn} from 'lodash';
+import {forOwn, get, set} from 'lodash';
 import * as fileManager from './fileManager.js';
 import * as fileParser from './fileParser.js';
 
@@ -23,6 +23,16 @@ export const READY = 'ready-to-go';
 export const EMPTY = 'dir-is-empty';
 
 export const SERVICE_URL = 'http://localhost';
+
+export const STRUCTOR_URLS = [
+    '/structor',
+    '/structor-invoke',
+    '/structor-sandbox',
+    '/structor-deskpage',
+    '/structor-desk',
+    '/structor-sandbox-preview',
+    '/structor-sandbox-screenshot'
+];
 
 let config = {
     status: undefined,
@@ -180,6 +190,30 @@ export function init(serverDirPath, projectDirPath) {
         });
 }
 
+export function rewriteProjectConfigOption(optionPath, optionValue){
+    return fileManager.readJson(config.project.paths.configFilePath)
+        .then(jsonData => {
+            set(jsonData, optionPath, optionValue);
+            return fileManager.writeJson(config.project.paths.configFilePath, jsonData);
+        })
+        .then(() => {
+            return loadProjectConfig();
+        })
+}
+
+export function checkDeniedProxyURL(textUrl){
+    let isDenied = false;
+    if(textUrl){
+        for(let i = 0; i < STRUCTOR_URLS.length; i++){
+            if(textUrl.indexOf(STRUCTOR_URLS[i]) === 0){
+                isDenied = true;
+                break;
+            }
+        }
+    }
+    return isDenied;
+}
+
 export function status() {
     return config.status;
 }
@@ -242,6 +276,10 @@ export function projectId() {
 
 export function getProjectConfig() {
     return config.project;
+}
+
+export function projectProxyURL(){
+    return config.project.conf.proxyURL;
 }
 
 export function sandboxDirPath(){

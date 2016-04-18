@@ -15,14 +15,23 @@
  */
 
 import {forOwn, isObject} from 'lodash';
-import { invokeStructor, invokeSandbox } from './restApi.js';
+import { invokeStructor, invokeSandbox, invokeDownload } from './restApi.js';
 import HtmlComponents, {getSortedHtmlComponents} from '../utils/HtmlComponents.js';
 
+export function getProjectStatus(){
+    return invokeDownload('getProjectStatus', {});
+}
+
+export function getProjectList(){
+    return invokeDownload('getProjectList', {});
+}
+
+export function prepareProject(downloadUrl){
+    return invokeDownload('prepareProject', {downloadUrl});
+}
+
 export function getProjectInfo() {
-    return invokeStructor('getConfig')
-        .then(config => {
-            return {projectConfig: config, projectStatus: config.status};
-        });
+    return invokeStructor('getConfig');
 }
 
 export function initUserCredentialsByToken(token) {
@@ -49,6 +58,10 @@ export function exportProjectModel(model){
     return invokeStructor('saveProjectModel', {model: model}).then(() => {
         return invokeStructor('exportPages', {model: model});
     });
+}
+
+export function setProxyURL(proxyURL){
+    return invokeStructor('setProxyURL', {proxyURL});
 }
 
 export function loadComponentsTree() {

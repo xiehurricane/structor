@@ -31,7 +31,7 @@ class Container extends Component {
         const { componentModel,  userAccountModel, deskPageModel, deskModel } = this.props;
         const { toggleLibraryPanel, togglePageTreeview, toggleQuickOptions } = this.props;
         const { setLivePreviewModeOn, setEditModeOn, reloadPage } = this.props;
-        const { saveProject, exportModel, signOut, showModal } = this.props;
+        const { saveProject, exportModel, signOut, showModal, proxyShowModal } = this.props;
 
         var leftSideStyle = {
             'position': 'absolute',
@@ -59,21 +59,23 @@ class Container extends Component {
                             <span className="fa fa-bars" style={{fontSize: 32}} />
                         </a>
                         <ul className="dropdown-menu" role="menu">
-                            <li><a href="#" onClick={ () => { saveProject(); } }>
+                            <li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); saveProject(); } }>
                                 <span className="fa fa-save fa-fw" />&nbsp;Save project</a>
                             </li>
                             <li className="divider" />
-                            <li><a href="#" onClick={ () => { exportModel(); } }>
+                            <li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); exportModel(); } }>
                                 <span className="fa fa-gift fa-fw" />&nbsp;Export project</a>
                             </li>
                             <li className="divider" />
-                            <li><a href="#" onClick={() => { this.props.showModalProxySetup(); } }>
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); proxyShowModal(); } }>
                                 <span className="fa fa-gears fa-fw" />&nbsp;Proxy settings</a>
                             </li>
+                            {/*
                             <li className="divider" />
                             <li><a href="/structor/docs.html" target="_blank">
                                 <span className="fa fa-paperclip fa-flip-vertical fa-fw"></span>&nbsp;Project documentation</a>
                             </li>
+                             */}
                             <li className="divider" />
                             { userAccountModel.email ?
                                 <li><a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); signOut(); }}>

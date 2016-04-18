@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
-import { serverApi, graphApi } from '../../../api';
-import { pushHistory } from '../HistoryControls/actions.js';
-import { updatePage } from '../DeskPage/actions.js';
 
-export const changeText = (newText, selectedKey) => (dispatch, getState) => {
-    let node = graphApi.getNode(selectedKey);
-    if (node) {
-        dispatch(pushHistory());
-        node.modelNode.text = newText;
-        dispatch(updatePage());
-    }
-};
+import validator from 'validator';
+import { bindActionCreators } from 'redux';
+
+export const HIDE_MODAL = "ProxySetupModal/HIDE_MODAL";
+export const SHOW_MODAL = "ProxySetupModal/SHOW_MODAL";
+export const SAVE = "ProxySetupModal/SAVE";
+
+export const hideModal = () => ({type: HIDE_MODAL});
+export const showModal = () => ({type: SHOW_MODAL});
+export const save = (proxyURL) => ({type: SAVE, payload: proxyURL});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setSelectedKey, changeText
+    hideModal, save
 }, dispatch);

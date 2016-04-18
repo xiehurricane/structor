@@ -35,6 +35,21 @@ export function installPackages(pkgNames, workingDirPath){
         });
 }
 
+export function installDefault(workingDirPath){
+    let oldProgress;
+    return getConfigVariable('progress', workingDirPath)
+        .then(result => {
+            oldProgress = result;
+            return setConfigVariable('progress', 'false', workingDirPath);
+        })
+        .then(() => {
+            return execute(`npm install`, workingDirPath);
+        })
+        .then(() => {
+            return setConfigVariable('progress', oldProgress, workingDirPath);
+        });
+}
+
 export function getConfigVariable(varName, workingDirPath){
     return execute(`npm get ${varName}`, workingDirPath);
 }

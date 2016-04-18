@@ -56,10 +56,10 @@ const depsHelp = marked(`
 * \`isImport\` - tells Structor to include resource into \`{assetsIndexFilePath}\`
 
 **Note**: find ***assetsDirPath*** and ***assetsIndexFilePath*** in project config file in .structor folder
+`);
 
-Example:
- \`\`\`
-{
+const depsExample =
+`{
   "packages":[
     {
       "name": "react-widgets",
@@ -70,10 +70,6 @@ Example:
           "to": "react-widgets/fonts"
         },
         {
-          "from": "dist/img",
-          "to": "react-widgets/img"
-        },
-        {
           "from": "dist/css/react-widgets.css",
           "to": "react-widgets/css/react-widgets.css",
           "isImport": true
@@ -82,12 +78,9 @@ Example:
     },
     {
       "name": "moment",
-      "version": ""
     }
   ]
-}
- \`\`\`
-`);
+}`;
 
 class Container extends Component {
 
@@ -306,6 +299,12 @@ class Container extends Component {
                                 <div style={cellBoxStyle}>
                                     <div style={{width: '100%', paddingTop: '2em'}}>
                                         <div dangerouslySetInnerHTML={{__html: depsHelp }}></div>
+                                    </div>
+                                </div>
+                                <p>Example:</p>
+                                <div style={cellBoxStyle}>
+                                    <div style={{width: '100%'}}>
+                                        <code style={{padding: '0px'}}><pre style={{fontSize: '10px'}}>{depsExample}</pre></code>
                                     </div>
                                 </div>
 

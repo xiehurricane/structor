@@ -18,6 +18,7 @@ import path from 'path';
 import * as config from '../commons/configuration.js';
 import * as fileManager from '../commons/fileManager.js';
 import * as validator from '../commons/validator.js';
+import * as modelParser from '../commons/modelParser.js';
 
 function isFirstCharacterInUpperCase(text){
     if (text && text.length > 0) {
@@ -37,6 +38,17 @@ export function readDefaults(componentName){
         isFirstCharacterInUpperCase(componentName) ? componentName : ('html-' + componentName);
     let filePath = path.join(config.componentDefaultsDirPath(), lookupComponentName + '.json');
     return fileManager.readJson(filePath)
+        .then(fileData => {
+            if(fileData.length > 0){
+                fileData.forEach(data => {
+                    modelParser.cleanModel(data);
+                });
+            }
+            return fileManager.writeJson(filePath, fileData)
+                .then(() => {
+                    return fileData;
+                });
+        })
         .catch( err => {
             return [];
         });
@@ -66,5 +78,10 @@ export function writeComponentSourceCode(filePath, sourceCode){
 }
 
 export function writeProjectJsonModel(jsonObj){
+    if(jsonObj && jsonObj.pages && jsonObj.pages.length > 0){
+        jsonObj.pages.forEach(page => {
+            modelParser.cleanModel(page);
+        });
+    }
     return fileManager.writeJson(config.deskModelFilePath(), jsonObj);
 }

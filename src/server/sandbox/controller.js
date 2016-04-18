@@ -37,7 +37,7 @@ export function setServer(server){
     serverRef = server;
     if(serverRef){
         const sandboxDeskDirPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk');
-        serverRef.app.use('/sandbox-preview', express.static(sandboxDeskDirPath));
+        serverRef.app.use('/structor-sandbox-preview', express.static(sandboxDeskDirPath));
         const screenshotStorage = multer.diskStorage({
             destination: (req, file, cb) => {
                 cb(null, path.join(sandboxDeskDirPath, 'assets', 'img'));
@@ -47,8 +47,7 @@ export function setServer(server){
             }
         });
         const upload = multer({storage: screenshotStorage});
-        serverRef.app.post('/sandbox-screenshot', upload.single('screenshot'), (req, res, next) => {
-            console.log('Uploaded...');
+        serverRef.app.post('/structor-sandbox-screenshot', upload.single('screenshot'), (req, res, next) => {
             console.log(req.file);
             res.status(204).end();
         });

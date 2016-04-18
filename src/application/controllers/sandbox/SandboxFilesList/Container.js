@@ -205,7 +205,7 @@ class Container extends Component {
                     </Grid>
                 </Tab>
                 <Tab key={'livePreview'} eventKey={2} title="Live component preview">
-                    <iframe ref="livePreviewFrame" style={iframeStyle} frameBorder="0" src="/sandbox-preview/index.html" />
+                    <iframe ref="livePreviewFrame" style={iframeStyle} frameBorder="0" src="/structor-sandbox-preview/index.html" />
                 </Tab>
             </Tabs>
         );

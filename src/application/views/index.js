@@ -21,12 +21,13 @@ import CheckboxStateful from './common/CheckboxStateful.js';
 import GeneratorKeyTitleView from './common/GeneratorKeyTitleView.js';
 // app
 import MainFrame from './app/MainFrame.js';
-
+import ProjectPanel from './app/ProjectPanel.js';
 // workspace
 import PageComponentForm from './workspace/PageComponentForm.js';
 import PageTreeViewItem from './workspace/PageTreeViewItem.js';
 import PageTreeViewItemText from './workspace/PageTreeViewItemText.js';
 import AceEditor from './workspace/AceEditor.js';
+import ProxyInput from './workspace/ProxyInput.js';
 
 export {
     ContentEditable,
@@ -37,5 +38,7 @@ export {
     AceEditor,
     InputTextStateful,
     CheckboxStateful,
-    GeneratorKeyTitleView
+    GeneratorKeyTitleView,
+    ProxyInput,
+    ProjectPanel
 }

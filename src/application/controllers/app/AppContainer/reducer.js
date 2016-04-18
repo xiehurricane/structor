@@ -30,7 +30,7 @@ const initialState = {
         error: undefined
     },
     packageConfig: {},
-    projectStatus: undefined,
+    proxyURL: undefined,
     workspaceMode: undefined
 };
 
@@ -38,22 +38,19 @@ export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
 
-    if(type === actions.GET_PROJECT_INFO_DONE){
+    if(type === actions.SET_PROJECT_INFO){
 
         return Object.assign({}, state, {
-            packageConfig: payload.projectConfig.server.packageConf,
-            projectStatus: payload.projectConfig.status,
-            workspaceMode: 'desk'
+            proxyURL: payload.project.conf.proxyURL,
+            packageConfig: payload.server.packageConf
         });
     }
 
-    //if(type === actions.SIGN_IN){
-    //    return Object.assign({}, state, {
-    //        authentication: {
-    //            error: null
-    //        }
-    //    });
-    //}
+    if(type === actions.SET_PROJECT_PROXY_URL){
+        return Object.assign({}, state, {
+            proxyURL: payload
+        });
+    }
 
     if(type === actions.SIGN_IN_DONE){
         return Object.assign({}, state, {
@@ -80,6 +77,18 @@ export default (state = initialState, action = {}) => {
     if(type === actions.SIGN_OUT_DONE){
         return Object.assign({}, state, {
             userAccount: initialState.userAccount
+        });
+    }
+
+    if(type === actions.SHOW_DESK){
+        return Object.assign({}, state, {
+            workspaceMode: 'desk'
+        });
+    }
+
+    if(type === actions.SHOW_PROJECTS){
+        return Object.assign({}, state, {
+            workspaceMode: 'projects'
         });
     }
 

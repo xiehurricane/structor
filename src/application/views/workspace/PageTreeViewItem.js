@@ -50,7 +50,7 @@ class PageTreeViewItem extends Component {
         }
 
         const linkStyle = {outline: 'none', color: '#2185D0'};
-        const propsStyle = {margin: '0 0 0 0.5em'};
+        const propsStyle = {margin: '0 0 0 0.5em', fontWeight: '200', cursor: 'pointer'};
         let label = this.props.type;
         let props = printProps(this.props.modelProps);
 
@@ -61,7 +61,7 @@ class PageTreeViewItem extends Component {
                     <a key={'toplink'} href="#" onClick={this.handleClick} style={linkStyle}>
                         <span>{label}</span>
                     </a>
-                    <span className="text-muted" style={propsStyle}>{props}</span>
+                    { props ? <span className="text-muted" onClick={this.handleClick} style={propsStyle}>{props}</span> : null }
                     <span>{'>'}</span>
                     {this.props.children}
                     <span>{'<'}</span>
@@ -78,7 +78,7 @@ class PageTreeViewItem extends Component {
                     <a href="#" onClick={this.handleClick} style={linkStyle}>
                         <span>{label}</span>
                     </a>
-                    <span className="text-muted" style={propsStyle}>{props}</span>
+                    { props ? <span className="text-muted" onClick={this.handleClick} style={propsStyle}>{props}</span> : null }
                     <span>{'/>'}</span>
                 </li>
             );

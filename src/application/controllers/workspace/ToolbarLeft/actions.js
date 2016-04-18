@@ -19,6 +19,7 @@ import { reloadPage, setEditModeOn, setLivePreviewModeOn, saveModel, exportModel
 import { toggleLibraryPanel, toggleQuickOptions, togglePageTreeview} from '../Desk/actions.js';
 import { signOut } from '../../app/AppContainer/actions.js'
 import { showModal } from '../../app/SignInModal/actions.js';
+import { showModal as proxyShowModal } from '../../app/ProxySetupModal/actions.js';
 
 export const saveProject = () => (dispatch, getState) => {
     dispatch(saveModel());
@@ -27,5 +28,5 @@ export const saveProject = () => (dispatch, getState) => {
 
 export const containerActions = (dispatch) => bindActionCreators({
     reloadPage, setEditModeOn, setLivePreviewModeOn, saveProject, exportModel,
-    toggleLibraryPanel, toggleQuickOptions, togglePageTreeview, showModal, signOut
+    toggleLibraryPanel, toggleQuickOptions, togglePageTreeview, showModal, signOut, proxyShowModal
 }, dispatch);

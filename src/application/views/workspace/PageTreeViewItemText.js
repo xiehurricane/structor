@@ -92,7 +92,7 @@ class PageTreeViewItemText extends Component {
                     style={{position: 'relative', fontWeight: '200'}}
                     onClick={this.handleTextClick}>
 
-                    {this.props.textValue}
+                    {this.props.textValue ? this.props.textValue : <small>empty</small>}
                 </span>
             );
         }

@@ -132,7 +132,7 @@ class Container extends Component {
                            onClick={() => {removeFromRecentGenerators(generatorId);}}></i>
                         : null
                     }
-                    <h5 style={ { marginBottom : "1.5em", position: 'relative'} }>
+                    <h5 style={ { marginBottom : "1em", position: 'relative'} }>
                         <small style={ {    "marginRight": "0.5em"} } >Key :</small>
                         <GeneratorKeyTitleView generatorKey={generatorKey} />
                     </h5>
@@ -154,7 +154,7 @@ class Container extends Component {
                                 md={ 8 }
                                 sm={ 8 }
                                 lg={ 8 }>
-                                <div style={{height: '10em', overflow: 'hidden', marginBottom: '1em'}}>
+                                <div style={{height: '10em', overflow: 'auto', marginBottom: '1em'}}>
                                     <div dangerouslySetInnerHTML={{__html: brief}}></div>
                                 </div>
                             </Col>

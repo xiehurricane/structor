@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import express from 'express';
 import rewrite from 'express-urlrewrite';
+import httpProxy from 'http-proxy';
 import * as config from '../commons/configuration.js';
 import * as indexManager from '../commons/indexManager.js';
 import * as clientManager from '../commons/clientManager.js';
@@ -24,6 +26,7 @@ import * as generatorManager from './generatorManager.js';
 import * as exportManager from './exportManager.js';
 
 let serverRef = undefined;
+let proxy = undefined;
 
 export function loopback(options){
     return Promise.resolve('Response: ' + options.message);
@@ -35,17 +38,60 @@ export function error(options){
 
 export function setServer(server){
     serverRef = server;
-    serverRef.app.use(middlewareCompilerManager.getDevMiddleware());
-    serverRef.app.use(middlewareCompilerManager.getHotMiddleware());
-    serverRef.app.use(middlewareCompilerManager.getBuilderMiddleware({
-        callback: stats => {
-            if(serverRef.ioSocketClient){
-                serverRef.ioSocketClient.emit('compiler.message', stats);
+    if(config.status() === config.READY){
+        initServer();
+        initProxyServer();
+    }
+}
+
+function initServer(){
+    if(serverRef){
+        serverRef.app.use(middlewareCompilerManager.getDevMiddleware());
+        serverRef.app.use(middlewareCompilerManager.getHotMiddleware());
+        serverRef.app.use(middlewareCompilerManager.getBuilderMiddleware({
+            callback: stats => {
+                if(serverRef.ioSocketClient){
+                    serverRef.ioSocketClient.emit('compiler.message', stats);
+                }
             }
+        }));
+        serverRef.app.use(rewrite('/structor-deskpage/*', '/structor-desk/index.html'));
+        serverRef.app.use('/structor-desk', express.static(config.deskDirPath()));
+    }
+}
+
+function initProxyServer(){
+    if(serverRef){
+        if(!proxy && config.projectProxyURL()){
+            proxy = httpProxy.createProxyServer({});
+            proxy.on('error', (err, req, res) => {
+                const statusText = 'Proxy server error connecting to ' + config.projectProxyURL() + req.url + " " + (err.message ? err.message : err);
+                res.writeHead(500, statusText);
+                res.end(statusText);
+                console.error(statusText);
+            });
+            proxy.on('proxyReq', () => {
+                const proxyURL = config.projectProxyURL().replace('http://', '');
+                return (proxyReq, req, res, options) => {
+                    proxyReq.setHeader('X-Forwarded-Host', proxyURL);
+                }
+            });
+            //
+            serverRef.app.all('/*', (req, res, next) => {
+                let url = req.url;
+                if (config.checkDeniedProxyURL(url)) {
+                    next('route');
+                } else {
+                    let proxyURL = config.projectProxyURL();
+                    if(proxyURL && proxyURL.length > 0){
+                        proxy.web(req, res, { target: proxyURL });
+                    } else {
+                        next('route');
+                    }
+                }
+            });
         }
-    }));
-    serverRef.app.use(rewrite('/deskpage/*', '/desk/index.html'));
-    serverRef.app.use('/desk', express.static(config.deskDirPath()));
+    }
 }
 
 export function getModel(){
@@ -54,6 +100,13 @@ export function getModel(){
 
 export function getConfig(){
     return Promise.resolve(config.asObject());
+}
+
+export function setProxyURL(options){
+    return config.rewriteProjectConfigOption('proxyURL', options.proxyURL)
+        .then(() => {
+            initProxyServer();
+        });
 }
 
 export function getComponentsTree(){

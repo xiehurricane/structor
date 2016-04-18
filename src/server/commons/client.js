@@ -56,6 +56,8 @@ export function post(url, requestBody) {
                                 reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                             } else if (response.statusCode === 401) {
                                 reject('User account is not authenticated. Please sign in to Structor Market.');
+                            } else if (response.statusCode === 502) {
+                                reject('Connection to Structor Market server can not be established. Please try a little bit later.');
                             } else {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
@@ -115,6 +117,8 @@ export function get(url) {
                                 reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                             } else if (response.statusCode === 401) {
                                 reject('User account is not authenticated. Please sign in to Structor Market.');
+                            } else if (response.statusCode === 502) {
+                                reject('Connection to Structor Market server can not be established. Please try a little bit later.');
                             } else {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
@@ -162,6 +166,8 @@ export function getText(url) {
                                 reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                             } else if (response.statusCode === 401) {
                                 reject('User account is not authenticated. Please sign in to Structor Market.');
+                            } else if (response.statusCode === 502) {
+                                reject('Connection to Structor Market server can not be established. Please try a little bit later.');
                             } else {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
@@ -211,6 +217,8 @@ export function download(url, requestBody) {
                                 reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                             } else if (response.statusCode === 401) {
                                 reject('User account is not authenticated. Please sign in to Structor Market.');
+                            } else if (response.statusCode === 502) {
+                                reject('Connection to Structor Market server can not be established. Please try a little bit later.');
                             } else {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
@@ -260,6 +268,8 @@ export function downloadGet(url) {
                                 reject('User account is not signed in. Requested operation is forbidden.');
                             } else if (response.statusCode === 401) {
                                 reject('User account is not authenticated.');
+                            } else if (response.statusCode === 502) {
+                                reject('Connection to Structor Market server can not be established. Please try a little bit later.');
                             } else {
                                 reject('Got error code ' + response.statusCode + '. Error: ' + response.statusMessage);
                             }

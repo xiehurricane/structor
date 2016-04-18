@@ -175,7 +175,7 @@ class Container extends Component {
 
         if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
             var domNode = ReactDOM.findDOMNode(this);
-            domNode.src = '/deskpage' + componentModel.currentPagePath;
+            domNode.src = '/structor-deskpage' + componentModel.currentPagePath;
         } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
             if(this.contentWindow){
                 // only when page is already loaded
@@ -231,7 +231,7 @@ class Container extends Component {
 
     render(){
         const { componentModel: {currentPagePath} } = this.props;
-        return (<iframe {...this.props} src="/deskpage/" />);
+        return (<iframe {...this.props} src="/structor-deskpage/" />);
     }
 
 }

@@ -19,6 +19,8 @@ import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
+import {Button} from 'react-bootstrap';
+
 import DeskPage from '../DeskPage';
 import ToolbarLeft from '../ToolbarLeft';
 import ToolbarTop from '../ToolbarTop';
@@ -34,7 +36,7 @@ class Container extends Component {
     }
 
     render(){
-        const {componentModel, deskPageModel} = this.props;
+        const {componentModel, deskPageModel, togglePageTreeview} = this.props;
         let leftPanelWidth = 0;
         let leftPanelInner = null;
         if(componentModel.isLibraryPanelActive && !deskPageModel.isLivePreviewModeOn){
@@ -174,6 +176,19 @@ class Container extends Component {
                     </div>
                 </div>
                 <div style={bottomPanelStyle}>
+                    <Button bsSize='xsmall'
+                            style={{
+                                padding: '0.2em',
+                                position: 'absolute',
+                                top: '2px',
+                                left: '2px',
+                                width: '2em',
+                                height: '2em',
+                                zIndex: '1030'
+                            }}
+                            onClick={(e) => {togglePageTreeview()}}>
+                        <span className='fa fa-times fa-fw'></span>
+                    </Button>
                     {bottomPanelInner}
                 </div>
             </div>

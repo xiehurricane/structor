@@ -41,13 +41,14 @@ import generatorReducer from '../controllers/generator/Generator/reducer.js';
 import generatorListReducer from '../controllers/generator/GeneratorList/reducer.js';
 import generatorBriefPanelReducer from '../controllers/generator/GeneratorBriefPanel/reducer.js';
 import metadataFormReducer from '../controllers/generator/MetadataForm/reducer.js';
-import projectGalleryReducer from '../controllers/projects/ProjectGallery/reducer.js';
 import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
 import sourceFilesListReducer from '../controllers/generator/SourceFilesList/reducer.js';
 import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
 import generatorCardReducer from '../controllers/sandbox/GeneratorCard/reducer.js';
 import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
 import sandboxFilesListReducer from '../controllers/sandbox/SandboxFilesList/reducer.js';
+import proxySetupModalReducer from '../controllers/app/ProxySetupModal/reducer.js';
+import projectGalleryReducer from '../controllers/app/ProjectGallery/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -75,13 +76,14 @@ const reducer = combineReducers({
     generatorList: generatorListReducer,
     generatorBriefPanel: generatorBriefPanelReducer,
     metadataForm: metadataFormReducer,
-    projectGallery: projectGalleryReducer,
     signInModal: signInModalReducer,
     sourceFilesList: sourceFilesListReducer,
     sandbox: sandboxReducer,
     generatorCard: generatorCardReducer,
     generatorTemplate: generatorTemplateReducer,
-    sandboxFilesList: sandboxFilesListReducer
+    sandboxFilesList: sandboxFilesListReducer,
+    proxySetupModal: proxySetupModalReducer,
+    projectGallery: projectGalleryReducer
 });
 
 export default reducer;

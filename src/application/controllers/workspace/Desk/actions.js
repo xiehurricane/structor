@@ -33,5 +33,5 @@ export const toggleLibraryPanel = () => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    changeViewportWidth
+    changeViewportWidth, togglePageTreeview
 }, dispatch);
