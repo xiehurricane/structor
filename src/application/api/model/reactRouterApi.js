@@ -19,7 +19,7 @@ import { matchPattern, formatPattern, getParams } from 'react-router/lib/Pattern
 export function getAvailableRoute(existingRoutes, checkPathname){
     let candidateRootKey = undefined;
     if(existingRoutes && existingRoutes.length > 0){
-        if(checkPathname === '/' || checkPathname.indexOf('/structor-deskpage') === 0){
+        if(checkPathname === '/' || checkPathname === '/structor-deskpage' || checkPathname === '/structor-deskpage/'){
             candidateRootKey = existingRoutes[0];
         } else {
             try{
