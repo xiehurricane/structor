@@ -32,14 +32,14 @@ export const pushHistory = () => (dispatch, getState) => {
 export const popHistory = () => (dispatch, getState) => {
     let historyObject = graphApi.popHistory();
     if(historyObject){
+        dispatch(removeClipboardKeys());
+        dispatch(removeSelectedKeys());
+        dispatch(resetPages());
+        dispatch(updatePage());
         const {pagePath} = historyObject;
         if(pagePath){
             dispatch(changePageRoute(pagePath));
         }
-        dispatch(resetPages());
-        dispatch(removeSelectedKeys());
-        dispatch(removeClipboardKeys());
-        dispatch(updatePage());
         dispatch({type: UPDATE_HISTORY_COUNTER});
     }
 };

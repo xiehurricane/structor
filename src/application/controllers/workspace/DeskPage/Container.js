@@ -43,6 +43,8 @@ class Container extends Component {
         super(props);
         this.handleComponentClick = this.handleComponentClick.bind(this);
         this.handlePathnameChanged = this.handlePathnameChanged.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.setupShortcuts = this.setupShortcuts.bind(this);
     }
 
     componentDidMount(){
@@ -57,7 +59,7 @@ class Container extends Component {
         loadPage();
         this.contentDocument = domNode.contentDocument;
         this.contentWindow = domNode.contentWindow;
-
+        this.setupShortcuts();
         domNode.onload = ( () => {
 
             this.contentWindow.onPageDidMount = (page, pathname) => {
@@ -84,10 +86,10 @@ class Container extends Component {
                     loadOptions(currentComponent);
                 });
 
-                page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]) });
-                page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]) });
-                page.bindToState('onClone', (key, isModifier) => { cloneSelected() });
-                page.bindToState('onDelete', (key, isModifier) => { deleteSelected() });
+                page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]); });
+                page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]); });
+                page.bindToState('onClone', (key, isModifier) => { cloneSelected(); });
+                page.bindToState('onDelete', (key, isModifier) => { deleteSelected(); });
 
                 page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key); });
                 page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key); });
@@ -203,6 +205,7 @@ class Container extends Component {
     }
 
     componentDidUpdate(){
+        this.setupShortcuts();
         if(this.page){
             if(this.doUpdatePageModel){
                 const { componentModel } = this.props;
@@ -227,6 +230,98 @@ class Container extends Component {
     handlePathnameChanged(pathname){
         const { changePageRouteFeedback } = this.props;
         changePageRouteFeedback(pathname);
+    }
+
+    handleKeyDown(e){
+        //console.log('Key is down:' + e.which);
+        //console.log('ActiveElement: ' + document.activeElement);
+
+        let contentEditableElement = document.activeElement.attributes['contenteditable']
+            ? document.activeElement.attributes['contenteditable'].value : false;
+        let elementNameUpperCase = document.activeElement.tagName.toUpperCase();
+        if(elementNameUpperCase !== 'INPUT'
+            && elementNameUpperCase !== 'TEXTAREA'
+            && elementNameUpperCase !== 'SELECT'
+            && !contentEditableElement
+            && !window.getSelection().toString()){
+            if (e.which === 8 || e.which === 46) { // Del or Backspace key
+                const { deleteSelected } = this.props;
+                e.stopPropagation();
+                e.preventDefault();
+                deleteSelected();
+            } else if (e.metaKey || e.ctrlKey) {
+                const { selectionBreadcrumbsModel:{selectedKeys} } = this.props;
+                const { clipboardIndicatorModel:{clipboardKeys} } = this.props;
+                const { setForCuttingKeys, setForCopyingKeys } = this.props;
+                const { pasteBefore, pasteAfter, pasteFirst } = this.props;
+                const { cloneSelected, popHistory } = this.props;
+
+                switch (e.which) {
+                    case 68: // D key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        cloneSelected();
+                        break;
+                    case 67: // C key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if(selectedKeys && selectedKeys.length > 0){
+                            setForCopyingKeys(selectedKeys);
+                        }
+                        break;
+                    case 65: // A key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if(selectedKeys && selectedKeys.length === 1 && clipboardKeys && clipboardKeys.length > 0){
+                            pasteBefore(selectedKeys[0]);
+                        }
+                        break;
+                    case 73: // I key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if(selectedKeys && selectedKeys.length === 1 && clipboardKeys && clipboardKeys.length > 0){
+                            pasteFirst(selectedKeys[0]);
+                        }
+                        break;
+                    case 86: // V key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if(selectedKeys && selectedKeys.length === 1 && clipboardKeys && clipboardKeys.length > 0){
+                            pasteAfter(selectedKeys[0]);
+                        }
+                        break;
+                    case 88: // X key
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if(selectedKeys && selectedKeys.length > 0){
+                            setForCuttingKeys(selectedKeys);
+                        }
+                        break;
+                    case 90: // Z key
+                        popHistory();
+                        e.stopPropagation();
+                        e.preventDefault();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    setupShortcuts(){
+        const { componentModel:{isEditModeOn} } = this.props;
+        if(isEditModeOn){
+            if(this.contentWindow){
+                this.contentWindow.addEventListener('keydown', this.handleKeyDown, false);
+            }
+            window.addEventListener('keydown', this.handleKeyDown, false);
+        } else {
+            if(this.contentWindow) {
+                this.contentWindow.removeEventListener('keydown', this.handleKeyDown, false);
+            }
+            window.removeEventListener('keydown', this.handleKeyDown, false);
+        }
     }
 
     render(){

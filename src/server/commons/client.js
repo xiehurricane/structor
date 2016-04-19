@@ -290,66 +290,66 @@ export function downloadGet(url) {
 
 }
 
-//upload(option, isAuth = false) {
-//    return new Promise( (resolve, reject) => {
-//        const url = option.url;
-//        let requestOptions = {
-//            uri: url,
-//            method: 'POST'
-//        };
-//        if (isAuth) {
-//            if (this.sm.getIn('client.user') && this.sm.getIn('client.pass')) {
-//                requestOptions.auth = {
-//                    'user': this.sm.getIn('client.user'),
-//                    'pass': this.sm.getIn('client.pass'),
-//                    'sendImmediately': true
-//                }
-//            } else {
-//                reject('Specify user name and password or create new account.');
-//            }
-//        }
-//        requestOptions.formData = {};
-//        if (option.filePaths && option.filePaths.length > 0) {
-//            option.filePaths.map( (filePath, index) => {
-//                requestOptions.formData['file_' + index] = fs.createReadStream(filePath);
-//            });
-//        } else {
-//            reject('Files for uploading were not specified.');
-//        }
-//        try {
-//            request(
-//                requestOptions,
-//                (error, response, body) => {
-//                    if (response) {
-//                        if (response.statusCode !== 200) {
-//                            if (response.statusCode === 401) {
-//                                reject('User account is not authenticated. Please sign in to Structor Market.');
-//                            } else {
-//                                reject('Got error code ' + response.statusCode + ' processing request to ' + url);
-//                            }
-//                        } else if (error) {
-//                            reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
-//                        } else if (body) {
-//                            if (body.error === true) {
-//                                let errorMessage = "Error: ";
-//                                if(body.errors && body.errors.length > 0){
-//                                    body.errors.map( errorStr => {
-//                                        errorMessage += errorStr + ', ';
-//                                    });
-//                                }
-//                                reject(errorMessage.substr(0, errorMessage.length - 2));
-//                            } else {
-//                                resolve(body.data);
-//                            }
-//                        }
-//                    } else {
-//                        reject('Error connection to ' + this.sm.getIn('client.serviceURL'));
-//                    }
-//                }
-//            )
-//        } catch (e) {
-//            reject('Error: ' + e.message);
-//        }
-//    });
-//}
+export function uploadFile(url, filePath, fieldName) {
+    return new Promise((resolve, reject) => {
+        var requestOptions = {
+            uri: url,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=UTF-8',
+                'X-Auth-Token': authenticationToken
+            },
+            method: 'POST',
+            followAllRedirects: false,
+            formData: {}
+        };
+        requestOptions.formData[fieldName] = fs.createReadStream(filePath);
+        try {
+            request(
+                requestOptions,
+                (error, response, body) => {
+                    if (response) {
 
+                        if (response.statusCode !== 200) {
+                            if (response.statusCode >= 301 && response.statusCode <= 302) {
+                                post(response.headers.location, requestBody)
+                                    .then(data => {
+                                        resolve(data);
+                                    })
+                                    .catch(err => {
+                                        reject(err);
+                                    });
+                            } else if (response.statusCode === 403) {
+                                reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
+                            } else if (response.statusCode === 401) {
+                                reject('User account is not authenticated. Please sign in to Structor Market.');
+                            } else if (response.statusCode === 502) {
+                                reject('Connection to Structor Market server can not be established. Please try a little bit later.');
+                            } else {
+                                reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
+                            }
+                        } else if (error) {
+                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
+                        } else {
+                            if (body.error === true) {
+                                let errorMessage = "Error: ";
+                                if (body.errors && body.errors.length > 0) {
+                                    body.errors.map(errorStr => {
+                                        errorMessage += errorStr + ', ';
+                                    });
+                                }
+                                reject(errorMessage.substr(0, errorMessage.length - 2));
+                            } else {
+                                resolve(body);
+                            }
+                        }
+                    } else {
+                        reject('Error connection to ' + url);
+                    }
+                }
+            )
+        } catch (e) {
+            reject(e.message ? e.message : e.toString());
+        }
+    });
+}

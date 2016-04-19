@@ -23,7 +23,7 @@ import { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace } from '..
 import { setSelectedKey, resetSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 import { cloneSelected, deleteSelected } from '../SelectionControls/actions.js';
 import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { pushHistory } from '../HistoryControls/actions.js';
+import { pushHistory, popHistory } from '../HistoryControls/actions.js';
 import { loadComponents, setDefaultVariant, hidePreviewComponent, selectVariant } from '../LibraryPanel/actions.js';
 import { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } from '../LibraryPanel/actions.js';
 
@@ -168,5 +168,6 @@ export const containerActions = (dispatch) => bindActionCreators({
     pasteFirst, pasteLast, pasteReplace,
     cloneSelected, deleteSelected,
     setDefaultVariant, hidePreviewComponent, selectVariant,
-    quickBefore, quickAfter, quickFirst, quickLast, quickReplace
+    quickBefore, quickAfter, quickFirst, quickLast, quickReplace,
+    popHistory
 }, dispatch);
