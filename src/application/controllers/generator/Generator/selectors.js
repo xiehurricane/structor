@@ -15,7 +15,9 @@
  */
 
 import { createStructuredSelector } from 'reselect';
+import { userAccountSelector } from '../../app/AppContainer/selectors.js';
 
 export const modelSelector = createStructuredSelector({
-    componentModel: state => state.generator
+    componentModel: state => state.generator,
+    userAccount: userAccountSelector
 });

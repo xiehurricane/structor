@@ -41,7 +41,6 @@ class Container extends Component {
         });
         const contentWindow = this.refs.livePreviewFrame.contentWindow;
         contentWindow.onPageDidMount = () => {
-            console.log('Live preview page was mounted');
             this.props.setAvailableToPublish(true);
             this.props.success('Test component source code has been compiled successfully. Look at the live preview.');
         };

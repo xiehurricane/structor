@@ -20,6 +20,7 @@ import { graphApi, serverApi } from '../../../api';
 import { hideGenerator } from '../../app/AppContainer/actions.js';
 //import { started, done } from '../../app/AppSpinner/actions.js';
 import { failed } from '../../app/AppMessage/actions.js';
+import { showModal as showSignIn } from '../../app/SignInModal/actions.js';
 
 export const STAGE1 = 'STAGE1';
 export const STAGE2 = 'STAGE2';
@@ -106,14 +107,14 @@ export const saveGenerated = () => (dispatch, getState) => {
     const {generator: {generatedData: {files, dependencies}}} = getState();
     const {metadataForm: {groupName, componentName}} = getState();
     dispatch({type: SAVE_GENERATED, payload: {selectedKey: selectedKeys[0], groupName, componentName, files, dependencies}});
+
 };
 
 export const hide = () => (dispatch, getState) => {
     dispatch(stepToStage(STAGE1));
     dispatch(hideGenerator());
-    console.log('Generator is closed');
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hide, stepToStage
+    hide, stepToStage, showSignIn
 }, dispatch);

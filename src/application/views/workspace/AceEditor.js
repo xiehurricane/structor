@@ -31,7 +31,6 @@ class AceEditor extends Component {
         if (!this.editor) {
             //
             let domNode = this.refs.editorElement;
-            console.log('DOM node: ' + domNode);
             this.editor = ace.edit(domNode);
             this.editor.getSession().setMode(this.props.mode);
             this.editor.getSession().setTabSize(4);
@@ -43,7 +42,6 @@ class AceEditor extends Component {
             this.editor.on('blur', this.handleBlur);
             this.editor.on('focus', this.handleFocus);
             this.isFocused = false;
-            console.log('Editor is initialized');
         }
         if (sourceCode) {
             this.editor.getSession().setValue(sourceCode);

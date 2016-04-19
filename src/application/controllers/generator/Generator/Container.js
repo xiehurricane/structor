@@ -31,6 +31,7 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.handleOnStep = this.handleOnStep.bind(this);
+        this.handleOnSignIn = this.handleOnSignIn.bind(this);
     }
 
     componentDidMount(){
@@ -51,10 +52,15 @@ class Container extends Component {
         }
     }
 
+    handleOnSignIn(e){
+        e.stopPropagation();
+        e.preventDefault();
+        this.props.showSignIn();
+    }
+
     render(){
 
-        const { componentModel: {stage}, hide } = this.props;
-        console.log('Stage is: ' + stage);
+        const { componentModel: {stage}, hide, userAccount} = this.props;
         const toolbarLabelStyle = {
             margin: '0 1em'
         };
@@ -92,6 +98,15 @@ class Container extends Component {
             toolbar = (
                 <ButtonGroup bsSize="xs">
                     {closeButton}
+                    {userAccount.userId ?
+                        null :
+                        <Button bsStyle="warning"
+                                onClick={this.handleOnSignIn}>
+                            <span style={toolbarLabelStyle}>
+                                Sign in to market
+                            </span>
+                        </Button>
+                    }
                 </ButtonGroup>
             );
             header = (<h4 className="text-center">Select component source code generator</h4>);

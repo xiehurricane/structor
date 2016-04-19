@@ -20,7 +20,6 @@ export default function webpackBuilderMiddleware(compiler, opts){
     compiler.plugin('done', stats => {
         if(opts.callback){
             stats = stats.toJson();
-            console.log('Compiler done: ');
             opts.callback({
                 status: 'done',
                 time: stats.time,
@@ -32,7 +31,6 @@ export default function webpackBuilderMiddleware(compiler, opts){
     });
 
     compiler.plugin('compilation', (c, params) => {
-        console.log('Compiler start compilation');
         if(opts.callback){
             opts.callback({ status: 'start' });
         }

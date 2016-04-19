@@ -42,7 +42,6 @@ function* signInByToken(){
 function* signIn(){
     while(true){
         const {payload: {email, password, staySignedIn}} = yield take(actions.SIGN_IN);
-        console.log('Receive signal sign in: ', email, password, staySignedIn);
         if(!email || email.length <= 0){
             yield put(actions.signInFailed('Please enter e-mail address value'));
         } else if( !validator.isEmail(email) ){

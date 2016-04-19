@@ -159,7 +159,6 @@ class Container extends Component {
     render(){
         const { componentModel: {templateObject, activeTemplate} } = this.props;
         const {templates, dependencies, metadata, metahelp, readme, model} = templateObject;
-        console.log(JSON.stringify(model, null, 4));
         const cellBoxStyle = {
             display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'
         };

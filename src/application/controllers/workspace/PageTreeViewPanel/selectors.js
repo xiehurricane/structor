@@ -16,10 +16,12 @@
 
 import { createStructuredSelector } from 'reselect';
 
+import { selectedKeysSelector } from '../SelectionBreadcrumbs/selectors.js';
+
 export const modelSelector = createStructuredSelector({
     componentModel: state => state.pageTreeViewPanel,
     deskPageModel: state => state.deskPage,
-    selectionBreadcrumbsModel: state => state.selectionBreadcrumbs,
+    currentSelectedKeys: selectedKeysSelector,
     deskModel: state => state.desk
 });
 

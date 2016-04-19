@@ -136,7 +136,6 @@ export function doGeneration(projectModel) {
                 );
             })
             .then(templateObjects => {
-                console.log('Export templates count: ' + templateObjects.length);
                 generatedObject.outputDirPath = projectDataObj.outputDirPath;
                 templateObjects.forEach(obj => {
                     //console.log(JSON.stringify(obj, null, 4));
@@ -176,7 +175,6 @@ export function commitGeneration(generatedObj) {
             return fileManager.ensureFilePath(page.pageOutputFilePath)
                 .then(() => {
                     const ext = path.extname(page.pageOutputFilePath);
-                    console.log('Writing new exported file: ' + page.pageOutputFilePath);
                     return fileManager.writeFile(
                         page.pageOutputFilePath,
                         page.pageSourceCode,

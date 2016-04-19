@@ -186,7 +186,6 @@ export function saveAndGenerateSandboxComponent(sampleId, filesObject){
         })
         .then(generatedData => {
             resultGeneratedData = generatedData;
-            console.log(JSON.stringify(resultGeneratedData, null, 4));
             return invokeSandbox('saveSandboxGenerated', generatedData);
         })
         .then(() => {

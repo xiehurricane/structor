@@ -51,7 +51,7 @@ function printError(message, error){
 function callControllerMethod(controller, req, res){
     let methodName = req.body.methodName;
     let data = req.body.data || {};
-    console.log('Calling controller method: ' + methodName);
+    //console.log('Calling controller method: ' + methodName);
     if(controller[methodName]){
         controller[methodName](data)
             .then( response => {

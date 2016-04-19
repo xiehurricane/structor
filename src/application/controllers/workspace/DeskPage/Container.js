@@ -45,6 +45,7 @@ class Container extends Component {
         this.handlePathnameChanged = this.handlePathnameChanged.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.setupShortcuts = this.setupShortcuts.bind(this);
+        this.removeShortcuts = this.removeShortcuts.bind(this);
     }
 
     componentDidMount(){
@@ -164,10 +165,16 @@ class Container extends Component {
         });
     }
 
+    componentWillUnmount(){
+        this.removeShortcuts();
+        this.contentDocument = undefined;
+        this.contentWindow = undefined;
+        this.page = undefined;
+    }
 
     componentWillUpdate(nextProps, nextState){
 
-        //console.log('DeskPage will update...');
+        this.removeShortcuts();
 
         this.doUpdatePageModel = false;
         this.doUpdateMarks = false;
@@ -317,11 +324,15 @@ class Container extends Component {
             }
             window.addEventListener('keydown', this.handleKeyDown, false);
         } else {
-            if(this.contentWindow) {
-                this.contentWindow.removeEventListener('keydown', this.handleKeyDown, false);
-            }
-            window.removeEventListener('keydown', this.handleKeyDown, false);
+            this.removeShortcuts();
         }
+    }
+
+    removeShortcuts(){
+        if(this.contentWindow) {
+            this.contentWindow.removeEventListener('keydown', this.handleKeyDown, false);
+        }
+        window.removeEventListener('keydown', this.handleKeyDown, false);
     }
 
     render(){

@@ -23,7 +23,9 @@ import * as generatorListActions from '../GeneratorList/actions.js';
 import * as metadataFormActions from '../MetadataForm/actions.js';
 import * as appContainerActions from '../../app/AppContainer/actions.js';
 import * as deskPageActions from '../../workspace/DeskPage/actions.js';
+import * as clipboardIndicatorActions from '../../workspace/ClipboardIndicator/actions.js';
 import { serverApi, graphApi, coockiesApi } from '../../../api';
+
 
 function* pregenerate(){
     while(true){
@@ -70,6 +72,7 @@ function* saveGenerated(){
         try {
             yield call(serverApi.saveGenerated, groupName, componentName, files, dependencies);
             graphApi.changeModelNodeType(selectedKey, componentName);
+            yield put(clipboardIndicatorActions.removeClipboardKeys());
             yield put(deskPageActions.setReloadPageRequest());
             yield put(actions.hide());
         } catch(error) {

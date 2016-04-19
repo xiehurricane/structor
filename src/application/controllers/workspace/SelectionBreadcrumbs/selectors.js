@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { createStructuredSelector } from 'reselect';
+import { createStructuredSelector, createSelector } from 'reselect';
+
+export const selectedKeysSelector = state => state.selectionBreadcrumbs.selectedKeys;
 
 export const modelSelector = createStructuredSelector({
     componentModel: state => state.selectionBreadcrumbs
-    //userAccountModel: state => state.appContainer.userAccount,
-    //deskPageModel: state => state.deskPage
-    //deskModel: state => state.desk
 });
 

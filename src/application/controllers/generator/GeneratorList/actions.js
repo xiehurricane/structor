@@ -17,8 +17,6 @@
 import { bindActionCreators } from 'redux';
 import { coockiesApi } from '../../../api';
 import { loadGenerators } from '../Generator/actions.js';
-//import { hideGeneratorFrame } from '../../app/AppContainer/actions.js';
-//import { started, done } from '../../app/AppSpinner/actions.js';
 
 export const ALL_GROUP_KEY = 'All';
 

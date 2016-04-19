@@ -77,25 +77,29 @@ class Container extends Component {
 
             if(clipboardKeys.length === 1){
                 let clipboardNode = graphApi.getNode(clipboardKeys[0]);
-                clipboardContent = (
-                    <span style={activeStyle}>
+                if(clipboardNode){
+                    clipboardContent = (
+                        <span style={activeStyle}>
                         <span>{clipboardNode.modelNode.type}</span>
                     </span>
-                );
+                    );
+                }
             } else if(clipboardKeys.length > 0) {
                 const childrenMenuItems = [];
                 let clipboardNode;
                 clipboardKeys.forEach((key, index) => {
                     clipboardNode = graphApi.getNode(key);
-                    childrenMenuItems.push(
-                        <li key={'menuItem' + index}>
-                            <a href="#"
-                               onClick={(e) => {e.stopPropagation(); e.preventDefault();}}
-                               style={{display: 'flex', alignItems: 'center'}}>
-                                {clipboardNode.modelNode.type}
-                            </a>
-                        </li>
-                    );
+                    if(clipboardNode){
+                        childrenMenuItems.push(
+                            <li key={'menuItem' + index}>
+                                <a href="#"
+                                   onClick={(e) => {e.stopPropagation(); e.preventDefault();}}
+                                   style={{display: 'flex', alignItems: 'center'}}>
+                                    {clipboardNode.modelNode.type}
+                                </a>
+                            </li>
+                        );
+                    }
                 });
                 clipboardContent = (
                     <span key={'menuMore'}

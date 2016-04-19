@@ -48,14 +48,13 @@ class Container extends Component {
         const { componentModel, deskPageModel, hideModal } = this.props;
         let tabPanes = [];
         tabPanes.push(
-            <Tab
-                key={tabPanes.length + 1}
-                eventKey={tabPanes.length + 1}
-                title={componentModel.mode === ADD_NEW ? 'Add new page' : 'Page options'}>
+            <Tab key={tabPanes.length + 1}
+                 eventKey={tabPanes.length + 1}
+                 title={componentModel.mode === ADD_NEW ? 'Add new page' : 'Page options'}>
                 <PageComponentForm
                     ref="formPageName"
                     pageName={componentModel.mode === ADD_NEW ? 'NewPage' : deskPageModel.currentPageName}
-                    pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath} />
+                    pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath}/>
             </Tab>
         );
 
@@ -69,7 +68,7 @@ class Container extends Component {
                    ref='dialog'
                    animation={true}>
                 <Modal.Body>
-                    <Tabs defaultActiveKey={1}>
+                    <Tabs id="pageOptionsModal" activeKey={1}>
                         {tabPanes}
                     </Tabs>
                 </Modal.Body>

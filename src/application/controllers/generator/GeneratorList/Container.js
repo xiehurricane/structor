@@ -21,7 +21,7 @@ import { modelSelector } from './selectors.js';
 import { containerActions, ALL_GROUP_KEY } from './actions.js';
 
 import { Button, Grid, Row, Col } from 'react-bootstrap';
-import { ListGroup, ListGroupItem, Tabs, Tab } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Tabs, Tab, Pagination } from 'react-bootstrap';
 import GeneratorBriefPanel from '../GeneratorBriefPanel';
 import { GeneratorKeyTitleView } from '../../../views';
 
@@ -29,9 +29,14 @@ class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            activePage: 1,
+            itemsPerPage: 10
+        };
         this.handleChangeCatalog = this.handleChangeCatalog.bind(this);
         this.handleChangeBackCatalog = this.handleChangeBackCatalog.bind(this);
         this.handleTabSelect = this.handleTabSelect.bind(this);
+        this.handlePageSelect = this.handlePageSelect.bind(this);
         this.groupsHistory = [];
     }
 
@@ -72,21 +77,30 @@ class Container extends Component {
         }
     }
 
-    handleTabSelect(key){
-        this.props.setSelectedTab(key);
+    handleTabSelect(eventKey){
+        if(eventKey){
+            this.props.setSelectedTab(eventKey);
+        }
+    }
+
+    handlePageSelect(event, selectedEvent){
+        this.setState({
+            activePage: parseInt(selectedEvent.eventKey)
+        });
     }
 
     render(){
 
         const { componentModel: {generators, recentGenerators, selectedTabKey, filter} } = this.props;
         const { generatorModel: {loadOptions}, toggleGenerics } = this.props;
+        const { activePage, itemsPerPage } = this.state;
         const { groupKey, groupName, groupNameBack } = filter;
+        let pageCount = 0;
 
         let generatorGroupCatalogs = [];
         let headGroupItems = [];
         let generatorGroup;
         let generatorPanelList = [];
-
         if(selectedTabKey === 1){
             generatorGroup = generators[ALL_GROUP_KEY];
             if (generatorGroup.files && generatorGroup.files.length > 0
@@ -161,14 +175,19 @@ class Container extends Component {
                     });
                 }
                 if (generatorGroup.files && generatorGroup.files.length > 0) {
+                    const lowerBound = (activePage - 1) * itemsPerPage;
+                    const higherBound = activePage * itemsPerPage;
                     generatorGroup.files.forEach((item, index) => {
-                        generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
-                                                                     generatorKey={item.dirNamePath}
-                                                                     projectId={item.projectId}
-                                                                     userId={item.userId}
-                                                                     generatorId={item.generatorId}
-                                                                     versions={item.versions}/>);
+                        if(index < higherBound && index >= lowerBound ){
+                            generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
+                                                                         generatorKey={item.dirNamePath}
+                                                                         projectId={item.projectId}
+                                                                         userId={item.userId}
+                                                                         generatorId={item.generatorId}
+                                                                         versions={item.versions}/>);
+                        }
                     });
+                    pageCount = parseInt(generatorGroup.files.length / itemsPerPage);
                 }
 
             }
@@ -177,6 +196,7 @@ class Container extends Component {
         return (
             <Tabs activeKey={selectedTabKey}
                   onSelect={this.handleTabSelect}
+                  id="generatorListTabs"
                   animation={false}>
                 <Tab key={'favoriteGenerators'}
                      eventKey={1}
@@ -231,7 +251,19 @@ class Container extends Component {
                                     lg={ 9 }>
 
                                     {generatorPanelList}
-
+                                    <div style={{margin: '1em 0'}}>
+                                        <Pagination bsSize="medium"
+                                                    items={pageCount}
+                                                    activePage={activePage}
+                                                    prev={true}
+                                                    next={true}
+                                                    first={true}
+                                                    last={true}
+                                                    ellipsis={true}
+                                                    maxButtons={5}
+                                                    onSelect={this.handlePageSelect}>
+                                        </Pagination>
+                                    </div>
                                 </Col>
                             </Row>
                         </Grid>

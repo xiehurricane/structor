@@ -105,7 +105,7 @@ class Container extends Component {
                                  style={{marginLeft: '0.5em'}}
                                  data-version={versionsList[versionsList.length-1]}
                                  onClick={this.handleOnClone}
-                                 title={userId !== accountUserId ? "Fork generator" : "Fork version"}
+                                 title={userId !== accountUserId ? "Fork generator" : "Update version"}
                                  bsStyle="default" bsSize="xs">
                         {cloneMenuItems}
                     </SplitButton>
@@ -143,7 +143,7 @@ class Container extends Component {
                                 md={ 4 }
                                 sm={ 4 }
                                 lg={ 4 }>
-                                <div style={{height: '10em', overflow: 'hidden', marginBottom: '1em'}}>
+                                <div style={{height: '16em', overflow: 'hidden', marginBottom: '1em'}}>
                                     <img
                                         src={imgUrl}
                                         style={ { "width": "100%"} } />
@@ -154,7 +154,7 @@ class Container extends Component {
                                 md={ 8 }
                                 sm={ 8 }
                                 lg={ 8 }>
-                                <div style={{height: '10em', overflow: 'auto', marginBottom: '1em'}}>
+                                <div style={{height: '16em', overflow: 'auto', marginBottom: '1em'}}>
                                     <div dangerouslySetInnerHTML={{__html: brief}}></div>
                                 </div>
                             </Col>
@@ -171,7 +171,7 @@ class Container extends Component {
                                     <a target="__blank"
                                        href="#">
                                         <i className="fa fa-external-link"></i>
-                                        <span style={{marginLeft: '0.5em'}}>Read more...</span>
+                                        <span style={{marginLeft: '0.5em'}}>Read in tab...</span>
                                     </a>
                                 </div>
                             </div>

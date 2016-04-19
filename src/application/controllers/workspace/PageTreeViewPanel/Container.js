@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {forOwn} from 'lodash';
+import {forOwn, difference} from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
@@ -67,8 +67,11 @@ class Container extends Component{
     }
 
     shouldComponentUpdate(nextProps, nextState){
+
         const { deskPageModel } = this.props;
         const { deskPageModel: newDeskPageModel } = nextProps;
+
+        this.shouldScroll = newDeskPageModel.markedUpdateCounter !== deskPageModel.markedUpdateCounter;
         return (
             newDeskPageModel.reloadPageCounter !== deskPageModel.reloadPageCounter
             || newDeskPageModel.currentPagePath !== deskPageModel.currentPagePath
@@ -77,15 +80,9 @@ class Container extends Component{
         );
     }
 
-    componentWillUpdate(nextProps, nextState){
-        const { selectionBreadcrumbsModel: {selectedKeys: oldKeys} } = this.props;
-        const { selectionBreadcrumbsModel: {selectedKeys: nextKeys}} = nextProps;
-        this.shouldScroll = oldKeys !== nextKeys;
-    }
-
     scrollToSelected(){
         if(this.shouldScroll === true){
-            const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+            const selectedKeys = this.props.currentSelectedKeys;
             if(selectedKeys && selectedKeys.length > 0){
                 scrollToSelected(this.$frameWindow, selectedKeys[selectedKeys.length - 1]);
             }

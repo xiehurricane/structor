@@ -67,7 +67,6 @@ export function installDependencies(dependencies) {
                 installTask = installTask.then(() => {
                     return npmUtils.getPackageAbsolutePath(pkg.name, config.projectDir())
                         .then(packagePath => {
-                            console.log('Found path: ' + packagePath);
                             if (!packagePath) {
                                 const version = pkg.version && pkg.version.trim().length > 0 ? '@' + pkg.version.trim() : '';
                                 packageNames += pkg.name + version + ' ';
@@ -77,9 +76,7 @@ export function installDependencies(dependencies) {
             });
             installTask = installTask.then(() => {
                 packageNames = packageNames.substr(0, packageNames.length - 1);
-                console.log('Gathered packages: ' + packageNames);
                 if (packageNames && packageNames.length > 0) {
-                    console.log('Install packages: ' + packageNames);
                     return npmUtils.installPackages(packageNames, config.projectDir());
                 }
             });
@@ -98,7 +95,6 @@ export function installDependencies(dependencies) {
                     });
                     copy.forEach(copyItem => {
                         installTask = installTask.then(() => {
-                            console.log('Copy from path: ' + absDirPath);
                             const absSrcPath = path.join(absDirPath, copyItem.from);
                             const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to);
                             return fileManager.copyFile(absSrcPath, absDestPath);

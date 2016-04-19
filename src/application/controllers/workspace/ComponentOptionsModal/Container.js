@@ -27,8 +27,20 @@ class Container extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            activeTabKey: 1
+        };
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.handleSelectTab = this.handleSelectTab.bind(this);
+    }
+
+    handleSelectTab(eventKey){
+        if(eventKey){
+            this.setState({
+                activeTabKey: eventKey
+            });
+        }
     }
 
     handleClose(e){
@@ -36,6 +48,9 @@ class Container extends Component {
         e.preventDefault();
         const {hideModal} = this.props;
         hideModal();
+        this.setState({
+            activeTabKey: 1
+        });
     }
 
     handleSave(e){
@@ -47,6 +62,9 @@ class Container extends Component {
         const sourceProps = sourcePropsEditor ? sourcePropsEditor.getSourceCode() : "{}";
         const sourceText = sourceTextInput ? sourceTextInput.getValue() : undefined;
         submitChanges({sourceCode, sourceProps, sourceText});
+        this.setState({
+            activeTabKey: 1
+        });
     }
 
 
@@ -126,7 +144,9 @@ class Container extends Component {
                    ref='dialog'
                    animation={true}>
                 <Modal.Body>
-                    <Tabs defaultActiveKey={1}>
+                    <Tabs id="componentOptionsModal"
+                          onSelect={this.handleSelectTab}
+                          activeKey={this.state.activeTabKey}>
                         {tabPanes}
                     </Tabs>
                 </Modal.Body>

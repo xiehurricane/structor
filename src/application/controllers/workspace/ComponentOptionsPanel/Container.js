@@ -119,10 +119,10 @@ class Container extends Component {
             panelContent = (
                 <div style={style}>
                     <div style={{position: 'relative'}}>
-                        <div style={{width: '100%', overflow: 'auto'}}>
+                        {/*<div style={{width: '100%', overflow: 'auto'}}>
                             <p><span>Props:</span></p>
                             <pre style={{fontSize: '10px'}}>{JSON.stringify(props, null, 2)}</pre>
-                        </div>
+                        </div>*/}
                         <CollapsiblePlusOptionInput
                             style={{width: '100%', zIndex: '1030', marginBottom: '0.5em'}}
                             onCommit={this.handleAddNewProp}/>
