@@ -29,6 +29,7 @@ export const STRUCTOR_URLS = [
     '/structor-invoke',
     '/structor-sandbox',
     '/structor-deskpage',
+    '/structor-dev',
     '/structor-desk',
     '/structor-sandbox-preview',
     '/structor-sandbox-screenshot'

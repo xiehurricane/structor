@@ -38,7 +38,7 @@ export function getAvailableRoute(existingRoutes, checkPathname){
                     //console.log('formattedPath: ' + formattedPath);
                     if (checkPathname === formattedPath) {
                         candidateRootKey = root;
-                        console.log('Path was found: ' + root + ', checked: ' + checkPathname);
+                        //console.log('Path was found: ' + root + ', checked: ' + checkPathname);
                         break;
                     }
                 }

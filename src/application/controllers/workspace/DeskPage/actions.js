@@ -60,7 +60,6 @@ export const saveModel = () => ({type: SAVE_MODEL});
 export const exportModel = () => ({type: EXPORT_MODEL});
 
 export const changePageRouteFeedback = (pathname) => (dispatch, getState) => {
-    //const availablePagePath = graphApi.getPagePath(pathname);
     dispatch({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pathname });
 };
 
@@ -84,6 +83,7 @@ export const addNewPage = (pageName, pagePath) => (dispatch, getState) => {
         let pageList = graphApi.addNewPage(pageModel, pagePath, pageName);
         dispatch(setPages(pageList));
         dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(reloadPage());
         dispatch(success('New page was added successfully'));
     } catch(e){
         dispatch(failed(e.message ? e.message : e));
@@ -97,6 +97,7 @@ export const clonePage = (pageName, pagePath) => (dispatch, getState) => {
         let pageList = graphApi.duplicatePage(currentPagePath, pagePath, pageName);
         dispatch(setPages(pageList));
         dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(reloadPage());
         dispatch(success('Page was cloned successfully'));
     } catch(e){
         dispatch(failed(e.message ? e.message : e));
@@ -116,6 +117,7 @@ export const changePageOptions = (pageName, pagePath) => (dispatch, getState) =>
             if (pageList) {
                 dispatch(setPages(pageList));
                 dispatch(changePageRoute(pagePath));
+                dispatch(reloadPage());
                 dispatch(success('Page options were changed successfully.'));
             }
         }
@@ -153,6 +155,7 @@ export const deletePage = () => (dispatch, getState) => {
             }
             dispatch(resetClipboardKeys());
             dispatch(resetSelectedKeys());
+            dispatch(reloadPage());
             dispatch(success('Route path ' + currentPagePath + ' were deleted successfully'));
         }
     } catch(e){

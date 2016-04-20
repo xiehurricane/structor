@@ -151,11 +151,11 @@ class Container extends Component {
                 //    quickWrap(componentName, selectedKey);
                 //});
 
-                const { componentModel } = this.props;
-                page.updatePageModel({
-                    pathname: componentModel.currentPagePath ? componentModel.currentPagePath : pathname,
-                    isEditModeOn: componentModel.isEditModeOn
-                });
+                //const { componentModel } = this.props;
+                //page.updatePageModel({
+                //    pathname: componentModel.currentPagePath ? componentModel.currentPagePath : pathname,
+                //    isEditModeOn: componentModel.isEditModeOn
+                //});
             };
 
             const initPage = () => {
@@ -174,6 +174,22 @@ class Container extends Component {
         this.page = undefined;
     }
 
+    componentWillReceiveProps(nextProps){
+        const { componentModel } = this.props;
+        const { componentModel: newComponentModel } = nextProps;
+        if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
+            var domNode = ReactDOM.findDOMNode(this);
+            domNode.src = '/structor-deskpage' + componentModel.currentPagePath;
+        } else if(newComponentModel.pagePathToChange != null
+            && newComponentModel.pagePathToChange != componentModel.pagePathToChange){
+            if(this.contentWindow){
+                // only when page is already loaded
+                //console.log('Switching to path: ' + newComponentModel.pagePathToChange);
+                this.contentWindow.__switchToPath(newComponentModel.pagePathToChange);
+            }
+        }
+    }
+
     componentWillUpdate(nextProps, nextState){
 
         this.removeShortcuts();
@@ -184,16 +200,7 @@ class Container extends Component {
         const { componentModel } = this.props;
         const { componentModel: newComponentModel } = nextProps;
 
-        if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
-            var domNode = ReactDOM.findDOMNode(this);
-            domNode.src = '/structor-deskpage' + componentModel.currentPagePath;
-        } else if(newComponentModel.pagePathToChange != componentModel.pagePathToChange){
-            if(this.contentWindow){
-                // only when page is already loaded
-                //console.log('Switching to path: ' + newComponentModel.pagePathToChange);
-                this.contentWindow.__switchToPath(newComponentModel.pagePathToChange);
-            }
-        } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
+        if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
         } else if(newComponentModel.markedUpdateCounter !== componentModel.markedUpdateCounter) {
             this.doUpdateMarks = true;
@@ -205,8 +212,8 @@ class Container extends Component {
         const { componentModel: newComponentModel } = nextProps;
         return (
             nextProps.style.width !== this.props.style.width
-            || newComponentModel.reloadPageCounter !== componentModel.reloadPageCounter
-            || newComponentModel.pagePathToChange !== componentModel.pagePathToChange
+            //|| newComponentModel.reloadPageCounter !== componentModel.reloadPageCounter
+            //|| newComponentModel.pagePathToChange !== componentModel.pagePathToChange
             || newComponentModel.isEditModeOn !== componentModel.isEditModeOn
             || newComponentModel.markedUpdateCounter !== componentModel.markedUpdateCounter
             || newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter

@@ -39,13 +39,13 @@ export function getDevMiddlewareCompiler() {
         const webpackConfig = _.mergeWith({
                 name: "browser",
                 entry: [
-                    'webpack-hot-middleware/client?path=/structor-desk/a&overlay=false',
+                    'webpack-hot-middleware/client?path=/structor-dev/a&overlay=false',
                     config.deskEntryPointFilePath()
                 ],
                 output: {
                     path: path.join(config.deskDirPath(), '__build__'),
                     filename: 'bundle.js',
-                    publicPath: '/structor-desk/__build__'
+                    publicPath: '/structor-dev/__build__'
                 },
                 devtool: 'inline-source-map',
                 plugins: [
@@ -111,7 +111,7 @@ export function getDevMiddleware() {
                 noInfo: true,
                 quiet: true,
                 lazy: false,
-                publicPath: '/structor-desk/__build__'
+                publicPath: '/structor-dev/__build__'
             }
         );
     }
@@ -124,7 +124,7 @@ export function getHotMiddleware() {
             getDevMiddlewareCompiler(),
             {
                 log: console.log,
-                path: '/structor-desk/a',
+                path: '/structor-dev/a',
                 heartbeat: 10 * 1000
             }
         );

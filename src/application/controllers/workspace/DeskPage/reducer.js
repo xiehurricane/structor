@@ -59,7 +59,8 @@ export default (state = initialState, action = {}) => {
             return Object.assign({}, state, {
                 currentPagePath: state.pages[pageIndex].pagePath,
                 currentPageName: state.pages[pageIndex].pageName,
-                currentPageIndex: pageIndex
+                currentPageIndex: pageIndex,
+                pagePathToChange: null
             });
         }
     }
