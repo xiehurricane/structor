@@ -89,7 +89,7 @@ class Container extends Component {
                         <span className="caret"></span>
                         &nbsp;&nbsp;
                     </button>
-                    <ul className="dropdown-menu" role="menu">
+                    <ul className="dropdown-menu" role="menu" style={{overflowY: 'auto', maxHeight: '12em'}}>
                         <li role="presentation" className="dropdown-header">Switch to:</li>
                         {pagesList}
                     </ul>

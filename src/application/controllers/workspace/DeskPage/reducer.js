@@ -21,6 +21,7 @@ const initialState = {
     currentPageIndex: -1,
     currentPageName: null,
     currentPagePath: null,
+    pagePathToChange: undefined,
     reloadPageRequest: false,
     isEditModeOn: true,
     isLivePreviewModeOn: false,
@@ -41,20 +42,9 @@ export default (state = initialState, action = {}) => {
     }
 
     if(type === actions.CHANGE_PAGE_ROUTE){
-        let pageIndex = -1;
-        for(let i = 0; i < state.pages.length; i++){
-            if(state.pages[i].pagePath === payload){
-                pageIndex = i;
-                break;
-            }
-        }
-        if(pageIndex >= 0){
-            return Object.assign({}, state, {
-                currentPagePath: state.pages[pageIndex].pagePath,
-                currentPageName: state.pages[pageIndex].pageName,
-                currentPageIndex: pageIndex
-            });
-        }
+        return Object.assign({}, state, {
+            pagePathToChange: payload
+        });
     }
 
     if(type === actions.CHANGE_PAGE_ROUTE_FEEDBACK){

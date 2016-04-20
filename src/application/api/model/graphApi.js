@@ -99,6 +99,14 @@ export function getNode(key){
     return graphObject.graph.node(key);
 }
 
+export function getPagePath(pathname){
+    let paths = [];
+    graphObject.pageNodes.forEach(pageNode => {
+        paths.push(pageNode.pagePath);
+    });
+    return getAvailableRoute(paths, pathname);
+}
+
 export function getWrappedModelByPagePath(pathname){
     let wrappedModel = undefined;
     let paths = [];

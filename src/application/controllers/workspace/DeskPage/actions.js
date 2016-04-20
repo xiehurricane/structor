@@ -54,11 +54,15 @@ export const setEditModeOn = () => ({ type: SET_EDIT_MODE_ON });
 export const setReloadPageRequest = () => ({ type: SET_RELOAD_PAGE_REQUEST });
 export const executeReloadPageRequest = () => ({ type: EXECUTE_RELOAD_PAGE_REQUEST });
 
-export const changePageRouteFeedback = (pagePath) => ({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pagePath });
 export const updatePage = () => ({type: UPDATE_PAGE});
 export const updateMarked = () => ({type: UPDATE_MARKED});
 export const saveModel = () => ({type: SAVE_MODEL});
 export const exportModel = () => ({type: EXPORT_MODEL});
+
+export const changePageRouteFeedback = (pathname) => (dispatch, getState) => {
+    //const availablePagePath = graphApi.getPagePath(pathname);
+    dispatch({type: CHANGE_PAGE_ROUTE_FEEDBACK, payload: pathname });
+};
 
 export const loadModel = (model) => (dispatch, getState) => {
     let { pages } = model;
@@ -70,7 +74,7 @@ export const loadModel = (model) => (dispatch, getState) => {
     graphApi.initGraph(model);
     let pageList = graphApi.getPages();
     dispatch(setPages(pageList));
-    dispatch(changePageRoute(pageList[0].pagePath));
+    dispatch(changePageRouteFeedback(pageList[0].pagePath));
 };
 
 export const addNewPage = (pageName, pagePath) => (dispatch, getState) => {
@@ -127,6 +131,7 @@ export const setIndexPage = () => (dispatch, getState) => {
         let pageList = graphApi.setIndexPage(currentPagePath);
         if(pageList){
             dispatch(setPages(pageList));
+            dispatch(reloadPage());
             dispatch(success('Route ' + currentPagePath + ' now is the index route.'));
         }
     } catch(e){

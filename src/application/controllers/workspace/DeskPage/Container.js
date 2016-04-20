@@ -57,17 +57,19 @@ class Container extends Component {
         const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
         const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } = this.props;
         const { loadOptions } = this.props;
+        const { componentModel:{pages} } = this.props;
         loadPage();
         this.contentDocument = domNode.contentDocument;
         this.contentWindow = domNode.contentWindow;
         this.setupShortcuts();
         domNode.onload = ( () => {
-
+            this.contentWindow.__pages = pages;
             this.contentWindow.onPageDidMount = (page, pathname) => {
                 this.page = page;
 
                 page.bindOnComponentMouseDown(this.handleComponentClick);
                 page.bindOnPathnameChanged(this.handlePathnameChanged);
+                page.bindGetPagePath(pathname => graphApi.getPagePath(pathname));
                 page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
                 page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
 
@@ -185,11 +187,11 @@ class Container extends Component {
         if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
             var domNode = ReactDOM.findDOMNode(this);
             domNode.src = '/structor-deskpage' + componentModel.currentPagePath;
-        } else if(newComponentModel.currentPagePath != componentModel.currentPagePath){
+        } else if(newComponentModel.pagePathToChange != componentModel.pagePathToChange){
             if(this.contentWindow){
                 // only when page is already loaded
-                //console.log('Switching to path: ' + newComponentModel.currentPagePath);
-                this.contentWindow.__switchToPath(newComponentModel.currentPagePath);
+                //console.log('Switching to path: ' + newComponentModel.pagePathToChange);
+                this.contentWindow.__switchToPath(newComponentModel.pagePathToChange);
             }
         } else if(newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter) {
             this.doUpdatePageModel = true;
@@ -204,7 +206,7 @@ class Container extends Component {
         return (
             nextProps.style.width !== this.props.style.width
             || newComponentModel.reloadPageCounter !== componentModel.reloadPageCounter
-            || newComponentModel.currentPagePath !== componentModel.currentPagePath
+            || newComponentModel.pagePathToChange !== componentModel.pagePathToChange
             || newComponentModel.isEditModeOn !== componentModel.isEditModeOn
             || newComponentModel.markedUpdateCounter !== componentModel.markedUpdateCounter
             || newComponentModel.modelUpdateCounter !== componentModel.modelUpdateCounter

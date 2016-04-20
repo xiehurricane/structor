@@ -23,13 +23,25 @@ export function getAvailableRoute(existingRoutes, checkPathname){
             candidateRootKey = existingRoutes[0];
         } else {
             try{
-                existingRoutes.forEach( root => {
+                let root;
+                for(let i = 0; i < existingRoutes.length; i++){
+                    root = existingRoutes[i];
+                    //console.log('Checking path: ' + root + ' against ' + checkPathname);
+                    //let matched = matchPattern(root, checkPathname);
+                    //console.log(JSON.stringify(matched, null, 4));
                     let paramsObj = getParams(root, checkPathname);
-                    let formattedPath = formatPattern(root, paramsObj);
-                    if (checkPathname === formattedPath && existingRoutes.indexOf(formattedPath) >= 0) {
-                        candidateRootKey = formattedPath;
+                    //console.log('paramsObj: ' + JSON.stringify(paramsObj));
+                    let formattedPath = root;
+                    if(paramsObj){
+                        formattedPath = decodeURIComponent(formatPattern(root, paramsObj));
                     }
-                });
+                    //console.log('formattedPath: ' + formattedPath);
+                    if (checkPathname === formattedPath) {
+                        candidateRootKey = root;
+                        console.log('Path was found: ' + root + ', checked: ' + checkPathname);
+                        break;
+                    }
+                }
             } catch(e){
                 console.error('Path name ' + checkPathname + ' was not found in project model. Error: ' + (e.message ? e.message : e));
             }
