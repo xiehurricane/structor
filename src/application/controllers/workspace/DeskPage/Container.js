@@ -179,7 +179,7 @@ class Container extends Component {
         const { componentModel: newComponentModel } = nextProps;
         if(newComponentModel.reloadPageCounter != componentModel.reloadPageCounter){
             var domNode = ReactDOM.findDOMNode(this);
-            domNode.src = '/structor-deskpage' + componentModel.currentPagePath;
+            domNode.src = '/structor-deskpage' + newComponentModel.currentPagePath;
         } else if(newComponentModel.pagePathToChange != null
             && newComponentModel.pagePathToChange != componentModel.pagePathToChange){
             if(this.contentWindow){

@@ -82,7 +82,7 @@ export const addNewPage = (pageName, pagePath) => (dispatch, getState) => {
         let pageModel = utilsStore.getTemplatePageModel();
         let pageList = graphApi.addNewPage(pageModel, pagePath, pageName);
         dispatch(setPages(pageList));
-        dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(changePageRouteFeedback(pageList[pageList.length - 1].pagePath));
         dispatch(reloadPage());
         dispatch(success('New page was added successfully'));
     } catch(e){
@@ -96,7 +96,7 @@ export const clonePage = (pageName, pagePath) => (dispatch, getState) => {
         const { deskPage: {currentPagePath} } = getState();
         let pageList = graphApi.duplicatePage(currentPagePath, pagePath, pageName);
         dispatch(setPages(pageList));
-        dispatch(changePageRoute(pageList[pageList.length - 1].pagePath));
+        dispatch(changePageRouteFeedback(pageList[pageList.length - 1].pagePath));
         dispatch(reloadPage());
         dispatch(success('Page was cloned successfully'));
     } catch(e){
@@ -116,7 +116,7 @@ export const changePageOptions = (pageName, pagePath) => (dispatch, getState) =>
             pageList = graphApi.changePagePathAndName(currentPagePath, pagePath, pageName);
             if (pageList) {
                 dispatch(setPages(pageList));
-                dispatch(changePageRoute(pagePath));
+                dispatch(changePageRouteFeedback(pagePath));
                 dispatch(reloadPage());
                 dispatch(success('Page options were changed successfully.'));
             }
@@ -149,9 +149,9 @@ export const deletePage = () => (dispatch, getState) => {
         if(pageList){
             dispatch(setPages(pageList));
             if(currentPageIndex === 0){
-                dispatch(changePageRoute(pageList[0].pagePath));
+                dispatch(changePageRouteFeedback(pageList[0].pagePath));
             } else if(currentPageIndex > 0){
-                dispatch(changePageRoute(pageList[currentPageIndex - 1].pagePath));
+                dispatch(changePageRouteFeedback(pageList[currentPageIndex - 1].pagePath));
             }
             dispatch(resetClipboardKeys());
             dispatch(resetSelectedKeys());
