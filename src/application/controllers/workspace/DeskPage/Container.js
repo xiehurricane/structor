@@ -49,7 +49,13 @@ class Container extends Component {
     }
 
     componentDidMount(){
+
         const domNode = ReactDOM.findDOMNode(this);
+        const { componentModel:{pages, currentPagePath} } = this.props;
+        if(currentPagePath){
+            domNode.src = '/structor-deskpage' + currentPagePath;
+        }
+
         const { loadPage, pageLoaded } = this.props;
         const { setForCuttingKeys, setForCopyingKeys } = this.props;
         const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace } = this.props;
@@ -57,11 +63,11 @@ class Container extends Component {
         const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
         const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } = this.props;
         const { loadOptions } = this.props;
-        const { componentModel:{pages} } = this.props;
         loadPage();
         this.contentDocument = domNode.contentDocument;
         this.contentWindow = domNode.contentWindow;
         this.setupShortcuts();
+
         domNode.onload = ( () => {
             this.contentWindow.__pages = pages;
             this.contentWindow.onPageDidMount = (page, pathname) => {
@@ -72,6 +78,7 @@ class Container extends Component {
                 page.bindGetPagePath(pathname => graphApi.getPagePath(pathname));
                 page.bindGetPageModel(pathname => graphApi.getWrappedModelByPagePath(pathname));
                 page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
+                page.bindGetMode(() => {return this.props.componentModel.isEditModeOn;});
 
                 page.bindGetComponentInPreview(() => {
                     const { libraryPanelModel: {componentInPreview, variantsInPreview, defaultVariantMap}} = this.props;
@@ -227,8 +234,7 @@ class Container extends Component {
                 const { componentModel } = this.props;
                 //console.log('Updating page model: ' + componentModel.currentPagePath);
                 this.page.updatePageModel({
-                    pathname: componentModel.currentPagePath,
-                    isEditModeOn: componentModel.isEditModeOn
+                    pathname: componentModel.currentPagePath
                 });
             }
             if(this.doUpdateMarks){
@@ -345,8 +351,7 @@ class Container extends Component {
     }
 
     render(){
-        const { componentModel: {currentPagePath} } = this.props;
-        return (<iframe {...this.props} src="/structor-deskpage/" />);
+        return (<iframe {...this.props} src="/structor-deskpage" />);
     }
 
 }

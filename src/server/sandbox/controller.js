@@ -48,7 +48,7 @@ export function setServer(server){
         });
         const upload = multer({storage: screenshotStorage});
         serverRef.app.post('/structor-sandbox-screenshot', upload.single('screenshot'), (req, res, next) => {
-            console.log(req.file);
+            //console.log(req.file);
             res.status(204).end();
         });
     }
