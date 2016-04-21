@@ -44,7 +44,7 @@ class Container extends Component {
             'position': 'relative',
             'minWidth': '4em',
             'width': '4em',
-            'padding': '0 0.5em 0 0.5em'
+            'padding': '10px 0.5em 0 0.5em'
         };
 
         var btnGroupStyle = {

@@ -60,12 +60,12 @@ class CollapsiblePlusOptionInput extends Component {
 
     render(){
 
-        let addInputStyle = {
-            height: '1.55em',
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            marginBottom: '0.5em'
-        };
+        //let addInputStyle = {
+        //    height: '1.55em',
+        //    paddingTop: '2px',
+        //    paddingBottom: '2px',
+        //    marginBottom: '0.5em'
+        //};
 
         let styleOptions = [];
         this.styleProps.forEach(style => {
@@ -90,25 +90,24 @@ class CollapsiblePlusOptionInput extends Component {
                     <div style={{position: 'relative'}}>
                         <form onSubmit={this.handleCommit}>
                             <Panel>
-                                <p>Property path</p>
+                                <label>Property path</label>
                                 <input ref="inputPath"
                                        placeholder="prop[.prop]"
                                        type="text"
                                        autoComplete="on"
                                        list="styleOptions"
                                        className="form-control"
-                                       style={addInputStyle}
                                        onKeyDown={this.handleOnKeyDown}/>
-                                <p>Property value</p>
+                                <label style={{marginTop: '5px'}}>Property value</label>
                                 <input ref="inputValue"
                                        type="text"
                                        className="form-control"
-                                       style={addInputStyle}
                                        onKeyDown={this.handleOnKeyDown}/>
                                 <button
                                     role="button"
                                     type="submit"
-                                    className="btn btn-default btn-xs btn-block">
+                                    className="btn btn-default btn-xs btn-block"
+                                    style={{marginTop: '10px'}}>
                                     <span>Add</span>
                                 </button>
                             </Panel>

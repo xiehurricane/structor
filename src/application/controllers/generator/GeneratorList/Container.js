@@ -188,6 +188,10 @@ class Container extends Component {
                         }
                     });
                     pageCount = parseInt(generatorGroup.files.length / itemsPerPage);
+                    if(pageCount > 0){
+                        pageCount += parseInt(generatorGroup.files.length % itemsPerPage);
+                    }
+
                 }
 
             }

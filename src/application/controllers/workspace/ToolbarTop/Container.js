@@ -31,7 +31,7 @@ class Container extends Component {
     render(){
 
         const containerStyle = {
-            paddingTop: '0.5em',
+            paddingTop: '10px',
             display: 'flex',
             flexDirection: 'row',
             flexWrap: 'nowrap',
