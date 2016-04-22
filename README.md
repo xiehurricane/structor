@@ -28,35 +28,20 @@ Structor was developed to overcome many challenges in Web application developmen
 The builder runs locally as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
-Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
-
-
 ### Videos
 
 * [Videos on Structor Market](https://helmetrex.com/videos)
-* [Spring Data REST Bootstrap prepack intro](https://www.youtube.com/watch?v=ag57pjaW9F8)
-* [Fetch data from GitHub | Part 1](https://www.youtube.com/watch?v=AY65e6Ry_rY)
-* [Fetch data from GitHub | Part 2](https://www.youtube.com/watch?v=JLz8B0XJPyk)
-* [Speed designing of ToDo list](https://www.youtube.com/watch?v=PggnIYdaJFI&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1&index=3)
 
 ### List of existing projects on GitHub
 
-* [sdr-bootstrap-prepack](https://github.com/ipselon/sdr-bootstrap-prepack)
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
-* [material-ui-prepack](https://github.com/ipselon/material-ui-prepack)
 
 ### Articles
 
 * [Using React Router inside of components](https://github.com/ipselon/structor/wiki/Using-React-Router-inside-of-components)
 * [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
-* [Generators metadata overview](https://github.com/ipselon/structor/wiki/Generators-metadata-overview)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
 * [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
-
-### Tutorials
-
-* [Fetch data from GitHub (part 1)](https://github.com/ipselon/structor/wiki/Structor-tutorial:-%22Fetch-data-from-GitHub%22-(part-1))
-* [Fetch data from GitHub (part 2)](https://github.com/ipselon/structor/wiki/Structor-tutorial:-%22Fetch-data-from-GitHub%22-(part-2))
 
 ### Getting started
 
