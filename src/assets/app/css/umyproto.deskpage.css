@@ -39,10 +39,10 @@ body {
 }
 
 .umy-logo {
-    width: 45px;
-    height: 45px;
+    width: 25em;
+    height: 25em;
     background: url(img/umylogo-white.svg);
-    background-size: 45px 45px;
+    background-size: 25em 25em;
 }
 
 .umy-grid-basic-element {

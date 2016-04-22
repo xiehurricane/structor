@@ -16,13 +16,10 @@
  * limitations under the License.
  */
 
-//require('babel-register');
 var minimist = require('minimist');
 var path = require('path');
 var io = require('socket.io');
-//var api = require('./server/api.js');
 var controller = require('./server/controller.js');
-//var controller = require('./src/server/controller.js');
 
 process.on('uncaughtException',
     function(err){
@@ -53,5 +50,4 @@ if(argv['d']){
     }
 }
 
-//api.initServer({ dirname: __dirname, workingDirname: workingDir, portNumber: portNumber, io: io });
 controller.initServer({ serverDir: __dirname, projectDir: workingDir, portNumber: portNumber, io: io });

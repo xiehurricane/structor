@@ -79,30 +79,14 @@ class Container extends Component {
             );
         } else {
             content = (
-                <Navbar
-                    staticTop={true}
-                    fixedTop={true}>
-                    <Navbar.Header>
-                        <Navbar.Brand>
-                            <div className='umy-logo' style={{position: 'absolute', left: 'calc(50% - 20px)', top: '0px'}}></div>
-                        </Navbar.Brand>
-                        <Navbar.Toggle />
-                    </Navbar.Header>
-                    <Navbar.Collapse>
-                        <Navbar.Text>
-                            <span>Structor</span>
-                            <span className='text-muted' style={{marginLeft: '0.2em'}}>{packageConfig.version}</span>
-                        </Navbar.Text>
-                        <Nav pullRight={true}>
-                            <NavItem href="https://groups.google.com/forum/#!forum/structor-forum" target="_blank">
-                                <span className="fa fa-comments-o fa-fw"></span>&nbsp;Forum
-                            </NavItem>
-                            <NavItem href="https://www.facebook.com/groups/1668757740011916/" target="_blank">
-                                <span className='fa fa-facebook-square fa-fw'></span>&nbsp;Group
-                            </NavItem>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Navbar>
+                <div style={{position: 'fixed', top: '0px', left: '0px', right: '0px', bottom: '0px'}}>
+                    <div
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}>
+                        <div style={{display: 'block'}}>
+                            <div className='umy-logo'></div>
+                        </div>
+                    </div>
+                </div>
             );
         }
 
