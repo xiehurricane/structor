@@ -1,4 +1,4 @@
-Structor - a user interface builder for Web applications with React UI
+Structor - an advanced user interface builder for React.
 ----------
 
 [![facebook group](https://img.shields.io/badge/facebook%20group-follow-blue.svg?style=flat)](https://www.facebook.com/groups/structor/)
