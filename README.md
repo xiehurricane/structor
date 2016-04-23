@@ -35,6 +35,7 @@ So, the builder can be used as an HTTP server with all hot reloading capabilitie
 ### List of existing projects on GitHub
 
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
+* [structor-starter-prepack](https://github.com/ipselon/structor-starter-prepack)
 
 ### Articles
 
