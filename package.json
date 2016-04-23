@@ -1,7 +1,7 @@
 {
   "name": "structor",
-  "version": "0.2.9",
-  "description": "A user interface builder for Web applications with React UI",
+  "version": "1.0.0",
+  "description": "An advanced user interface builder for React",
   "main": "structor.js",
   "scripts": {
     "build-server": "gulp --gulpfile ./build-conf/gulpfile.js build-server",
@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/ipselon/structor.git"
   },
-  "author": "Alexander Pustovalov",
+  "author": "Alex Pustovalov",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ipselon/structor/issues"
