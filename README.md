@@ -1,8 +1,8 @@
-Structor - a user interface builder for Web applications with React UI
+Structor - an advanced user interface builder for React.
 ----------
 
 [![facebook group](https://img.shields.io/badge/facebook%20group-follow-blue.svg?style=flat)](https://www.facebook.com/groups/structor/)
-[![Twitter Follow](https://img.shields.io/twitter/follow/@helmetrex.svg?style=social)](https://twitter.com/StructorMarket)
+[![Twitter Follow](https://img.shields.io/twitter/follow/@helmetrex.svg?style=social)](https://twitter.com/helmetrex)
 
 [![npm version](https://img.shields.io/npm/v/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
 [![npm downloads](https://img.shields.io/npm/dt/structor.svg?style=flat)](https://www.npmjs.com/package/structor)
@@ -17,7 +17,7 @@ Structor was developed to overcome many challenges in Web application developmen
 
 * A unique flexible and configurable code generation. UI developer is able to configure the existing code generators or create his own code generator. Both options are quick and simple. And the result is - clear and clean code generated with taking into account your preferable design patterns.
 
-* <a href="https://helmetrex.com/generators">Installable online source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
+* <a href="https://helmetrex.com/generators">Online source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
 
 * Advanced documentation features for components. All components used in Structor has built-in documentation. Thus, it’s easy and convenient to configure and modify components within Structor.
 
@@ -28,35 +28,20 @@ Structor was developed to overcome many challenges in Web application developmen
 The builder runs locally as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
-Watch the presentation about how Structor works. This presentation shows all capabilities of Structor as development tool and describe its user interface controls: [How does Structor work ?](http://slides.com/alexanderpustovalov/deck)
-
-
 ### Videos
 
 * [Videos on Structor Market](https://helmetrex.com/videos)
-* [Spring Data REST Bootstrap prepack intro](https://www.youtube.com/watch?v=ag57pjaW9F8)
-* [Fetch data from GitHub | Part 1](https://www.youtube.com/watch?v=AY65e6Ry_rY)
-* [Fetch data from GitHub | Part 2](https://www.youtube.com/watch?v=JLz8B0XJPyk)
-* [Speed designing of ToDo list](https://www.youtube.com/watch?v=PggnIYdaJFI&list=PLAcaUOtEwjoR_U6eE2HQEXwkefeVESix1&index=3)
 
 ### List of existing projects on GitHub
 
-* [sdr-bootstrap-prepack](https://github.com/ipselon/sdr-bootstrap-prepack)
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
-* [material-ui-prepack](https://github.com/ipselon/material-ui-prepack)
 
 ### Articles
 
 * [Using React Router inside of components](https://github.com/ipselon/structor/wiki/Using-React-Router-inside-of-components)
 * [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
-* [Generators metadata overview](https://github.com/ipselon/structor/wiki/Generators-metadata-overview)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
 * [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
-
-### Tutorials
-
-* [Fetch data from GitHub (part 1)](https://github.com/ipselon/structor/wiki/Structor-tutorial:-%22Fetch-data-from-GitHub%22-(part-1))
-* [Fetch data from GitHub (part 2)](https://github.com/ipselon/structor/wiki/Structor-tutorial:-%22Fetch-data-from-GitHub%22-(part-2))
 
 ### Getting started
 
