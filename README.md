@@ -17,7 +17,7 @@ Structor was developed to overcome many challenges in Web application developmen
 
 * A unique flexible and configurable code generation. UI developer is able to configure the existing code generators or create his own code generator. Both options are quick and simple. And the result is - clear and clean code generated with taking into account your preferable design patterns.
 
-* <a href="https://helmetrex.com/generators">Installable online source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
+* <a href="https://helmetrex.com/generators">Online source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
 
 * Advanced documentation features for components. All components used in Structor has built-in documentation. Thus, it’s easy and convenient to configure and modify components within Structor.
 
