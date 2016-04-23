@@ -32,7 +32,7 @@ So, the builder can be used as an HTTP server with all hot reloading capabilitie
 
 * [Videos on Structor Market](https://helmetrex.com/videos)
 
-### List of existing projects on GitHub
+### Existing projects on GitHub
 
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
 * [structor-starter-prepack](https://github.com/ipselon/structor-starter-prepack)
