@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { SagaCancellationException } from 'redux-saga';
 import { fork, take, call, put, race } from 'redux-saga/effects';
 import * as actions from './actions.js';
 import { actions as spinnerActions } from '../AppSpinner/index.js';
@@ -42,7 +43,7 @@ function* triggerDownloadProject(){
         try {
             const {timeout, response} = yield race({
                 response: call(downloadProject, payload),
-                timeout: call(delay, 300000)
+                timeout: call(delay, 480000)
             });
             if(response){
                 yield put(appContainerActions.getProjectStatus());
