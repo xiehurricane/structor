@@ -161,7 +161,7 @@ function resolveAbsoluteSourcePath(indexObj) {
         _.forEach(requires, item => {
             if (item.source && item.source.indexOf('../../') === 0) {
                 item.absoluteSource =
-                    path.resolve(path.dirname(sandboxConfig.deskIndexFilePath()), item.source);
+                    path.resolve(path.dirname(sandboxConfig.deskIndexFilePath()), item.source).replace(/\\/g, '/');
             }
         });
     }
@@ -172,7 +172,7 @@ function resolveAbsoluteSourcePath(indexObj) {
                 group.components.forEach(component => {
                     if (component.source && component.source.indexOf('../../') === 0) {
                         component.absoluteSource =
-                            path.resolve(path.dirname(sandboxConfig.deskIndexFilePath()), component.source);
+                            path.resolve(path.dirname(sandboxConfig.deskIndexFilePath()), component.source).replace(/\\/g, '/');
                     }
                 });
             }

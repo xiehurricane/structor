@@ -28,18 +28,18 @@ let config = {
 };
 
 function setupProjectPaths(rootDirPath) {
-    const absRoot = path.join(rootDirPath, SERVICE_DIR);
+    const absRoot = path.join(rootDirPath, SERVICE_DIR).replace(/\\/g, '/');
     config.project.paths = {
         dir: rootDirPath,
-        configFilePath: path.join(absRoot, 'config.json'),
-        deskSourceDirPath: path.join(absRoot, 'src'),
-        //deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js'),
-        deskPageTemplatePath: path.join(absRoot, 'src', 'PageForDesk.tpl'),
-        deskIndexFilePath: path.join(absRoot, 'src', 'index.js'),
-        deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js'),
-        deskDirPath: path.join(absRoot, 'desk'),
-        docsDirPath: path.join(absRoot, 'docs'),
-        docsComponentsDirPath: path.join(absRoot, 'docs', 'components')
+        configFilePath: path.join(absRoot, 'config.json').replace(/\\/g, '/'),
+        deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
+        //deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
+        deskPageTemplatePath: path.join(absRoot, 'src', 'PageForDesk.tpl').replace(/\\/g, '/'),
+        deskIndexFilePath: path.join(absRoot, 'src', 'index.js').replace(/\\/g, '/'),
+        deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js').replace(/\\/g, '/'),
+        deskDirPath: path.join(absRoot, 'desk').replace(/\\/g, '/'),
+        docsDirPath: path.join(absRoot, 'docs').replace(/\\/g, '/'),
+        docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/')
     };
 }
 
@@ -70,7 +70,7 @@ function loadProjectConfig() {
             let newPaths = {};
             if (jsonData.paths) {
                 forOwn(jsonData.paths, (value, prop) => {
-                    newPaths[prop] = path.join(config.project.paths.dir, value);
+                    newPaths[prop] = path.join(config.project.paths.dir, value).replace(/\\/g, '/');
                 });
             } else {
                 throw Error('The paths section is missing in the current project configuration.');
@@ -78,7 +78,7 @@ function loadProjectConfig() {
             let newFiles = {};
             if (jsonData.files) {
                 forOwn(jsonData.files, (value, prop) => {
-                    newFiles[prop] = path.join(config.project.paths.dir, value);
+                    newFiles[prop] = path.join(config.project.paths.dir, value).replace(/\\/g, '/');
                 });
             } else {
                 throw Error('The files section is missing in the current project configuration.');

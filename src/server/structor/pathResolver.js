@@ -27,7 +27,7 @@ export function resolveFromProjectPerspective(projectDataObj){
         if(pageObj.imports && pageObj.imports.length > 0){
             pageObj.imports.forEach( (variable, index) => {
                 if(variable.source.substr(0, 6) === '../../'){
-                    let absoluteSourcePath = path.resolve(indexFileDirPath, variable.source);
+                    let absoluteSourcePath = path.resolve(indexFileDirPath, variable.source).replace(/\\/g, '/');
                     variable.relativeSource = repairPath(path.relative(absoluteDirPath, absoluteSourcePath)).replace(/\\/g, '/');
                 } else {
                     variable.relativeSource = variable.source;
@@ -38,7 +38,7 @@ export function resolveFromProjectPerspective(projectDataObj){
             pageObj.resources.requires.forEach( (variable, index) => {
 
                 if(variable.source.substr(0, 6) === '../../'){
-                    let absoluteSourcePath = path.resolve(indexFileDirPath, variable.source);
+                    let absoluteSourcePath = path.resolve(indexFileDirPath, variable.source).replace(/\\/g, '/');
                     variable.relativeSource = repairPath(path.relative(absoluteDirPath, absoluteSourcePath)).replace(/\\/g, '/');
                 } else {
                     variable.relativeSource = variable.source;

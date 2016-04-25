@@ -18,7 +18,7 @@ import path from 'path';
 import * as fileManager from '../commons/fileManager.js';
 
 export function writeProject(destDirPath, fileData){
-    let destFilePath = path.join(destDirPath, '__app.tar.gz');
+    let destFilePath = path.join(destDirPath, '__app.tar.gz').replace(/\\/g, '/');
     let tempFilePath;
     return fileManager.writeBinaryFile(destFilePath, fileData)
         .then(() => {

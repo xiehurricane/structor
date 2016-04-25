@@ -95,8 +95,8 @@ export function installDependencies(dependencies) {
                     });
                     copy.forEach(copyItem => {
                         installTask = installTask.then(() => {
-                            const absSrcPath = path.join(absDirPath, copyItem.from);
-                            const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to);
+                            const absSrcPath = path.join(absDirPath, copyItem.from).replace(/\\/g, '/');
+                            const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to).replace(/\\/g, '/');
                             return fileManager.copyFile(absSrcPath, absDestPath);
                         });
                     });

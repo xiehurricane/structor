@@ -225,7 +225,7 @@ export function readDirectoryTree(result, start, callback, testFileNames = undef
             let total = 0;
             let processed = 0;
             var isDir = (dirPath, fileName) => {
-                const abspath = path.join(dirPath, fileName);
+                const abspath = path.join(dirPath, fileName).replace(/\\/g, '/');
                 fs.stat(abspath, (err, stat) => {
                     if(err){
                         callback(err);
@@ -328,7 +328,7 @@ export function readDirectoryFlat(dirPath){
                         resolve(found);
                     }
                     for (let x = 0, l = files.length; x < l; x++) {
-                        let absPath = path.join(dirPath, files[x]);
+                        let absPath = path.join(dirPath, files[x]).replace(/\\/g, '/');
                         fs.stat(absPath, ((_path, _name, _x) => {
                             return (err, stat) => {
                                 if (err) {

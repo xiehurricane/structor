@@ -144,13 +144,13 @@ export function doGeneration(projectModel) {
                         projectDataObj.pages.forEach((page, index) => {
                             let pageName = obj.outputFileName.replace('{pagename}', page.pageName);
                             generatedObject.pages.push({
-                                pageOutputFilePath: path.join(projectDataObj.outputDirPath, pageName),
+                                pageOutputFilePath: path.join(projectDataObj.outputDirPath, pageName).replace(/\\/g, '/'),
                                 pageSourceCode: obj.templateObj(page)
                             });
                         });
                     } else {
                         generatedObject.pages.push({
-                            pageOutputFilePath: path.join(projectDataObj.outputDirPath, obj.outputFileName),
+                            pageOutputFilePath: path.join(projectDataObj.outputDirPath, obj.outputFileName).replace(/\\/g, '/'),
                             pageSourceCode: obj.templateObj(projectDataObj)
                         });
                     }

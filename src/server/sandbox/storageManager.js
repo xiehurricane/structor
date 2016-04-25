@@ -20,11 +20,11 @@ import * as fileManager from '../commons/fileManager.js';
 import * as validator from '../commons/validator.js';
 
 export function makeWorkingCopy(){
-    const workingDirPath = path.join(config.sandboxDirPath(), 'work');
+    const workingDirPath = path.join(config.sandboxDirPath(), 'work').replace(/\\/g, '/');
     return fileManager.copyFile(config.sandboxTemplateDirPath(), workingDirPath);
 }
 
 export function deleteWorkingCopy(){
-    const workingDirPath = path.join(config.sandboxDirPath(), 'work');
+    const workingDirPath = path.join(config.sandboxDirPath(), 'work').replace(/\\/g, '/');
     return fileManager.removeFile(workingDirPath);
 }

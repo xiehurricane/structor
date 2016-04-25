@@ -36,11 +36,11 @@ export function error(options){
 export function setServer(server){
     serverRef = server;
     if(serverRef){
-        const sandboxDeskDirPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk');
+        const sandboxDeskDirPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk').replace(/\\/g, '/');
         serverRef.app.use('/structor-sandbox-preview', express.static(sandboxDeskDirPath));
         const screenshotStorage = multer.diskStorage({
             destination: (req, file, cb) => {
-                cb(null, path.join(sandboxDeskDirPath, 'assets', 'img'));
+                cb(null, path.join(sandboxDeskDirPath, 'assets', 'img').replace(/\\/g, '/'));
             },
             filename: (req, file, cb) => {
                 cb(null, 'screenshot.png');

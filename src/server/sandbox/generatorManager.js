@@ -31,7 +31,7 @@ function repairPath(path){
 }
 
 export function initGeneratorData(groupName, componentName, model, metadata) {
-    return sandboxConfig.init(path.join(config.sandboxDirPath(), 'work'))
+    return sandboxConfig.init(path.join(config.sandboxDirPath(), 'work').replace(/\\/g, '/'))
         .then(() => {
             return sandboxIndexManager.initIndex();
         })
@@ -124,8 +124,8 @@ export function installDependencies(dependencies) {
                     });
                     copy.forEach(copyItem => {
                         installTask = installTask.then(() => {
-                            const absSrcPath = path.join(absDirPath, copyItem.from);
-                            const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to);
+                            const absSrcPath = path.join(absDirPath, copyItem.from).replace(/\\/g, '/');
+                            const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to).replace(/\\/g, '/');
                             return fileManager.copyFile(absSrcPath, absDestPath);
                         });
                     });
@@ -161,7 +161,7 @@ export function saveGenerated(files) {
                 const componentRelativePath = path.relative(indexFileDirPath, componentFilePath).replace(/\\/g, '/');
                 const pageForDeskTemplate = template(pageForDeskTemplateText);
                 return fileManager.writeFile(
-                    path.join(sandboxConfig.deskSourceDirPath(), 'PageForDesk.js'),
+                    path.join(sandboxConfig.deskSourceDirPath(), 'PageForDesk.js').replace(/\\/g, '/'),
                     pageForDeskTemplate({componentRelativePath}),
                     false
                 );

@@ -36,7 +36,7 @@ export function readProjectJsonModel(){
 export function readDefaults(componentName){
     let lookupComponentName =
         isFirstCharacterInUpperCase(componentName) ? componentName : ('html-' + componentName);
-    let filePath = path.join(config.componentDefaultsDirPath(), lookupComponentName + '.json');
+    let filePath = path.join(config.componentDefaultsDirPath(), lookupComponentName + '.json').replace(/\\/g, '/');
     return fileManager.readJson(filePath)
         .then(fileData => {
             if(fileData.length > 0){
@@ -55,7 +55,7 @@ export function readDefaults(componentName){
 }
 
 export function readComponentDocument(componentName){
-    const componentNoteFilePath = path.join(config.docsComponentsDirPath(), componentName + '.md');
+    const componentNoteFilePath = path.join(config.docsComponentsDirPath(), componentName + '.md').replace(/\\/g, '/');
     return fileManager.readFile(componentNoteFilePath)
         .then( fileData => {
             fileData = fileData || 'Component does not have notes';

@@ -123,7 +123,7 @@ export function sandboxProcess(sampleId, data){
 }
 
 export function sandboxPublish(sampleId, generatorKey){
-    const screenshotPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk', 'assets', 'img', 'screenshot.png');
+    const screenshotPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk', 'assets', 'img', 'screenshot.png').replace(/\\/g, '/');
     return client.uploadFile(
         SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey,
         screenshotPath, 'screenshot'

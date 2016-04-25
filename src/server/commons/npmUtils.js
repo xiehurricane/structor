@@ -51,11 +51,19 @@ export function installDefault(workingDirPath){
 }
 
 export function getConfigVariable(varName, workingDirPath){
-    return execute(`npm get ${varName}`, workingDirPath);
+    return execute(`npm get ${varName}`, workingDirPath)
+        .catch(err => {
+            console.error(err);
+            return undefined;
+        });
 }
 
 export function setConfigVariable(varName, varValue, workingDirPath){
-    return execute(`npm set ${varName}=${varValue}`, workingDirPath);
+    return execute(`npm set ${varName}=${varValue}`, workingDirPath)
+        .catch(err => {
+            console.error(err);
+            return undefined;
+        });
 }
 
 export function getPackageAbsolutePath(packageName, workingDir){

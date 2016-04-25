@@ -48,33 +48,33 @@ let config = {
 };
 
 function setupProjectPaths(rootDirPath) {
-    const absRoot = path.join(rootDirPath, SERVICE_DIR);
+    const absRoot = path.join(rootDirPath, SERVICE_DIR).replace(/\\/g, '/');
     config.project.paths = {
         dir: rootDirPath,
-        configFilePath: path.join(absRoot, 'config.json'),
-        webpackConfigFilePath: path.join(absRoot, 'webpack.config.js'),
-        templatesDirPath: path.join(absRoot, 'templates'),
-        deskSourceDirPath: path.join(absRoot, 'src'),
-        deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js'),
-        deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js'),
-        deskIndexFilePath: path.join(absRoot, 'src', 'index.js'),
-        docsDirPath: path.join(absRoot, 'docs'),
-        docsReadmeFilePath: path.join(absRoot, 'docs', 'Readme.md'),
-        docsComponentsDirPath: path.join(absRoot, 'docs', 'components'),
-        componentDefaultsDirPath: path.join(absRoot, 'defaults'),
-        nodeModulesDirPath: path.join(rootDirPath, 'node_modules'),
-        deskModelFilePath: path.join(absRoot, 'desk', 'model.json'),
-        deskDirPath: path.join(absRoot, 'desk'),
-        sandboxDirPath: path.join(absRoot, 'sandbox'),
-        sandboxTemplateDirPath: path.join(absRoot, 'sandbox', 'template')
+        configFilePath: path.join(absRoot, 'config.json').replace(/\\/g, '/'),
+        webpackConfigFilePath: path.join(absRoot, 'webpack.config.js').replace(/\\/g, '/'),
+        templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
+        deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
+        deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
+        deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js').replace(/\\/g, '/'),
+        deskIndexFilePath: path.join(absRoot, 'src', 'index.js').replace(/\\/g, '/'),
+        docsDirPath: path.join(absRoot, 'docs').replace(/\\/g, '/'),
+        docsReadmeFilePath: path.join(absRoot, 'docs', 'Readme.md').replace(/\\/g, '/'),
+        docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/'),
+        componentDefaultsDirPath: path.join(absRoot, 'defaults').replace(/\\/g, '/'),
+        nodeModulesDirPath: path.join(rootDirPath, 'node_modules').replace(/\\/g, '/'),
+        deskModelFilePath: path.join(absRoot, 'desk', 'model.json').replace(/\\/g, '/'),
+        deskDirPath: path.join(absRoot, 'desk').replace(/\\/g, '/'),
+        sandboxDirPath: path.join(absRoot, 'sandbox').replace(/\\/g, '/'),
+        sandboxTemplateDirPath: path.join(absRoot, 'sandbox', 'template').replace(/\\/g, '/')
     };
 }
 
 function setupServerPaths(rootDirPath) {
     config.server.paths = {
         dir: rootDirPath,
-        packageFilePath: path.join(rootDirPath, 'package.json'),
-        nodeModulesDirPath: path.join(rootDirPath, 'node_modules')
+        packageFilePath: path.join(rootDirPath, 'package.json').replace(/\\/g, '/'),
+        nodeModulesDirPath: path.join(rootDirPath, 'node_modules').replace(/\\/g, '/')
     };
 }
 
@@ -105,7 +105,7 @@ function loadProjectConfig() {
             let newPaths = {};
             if (jsonData.paths) {
                 forOwn(jsonData.paths, (value, prop) => {
-                    newPaths[prop] = path.join(config.project.paths.dir, value);
+                    newPaths[prop] = path.join(config.project.paths.dir, value).replace(/\\/g, '/');
                 });
             } else {
                 throw Error('The paths section is missing in the current project configuration.');
@@ -113,7 +113,7 @@ function loadProjectConfig() {
             let newFiles = {};
             if (jsonData.files) {
                 forOwn(jsonData.files, (value, prop) => {
-                    newFiles[prop] = path.join(config.project.paths.dir, value);
+                    newFiles[prop] = path.join(config.project.paths.dir, value).replace(/\\/g, '/');
                 });
             } else {
                 throw Error('The files section is missing in the current project configuration.');
