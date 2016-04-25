@@ -17,7 +17,7 @@ Structor was developed to overcome many challenges in Web application developmen
 
 * A unique flexible and configurable code generation. UI developer is able to configure the existing code generators or create his own code generator. Both options are quick and simple. And the result is - clear and clean code generated with taking into account your preferable design patterns.
 
-* <a href="https://helmetrex.com/generators">Online source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
+* <a href="https://helmetrex.com/generators">Source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
 
 * Advanced documentation features for components. All components used in Structor has built-in documentation. Thus, it’s easy and convenient to configure and modify components within Structor.
 
@@ -28,12 +28,18 @@ Structor was developed to overcome many challenges in Web application developmen
 The builder runs locally as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
 So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
 
+### Requirements
+
+* node.js 5.x
+* npm 3.8.x
+
 ### Videos
 
 * [Videos on Structor Market](https://helmetrex.com/videos)
 
 ### Existing projects on GitHub
 
+* [material-ui-prepack](https://github.com/ipselon/material-ui-prepack)
 * [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
 * [structor-starter-prepack](https://github.com/ipselon/structor-starter-prepack)
 
@@ -53,14 +59,14 @@ npm install structor -g
 
 Then you have two ways to start working in the builder.
 
-The first way:
+#### The first way:
 * Create an empty folder on local machine.
 * cd to this folder and run command: ```structor```.
 * Open the browser and enter the address: ```http://localhost:2222/structor```.
 * Choose suitable prepack and click clone option.
 * Start composing UI...
 
-The second way:
+#### The second way (preferable for Windows users):
 * Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable boilerplate.
 * Download package on localhost and unpack it in some empty folder.
 * cd to this folder and run ```npm install``` command.
@@ -74,5 +80,5 @@ The next time you want to open project in Structor, just go to the folder where 
 * To run with different port: ```structor -p <port>```<br/>
 * To specify different project's working directory: ```structor -d <path_to_project_dir>```
 
-#### License
+### License
 Apache License, Version 2.0 (Apache-2.0)
