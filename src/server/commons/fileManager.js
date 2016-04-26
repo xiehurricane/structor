@@ -132,7 +132,7 @@ export function copyFile(srcFilePath, destFilePath){
                 reject(err);
             } else if(stat) {
                 if (stat.isDirectory()) {
-                    fs.ensureDir(srcFilePath, err => {
+                    fs.ensureDir(destFilePath, err => {
                         if(err){
                             reject(err);
                         } else {
@@ -146,7 +146,7 @@ export function copyFile(srcFilePath, destFilePath){
                         }
                     });
                 } else if(stat.isFile()) {
-                    fs.ensureFile(srcFilePath, err => {
+                    fs.ensureFile(destFilePath, err => {
                         if(err){
                             reject(err);
                         } else {
