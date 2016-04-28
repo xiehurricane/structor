@@ -57,14 +57,16 @@ class Container extends Component {
     }
 
     render() {
-        const { projectId, userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
+        const { projectId, projectRepo, userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
         const { componentModel: {infos}, generatorKey } = this.props;
         const { appContainerModel: {userAccount: {userId: accountUserId}} } = this.props;
         const brief = infos[generatorId] ? marked(infos[generatorId].brief) : '';
 
         let imgUrl = null;
+        let readmeUrl = '#';
         if(generatorKey){
             imgUrl = window.serviceUrl + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/screenshot.png';
+            readmeUrl = window.serviceUrl + '/generator?key=' + generatorKey + '&repo=' + projectRepo + '&projectId=' + projectId + '&userId=' + userId + '&generatorId=' + generatorId;
         }
         let selectButton = null;
         let cloneButton = null;
@@ -169,7 +171,7 @@ class Container extends Component {
                             <div style={{flexGrow: '2'}}>
                                 <div style={{width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'flex-end' }}>
                                     <a target="__blank"
-                                       href="#">
+                                       href={readmeUrl}>
                                         <i className="fa fa-external-link"></i>
                                         <span style={{marginLeft: '0.5em'}}>Read in tab...</span>
                                     </a>

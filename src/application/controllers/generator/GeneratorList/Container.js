@@ -115,6 +115,7 @@ class Container extends Component {
                             element: <GeneratorBriefPanel key={ item.generatorId }
                                                           generatorKey={item.dirNamePath}
                                                           projectId={item.projectId}
+                                                          projectRepo={item.projectRepo}
                                                           userId={item.userId}
                                                           generatorId={item.generatorId}
                                                           versions={item.versions}
@@ -182,14 +183,15 @@ class Container extends Component {
                             generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
                                                                          generatorKey={item.dirNamePath}
                                                                          projectId={item.projectId}
+                                                                         projectRepo={item.projectRepo}
                                                                          userId={item.userId}
                                                                          generatorId={item.generatorId}
                                                                          versions={item.versions}/>);
                         }
                     });
                     pageCount = parseInt(generatorGroup.files.length / itemsPerPage);
-                    if(pageCount > 0){
-                        pageCount += parseInt(generatorGroup.files.length % itemsPerPage);
+                    if(pageCount > 0 && parseInt(generatorGroup.files.length % itemsPerPage) > 0){
+                        pageCount += 1;
                     }
 
                 }
