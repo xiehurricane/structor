@@ -11,22 +11,10 @@ Structor - an advanced user interface builder for React.
 
 Structor was developed to overcome many challenges in Web application development. It’s a fast and handy tool for the visual construction of User Interface from a pre-created components.
 
-### Features
+### Introduction
 
-* Visual combining of interface elements utilising well known WYSIWYG principals. You always get the instant feedback - how your UI-components look, feel, how they can interact with each other and with User.
-
-* A unique flexible and configurable code generation. UI developer is able to configure the existing code generators or create his own code generator. Both options are quick and simple. And the result is - clear and clean code generated with taking into account your preferable design patterns.
-
-* <a href="https://helmetrex.com/generators">Source code generators</a>, which are designed to eliminate the efforts to create advanced components, which require the source code infrastructure in order to interact, for example, with RESTful service or with each other. 
-
-* Advanced documentation features for components. All components used in Structor has built-in documentation. Thus, it’s easy and convenient to configure and modify components within Structor.
-
-* Structor works with specially crafted projects - bundles with a sets of simple basic components or components with an advanced complicated logic. It’s really easy to reuse components in Structor.
-
-* Structor’s Team support. We are providing service support both for integration of Structor into your development process and overall fulfillment.
-
-The builder runs locally as HTTP server with ```webpack-dev-middleware``` + ```webpack-hot-middleware``` + ```react-transform-hmr``` inside.
-So, the builder can be used as an HTTP server with all hot reloading capabilities from the box.
+* [Part 1](https://github.com/ipselon/structor/wiki/Structor-intro.-Part-1.)
+* [Part 2](https://github.com/ipselon/structor/wiki/Structor-Intro.-Part-2.)
 
 ### Requirements
 
@@ -49,6 +37,11 @@ So, the builder can be used as an HTTP server with all hot reloading capabilitie
 * [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
 * [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
+
+### Blog
+
+* [Structor as playground for React Applications](https://medium.com/@alex_pustovalov/structor-as-a-playground-for-react-applications-49accf4544b8#.auvm78l7v)
+
 
 ### Getting started
 
