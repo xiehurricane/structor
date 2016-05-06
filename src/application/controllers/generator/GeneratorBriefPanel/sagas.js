@@ -21,10 +21,10 @@ import { serverApi, cookies } from '../../../api';
 //
 //const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out'), ms));
 //
-function* getInfo(projectId, userId, generatorId){
+function* getInfo(userId, generatorId){
     try{
-        const textInfo = yield call(serverApi.getGeneratorInfo, projectId, userId, generatorId);
-        yield put(actions.setGeneratorInfo(projectId, userId, generatorId, {brief: textInfo}));
+        const textInfo = yield call(serverApi.getGeneratorInfo, userId, generatorId);
+        yield put(actions.setGeneratorInfo(userId, generatorId, {brief: textInfo}));
     } catch(e){
         console.warn(e.message ? e.message : e.toString());
     }
@@ -32,8 +32,8 @@ function* getInfo(projectId, userId, generatorId){
 
 function* getGeneratorInfo(){
     while(true){
-        const {payload: {projectId, userId, generatorId}} = yield take(actions.GET_GENERATOR_INFO);
-        yield fork(getInfo, projectId, userId, generatorId);
+        const {payload: {userId, generatorId}} = yield take(actions.GET_GENERATOR_INFO);
+        yield fork(getInfo, userId, generatorId);
     }
 }
 // main saga

@@ -77,12 +77,8 @@ export function downloadGalleryFile(downloadUrl) {
 //    throw Error('Current project\'s configuration does not have projectName field. It seems project is not compatible with Structor\'s version.');
 //}
 
-export function getGeneratorBriefText(projectId, userId, generatorId) {
-        return client.getText(SERVICE_URL + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/brief.md')
-}
-
-export function getGeneratorReadmeText(projectId, userId, generatorId) {
-        return client.getText(SERVICE_URL + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/readme.md')
+export function getGeneratorReadmeText(userId, generatorId) {
+        return client.getText(SERVICE_URL + '/sm/public/generator/info/' + userId + '/' + generatorId + '/readme.md')
 }
 
 export function getAvailableGeneratorsList() {
@@ -95,13 +91,6 @@ export function getAvailableGeneratorsList() {
 export function getAvailableGeneratorGenerics(){
     if (config.projectId()) {
         return client.get(SERVICE_URL + '/sm/public/generator/generics?projectId=' + config.projectId());
-    }
-    return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
-}
-
-export function getGeneratorSamples(){
-    if (config.projectId()) {
-        return client.get(SERVICE_URL + '/sm/gengine/samples?projectId=' + config.projectId());
     }
     return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }
@@ -125,7 +114,7 @@ export function sandboxProcess(sampleId, data){
 export function sandboxPublish(sampleId, generatorKey){
     const screenshotPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk', 'assets', 'img', 'screenshot.png').replace(/\\/g, '/');
     return client.uploadFile(
-        SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey,
+        SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey + '&projectId=' + config.projectId(),
         screenshotPath, 'screenshot'
     );
 }

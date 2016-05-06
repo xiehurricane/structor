@@ -32,8 +32,8 @@ class Container extends Component {
     }
 
     componentDidMount(){
-        const { projectId, userId, generatorId, getGeneratorInfo } = this.props;
-        getGeneratorInfo(projectId, userId, generatorId);
+        const { userId, generatorId, getGeneratorInfo } = this.props;
+        getGeneratorInfo(userId, generatorId);
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -57,7 +57,7 @@ class Container extends Component {
     }
 
     render() {
-        const { projectId, projectRepo, userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
+        const { userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
         const { componentModel: {infos}, generatorKey } = this.props;
         const { appContainerModel: {userAccount: {userId: accountUserId}} } = this.props;
         const brief = infos[generatorId] ? marked(infos[generatorId].brief) : '';
@@ -65,8 +65,8 @@ class Container extends Component {
         let imgUrl = null;
         let readmeUrl = '#';
         if(generatorKey){
-            imgUrl = window.serviceUrl + '/sm/public/generator/info/' + projectId + '/' + userId + '/' + generatorId + '/screenshot.png';
-            readmeUrl = window.serviceUrl + '/generator?key=' + generatorKey + '&repo=' + projectRepo + '&projectId=' + projectId + '&userId=' + userId + '&generatorId=' + generatorId;
+            imgUrl = window.serviceUrl + '/sm/public/generator/info/' + userId + '/' + generatorId + '/screenshot.png';
+            readmeUrl = window.serviceUrl + '/generator?key=' + generatorKey + '&userId=' + userId + '&generatorId=' + generatorId;
         }
         let selectButton = null;
         let cloneButton = null;
@@ -186,7 +186,6 @@ class Container extends Component {
 }
 
 Container.defaultProps = {
-    projectId: undefined,
     userId: undefined,
     generatorId: undefined,
     versions: undefined,
@@ -194,7 +193,6 @@ Container.defaultProps = {
     isRecentPanel: undefined
 };
 Container.propTypes = {
-    projectId: PropTypes.number.isRequired,
     userId: PropTypes.number.isRequired,
     generatorId: PropTypes.number.isRequired,
     versions: PropTypes.string.isRequired,

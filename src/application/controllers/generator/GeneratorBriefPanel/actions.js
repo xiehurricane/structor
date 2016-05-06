@@ -23,10 +23,10 @@ import { removeFromRecentGenerators } from '../GeneratorList/actions.js';
 export const GET_GENERATOR_INFO = "GeneratorBriefPanel/GET_GENERATOR_INFO";
 export const SET_GENERATOR_INFO = "GeneratorBriefPanel/SET_GENERATOR_INFO";
 
-export const getGeneratorInfo = (projectId, userId, generatorId) =>
-    ({type: GET_GENERATOR_INFO, payload: {generatorId, userId, projectId}});
-export const setGeneratorInfo = (projectId, userId, generatorId, info) =>
-    ({type: SET_GENERATOR_INFO, payload: {projectId, userId, generatorId, info}});
+export const getGeneratorInfo = (userId, generatorId) =>
+    ({type: GET_GENERATOR_INFO, payload: {generatorId, userId}});
+export const setGeneratorInfo = (userId, generatorId, info) =>
+    ({type: SET_GENERATOR_INFO, payload: {userId, generatorId, info}});
 
 export const containerActions = (dispatch) => bindActionCreators({
     getGeneratorInfo, pregenerate, setGeneratorSample, removeFromRecentGenerators

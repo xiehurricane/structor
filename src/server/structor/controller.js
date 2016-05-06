@@ -187,12 +187,7 @@ export function exportPages(options){
     });
 }
 
-export function getGeneratorBrief(options){
-    const {projectId, userId, generatorId} = options;
-    return clientManager.getGeneratorBriefText(projectId, userId, generatorId);
-}
-
 export function getGeneratorReadme(options){
-    const {projectId, userId, generatorId} = options;
-    return clientManager.getGeneratorReadmeText(projectId, userId, generatorId);
+    const {userId, generatorId} = options;
+    return clientManager.getGeneratorReadmeText(userId, generatorId);
 }

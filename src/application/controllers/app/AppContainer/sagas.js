@@ -53,6 +53,7 @@ function* signIn(){
                 if(staySignedIn === true){
                     cookies.setItem("structor-market-token", response.token, 31536e3, "/");
                 }
+                console.log(JSON.stringify(response));
                 yield put(actions.signInDone(response));
                 yield put(signInModalActions.hideModal());
                 yield put(messageActions.success('Signing in to your account has been done successfully.'));

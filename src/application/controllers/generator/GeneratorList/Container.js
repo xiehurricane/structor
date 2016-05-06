@@ -101,6 +101,7 @@ class Container extends Component {
         let headGroupItems = [];
         let generatorGroup;
         let generatorPanelList = [];
+        let generatorGroupCount = 0;
         if(selectedTabKey === 1){
             generatorGroup = generators[ALL_GROUP_KEY];
             if (generatorGroup.files && generatorGroup.files.length > 0
@@ -114,8 +115,6 @@ class Container extends Component {
                             index: sortIndex,
                             element: <GeneratorBriefPanel key={ item.generatorId }
                                                           generatorKey={item.dirNamePath}
-                                                          projectId={item.projectId}
-                                                          projectRepo={item.projectRepo}
                                                           userId={item.userId}
                                                           generatorId={item.generatorId}
                                                           versions={item.versions}
@@ -135,55 +134,55 @@ class Container extends Component {
                                key={'allFiles'}
                                data-catalog="All"
                                data-catalog-name="All"
-                               style={{position: 'relative'}}
+                               style={{position: 'relative', outline: 0}}
                                onClick={this.handleChangeCatalog}>
+                    <i style={{margin: '0 1em 0 0'}} className="fa fa-reply-all"></i>
                     <span>Reset filter</span>
-                <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
-                    <span className="fa fa-reply-all"></span>
-                </span>
                 </ListGroupItem>
             );
             if(this.groupsHistory.length > 0){
                 headGroupItems.push(
                     <ListGroupItem href="#"
                                    key={'backNavigation'}
+                                   style={{position: 'relative', outline: 0}}
                                    style={{position: 'relative'}}
                                    onClick={this.handleChangeBackCatalog}>
+                        <i style={{margin: '0 1em 0 0'}} className="fa fa-chevron-left"></i>
                         <span>{groupNameBack}</span>
-                        <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
-                            <span className="fa fa-reply"></span>
-                        </span>
-
                     </ListGroupItem>
                 );
             }
             if(generatorGroup){
                 if(generatorGroup.catalogs && generatorGroup.catalogs.length > 0){
                     generatorGroup.catalogs.forEach( (catalog, index) => {
+                        const childGeneratorGroup = generators[catalog.dirNamePath];
+                        const childGeneratorGroupCount = childGeneratorGroup && childGeneratorGroup.files ? childGeneratorGroup.files.length || 0 : 0;
                         generatorGroupCatalogs.push(
                             <ListGroupItem href="#"
                                            key={'catalog' + index}
-                                           style={{position: 'relative'}}
+                                           style={{position: 'relative', outline: 0}}
                                            data-catalog={catalog.dirNamePath}
                                            data-catalog-name={catalog.dirName}
                                            onClick={this.handleChangeCatalog}>
+                                <span style={{margin: '0 1em 0 0'}}>
+                                    <span className="fa fa-chevron-right"></span>
+                                </span>
                                 <span>{catalog.dirName}</span>
                                 <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
-                                    <span className="fa fa-chevron-right"></span>
+                                    <span>{childGeneratorGroupCount}</span>
                                 </span>
                             </ListGroupItem>
                         );
                     });
                 }
                 if (generatorGroup.files && generatorGroup.files.length > 0) {
+                    generatorGroupCount = generatorGroup.files.length;
                     const lowerBound = (activePage - 1) * itemsPerPage;
                     const higherBound = activePage * itemsPerPage;
                     generatorGroup.files.forEach((item, index) => {
                         if(index < higherBound && index >= lowerBound ){
                             generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
                                                                          generatorKey={item.dirNamePath}
-                                                                         projectId={item.projectId}
-                                                                         projectRepo={item.projectRepo}
                                                                          userId={item.userId}
                                                                          generatorId={item.generatorId}
                                                                          versions={item.versions}/>);
@@ -245,6 +244,9 @@ class Container extends Component {
                                         {headGroupItems}
                                         <ListGroupItem active={true}>
                                             <span>{groupName}</span>
+                                            <span className="badge">
+                                                <span>{generatorGroupCount}</span>
+                                            </span>
                                         </ListGroupItem>
                                         {generatorGroupCatalogs}
                                     </ListGroup>

@@ -146,8 +146,8 @@ export function getAvailableGeneratorGenerics(){
     return invokeStructor('getAvailableGeneratorGenerics');
 }
 
-export function getGeneratorInfo(projectId, userId, generatorId){
-    return invokeStructor('getGeneratorReadme', {projectId, userId, generatorId});
+export function getGeneratorInfo(userId, generatorId){
+    return invokeStructor('getGeneratorReadme', {userId, generatorId});
 }
 
 export function pregenerate(generatorId, version, groupName, componentName, model){
