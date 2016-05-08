@@ -31,10 +31,10 @@ import { serverApi, utils, graphApi } from '../../../api';
 
 function* prepareGeneratorSample(){
     while(true){
-        const {payload:{generatorId, version}} = yield take(actions.SET_GENERATOR_SAMPLE);
+        const {payload:{generatorId, version, generatorKey, userId}} = yield take(actions.SET_GENERATOR_SAMPLE);
         yield put(spinnerActions.started('Preparing generator sample'));
         try {
-            const generatorTemplate = yield call(serverApi.prepareGeneratorSampleSandbox, generatorId, version);
+            const generatorTemplate = yield call(serverApi.prepareGeneratorSampleSandbox, generatorId, version, generatorKey, userId);
             yield put(generatorTemplateActions.setTemplate(generatorTemplate));
             yield put(appContainerActions.showSandbox());
         } catch(error) {
@@ -62,10 +62,10 @@ function* saveAndGenerateComponent(){
 
 function* publishGenerator(){
     while(true){
-        const {payload:{sampleId, generatorKey}} = yield take(actions.PUBLISH_GENERATOR_SAMPLE);
+        const {payload:{sampleId, generatorKey, forceClone}} = yield take(actions.PUBLISH_GENERATOR_SAMPLE);
         yield put(spinnerActions.started('Publishing generator'));
         try {
-            yield call(serverApi.publishSandboxGenerator, sampleId, generatorKey);
+            yield call(serverApi.publishSandboxGenerator, sampleId, generatorKey, forceClone);
             yield put(actions.stepToStage(actions.STAGE1));
             yield put(generatorActions.loadGenerators());
             yield put(generatorListActions.setFilterByGeneratorKey(generatorKey));

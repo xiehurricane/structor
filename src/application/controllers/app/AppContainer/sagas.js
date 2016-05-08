@@ -77,7 +77,7 @@ function* signOut(){
 
 function* delayForCompiler(){
     try{
-        yield call(delay, 60000);
+        yield call(delay, 300000);
         yield put(messageActions.timeout('The source code compiling is timed out. Look at console output or reload the browser page.'));
         yield put(deskPageActions.setReloadPageRequest());
         yield put(actions.compilerTimeout());

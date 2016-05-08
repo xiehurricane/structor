@@ -21,7 +21,8 @@ const initialState = {
     generatorSampleId: undefined,
     generatorSampleVersion: undefined,
     generatorSampleKey: undefined,
-    generatorSampleUserId: undefined
+    generatorSampleUserId: undefined,
+    isForceClone: false
 };
 
 export default (state = initialState, action = {}) => {
@@ -39,7 +40,8 @@ export default (state = initialState, action = {}) => {
             generatorSampleId: payload.generatorId,
             generatorSampleVersion: payload.version,
             generatorSampleKey: payload.generatorKey,
-            generatorSampleUserId: payload.userId
+            generatorSampleUserId: payload.userId,
+            isForceClone: payload.forceClone
         });
     }
 

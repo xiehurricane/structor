@@ -165,10 +165,10 @@ export function getAvailableGeneratorSamplesList(){
     return invokeSandbox('getGeneratorSamples');
 }
 
-export function prepareGeneratorSampleSandbox(generatorId, version){
+export function prepareGeneratorSampleSandbox(generatorId, version, generatorKey, userId){
     return invokeSandbox('removeWorkingDirectory')
         .then(() => {
-            return invokeSandbox('makeWorkingDirectory');
+            return invokeSandbox('makeWorkingDirectory', {generatorId, userId});
         })
         .then(() => {
             return invokeSandbox('sandboxPrepare', {generatorId, version});
@@ -196,6 +196,6 @@ export function saveAndGenerateSandboxComponent(sampleId, filesObject){
         });
 }
 
-export function publishSandboxGenerator(sampleId, generatorKey){
-    return invokeSandbox('sandboxPublish', {sampleId, generatorKey});
+export function publishSandboxGenerator(sampleId, generatorKey, forceClone){
+    return invokeSandbox('sandboxPublish', {sampleId, generatorKey, forceClone});
 }

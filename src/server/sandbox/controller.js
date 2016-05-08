@@ -55,7 +55,8 @@ export function setServer(server){
 }
 
 export function makeWorkingDirectory(options){
-    return storageManager.makeWorkingCopy();
+    const {generatorId, userId} = options;
+    return storageManager.makeWorkingCopy(generatorId, userId);
 }
 
 export function removeWorkingDirectory(options){
@@ -98,6 +99,6 @@ export function saveSandboxGenerated(options){
 }
 
 export function sandboxPublish(options){
-    return clientManager.sandboxPublish(options.sampleId, options.generatorKey);
+    return clientManager.sandboxPublish(options.sampleId, options.generatorKey, options.forceClone);
 }
 

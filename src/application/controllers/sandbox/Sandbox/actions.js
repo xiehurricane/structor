@@ -33,8 +33,8 @@ export const PUBLISH_GENERATOR_SAMPLE = "Sandbox/PUBLISH_GENERATOR_SAMPLE";
 
 export const stepToStage = (stage) => ({type: STEP_TO_STAGE, payload: stage});
 //export const loadGeneratorSamples = () => ({type: LOAD_GENERATOR_SAMPLES});
-export const setGeneratorSample = (generatorId, version, generatorKey, userId) => (dispatch, getState) => {
-    dispatch({type: SET_GENERATOR_SAMPLE, payload: {generatorId, version, generatorKey, userId}});
+export const setGeneratorSample = (generatorId, version, generatorKey, userId, forceClone) => (dispatch, getState) => {
+    dispatch({type: SET_GENERATOR_SAMPLE, payload: {generatorId, version, generatorKey, userId, forceClone}});
 };
 export const saveAndGenerateSandboxComponent = (templateObject) => (dispatch, getState) => {
     const {sandbox:{generatorSampleId}} = getState();
@@ -42,8 +42,8 @@ export const saveAndGenerateSandboxComponent = (templateObject) => (dispatch, ge
 };
 
 export const publishGeneratorSample = (generatorKey) => (dispatch, getState) => {
-    const {sandbox:{generatorSampleId}} = getState();
-    dispatch({type: PUBLISH_GENERATOR_SAMPLE, payload: {sampleId: generatorSampleId, generatorKey}});
+    const {sandbox:{generatorSampleId, isForceClone}} = getState();
+    dispatch({type: PUBLISH_GENERATOR_SAMPLE, payload: {sampleId: generatorSampleId, generatorKey, forceClone: isForceClone}});
 };
 
 export const hide = () => (dispatch, getState) => {

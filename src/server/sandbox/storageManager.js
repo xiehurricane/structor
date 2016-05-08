@@ -18,10 +18,24 @@ import path from 'path';
 import * as config from '../commons/configuration.js';
 import * as fileManager from '../commons/fileManager.js';
 import * as validator from '../commons/validator.js';
+import * as clientManager from '../commons/clientManager.js';
 
-export function makeWorkingCopy(){
+export function makeWorkingCopy(generatorId, userId){
     const workingDirPath = path.join(config.sandboxDirPath(), 'work').replace(/\\/g, '/');
-    return fileManager.copyFile(config.sandboxTemplateDirPath(), workingDirPath);
+    return fileManager.copyFile(config.sandboxTemplateDirPath(), workingDirPath)
+        .then(() => {
+            return clientManager.downloadGeneratorScreenshot(userId, generatorId)
+                .catch(err => {
+                    return undefined;
+                });
+        })
+        .then(file => {
+            if(file){
+                const screenshotFilePath = path.join(workingDirPath, '.structor', 'desk', 'assets', 'img', 'screenshot.png').replace(/\\/g, '/');
+                return fileManager.writeBinaryFile(screenshotFilePath, file);
+            }
+        });
+
 }
 
 export function deleteWorkingCopy(){

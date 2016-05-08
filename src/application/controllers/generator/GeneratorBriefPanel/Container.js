@@ -29,6 +29,7 @@ class Container extends Component {
         super(props);
         this.handleOnSelect = this.handleOnSelect.bind(this);
         this.handleOnClone = this.handleOnClone.bind(this);
+        this.handleOnUpdate = this.handleOnUpdate.bind(this);
     }
 
     componentDidMount(){
@@ -53,7 +54,15 @@ class Container extends Component {
         e.stopPropagation();
         const { generatorId, setGeneratorSample, userId, generatorKey } = this.props;
         const version = e.currentTarget.dataset.version;
-        setGeneratorSample(generatorId, version, generatorKey, userId);
+        setGeneratorSample(generatorId, version, generatorKey, userId, true);
+    }
+
+    handleOnUpdate(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const { generatorId, setGeneratorSample, userId, generatorKey } = this.props;
+        const version = e.currentTarget.dataset.version;
+        setGeneratorSample(generatorId, version, generatorKey, userId, false);
     }
 
     render() {
@@ -70,6 +79,7 @@ class Container extends Component {
         }
         let selectButton = null;
         let cloneButton = null;
+        let updateButton = null;
         if(versions){
             const versionsList = versions.split(',');
             let menuItems = [];
@@ -107,11 +117,23 @@ class Container extends Component {
                                  style={{marginLeft: '0.5em'}}
                                  data-version={versionsList[versionsList.length-1]}
                                  onClick={this.handleOnClone}
-                                 title={userId !== accountUserId ? "Fork generator" : "Update version"}
+                                 title="Fork generator"
                                  bsStyle="default" bsSize="xs">
                         {cloneMenuItems}
                     </SplitButton>
                 );
+                if(userId === accountUserId){
+                    updateButton = (
+                        <SplitButton id="cloneButton"
+                                     style={{marginLeft: '0.5em'}}
+                                     data-version={versionsList[versionsList.length-1]}
+                                     onClick={this.handleOnUpdate}
+                                     title="Update version"
+                                     bsStyle="default" bsSize="xs">
+                            {cloneMenuItems}
+                        </SplitButton>
+                    );
+                }
             }
         }
         const closeButtonStyle = {
@@ -166,6 +188,7 @@ class Container extends Component {
                         <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                             <div style={{minWidth: '30em', flexGrow: '1'}}>
                                 {selectButton}
+                                {updateButton}
                                 {cloneButton}
                             </div>
                             <div style={{flexGrow: '2'}}>

@@ -67,6 +67,10 @@ export function downloadGalleryFile(downloadUrl) {
     return client.downloadGet(downloadUrl);
 }
 
+export function downloadGeneratorScreenshot(userId, generatorId){
+    return client.downloadGet(SERVICE_URL + '/sm/public/generator/info/' + userId + '/' + generatorId + '/screenshot.png');
+}
+
 //export function downloadGeneratorFile(generatorKey, version) {
 //    const projectConfig = require(this.sm.getProject('config.filePath'));
 //    if (projectConfig.projectName) {
@@ -111,10 +115,11 @@ export function sandboxProcess(sampleId, data){
     return client.post(SERVICE_URL + '/sm/gengine/sandbox/process?sampleId=' + sampleId, data);
 }
 
-export function sandboxPublish(sampleId, generatorKey){
+export function sandboxPublish(sampleId, generatorKey, forceClone){
     const screenshotPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk', 'assets', 'img', 'screenshot.png').replace(/\\/g, '/');
-    return client.uploadFile(
-        SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey + '&projectId=' + config.projectId(),
-        screenshotPath, 'screenshot'
-    );
+    let publishUrl = SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey + '&projectId=' + config.projectId();
+    if(forceClone === true){
+        publishUrl += '&forceClone=true';
+    }
+    return client.uploadFile(publishUrl, screenshotPath, 'screenshot');
 }

@@ -48,7 +48,7 @@ const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out')
 
 function* delayForPageLoaded(){
     try{
-        yield call(delay, 30000);
+        yield call(delay, 300000);
         yield put(messageActions.timeout('Page loading is timed out. Look at the console output and try to fix error. ' +
             'Page will be reloaded automatically after successful compiling.'));
         yield put(actions.setReloadPageRequest());
