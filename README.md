@@ -44,22 +44,34 @@ Install Structor in global scope:
 npm install structor -g
 ```
 
-Then you have two ways to start working in the builder.
+Then you have the following ways to start working in the builder.
 
-#### The first way:
+#### The fastest way
+* Clone one of existing projects (BTW, you can request your own structure of Structor project with own generators, just [write to us](mailto:support@helmetrex.com)):
+   * `git clone https://github.com/ipselon/bootstrap-prepack.git` for Bootstrap project
+   * `git clone https://github.com/ipselon/material-ui-prepack.git` for Material UI project
+   * `git clone https://github.com/ipselon/structor-starter-prepack.git` for starter project
+* Go to appeared folder:
+   * `cd bootstrap-prepack` for Bootstrap project
+   * `cd material-ui-prepack` for Material UI project
+   * `cd structor-starter-prepack` for starter project
+* Install dependencies: `npm install`
+* Run Structor: `structor` (`structor -p <some another port>`)
+* Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
+
+#### The laizy way (often buggy):
 * Create an empty folder on local machine.
-* cd to this folder and run command: ```structor```.
-* Open the browser and enter the address: ```http://localhost:2222/structor```.
-* Choose suitable prepack and click clone option.
-* Start composing UI...
+* Go to this folder.
+* Run Structor: `structor` (`structor -p <some another port>`)
+* Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
+* Choose suitable project and click clone option.
 
-#### The second way (preferable for Windows users):
-* Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable boilerplate.
+#### One more way (preferable for Windows users):
+* Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable project.
 * Download package on localhost and unpack it in some empty folder.
 * cd to this folder and run ```npm install``` command.
-* Once installation is finished run ```structor```.
-* Open the browser and enter the address: ```http://localhost:2222/structor```.
-* Start composing UI...
+* Run Structor: `structor` (`structor -p <some another port>`)
+* Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
  
 The next time you want to open project in Structor, just go to the folder where project is and run ```structor```.
 
