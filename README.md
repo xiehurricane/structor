@@ -13,13 +13,7 @@ Structor is a fast and handy tool for the visual construction of User Interface 
 
 ### Introduction
 
-* [Part 1](https://github.com/ipselon/structor/wiki/Structor-intro.-Part-1.)
-* [Part 2](https://github.com/ipselon/structor/wiki/Structor-Intro.-Part-2.)
-
-### Requirements
-
-* node.js 5.x
-* npm 3.8.x
+* [Structor as playground for React Applications](https://medium.com/@alex_pustovalov/structor-as-a-playground-for-react-applications-49accf4544b8#.auvm78l7v)
 
 ### Videos
 
@@ -38,10 +32,10 @@ Structor is a fast and handy tool for the visual construction of User Interface 
 * [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
 * [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
 
-### Blog
+### Requirements
 
-* [Structor as playground for React Applications](https://medium.com/@alex_pustovalov/structor-as-a-playground-for-react-applications-49accf4544b8#.auvm78l7v)
-
+* node.js 5.x
+* npm 3.8.x
 
 ### Getting started
 
