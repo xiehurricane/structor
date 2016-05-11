@@ -59,7 +59,7 @@ Then you have the following ways to start working in the builder.
 * Run Structor: `structor` (`structor -p <some another port>`)
 * Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
 
-#### The laizy way (often buggy):
+#### The lazy way (often buggy):
 * Create an empty folder on local machine.
 * Go to this folder.
 * Run Structor: `structor` (`structor -p <some another port>`)
