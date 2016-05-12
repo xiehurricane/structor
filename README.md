@@ -9,7 +9,7 @@ Structor - visual GUI editor for React.
 
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
-Structor is a fast and handy tool for the visual construction of User Interface from a pre-created components.
+Structor is a fast and handy tool for the visual construction of User Interface from pre-created components.
 
 ### Introduction
 
