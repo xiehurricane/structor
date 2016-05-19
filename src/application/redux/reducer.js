@@ -49,6 +49,7 @@ import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/r
 import sandboxFilesListReducer from '../controllers/sandbox/SandboxFilesList/reducer.js';
 import proxySetupModalReducer from '../controllers/app/ProxySetupModal/reducer.js';
 import projectGalleryReducer from '../controllers/app/ProjectGallery/reducer.js';
+import sandboxPageReducer from '../controllers/sandbox/SandboxPage/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -83,7 +84,8 @@ const reducer = combineReducers({
     generatorTemplate: generatorTemplateReducer,
     sandboxFilesList: sandboxFilesListReducer,
     proxySetupModal: proxySetupModalReducer,
-    projectGallery: projectGalleryReducer
+    projectGallery: projectGalleryReducer,
+    sandboxPage: sandboxPageReducer
 });
 
 export default reducer;

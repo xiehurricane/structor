@@ -33,13 +33,15 @@ function setupProjectPaths(rootDirPath) {
         dir: rootDirPath,
         configFilePath: path.join(absRoot, 'config.json').replace(/\\/g, '/'),
         deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
-        //deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
-        deskPageTemplatePath: path.join(absRoot, 'src', 'PageForDesk.tpl').replace(/\\/g, '/'),
+        deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
+        //deskPageTemplatePath: path.join(absRoot, 'src', 'PageForDesk.tpl').replace(/\\/g, '/'),
         deskIndexFilePath: path.join(absRoot, 'src', 'index.js').replace(/\\/g, '/'),
+        deskIndexTemplatePath: path.join(absRoot, 'src', 'index.tpl').replace(/\\/g, '/'),
         deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js').replace(/\\/g, '/'),
         deskDirPath: path.join(absRoot, 'desk').replace(/\\/g, '/'),
         docsDirPath: path.join(absRoot, 'docs').replace(/\\/g, '/'),
-        docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/')
+        docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/'),
+        componentDefaultsDirPath: path.join(absRoot, 'defaults').replace(/\\/g, '/')
     };
 }
 
@@ -135,9 +137,13 @@ export function deskIndexFilePath(){
     return config.project.paths.deskIndexFilePath;
 }
 
-export function deskPageTemplatePath(){
-    return config.project.paths.deskPageTemplatePath;
+export function deskIndexTemplatePath(){
+    return config.project.paths.deskIndexTemplatePath;
 }
+
+//export function deskPageTemplatePath(){
+//    return config.project.paths.deskPageTemplatePath;
+//}
 
 export function getProjectConfig() {
     return config.project;

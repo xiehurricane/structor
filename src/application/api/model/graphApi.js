@@ -18,7 +18,7 @@ import { forOwn, isObject, takeRight, last, initial } from 'lodash';
 import { Graph } from 'graphlib';
 import { fulex } from '../utils/utils.js';
 import { getAvailableRoute } from './reactRouterApi.js';
-import { mapModel, makeNodeWrapper, traverseGraphBranch, adjustIndices } from './graphUtils.js';
+import { mapModel, mapModelForNode, makeNodeWrapper, traverseGraphBranch, adjustIndices } from './graphUtils.js';
 import { detachGraphNode, detachGraphNodes, copyGraphNode, copyGraphNodes } from './graphUtils.js';
 
 let bufferKey = undefined;
@@ -1036,10 +1036,12 @@ export function deleteSelected(){
     return newResultKeys;
 }
 
-export function changeModelNodeType(nodeKey, newType){
+export function changeModelNodeType(nodeKey, newType, newModel){
     const {graph} = graphObject;
     let node = graph.node(nodeKey);
-    if(node){
+    const parentKey = graph.parent(nodeKey);
+    const detachedModel = fulex(newModel);
+    if(node && parentKey){
         traverseGraphBranch(graph, nodeKey, childKey => {
             if(childKey !== nodeKey){
                 let childNode = graph.node(childKey);
@@ -1049,9 +1051,13 @@ export function changeModelNodeType(nodeKey, newType){
                 }
             }
         });
-        node.modelNode.children = [];
-        node.modelNode.type = newType;
-        node.modelNode.props = {};
+        mapModelForNode(graph, detachedModel, node.index, undefined, undefined, nodeKey);
+        let parentNode = graph.node(parentKey);
+        let {modelNode} = parentNode;
+        modelNode.children = modelNode.children || [];
+        let modelNodesArgs = [node.index, 1].concat([detachedModel]);
+        modelNode.children.splice.apply(modelNode.children, modelNodesArgs);
+        adjustIndices(graph, parentKey);
     }
 }
 

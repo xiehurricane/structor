@@ -153,15 +153,15 @@ export function saveGenerated(files) {
     });
     return Promise.all(fileSavers)
         .then(() => {
-            return fileManager.readFile(sandboxConfig.deskPageTemplatePath());
+            return fileManager.readFile(sandboxConfig.deskIndexTemplatePath());
         })
-        .then(pageForDeskTemplateText => {
+        .then(deskIndexTemplateText => {
             if (componentFilePath) {
                 const indexFileDirPath = sandboxConfig.deskSourceDirPath();
                 const componentRelativePath = path.relative(indexFileDirPath, componentFilePath).replace(/\\/g, '/');
-                const pageForDeskTemplate = template(pageForDeskTemplateText);
+                const pageForDeskTemplate = template(deskIndexTemplateText);
                 return fileManager.writeFile(
-                    path.join(sandboxConfig.deskSourceDirPath(), 'PageForDesk.js').replace(/\\/g, '/'),
+                    path.join(sandboxConfig.deskSourceDirPath(), 'index.js').replace(/\\/g, '/'),
                     pageForDeskTemplate({componentRelativePath}),
                     false
                 );

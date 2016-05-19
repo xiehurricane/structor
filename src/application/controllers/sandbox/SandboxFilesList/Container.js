@@ -23,6 +23,7 @@ import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
 import { Grid, Row, Col, Button, ListGroup, ListGroupItem, Tabs, Tab  } from 'react-bootstrap';
+import SandboxPage from '../SandboxPage';
 
 class Container extends Component {
 
@@ -39,13 +40,6 @@ class Container extends Component {
         $(this.refs.sourceCodePane).children('pre').each((i, block) => {
             hljs.highlightBlock(block);
         });
-        const contentWindow = this.refs.livePreviewFrame.contentWindow;
-        contentWindow.onPageDidMount = () => {
-            this.props.setAvailableToPublish(true);
-            this.props.success('Test component source code has been compiled successfully. Look at the live preview.');
-        };
-        //this.refs.livePreviewFrame.onload = (() => {
-        //});
     }
 
     componentDidUpdate(){
@@ -130,12 +124,6 @@ class Container extends Component {
                 previewFilePath = 'None';
             }
         }
-        let iframeStyle = {
-            height : '42.5em',
-            width : '100%',
-            minWidth : '320px',
-            border : '1px solid #000000'
-        };
         return (
             <Tabs defaultActiveKey={1} animation={false}>
                 <Tab key={'fileList'} eventKey={1} title="Source code files">
@@ -204,7 +192,7 @@ class Container extends Component {
                     </Grid>
                 </Tab>
                 <Tab key={'livePreview'} eventKey={2} title="Live component preview">
-                    <iframe ref="livePreviewFrame" style={iframeStyle} frameBorder="0" src="/structor-sandbox-preview/index.html" />
+                    <SandboxPage />
                 </Tab>
             </Tabs>
         );

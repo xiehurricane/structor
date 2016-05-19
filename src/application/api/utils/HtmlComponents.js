@@ -347,8 +347,49 @@ const HtmlComponents = {
         children: [
             {type: 'span', text: 'Code text line'}
         ]
+    },
+    'header': {
+        children: [
+            {type: 'p', children: [
+                {type: 'span', text: 'Header'}
+            ]}
+        ]
+    },
+    'main': {
+        children: [
+            {type: 'p', children: [
+                {type: 'span', text: 'Main'}
+            ]}
+        ]
+    },
+    'article': {
+        children: [
+            {type: 'p', children: [
+                {type: 'span', text: 'Article'}
+            ]}
+        ]
+    },
+    'nav': {
+        children: [
+            {type: 'p', children: [
+                {type: 'span', text: 'Navigation'}
+            ]}
+        ]
+    },
+    'aside': {
+        children: [
+            {type: 'p', children: [
+                {type: 'span', text: 'Aside'}
+            ]}
+        ]
+    },
+    'footer': {
+        children: [
+            {type: 'p', children: [
+                {type: 'span', text: 'Footer'}
+            ]}
+        ]
     }
-
 };
 
 export default HtmlComponents;

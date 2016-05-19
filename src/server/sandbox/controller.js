@@ -17,6 +17,7 @@
 import path from 'path';
 import express from 'express';
 import multer from 'multer';
+import {isArray} from 'lodash';
 import * as clientManager from '../commons/clientManager.js';
 import * as storageManager from './storageManager.js';
 import * as projectCompiler from './projectCompiler.js';
@@ -85,9 +86,30 @@ export function sandboxWriteFiles(options){
 
 export function sandboxGenerate(options){
     const {sampleId, metadata, model} = options;
-    return generatorManager.initGeneratorData('TestGroup', 'TestComponent', model, metadata)
+    const groupName = 'TestGroup';
+    const componentName = 'TestComponent';
+    return generatorManager.initGeneratorData(groupName, componentName, model, metadata)
         .then(generatorData => {
             return clientManager.sandboxProcess(sampleId, generatorData);
+        })
+        .then(generatorData => {
+            const {files} = generatorData;
+            const defaultModelFileName = componentName + '.json';
+            files.forEach(fileObject => {
+                if(fileObject.outputFileName === defaultModelFileName){
+                    try{
+                        generatorData.defaultModel = JSON.parse(fileObject.sourceCode);
+                    } catch(e){
+                        console.error('Sandbox default model source code parsing: ' + e);
+                    }
+                }
+            });
+            if(!generatorData.defaultModel || !isArray(generatorData.defaultModel) || generatorData.defaultModel.length <= 0){
+                generatorData.defaultModel = [{
+                    type: componentName
+                }];
+            }
+            return generatorData;
         });
 }
 

@@ -21,6 +21,7 @@ import * as HtmlComponents from './utils/HtmlComponents.js';
 import * as cookies from './utils/cookies.js';
 import * as graphApi from './model/graphApi.js';
 import * as previewGraphApi from './model/previewGraphApi.js';
+import * as sandboxGraphApi from './model/sandboxGraphApi.js';
 import * as coockiesApi from './app/coockiesApi.js';
 
 export {
@@ -32,5 +33,6 @@ export {
     cookies,
     graphApi,
     previewGraphApi,
+    sandboxGraphApi,
     coockiesApi
 };

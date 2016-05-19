@@ -36,6 +36,24 @@ export function mapModel(srcGraph, rootModelNode, rootIndex, isNew, prop) {
     return rootKey;
 }
 
+export function mapModelForNode(srcGraph, rootModelNode, rootIndex, isNew, prop, rootKey) {
+    srcGraph.setNode(rootKey, { modelNode: rootModelNode, index: rootIndex, prop });
+    forOwn(rootModelNode.props, (value, prop) => {
+        if (isObject(value) && value.type) {
+            const childKey = mapModel(srcGraph, value, 0, isNew, prop);
+            srcGraph.setParent(childKey, rootKey);
+        }
+    });
+    const { children } = rootModelNode;
+    if (children && children.length > 0) {
+        for (let i = 0; i < children.length; i++) {
+            const childKey = mapModel(srcGraph, children[i], i, isNew);
+            srcGraph.setParent(childKey, rootKey);
+        }
+    }
+    return rootKey;
+}
+
 export function makeNodeWrapper(key, graphNode){
     return {
         key: key,

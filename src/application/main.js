@@ -37,7 +37,8 @@ import { handleCompilerMessage } from './controllers/app/AppContainer/actions.js
 
 import { MainFrame } from './views/index.js';
 
-window.serviceUrl = 'https://helmetrex.com';
+//window.serviceUrl = 'https://helmetrex.com';
+window.serviceUrl = 'http://localhost';
 
 const sagaMiddleware = createSagaMiddleware(mainSaga);
 const store = createStore(reducer, applyMiddleware(myMiddleware, sagaMiddleware, thunk));

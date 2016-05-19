@@ -24,6 +24,7 @@ import * as metadataFormActions from '../MetadataForm/actions.js';
 import * as appContainerActions from '../../app/AppContainer/actions.js';
 import * as deskPageActions from '../../workspace/DeskPage/actions.js';
 import * as clipboardIndicatorActions from '../../workspace/ClipboardIndicator/actions.js';
+import * as libraryPanelActions from '../../workspace/LibraryPanel/actions.js';
 import { serverApi, graphApi, coockiesApi } from '../../../api';
 
 
@@ -71,8 +72,15 @@ function* saveGenerated(){
         yield put(spinnerActions.started('Installing & saving the source code'));
         try {
             yield call(serverApi.saveGenerated, groupName, componentName, files, dependencies);
-            graphApi.changeModelNodeType(selectedKey, componentName);
+            const response = yield call(serverApi.loadComponentsTree);
+            yield put(libraryPanelActions.setComponents(response));
+            let componentDefaults = response.componentDefaultsMap.get(componentName);
+            if(!componentDefaults || componentDefaults.length <= 0){
+                throw Error('Generated component does not have a valid model.');
+            }
+            graphApi.changeModelNodeType(selectedKey, componentName, componentDefaults[0]);
             yield put(clipboardIndicatorActions.removeClipboardKeys());
+            // yield put(libraryPanelActions.loadComponents());
             yield put(deskPageActions.setReloadPageRequest());
             yield put(actions.hide());
         } catch(error) {

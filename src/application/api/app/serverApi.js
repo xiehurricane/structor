@@ -85,7 +85,6 @@ export function loadComponentsTree() {
                                                 response = [];
                                                 if (htmlDefaults) {
                                                     response.push({
-                                                        variantName: 'Unsaved variant',
                                                         type: componentName,
                                                         props: htmlDefaults.props,
                                                         children: htmlDefaults.children,
@@ -93,7 +92,6 @@ export function loadComponentsTree() {
                                                     });
                                                 } else {
                                                     response.push({
-                                                        variantName: 'Unsaved variant',
                                                         type: componentName
                                                     });
                                                 }
