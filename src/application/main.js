@@ -39,14 +39,14 @@ import { MainFrame } from './views/index.js';
 
 window.serviceUrl = 'https://helmetrex.com';
 
-const sagaMiddleware = createSagaMiddleware(mainSaga);
+const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducer, applyMiddleware(myMiddleware, sagaMiddleware, thunk));
-
+sagaMiddleware.run(mainSaga);
 const { protocol, hostname, port } = window.location;
 const socket = io.connect(protocol + '//' + hostname + ':' + port);
 socket.on( 'invitation', message => console.log(message) );
 socket.on( 'compiler.message', stats => {
-    console.log('compiler.message: ' + JSON.stringify(stats));
+    // console.log('compiler.message: ' + JSON.stringify(stats));
     store.dispatch(handleCompilerMessage(stats));
 });
 

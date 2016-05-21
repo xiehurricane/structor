@@ -5,10 +5,8 @@ module.exports = [
     {
         name: "browser",
         entry: {
-            //main: './src/client/src/main.js',
             main: './src/application/main.js',
             //docs: './src/client/src/docs.js',
-            //generators: './src/client/src/generators.js'
         },
         output: {
             path: './static',
@@ -20,7 +18,7 @@ module.exports = [
                     query: {
                         cacheDirectory: true,
                         presets: ['react', 'es2015', 'stage-0'],
-                        plugins: ['transform-runtime', 'transform-object-assign', 'add-module-exports']
+                        plugins: ['transform-object-assign', 'add-module-exports']
                     }
                 },
                 { test: /\.css$/, exclude: /node_modules/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },

@@ -37,6 +37,7 @@ export const STRUCTOR_URLS = [
 
 let config = {
     status: undefined,
+    debugMode: false,
     project: {
         paths: {},
         conf: {}
@@ -158,8 +159,9 @@ export function reinit() {
     return init(serverDirPath, projectDirPath);
 }
 
-export function init(serverDirPath, projectDirPath) {
+export function init(serverDirPath, projectDirPath, debugMode) {
     config.status = undefined;
+    config.debugMode = debugMode;
     serverDir(serverDirPath);
     return loadServerConfig()
         .then(() => {
@@ -217,6 +219,10 @@ export function checkDeniedProxyURL(textUrl){
 
 export function status() {
     return config.status;
+}
+
+export function getDebugMode(){
+    return config.debugMode;
 }
 
 export function asObject() {

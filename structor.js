@@ -50,4 +50,6 @@ if(argv['d']){
     }
 }
 
-controller.initServer({ serverDir: __dirname, projectDir: workingDir, portNumber: portNumber, io: io });
+var debugMode = argv['v'];
+
+controller.initServer({ serverDir: __dirname, projectDir: workingDir, portNumber: portNumber, debugMode: debugMode, io: io });

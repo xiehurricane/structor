@@ -1,4 +1,8 @@
 {
   "presets": ["es2015", "stage-0"],
-  "plugins": ["transform-runtime", "transform-object-assign", "add-module-exports"]
+  "plugins": [
+    "transform-runtime",
+    "transform-object-assign",
+    "add-module-exports"
+  ]
 }

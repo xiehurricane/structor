@@ -57,6 +57,7 @@ function initServer(){
         }));
         serverRef.app.use(rewrite('/structor-deskpage/*', '/structor-desk/index.html'));
         serverRef.app.use('/structor-desk', express.static(config.deskDirPath()));
+        
     }
 }
 

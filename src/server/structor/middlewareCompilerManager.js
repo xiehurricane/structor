@@ -29,75 +29,24 @@ let builderMiddleware = undefined;
 
 export function getDevMiddlewareCompiler() {
     if (compiler === undefined) {
-        let configPart;
         try{
-            configPart = require(config.webpackConfigFilePath());
-        } catch(e){
-            console.warn('Webpack loaders custom config was not found');
-        }
-        configPart = configPart || {};
-        const webpackConfig = _.mergeWith({
-                name: "browser",
-                entry: [
-                    'webpack-hot-middleware/client?path=/structor-dev/a&overlay=false',
-                    config.deskEntryPointFilePath()
-                ],
-                output: {
-                    path: path.join(config.deskDirPath(), '__build__'),
-                    filename: 'bundle.js',
-                    publicPath: '/structor-dev/__build__'
-                },
-                devtool: 'inline-source-map',
-                plugins: [
-                    new webpack.optimize.OccurenceOrderPlugin(),
-                    new webpack.HotModuleReplacementPlugin(),
-                    new webpack.NoErrorsPlugin()
-                ],
-                module: {
-                    loaders: [
-                        {
-                            test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel',
-                            query: {
-                                cacheDirectory: true,
-                                presets: [
-                                    path.join(config.serverNodeModulesDirPath(), 'babel-preset-react'),
-                                    path.join(config.serverNodeModulesDirPath(), 'babel-preset-es2015'),
-                                    path.join(config.serverNodeModulesDirPath(), 'babel-preset-stage-0')
-                                ],
-                                plugins: [
-                                    [path.join(config.serverNodeModulesDirPath(), 'babel-plugin-react-transform'), {
-                                        transforms: [{
-                                            transform: path.join(config.serverNodeModulesDirPath(), 'react-transform-hmr'),
-                                            imports: ["react"],
-                                            locals: ["module"]
-                                        }]
-                                    }],
-                                    [path.join(config.serverNodeModulesDirPath(), 'babel-plugin-transform-runtime')],
-                                    [path.join(config.serverNodeModulesDirPath(), 'babel-plugin-add-module-exports')]
-                                ]
-                            }
-                        }
-                    ]
-                },
-                resolve: {
-                    root: [config.serverNodeModulesDirPath(), config.nodeModulesDirPath()]
-                },
-                resolveLoader: {
-                    root: [config.serverNodeModulesDirPath(), config.nodeModulesDirPath()]
-                },
-                externals: {
-                    "jquery": "jQuery"
-                }
-            },
-            configPart,
-            (a, b) => {
-                if (_.isArray(a)) {
-                    return a.concat(b);
-                }
+            let webpackConfig = require(config.webpackConfigFilePath())({
+                deskEntryPoint: 'webpack-hot-middleware/client?path=/structor-dev/a&overlay=false',
+                deskEntryPointFilePath: config.deskEntryPointFilePath(),
+                deskEntryPointOutputPath: path.join(config.deskDirPath(), '__build__'),
+                deskEntryPointOutputFileName: 'bundle.js',
+                deskEntryPointOutputPublicPath: '/structor-dev/__build__',
+                nodeModulesDirPath: config.nodeModulesDirPath(),
+                serverNodeModulesDirPath: config.serverNodeModulesDirPath()
             });
-        //console.log(JSON.stringify(webpackConfig, null, 4));
-
-        compiler = webpack(webpackConfig);
+            compiler = webpack(webpackConfig);
+            if(config.getDebugMode()){
+                console.log('Webpack configuration:');
+                console.log(JSON.stringify(webpackConfig, null, 4));
+            }
+        } catch(e){
+            throw Error('Webpack config was not found. ' + e);
+        }
 
     }
     return compiler;
@@ -108,8 +57,8 @@ export function getDevMiddleware() {
         devMiddleware = webpackDevMiddleware(
             getDevMiddlewareCompiler(),
             {
-                noInfo: true,
-                quiet: true,
+                noInfo: !config.getDebugMode(),
+                quiet: !config.getDebugMode(),
                 lazy: false,
                 publicPath: '/structor-dev/__build__'
             }

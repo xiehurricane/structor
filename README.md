@@ -78,6 +78,7 @@ The next time you want to open project in Structor, just go to the folder where 
 ##### Tips
 * To run with different port: ```structor -p <port>```<br/>
 * To specify different project's working directory: ```structor -d <path_to_project_dir>```
+* To in verbose mode: ```structor -v```
 
 ### License
 Apache License, Version 2.0 (Apache-2.0)

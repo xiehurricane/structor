@@ -73,10 +73,10 @@ function callControllerMethod(controller, req, res){
 }
 
 export function initServer(options){
-    const { serverDir, projectDir, portNumber, io } = options;
+    const { serverDir, projectDir, portNumber, debugMode, io } = options;
     serverDirPath = serverDir;
     projectDirPath = projectDir;
-    return config.init(serverDir, projectDir)
+    return config.init(serverDir, projectDir, debugMode)
         .then(status => {
             if(status){
 
