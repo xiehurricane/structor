@@ -19,63 +19,35 @@ import path from 'path';
 import webpack from 'webpack';
 import * as config from '../commons/configuration.js';
 
+let compiler = undefined;
+
 function compile(entryFilePath, outputDirPath, outputFileName) {
     return new Promise((resolve, reject) => {
-        let configPart;
-        try {
-            configPart = require(config.webpackConfigFilePath());
-        } catch (e) {
-            console.warn('Webpack loaders custom config was not found');
-        }
-        configPart = configPart || {};
-        let compiler = webpack(_.mergeWith({
-                name: "browser",
-                entry: [entryFilePath],
-                output: {
+        if(!compiler){
+            try{
+                let webpackConfig = require(config.webpackConfigFilePath())({
+                    deskEntryPoint: entryFilePath,
+                    deskEntryPointFilePath: '',
+                    deskEntryPointOutputPath: outputDirPath,
+                    deskEntryPointOutputFileName: outputFileName,
+                    deskEntryPointOutputPublicPath: '',
+                    nodeModulesDirPath: config.nodeModulesDirPath(),
+                    serverNodeModulesDirPath: config.serverNodeModulesDirPath()
+                });
+                webpackConfig.entry = [entryFilePath];
+                webpackConfig.output = {
                     path: outputDirPath,
                     filename: outputFileName
-                },
-                devtool: 'inline-source-map',
-                plugins: [
-                    new webpack.optimize.OccurenceOrderPlugin(),
-                    new webpack.NoErrorsPlugin()
-                ],
-                module: {
-                    loaders: [
-                        {
-                            test: /\.(js|jsx)$/, exclude: /node_modules/, loader: 'babel',
-                            query: {
-                                cacheDirectory: true,
-                                presets: [
-                                    path.join(config.serverNodeModulesDirPath(), 'babel-preset-react'),
-                                    path.join(config.serverNodeModulesDirPath(), 'babel-preset-es2015'),
-                                    path.join(config.serverNodeModulesDirPath(), 'babel-preset-stage-0')
-                                ],
-                                plugins: [
-                                    [path.join(config.serverNodeModulesDirPath(), 'babel-plugin-transform-runtime')],
-                                    [path.join(config.serverNodeModulesDirPath(), 'babel-plugin-add-module-exports')]
-                                ]
-                            }
-                        }
-                    ]
-                },
-                resolve: {
-                    root: [config.serverNodeModulesDirPath(), config.nodeModulesDirPath()]
-                },
-                resolveLoader: {
-                    root: [config.serverNodeModulesDirPath(), config.nodeModulesDirPath()]
-                },
-                externals: {
-                    "jquery": "jQuery"
+                };
+                compiler = webpack(webpackConfig);
+                if(config.getDebugMode()){
+                    console.log('Webpack configuration:');
+                    console.log(JSON.stringify(webpackConfig, null, 4));
                 }
-            },
-            configPart,
-            (a, b) => {
-                if (_.isArray(a)) {
-                    return a.concat(b);
-                }
-            }));
-
+            } catch(e){
+                throw Error('Webpack config was not found. ' + e);
+            }
+        }
         compiler.run((err, stats) => {
             let jsonStats = stats.toJson({
                 hash: true
