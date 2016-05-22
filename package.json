@@ -1,6 +1,6 @@
 {
   "name": "structor",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "An advanced GUI editor for React",
   "main": "structor.js",
   "scripts": {
