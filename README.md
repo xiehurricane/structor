@@ -39,14 +39,9 @@ Structor is a fast and handy tool for the visual construction of User Interface 
 
 ### Getting started
 
-Install Structor in global scope:
-```
-npm install structor -g
-```
+Structor is a tool which helps to create UI in a Web application. So, the first thing that you need - clone or download one of the existing Web application projects from GitHub.
 
-Then you have the following ways to start working in the builder.
-
-#### The fastest way
+#### Clone project from GitHub:
 * Clone one of existing projects (BTW, you can request your own structure of Structor project with own generators, just [write to us](mailto:support@helmetrex.com)):
    * `git clone https://github.com/ipselon/bootstrap-prepack.git` for Bootstrap project
    * `git clone https://github.com/ipselon/material-ui-prepack.git` for Material UI project
@@ -56,24 +51,40 @@ Then you have the following ways to start working in the builder.
    * `cd material-ui-prepack` for Material UI project
    * `cd structor-starter-prepack` for starter project
 * Install dependencies: `npm install`
-* Run Structor: `structor` (`structor -p <some another port>`)
-* Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
 
-#### The lazy way (often buggy):
-* Create an empty folder on local machine.
-* Go to this folder.
-* Run Structor: `structor` (`structor -p <some another port>`)
-* Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
-* Choose suitable project and click clone option.
-
-#### One more way (preferable for Windows users):
+#### Download & unpack:
 * Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable project.
 * Download package on localhost and unpack it in some empty folder.
 * cd to this folder and run ```npm install``` command.
-* Run Structor: `structor` (`structor -p <some another port>`)
-* Open your browser with address: `http://localhost:2222/structor` (`http://localhost:<some another port>/structor`)
- 
-The next time you want to open project in Structor, just go to the folder where project is and run ```structor```.
+
+#### Install Stuctor
+If you are going to work in Structor with many project it's better to install Structor globally. But if you do not have an access to install globally or your environment has issues with global paths (see [#56](https://github.com/ipselon/structor/issues/56) issue), you can install and run Structor locally.
+
+**Global installation**
+```
+npm install structor -g
+```
+
+**Local installation**
+```
+npm install structor
+```
+* Add the following line into `package.json` file in ```scripts``` section:
+```
+"structor": "structor"
+```
+
+#### Run Structor
+
+Being in project's folder run from command line:
+* In case Structor installed globally:
+```
+structor
+```
+* In case Structor installed locally:
+```
+npm run structor
+```
 
 ##### Tips
 * To run with different port: ```structor -p <port>```<br/>
