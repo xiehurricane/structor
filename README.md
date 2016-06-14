@@ -58,7 +58,7 @@ Structor is a tool which helps to create UI in a Web application. So, the first 
 * cd to this folder and run ```npm install``` command.
 
 #### Install Stuctor
-If you are going to work in Structor with many project it's better to install Structor globally. But if you do not have an access to install globally or your environment has issues with global paths (see [#56](https://github.com/ipselon/structor/issues/56) issue), you can install and run Structor locally.
+If you are going to work in Structor with many projects, it's better to install Structor globally. But if you do not have an access to install globally or your environment has issues with global paths (see [#56](https://github.com/ipselon/structor/issues/56) issue), you can install and run Structor locally.
 
 **Global installation**
 ```
