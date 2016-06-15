@@ -41,7 +41,7 @@ Structor is a fast and handy tool for the visual construction of User Interface 
 
 Structor is a tool which helps to create UI in a Web application. So, the first thing that you need - clone or download one of the existing Web application projects from GitHub.
 
-#### Clone project from GitHub:
+___Clone project from GitHub:___  
 * Clone one of existing projects (BTW, you can request your own structure of Structor project with own generators, just [write to us](mailto:support@helmetrex.com)):
    * `git clone https://github.com/ipselon/bootstrap-prepack.git` for Bootstrap project
    * `git clone https://github.com/ipselon/material-ui-prepack.git` for Material UI project
@@ -52,7 +52,7 @@ Structor is a tool which helps to create UI in a Web application. So, the first 
    * `cd structor-starter-prepack` for starter project
 * Install dependencies: `npm install`
 
-#### Download & unpack:
+___Or download & unpack:___  
 * Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable project.
 * Download package on localhost and unpack it in some empty folder.
 * cd to this folder and run ```npm install``` command.
