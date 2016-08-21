@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
-import path from 'path';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -26,19 +24,12 @@ let compiler = undefined;
 let devMiddleware = undefined;
 let hotMiddleware = undefined;
 let builderMiddleware = undefined;
+let webpackConfig = undefined;
 
 export function getDevMiddlewareCompiler() {
     if (compiler === undefined) {
         try{
-            let webpackConfig = require(config.webpackConfigFilePath())({
-                deskEntryPoint: 'webpack-hot-middleware/client?path=/structor-dev/a&overlay=false',
-                deskEntryPointFilePath: config.deskEntryPointFilePath(),
-                deskEntryPointOutputPath: path.join(config.deskDirPath(), '__build__'),
-                deskEntryPointOutputFileName: 'bundle.js',
-                deskEntryPointOutputPublicPath: '/structor-dev/__build__',
-                nodeModulesDirPath: config.nodeModulesDirPath(),
-                serverNodeModulesDirPath: config.serverNodeModulesDirPath()
-            });
+            webpackConfig = require(config.webpackConfigFilePath())();
             compiler = webpack(webpackConfig);
             if(config.getDebugMode()){
                 console.log('Webpack configuration:');
@@ -60,7 +51,7 @@ export function getDevMiddleware() {
                 noInfo: !config.getDebugMode(),
                 quiet: !config.getDebugMode(),
                 lazy: false,
-                publicPath: '/structor-dev/__build__'
+                publicPath: webpackConfig ? webpackConfig.output.publicPath : '/structor-dev/__build__'
             }
         );
     }
@@ -73,8 +64,12 @@ export function getHotMiddleware() {
             getDevMiddlewareCompiler(),
             {
                 log: console.log,
-                path: '/structor-dev/a',
-                heartbeat: 10 * 1000
+                overlay: false,
+                reload: true,
+                noInfo: false,
+                quiet: false,
+                path: '/structor-dev/a'
+                // dynamicPublicPath: true
             }
         );
     }

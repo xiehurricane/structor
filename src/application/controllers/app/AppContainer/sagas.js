@@ -147,18 +147,21 @@ function* getProjectStatus(){
             yield call(signInByToken);
             const status = yield call(serverApi.getProjectStatus);
             if(status === 'ready-to-go'){
-
+                console.log('Status is OK');
                 const model = yield call(serverApi.getProjectModel);
+                console.log('getProjectModel is OK');
                 const componentsTree = yield call(serverApi.loadComponentsTree);
+                console.log('loadComponentsTree is OK');
                 yield put(libraryPanelActions.setComponents(componentsTree));
                 yield put(deskPageActions.loadModel(model || {}));
 
                 const projectInfo = yield call(serverApi.getProjectInfo);
+                console.log('getProjectInfo is OK');
                 yield put(actions.setProjectInfo(projectInfo));
 
                 yield put(actions.showDesk());
             } else {
-                yield put(actions.showProjects());
+                yield put(messageActions.failed('Loading error of the current project'));
             }
         } catch(error) {
             yield put(messageActions.failed('Obtaining project status error. ' + (error.message ? error.message : error)));

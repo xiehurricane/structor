@@ -70,7 +70,7 @@ class Container extends Component {
 
         domNode.onload = ( () => {
             this.contentWindow.__pages = pages;
-            this.contentWindow.onPageDidMount = (page, pathname) => {
+            this.contentWindow.onPageDidMount = (page) => {
                 this.page = page;
 
                 page.bindOnComponentMouseDown(this.handleComponentClick);
@@ -157,12 +157,6 @@ class Container extends Component {
                 //page.bindToState('quickWrap', (componentName, selectedKey) => {
                 //    quickWrap(componentName, selectedKey);
                 //});
-
-                //const { componentModel } = this.props;
-                //page.updatePageModel({
-                //    pathname: componentModel.currentPagePath ? componentModel.currentPagePath : pathname,
-                //    isEditModeOn: componentModel.isEditModeOn
-                //});
             };
 
             const initPage = () => {
@@ -233,13 +227,12 @@ class Container extends Component {
             if(this.doUpdatePageModel){
                 const { componentModel } = this.props;
                 //console.log('Updating page model: ' + componentModel.currentPagePath);
-                this.page.updatePageModel({
-                    pathname: componentModel.currentPagePath
-                });
+                this.page.updatePageModel({pathname: componentModel.currentPagePath});
             }
             if(this.doUpdateMarks){
+                const { componentModel } = this.props;
                 //console.log('Updating marked only');
-                this.page.updateMarks();
+                this.page.updateMarks({pathname: componentModel.currentPagePath});
             }
         }
     }

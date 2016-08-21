@@ -49,7 +49,6 @@ class Container extends Component {
 
         const { componentModel: {selectedGenerator, groupName, componentName, metaData}, libraryPanelModel: {groupsList, componentsList} } = this.props;
         const metaHelpText = marked(selectedGenerator.metaHelp);
-
         const cellBoxStyle = {
             display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'
         };

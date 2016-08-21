@@ -53,15 +53,15 @@ function* pregenerate(){
 function* generate(){
     while(true){
         const {payload: {generatorId, version, groupName, componentName, modelNode, metaData}} = yield take(actions.GENERATE);
-        yield put(spinnerActions.started('Generating source code'));
+        yield put(spinnerActions.started('Generating the source code'));
         try {
             const generatedData = yield call(serverApi.generate, generatorId, version, groupName, componentName, modelNode, metaData);
             yield put(actions.setGeneratedData(generatedData));
             yield put(actions.stepToStage(actions.STAGE3));
         } catch(error) {
-            yield put(messageActions.failed('Source code generation has an error. ' + (error.message ? error.message : error)));
+            yield put(messageActions.failed('The source code generation has an error. ' + (error.message ? error.message : error)));
         }
-        yield put(spinnerActions.done('Generating source code'));
+        yield put(spinnerActions.done('Generating the source code'));
     }
 }
 
@@ -81,7 +81,7 @@ function* saveGenerated(){
             graphApi.changeModelNodeType(selectedKey, componentName, componentDefaults[0]);
             yield put(clipboardIndicatorActions.removeClipboardKeys());
             // yield put(libraryPanelActions.loadComponents());
-            yield put(deskPageActions.setReloadPageRequest());
+            // yield put(deskPageActions.setReloadPageRequest());
             yield put(actions.hide());
         } catch(error) {
             yield put(messageActions.failed('Source code installation has an error. ' + (error.message ? error.message : error)));

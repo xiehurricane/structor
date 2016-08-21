@@ -136,7 +136,7 @@ class Container extends Component {
                                data-catalog-name="All"
                                style={{position: 'relative', outline: 0}}
                                onClick={this.handleChangeCatalog}>
-                    <i style={{margin: '0 1em 0 0'}} className="fa fa-reply-all"></i>
+                    <i style={{margin: '0 1em 0 0'}} className="fa fa-reply-all" />
                     <span>Reset filter</span>
                 </ListGroupItem>
             );
@@ -145,9 +145,8 @@ class Container extends Component {
                     <ListGroupItem href="#"
                                    key={'backNavigation'}
                                    style={{position: 'relative', outline: 0}}
-                                   style={{position: 'relative'}}
                                    onClick={this.handleChangeBackCatalog}>
-                        <i style={{margin: '0 1em 0 0'}} className="fa fa-chevron-left"></i>
+                        <i style={{margin: '0 1em 0 0'}} className="fa fa-chevron-left" />
                         <span>{groupNameBack}</span>
                     </ListGroupItem>
                 );
@@ -165,7 +164,7 @@ class Container extends Component {
                                            data-catalog-name={catalog.dirName}
                                            onClick={this.handleChangeCatalog}>
                                 <span style={{margin: '0 1em 0 0'}}>
-                                    <span className="fa fa-chevron-right"></span>
+                                    <span className="fa fa-chevron-right" />
                                 </span>
                                 <span>{catalog.dirName}</span>
                                 <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>

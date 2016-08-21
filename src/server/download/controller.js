@@ -24,10 +24,6 @@ import * as config from '../commons/configuration.js';
 let postInstallationCallback = undefined;
 let currentProjectDirPath = undefined;
 
-export function getProjectStatus(){
-    return Promise.resolve(config.status());
-}
-
 export function setPostInstallationCallback(func){
     postInstallationCallback = func;
 }

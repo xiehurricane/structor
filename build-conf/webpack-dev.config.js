@@ -5,11 +5,12 @@ module.exports = [
     {
         name: "browser",
         entry: {
-            main: './src/application/main.js',
+            main: './src/application/main.js'
             //docs: './src/client/src/docs.js'
         },
         output: {
-            path: './static',
+            // path: './static',
+            path: '/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate/node_modules/structor/static',
             filename: '[name].js'
         },
         devtool: 'inline-source-map',
@@ -19,8 +20,8 @@ module.exports = [
                 { test: /\.js$/, exclude: /node_modules/, loader: 'babel',
                     query: {
                         cacheDirectory: true,
-                        presets: ['react', 'es2015', 'stage-0'],
-                        plugins: ['transform-object-assign', 'add-module-exports']
+                        presets: ['react', 'es2015-webpack', 'stage-0'],
+                        plugins: ['transform-object-assign']
                     }
                 },
                 { test: /\.css$/, exclude: /node_modules/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },

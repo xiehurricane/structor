@@ -22,7 +22,8 @@ export const SERVICE_DIR = '.structor';
 export const READY = 'ready-to-go';
 export const EMPTY = 'dir-is-empty';
 
-export const SERVICE_URL = 'https://helmetrex.com';
+// export const SERVICE_URL = 'https://helmetrex.com';
+export const SERVICE_URL = 'http://localhost';
 
 export const STRUCTOR_URLS = [
     '/structor',
@@ -54,15 +55,20 @@ function setupProjectPaths(rootDirPath) {
         dir: rootDirPath,
         configFilePath: path.join(absRoot, 'config.json').replace(/\\/g, '/'),
         webpackConfigFilePath: path.join(absRoot, 'webpack.config.js').replace(/\\/g, '/'),
+        deskIndexFilePath: path.join(absRoot, 'app', 'components.js').replace(/\\/g, '/'),
+        deskReducersFilePath: path.join(absRoot, 'app', 'reducers.js').replace(/\\/g, '/'),
+        deskSagasFilePath: path.join(absRoot, 'app', 'sagas.js').replace(/\\/g, '/'),
+        componentDefaultsDirPath: path.join(absRoot, 'defaults').replace(/\\/g, '/'),
+        docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/'),
+
+        appDirPath: path.join(rootDirPath, 'app').replace(/\\/g, '/'),
+
         templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
         deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
         deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
         deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js').replace(/\\/g, '/'),
-        deskIndexFilePath: path.join(absRoot, 'src', 'index.js').replace(/\\/g, '/'),
         docsDirPath: path.join(absRoot, 'docs').replace(/\\/g, '/'),
         docsReadmeFilePath: path.join(absRoot, 'docs', 'Readme.md').replace(/\\/g, '/'),
-        docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/'),
-        componentDefaultsDirPath: path.join(absRoot, 'defaults').replace(/\\/g, '/'),
         nodeModulesDirPath: path.join(rootDirPath, 'node_modules').replace(/\\/g, '/'),
         deskModelFilePath: path.join(absRoot, 'desk', 'model.json').replace(/\\/g, '/'),
         deskDirPath: path.join(absRoot, 'desk').replace(/\\/g, '/'),
@@ -255,6 +261,14 @@ export function deskSourceDirPath(){
 
 export function deskIndexFilePath() {
     return config.project.paths.deskIndexFilePath;
+}
+
+export function deskReducersFilePath() {
+    return config.project.paths.deskReducersFilePath;
+}
+
+export function deskSagasFilePath() {
+    return config.project.paths.deskSagasFilePath;
 }
 
 export function nodeModulesDirPath() {

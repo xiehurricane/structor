@@ -17,8 +17,8 @@ module.exports = [
                 { test: /\.js$/, exclude: /node_modules/, loader: 'babel',
                     query: {
                         cacheDirectory: true,
-                        presets: ['react', 'es2015', 'stage-0'],
-                        plugins: ['transform-object-assign', 'add-module-exports']
+                        presets: ['react', 'es2015-webpack', 'stage-0'],
+                        plugins: ['transform-object-assign']
                     }
                 },
                 { test: /\.css$/, exclude: /node_modules/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
@@ -26,19 +26,19 @@ module.exports = [
             ]
         },
         plugins: [
-            new ExtractTextPlugin("styles.css"),
-            new webpack.optimize.OccurenceOrderPlugin(),
+            new webpack.optimize.OccurrenceOrderPlugin(true),
+            new webpack.DefinePlugin({
+                "process.env": {
+                    NODE_ENV: JSON.stringify("production")
+                }
+            }),
             new webpack.optimize.DedupePlugin(),
             new webpack.optimize.UglifyJsPlugin({
                 compress: {
                     warnings: false
                 }
             }),
-            new webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("production")
-                }
-            })
+            new ExtractTextPlugin("styles.css")
         ],
         externals: {
             "jquery": "jQuery"

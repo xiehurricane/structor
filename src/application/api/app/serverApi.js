@@ -18,16 +18,17 @@ import {forOwn, isObject} from 'lodash';
 import { invokeStructor, invokeSandbox, invokeDownload } from './restApi.js';
 import HtmlComponents, {getSortedHtmlComponents} from '../utils/HtmlComponents.js';
 
+//
+// export function getProjectList(){
+//     return invokeDownload('getProjectList', {});
+// }
+//
+// export function prepareProject(downloadUrl){
+//     return invokeDownload('prepareProject', {downloadUrl});
+// }
+
 export function getProjectStatus(){
-    return invokeDownload('getProjectStatus', {});
-}
-
-export function getProjectList(){
-    return invokeDownload('getProjectList', {});
-}
-
-export function prepareProject(downloadUrl){
-    return invokeDownload('prepareProject', {downloadUrl});
+    return invokeStructor('getProjectStatus', {});
 }
 
 export function getProjectInfo() {
@@ -157,43 +158,4 @@ export function generate(generatorId, version, groupName, componentName, model, 
 
 export function saveGenerated(groupName, componentName, files, dependencies){
     return invokeStructor('saveGenerated', {groupName, componentName, files, dependencies});
-}
-
-export function getAvailableGeneratorSamplesList(){
-    return invokeSandbox('getGeneratorSamples');
-}
-
-export function prepareGeneratorSampleSandbox(generatorId, version, generatorKey, userId){
-    return invokeSandbox('removeWorkingDirectory')
-        .then(() => {
-            return invokeSandbox('makeWorkingDirectory', {generatorId, userId});
-        })
-        .then(() => {
-            return invokeSandbox('sandboxPrepare', {generatorId, version});
-        })
-        .then(() => {
-            return invokeSandbox('sandboxReadFiles', {sampleId: generatorId});
-        });
-}
-
-export function saveAndGenerateSandboxComponent(sampleId, filesObject){
-    let resultGeneratedData;
-    return invokeSandbox('sandboxWriteFiles', {sampleId, filesObject})
-        .then(() => {
-            return invokeSandbox('sandboxGenerate', {sampleId, metadata: filesObject.metadata, model: filesObject.model});
-        })
-        .then(generatedData => {
-            resultGeneratedData = generatedData;
-            return invokeSandbox('saveSandboxGenerated', generatedData);
-        })
-        .then(() => {
-            return invokeSandbox('compileWorkingDesk');
-        })
-        .then(() => {
-            return resultGeneratedData;
-        });
-}
-
-export function publishSandboxGenerator(sampleId, generatorKey, forceClone){
-    return invokeSandbox('sandboxPublish', {sampleId, generatorKey, forceClone});
 }

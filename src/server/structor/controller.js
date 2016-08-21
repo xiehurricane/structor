@@ -103,6 +103,10 @@ export function getConfig(){
     return Promise.resolve(config.asObject());
 }
 
+export function getProjectStatus(){
+    return Promise.resolve(config.status());
+}
+
 export function setProxyURL(options){
     return config.rewriteProjectConfigOption('proxyURL', options.proxyURL)
         .then(() => {

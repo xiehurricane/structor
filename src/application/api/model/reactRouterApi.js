@@ -26,19 +26,13 @@ export function getAvailableRoute(existingRoutes, checkPathname){
                 let root;
                 for(let i = 0; i < existingRoutes.length; i++){
                     root = existingRoutes[i];
-                    //console.log('Checking path: ' + root + ' against ' + checkPathname);
-                    //let matched = matchPattern(root, checkPathname);
-                    //console.log(JSON.stringify(matched, null, 4));
                     let paramsObj = getParams(root, checkPathname);
-                    //console.log('paramsObj: ' + JSON.stringify(paramsObj));
                     let formattedPath = root;
                     if(paramsObj){
                         formattedPath = decodeURIComponent(formatPattern(root, paramsObj));
                     }
-                    //console.log('formattedPath: ' + formattedPath);
                     if (checkPathname === formattedPath) {
                         candidateRootKey = root;
-                        //console.log('Path was found: ' + root + ', checked: ' + checkPathname);
                         break;
                     }
                 }

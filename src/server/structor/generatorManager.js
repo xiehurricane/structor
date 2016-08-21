@@ -34,17 +34,35 @@ export function initGeneratorData(groupName, componentName, model, metadata) {
             let fileReaders = [];
             let project = config.getProjectConfig();
             let fileSources = {};
-            forOwn(project.conf.files, (value, prop) => {
-                fileReaders.push(
-                    fileManager.readFile(value)
-                        .then(fileData => {
-                            fileSources[prop] = fileData;
-                        })
-                );
-            });
+            fileReaders.push(
+                fileManager.readFile(config.deskIndexFilePath())
+                    .then(fileData => {
+                        fileSources.deskIndexFile = fileData;
+                    })
+            );
+            fileReaders.push(
+                fileManager.readFile(config.deskReducersFilePath())
+                    .then(fileData => {
+                        fileSources.deskReducersFile = fileData;
+                    })
+            );
+            fileReaders.push(
+                fileManager.readFile(config.deskSagasFilePath())
+                    .then(fileData => {
+                        fileSources.deskSagasFile = fileData;
+                    })
+            );
+            // forOwn(project.conf.files, (value, prop) => {
+            //     fileReaders.push(
+            //         fileManager.readFile(value)
+            //             .then(fileData => {
+            //                 fileSources[prop] = fileData;
+            //             })
+            //     );
+            // });
             return Promise.all(fileReaders)
                 .then(() => {
-                    project.conf.sources = fileSources;
+                    project.sources = fileSources;
                     return {groupName, componentName, model, metadata, project, index};
                 });
         });
@@ -52,13 +70,13 @@ export function initGeneratorData(groupName, componentName, model, metadata) {
 
 export function installDependencies(dependencies) {
     if (dependencies) {
-        const projectConfig = config.getProjectConfig();
-        if (!has(projectConfig, 'conf.paths.assetsDirPath')) {
-            return Promise.reject('Wrong project configuration. \'assetsDirPath\' field is missing.');
-        }
-        if (!has(projectConfig, 'conf.files.assetsIndexFilePath')) {
-            return Promise.reject('Wrong project configuration. \'assetsIndexFilePath\' field is missing.');
-        }
+        // const projectConfig = config.getProjectConfig();
+        // if (!has(projectConfig, 'conf.paths.assetsDirPath')) {
+        //     return Promise.reject('Wrong project configuration. \'assetsDirPath\' field is missing.');
+        // }
+        // if (!has(projectConfig, 'conf.files.assetsIndexFilePath')) {
+        //     return Promise.reject('Wrong project configuration. \'assetsIndexFilePath\' field is missing.');
+        // }
         const { packages } = dependencies;
         if (packages && packages.length > 0) {
             let installTask = Promise.resolve();
@@ -80,28 +98,28 @@ export function installDependencies(dependencies) {
                     return npmUtils.installPackages(packageNames, config.projectDir());
                 }
             });
-            packages.forEach(pkg => {
-                const { copy } = pkg;
-                if (copy && copy.length > 0) {
-                    let absDirPath;
-                    installTask = installTask.then(() => {
-                        return npmUtils.getPackageAbsolutePath(pkg.name, config.projectDir())
-                            .then(packagePath => {
-                                if(!packagePath){
-                                    throw Error('Package ' + pkg.name + ' was not installed properly.');
-                                }
-                                absDirPath = packagePath;
-                            });
-                    });
-                    copy.forEach(copyItem => {
-                        installTask = installTask.then(() => {
-                            const absSrcPath = path.join(absDirPath, copyItem.from).replace(/\\/g, '/');
-                            const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to).replace(/\\/g, '/');
-                            return fileManager.copyFile(absSrcPath, absDestPath);
-                        });
-                    });
-                }
-            });
+            // packages.forEach(pkg => {
+            //     const { copy } = pkg;
+            //     if (copy && copy.length > 0) {
+            //         let absDirPath;
+            //         installTask = installTask.then(() => {
+            //             return npmUtils.getPackageAbsolutePath(pkg.name, config.projectDir())
+            //                 .then(packagePath => {
+            //                     if(!packagePath){
+            //                         throw Error('Package ' + pkg.name + ' was not installed properly.');
+            //                     }
+            //                     absDirPath = packagePath;
+            //                 });
+            //         });
+            //         copy.forEach(copyItem => {
+            //             installTask = installTask.then(() => {
+            //                 const absSrcPath = path.join(absDirPath, copyItem.from).replace(/\\/g, '/');
+            //                 const absDestPath = path.join(projectConfig.conf.paths.assetsDirPath, copyItem.to).replace(/\\/g, '/');
+            //                 return fileManager.copyFile(absSrcPath, absDestPath);
+            //             });
+            //         });
+            //     }
+            // });
 
             return installTask;
         }
@@ -123,12 +141,13 @@ export function saveGenerated(groupName, componentName, files) {
         );
     });
     return Promise.all(fileSavers).then(() => {
-        if (componentFilePath) {
-            const indexFileDirPath = config.deskSourceDirPath();
-            const relativeFilePathInIndex = path.relative(indexFileDirPath, componentFilePath).replace(/\\/g, '/');
-            return indexManager.addComponent(groupName, componentName, relativeFilePathInIndex);
-        } else {
-            return indexManager.initIndex();
-        }
+        return indexManager.initIndex();
+        // if (componentFilePath) {
+        //     const indexFileDirPath = config.deskSourceDirPath();
+        //     const relativeFilePathInIndex = path.relative(indexFileDirPath, componentFilePath).replace(/\\/g, '/');
+        //     return indexManager.addComponent(groupName, componentName, relativeFilePathInIndex);
+        // } else {
+        //     return indexManager.initIndex();
+        // }
     });
 }

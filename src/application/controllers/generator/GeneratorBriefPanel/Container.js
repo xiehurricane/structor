@@ -28,8 +28,6 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.handleOnSelect = this.handleOnSelect.bind(this);
-        this.handleOnClone = this.handleOnClone.bind(this);
-        this.handleOnUpdate = this.handleOnUpdate.bind(this);
     }
 
     componentDidMount(){
@@ -49,22 +47,6 @@ class Container extends Component {
         pregenerate(generatorId, version);
     }
 
-    handleOnClone(e){
-        e.preventDefault();
-        e.stopPropagation();
-        const { generatorId, setGeneratorSample, userId, generatorKey } = this.props;
-        const version = e.currentTarget.dataset.version;
-        setGeneratorSample(generatorId, version, generatorKey, userId, true);
-    }
-
-    handleOnUpdate(e){
-        e.preventDefault();
-        e.stopPropagation();
-        const { generatorId, setGeneratorSample, userId, generatorKey } = this.props;
-        const version = e.currentTarget.dataset.version;
-        setGeneratorSample(generatorId, version, generatorKey, userId, false);
-    }
-
     render() {
         const { userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
         const { componentModel: {infos}, generatorKey } = this.props;
@@ -78,12 +60,9 @@ class Container extends Component {
             readmeUrl = window.serviceUrl + '/generator?key=' + generatorKey + '&userId=' + userId + '&generatorId=' + generatorId;
         }
         let selectButton = null;
-        let cloneButton = null;
-        let updateButton = null;
         if(versions){
             const versionsList = versions.split(',');
             let menuItems = [];
-            let cloneMenuItems = [];
             if(versionsList && versionsList.length > 0){
                 versionsList.forEach((item, index) => {
                     menuItems.push(
@@ -91,14 +70,6 @@ class Container extends Component {
                                   eventKey={index + 1}
                                   data-version={item}
                                   onClick={this.handleOnSelect}>
-                            {'Version ' + item}
-                        </MenuItem>
-                    );
-                    cloneMenuItems.push(
-                        <MenuItem key={index}
-                                  eventKey={index + 1}
-                                  data-version={item}
-                                  onClick={this.handleOnClone}>
                             {'Version ' + item}
                         </MenuItem>
                     );
@@ -112,28 +83,6 @@ class Container extends Component {
                         {menuItems}
                     </SplitButton>
                 );
-                cloneButton = (
-                    <SplitButton id="cloneButton"
-                                 style={{marginLeft: '0.5em'}}
-                                 data-version={versionsList[versionsList.length-1]}
-                                 onClick={this.handleOnClone}
-                                 title="Fork generator"
-                                 bsStyle="default" bsSize="xs">
-                        {cloneMenuItems}
-                    </SplitButton>
-                );
-                if(userId === accountUserId){
-                    updateButton = (
-                        <SplitButton id="cloneButton"
-                                     style={{marginLeft: '0.5em'}}
-                                     data-version={versionsList[versionsList.length-1]}
-                                     onClick={this.handleOnUpdate}
-                                     title="Update version"
-                                     bsStyle="default" bsSize="xs">
-                            {cloneMenuItems}
-                        </SplitButton>
-                    );
-                }
             }
         }
         const closeButtonStyle = {
@@ -153,7 +102,7 @@ class Container extends Component {
                         <i style={closeButtonStyle}
                            title="Remove from recently used list"
                            className="fa fa-times-circle"
-                           onClick={() => {removeFromRecentGenerators(generatorId);}}></i>
+                           onClick={() => {removeFromRecentGenerators(generatorId);}} />
                         : null
                     }
                     <h5 style={ { marginBottom : "1em", position: 'relative'} }>
@@ -188,14 +137,12 @@ class Container extends Component {
                         <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                             <div style={{minWidth: '30em', flexGrow: '1'}}>
                                 {selectButton}
-                                {updateButton}
-                                {cloneButton}
                             </div>
                             <div style={{flexGrow: '2'}}>
                                 <div style={{width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'flex-end' }}>
                                     <a target="__blank"
                                        href={readmeUrl}>
-                                        <i className="fa fa-external-link"></i>
+                                        <i className="fa fa-external-link" />
                                         <span style={{marginLeft: '0.5em'}}>Read in tab...</span>
                                     </a>
                                 </div>

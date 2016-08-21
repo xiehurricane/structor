@@ -133,7 +133,7 @@ export function get(url) {
                 }
             )
         } catch (e) {
-            reject(error.message ? error.message : error.toString());
+            reject(e.message ? e.message : e.toString());
         }
     });
 }

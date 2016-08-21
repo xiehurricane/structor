@@ -16,7 +16,7 @@
  */
 
 import _ from 'lodash';
-import esprima from 'esprima-fb';
+import esprima from 'esprima';
 
 // Executes visitor on the object and its children (recursively).
 export function traverse(object, visitor) {

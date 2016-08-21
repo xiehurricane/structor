@@ -21,7 +21,6 @@ import CheckboxStateful from './common/CheckboxStateful.js';
 import GeneratorKeyTitleView from './common/GeneratorKeyTitleView.js';
 // app
 import MainFrame from './app/MainFrame.js';
-import ProjectPanel from './app/ProjectPanel.js';
 // workspace
 import PageComponentForm from './workspace/PageComponentForm.js';
 import PageTreeViewItem from './workspace/PageTreeViewItem.js';
@@ -39,6 +38,5 @@ export {
     InputTextStateful,
     CheckboxStateful,
     GeneratorKeyTitleView,
-    ProxyInput,
-    ProjectPanel
+    ProxyInput
 }

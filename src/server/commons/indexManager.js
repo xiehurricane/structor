@@ -22,28 +22,41 @@ import * as fileManager from './fileManager.js';
 import * as fileParser from './fileParser.js';
 import * as config from './configuration.js';
 
-function findExportsNode(ast) {
-    var exports = null;
+export function findExportsNode(ast) {
+    let exports = null;
     fileParser.traverse(ast, node => {
-        if (node.type === 'ExpressionStatement' && node.expression.type === 'AssignmentExpression') {
-            if (node.expression.left.type === 'Identifier' && node.expression.left.name === 'exports') {
-                exports = node.expression.right;
-            } else if (node.expression.left.type === 'MemberExpression' && node.expression.left.property.name === 'exports') {
-                exports = node.expression.right;
+        if(node.type === 'ExportDefaultDeclaration'){
+            exports = node.declaration;
+        }
+    });
+    return exports;
+}
+
+export function findImports(ast){
+    let imports = {};
+    fileParser.traverse(ast, node => {
+        if(node.type === 'ImportDeclaration'){
+            const {specifiers, source} = node;
+            if(specifiers && specifiers.length > 0 && source){
+                specifiers.forEach(specifier => {
+                    const {type, local} = specifier;
+                    const {value} = source;
+                    if((type === 'ImportDefaultSpecifier')
+                        && local
+                        && local.type === 'Identifier'
+                        && value){
+                        imports[local.name] = { source: value };
+                    } else if((type === 'ImportSpecifier')
+                        && local
+                        && local.type === 'Identifier'
+                        && value){
+                        imports[local.name] = { source: value, member: true };
+                    }
+                });
             }
         }
     });
-
-    var variableName = null;
-    if (exports.type === 'Identifier') {
-        variableName = exports.name;
-        fileParser.traverse(ast, function (node) {
-            if (node.type === 'VariableDeclarator' && node.id.name === variableName) {
-                exports = node.init;
-            }
-        });
-    }
-    return exports;
+    return imports;
 }
 
 function appendToNode(node, variableString) {
@@ -99,26 +112,12 @@ function parseIndexFile() {
         });
 }
 
-function getStructure(ast) {
+export function getStructure(ast) {
 
     let structure = {
-        requires: [],
+        imports: findImports(ast),
         groups: {}
     };
-
-    fileParser.traverse(ast, node => {
-        if (node.type === 'ExpressionStatement'
-            && node.expression
-            && node.expression.type === 'CallExpression'
-            && node.expression.callee
-            && node.expression.callee.name === 'require') {
-
-            structure.requires.push({
-                source: node.expression.arguments[0].value
-            });
-
-        }
-    });
 
     let exportsNode = findExportsNode(ast);
     if (exportsNode) {
@@ -128,22 +127,16 @@ function getStructure(ast) {
                 let group = structure.groups[property.key.name] = {
                     components: []
                 };
-
                 let values = property.value.properties;
                 if (values && values.length > 0) {
                     values.forEach(value => {
                         let component = {
                             name: value.key.name
                         };
-                        fileParser.traverse(value, node => {
-                            if (node.type === 'CallExpression' && node.callee && node.callee.name === 'require') {
-                                if (node.arguments && node.arguments.length > 0) {
-                                    component.source = node.arguments[0].value;
-                                }
-                            }
-                        });
-                        if (value.value.type === 'MemberExpression') {
-                            component.member = memberExpressionToString(value.value);
+                        let from = structure.imports[component.name];
+                        if(from){
+                            component.source = from.source;
+                            component.member = from.member;
                         }
                         group.components.push(component);
                     });
@@ -151,33 +144,23 @@ function getStructure(ast) {
             });
         }
     }
-
     return structure;
 }
 
 function resolveAbsoluteSourcePath(indexObj) {
-    var requires = indexObj.requires;
-    if (requires && requires.length > 0) {
-        _.forEach(requires, item => {
-            if (item.source && item.source.indexOf('../../') === 0) {
-                item.absoluteSource =
-                    path.resolve(path.dirname(config.deskIndexFilePath()), item.source).replace(/\\/g, '/');
-            }
-        });
-    }
-    var groups = indexObj.groups;
-    if (groups) {
-        _.forOwn(groups, (group, prop) => {
-            if (group.components && group.components.length > 0) {
-                group.components.forEach(component => {
-                    if (component.source && component.source.indexOf('../../') === 0) {
-                        component.absoluteSource =
-                            path.resolve(path.dirname(config.deskIndexFilePath()), component.source).replace(/\\/g, '/');
-                    }
-                });
-            }
-        });
-    }
+    // let groups = indexObj.groups;
+    // if (groups) {
+    //     _.forOwn(groups, (group, prop) => {
+    //         if (group.components && group.components.length > 0) {
+    //             group.components.forEach(component => {
+    //                 if (component.source && component.source.indexOf('../../') === 0) {
+    //                     component.absoluteSource =
+    //                         path.resolve(path.dirname(config.deskIndexFilePath()), component.source).replace(/\\/g, '/');
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
     return indexObj;
 }
 

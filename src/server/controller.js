@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
 import express from 'express';
 import http from 'http';
-import rewrite from 'express-urlrewrite';
 import path from 'path';
 import bodyParser from 'body-parser';
-import httpProxy from 'http-proxy';
 
 import * as config from './commons/configuration.js';
-import * as fileManager from './commons/fileManager.js';
 
 import * as structorController from './structor/controller.js';
 import * as sandboxController from './sandbox/controller.js';
@@ -101,10 +97,10 @@ export function initServer(options){
                     }
                 });
 
-                initDownloadController();
+                // initDownloadController();
                 if(status === config.READY){
                     initStructorController();
-                    initSandboxController();
+                    // initSandboxController();
                 }
             }
         }).catch(e => {
@@ -117,7 +113,7 @@ function reinitServer(){
         .then(status => {
             if(status === config.READY){
                 initStructorController();
-                initSandboxController();
+                // initSandboxController();
             } else {
                 throw Error('Server reinitialization should not be provided in empty directory.');
             }
