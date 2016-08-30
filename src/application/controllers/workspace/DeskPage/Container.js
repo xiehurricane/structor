@@ -80,16 +80,16 @@ class Container extends Component {
                 page.bindGetMarked(pathname => graphApi.getMarkedKeysByPagePath(pathname));
                 page.bindGetMode(() => {return this.props.componentModel.isEditModeOn;});
 
-                page.bindGetComponentInPreview(() => {
-                    const { libraryPanelModel: {componentInPreview, variantsInPreview, defaultVariantMap}} = this.props;
-                    if(componentInPreview){
-                        const defaultVariantKey = defaultVariantMap[componentInPreview].key;
-                        const previewModel = previewGraphApi.getWrappedModelForVariant(defaultVariantKey);
-                        return {componentInPreview, variantsInPreview, previewModel, defaultVariantKey};
-                    } else {
-                        return undefined;
-                    }
-                });
+                // page.bindGetComponentInPreview(() => {
+                //     const { libraryPanelModel: {componentInPreview, variantsInPreview, defaultVariantMap}} = this.props;
+                //     if(componentInPreview){
+                //         const defaultVariantKey = defaultVariantMap[componentInPreview].key;
+                //         const previewModel = previewGraphApi.getWrappedModelForVariant(defaultVariantKey);
+                //         return {componentInPreview, variantsInPreview, previewModel, defaultVariantKey};
+                //     } else {
+                //         return undefined;
+                //     }
+                // });
 
                 page.bindToState('onLoadOptions', (key, isModifier) => {
                     const { currentComponent } = this.props;

@@ -144,6 +144,7 @@ class Container extends Component {
         }
         return (
             <div ref="containerElement"
+                 id="containerElement"
                  style={{position: 'absolute', top: '0px', left: '0px', right: '0px', bottom: '0px', overflow: 'auto'}}>
                 <div style={{width: '100%', position: 'fixed', zIndex: '100', padding: '0 2em'}}>
                     <div style={{backgroundColor: '#f5f5f5', borderBottom: '1px solid #ffffff'}}>

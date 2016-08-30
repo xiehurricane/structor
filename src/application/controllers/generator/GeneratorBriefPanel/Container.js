@@ -28,6 +28,10 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleExpand = this.handleExpand.bind(this);
+        this.state = {
+            isExpanded: false
+        };
     }
 
     componentDidMount(){
@@ -47,7 +51,29 @@ class Container extends Component {
         pregenerate(generatorId, version);
     }
 
+    handleExpand(e){
+        e.preventDefault();
+        e.stopPropagation();
+        const {isExpanded} = this.state;
+        if(isExpanded){
+            const panelOffset = $(this.panel).offset();
+            const $body = $('#containerElement');
+            let diff = (panelOffset.top + $body.scrollTop()) - $body.offset().top;
+            let margin = 90;
+            $body.animate(
+                { scrollTop: (diff - margin) },
+                300
+            );
+            setTimeout(() => {
+                this.setState({isExpanded: !isExpanded});
+            }, 300);
+        } else {
+            this.setState({isExpanded: !isExpanded});
+        }
+    }
+
     render() {
+        const {isExpanded} = this.state;
         const { userId, generatorId, versions, isRecentPanel, removeFromRecentGenerators } = this.props;
         const { componentModel: {infos}, generatorKey } = this.props;
         const { appContainerModel: {userAccount: {userId: accountUserId}} } = this.props;
@@ -78,8 +104,8 @@ class Container extends Component {
                     <SplitButton id="selectButton"
                                  data-version={versionsList[versionsList.length-1]}
                                  onClick={this.handleOnSelect}
-                                 title="Run generator"
-                                 bsStyle="primary" bsSize="xs">
+                                 title="Generate"
+                                 bsStyle="default" bsSize="xs">
                         {menuItems}
                     </SplitButton>
                 );
@@ -96,7 +122,14 @@ class Container extends Component {
             zIndex: '100',
             opacity: '0.5'
         };
-        return (<div {...this.props}>
+        // const innerCellStyle = {
+        //     transform: isExpanded ? "translate(0%)" : "translate(-100%)",
+        //     transition: "transform 500ms ease-in-out",
+        //     height: isExpanded ? '100%' : '20em',
+        //     overflow: 'hidden'
+        // };
+        return (
+            <div ref={me => this.panel = me} {...this.props}>
                 <Panel>
                     { isRecentPanel ?
                         <i style={closeButtonStyle}
@@ -105,49 +138,40 @@ class Container extends Component {
                            onClick={() => {removeFromRecentGenerators(generatorId);}} />
                         : null
                     }
-                    <h5 style={ { marginBottom : "1em", position: 'relative'} }>
-                        <small style={ {    "marginRight": "0.5em"} } >Key :</small>
-                        <GeneratorKeyTitleView generatorKey={generatorKey} />
+                    <h5 style={{margin : "0px", position: 'relative', padding: '3px', backgroundColor: '#f5f5f5', borderRadius: '3px'}}>
+                        {selectButton}
+                        <GeneratorKeyTitleView style={{marginLeft: '1em'}} generatorKey={generatorKey} />
                     </h5>
                     <Grid fluid={ true }>
                         <Row>
                             <Col
                                 xs={ 12 }
-                                md={ 4 }
-                                sm={ 4 }
-                                lg={ 4 }>
-                                <div style={{height: '16em', overflow: 'hidden', marginBottom: '1em'}}>
-                                    <img
-                                        src={imgUrl}
-                                        style={ { "width": "100%"} } />
+                                md={ 8 }
+                                sm={ 8 }
+                                lg={ 8 } style={{paddingLeft: '0px'}}>
+                                <div style={{height: isExpanded ? '100%' : '20em', overflow: 'hidden'}}>
+                                    <div dangerouslySetInnerHTML={{__html: brief}}></div>
                                 </div>
                             </Col>
                             <Col
                                 xs={ 12 }
-                                md={ 8 }
-                                sm={ 8 }
-                                lg={ 8 }>
-                                <div style={{height: '16em', overflow: 'auto', marginBottom: '1em'}}>
-                                    <div dangerouslySetInnerHTML={{__html: brief}}></div>
+                                md={ 4 }
+                                sm={ 4 }
+                                lg={ 4 }>
+                                <div style={{height: isExpanded ? '100%' : '20em', overflow: 'hidden'}}>
+                                    <img
+                                        src={imgUrl}
+                                        style={{ "width": "100%"}} />
                                 </div>
                             </Col>
                         </Row>
                     </Grid>
-                    <div style={{marginTop: '1em', width: '100%'}}>
-                        <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <div style={{minWidth: '30em', flexGrow: '1'}}>
-                                {selectButton}
-                            </div>
-                            <div style={{flexGrow: '2'}}>
-                                <div style={{width: '100%', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', justifyContent: 'flex-end' }}>
-                                    <a target="__blank"
-                                       href={readmeUrl}>
-                                        <i className="fa fa-external-link" />
-                                        <span style={{marginLeft: '0.5em'}}>Read in tab...</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                    <div style={{margin: '1em 0px 0px 0px', width: '100%'}}>
+                        <a href="#"
+                           onClick={this.handleExpand} >
+                            <i className={"fa " + (isExpanded ? "fa-caret-up" : "fa-caret-down")} />
+                            <span style={{marginLeft: '0.5em'}}>{isExpanded ? "Read less" : 'Read more'}</span>
+                        </a>
                     </div>
                 </Panel>
             </div>

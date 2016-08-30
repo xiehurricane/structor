@@ -92,7 +92,7 @@ class Container extends Component {
     render(){
 
         const { componentModel: {generators, recentGenerators, selectedTabKey, filter} } = this.props;
-        const { generatorModel: {loadOptions}, toggleGenerics } = this.props;
+        const { generatorModel: {loadOptions} } = this.props;
         const { activePage, itemsPerPage } = this.state;
         const { groupKey, groupName, groupNameBack } = filter;
         let pageCount = 0;
@@ -181,6 +181,7 @@ class Container extends Component {
                     generatorGroup.files.forEach((item, index) => {
                         if(index < higherBound && index >= lowerBound ){
                             generatorPanelList.push(<GeneratorBriefPanel key={ item.generatorId }
+                                                                         style={{position: 'relative'}}
                                                                          generatorKey={item.dirNamePath}
                                                                          userId={item.userId}
                                                                          generatorId={item.generatorId}
@@ -231,14 +232,6 @@ class Container extends Component {
                                     md={ 3 }
                                     sm={ 3 }
                                     lg={ 3 }>
-
-                                    <ListGroup>
-                                        <ListGroupItem active={loadOptions.isOnlyGenerics}
-                                                       href="#"
-                                                       onClick={(e) => {e.stopPropagation(); e.preventDefault(); toggleGenerics(); }}>
-                                            <span>Only generic generators</span>
-                                        </ListGroupItem>
-                                    </ListGroup>
                                     <ListGroup>
                                         {headGroupItems}
                                         <ListGroupItem active={true}>
@@ -249,14 +242,12 @@ class Container extends Component {
                                         </ListGroupItem>
                                         {generatorGroupCatalogs}
                                     </ListGroup>
-
                                 </Col>
                                 <Col
                                     xs={ 12 }
                                     md={ 9 }
                                     sm={ 9 }
                                     lg={ 9 }>
-
                                     {generatorPanelList}
                                     <div style={{margin: '1em 0'}}>
                                         <Pagination bsSize="medium"
@@ -278,9 +269,7 @@ class Container extends Component {
                 </Tab>
             </Tabs>
         );
-
     }
-
 }
 
 export default connect(modelSelector, containerActions)(Container);

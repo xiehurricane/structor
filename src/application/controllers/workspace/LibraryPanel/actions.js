@@ -69,6 +69,7 @@ export const quickCopyToClipboard = (componentName) => (dispatch, getState) => {
         const variantModel = getVariantModel(defaultVariantMap, componentName);
         if(variantModel){
             dispatch(setForNew(variantModel));
+            dispatch(success(componentName + ' was copied to clipboard'));
         } else {
             console.error('Quick copy to clipboard: model for variant key was not found');
         }

@@ -62,10 +62,10 @@ class Container extends Component {
                             <li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); saveProject(); } }>
                                 <span className="fa fa-save fa-fw" />&nbsp;Save project</a>
                             </li>
-                            <li className="divider" />
-                            <li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); exportModel(); } }>
-                                <span className="fa fa-gift fa-fw" />&nbsp;Export project</a>
-                            </li>
+                            {/*<li className="divider" />*/}
+                            {/*<li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); exportModel(); } }>*/}
+                                {/*<span className="fa fa-gift fa-fw" />&nbsp;Export project</a>*/}
+                            {/*</li>*/}
                             <li className="divider" />
                             <li><a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); proxyShowModal(); } }>
                                 <span className="fa fa-gears fa-fw" />&nbsp;Proxy settings</a>

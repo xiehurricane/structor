@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
+import {findIndex, forOwn} from 'lodash';
 import path from 'path';
 import esprima from 'esprima';
 import escodegen from 'escodegen';
@@ -70,7 +70,7 @@ function appendToNode(node, variableString) {
     if (node.properties) {
         let index = -1;
         if (node.properties.length > 0) {
-            index = _.findIndex(node.properties, (o) => {
+            index = findIndex(node.properties, (o) => {
                 return (o.key && o.key.type === 'Identifier' && o.key.name === newPart.key.name);
             });
         }
@@ -148,26 +148,35 @@ export function getStructure(ast) {
 }
 
 function resolveAbsoluteSourcePath(indexObj) {
-    // let groups = indexObj.groups;
-    // if (groups) {
-    //     _.forOwn(groups, (group, prop) => {
-    //         if (group.components && group.components.length > 0) {
-    //             group.components.forEach(component => {
-    //                 if (component.source && component.source.indexOf('../../') === 0) {
-    //                     component.absoluteSource =
-    //                         path.resolve(path.dirname(config.deskIndexFilePath()), component.source).replace(/\\/g, '/');
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
-    return indexObj;
+    let groups = indexObj.groups;
+    let tasks = [];
+    if (groups) {
+        forOwn(groups, (group, prop) => {
+            if (group.components && group.components.length > 0) {
+                group.components.forEach(component => {
+                    if(component.source){
+                        tasks.push(
+                            fileManager.findComponentFilePath(path.join(config.appDirPath(), component.source))
+                                .then(componentFilePath => {
+                                    component.absoluteSource = componentFilePath;
+                                })
+                                .catch(error => {
+                                })
+                        );
+                    }
+                });
+            }
+        });
+    }
+    return Promise.all(tasks).then(() => {
+        return indexObj;
+    });
 }
 
 function getComponentsNamesFromTree(componentsTree) {
     let componentsNames = [];
-    _.forOwn(componentsTree, (group, groupName) => {
-        _.forOwn(group, (component, componentName) => {
+    forOwn(componentsTree, (group, groupName) => {
+        forOwn(group, (component, componentName) => {
             componentsNames.push(componentName);
         });
     });
@@ -177,8 +186,9 @@ function getComponentsNamesFromTree(componentsTree) {
 export function initIndex() {
     return parseIndexFile()
         .then((ast) => {
-            let indexObject = getStructure(ast);
-            indexObject = resolveAbsoluteSourcePath(indexObject);
+            return resolveAbsoluteSourcePath(getStructure(ast));
+        })
+        .then(indexObject => {
             return indexObject;
         });
 }
@@ -188,7 +198,7 @@ export function getComponentsTree() {
         .then(indexObj => {
             let result = {};
             if (indexObj && indexObj.groups) {
-                _.forOwn(indexObj.groups, (group, prop) => {
+                forOwn(indexObj.groups, (group, prop) => {
                     result[prop] = {};
                     if (group.components && group.components.length > 0) {
                         group.components.forEach(component => {

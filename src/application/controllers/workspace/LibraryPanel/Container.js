@@ -26,11 +26,12 @@ class Container extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { filer: '' };
+        this.state = { filer: '', expandedGroupKeys: {} };
         this.handleChangeFind = this.handleChangeFind.bind(this);
         this.handleClearFind = this.handleClearFind.bind(this);
         this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
-        this.handlePreviewComponent = this.handlePreviewComponent.bind(this);
+        this.handleToggleGroup = this.handleToggleGroup.bind(this);
+        // this.handlePreviewComponent = this.handlePreviewComponent.bind(this);
         this.handleQuickCopyToClipboard = this.handleQuickCopyToClipboard.bind(this);
     }
 
@@ -54,15 +55,25 @@ class Container extends Component {
         this.setState({filter: ''});
     }
 
-    handlePreviewComponent(e){
-        e.preventDefault();
+    handleToggleGroup(e){
         e.stopPropagation();
-        const { previewComponent } = this.props;
-        const componentName = e.currentTarget.dataset.component;
-        if(previewComponent && componentName){
-            previewComponent(componentName);
-        }
+        e.preventDefault();
+        const key = e.currentTarget.dataset.groupkey;
+        console.log('Toggling group: ' + key);
+        let newExpandedGroupKeys = Object.assign({}, this.state.expandedGroupKeys);
+        newExpandedGroupKeys[key] = !newExpandedGroupKeys[key];
+        this.setState({ expandedGroupKeys: newExpandedGroupKeys });
     }
+
+    // handlePreviewComponent(e){
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     const { previewComponent } = this.props;
+    //     const componentName = e.currentTarget.dataset.component;
+    //     if(previewComponent && componentName){
+    //         previewComponent(componentName);
+    //     }
+    // }
 
     handleQuickCopyToClipboard(e){
         e.preventDefault();
@@ -84,9 +95,9 @@ class Container extends Component {
 
     render() {
 
-        const { componentModel: {componentsTree : componentTreeModel, componentInPreview} } = this.props;
+        const { componentModel: {componentsTree : componentTreeModel} } = this.props;
 
-        const { filter } = this.state;
+        const { filter, expandedGroupKeys } = this.state;
 
         const style = {
             position: 'relative',
@@ -99,7 +110,6 @@ class Container extends Component {
         let counter = 0;
 
         const filterString = filter ? filter.toUpperCase() : null;
-        //console.log('Component in preview: ' + componentInPreview);
         forOwn(componentTreeModel, (group, groupName) => {
             if(isObject(group)){
                 let components = [];
@@ -108,16 +118,13 @@ class Container extends Component {
                         if(componentName.toUpperCase().includes(filterString)){
                             components.push(
                                 <a key={componentName}
-                                   className={componentInPreview === componentName ? 'list-group-item active' : 'list-group-item'}
+                                   className={'list-group-item'}
                                    href="#"
-                                   title={componentName}
+                                   title={'Copy to clipboard ' + componentName}
                                    data-component={componentName}
-                                   onClick={this.handlePreviewComponent}>
+                                   onClick={this.handleQuickCopyToClipboard}>
                                     <span>{this.makeTitle(componentName)}</span>
                                     <span className="badge"
-                                          title="Copy to clipboard"
-                                          data-component={componentName}
-                                          onClick={this.handleQuickCopyToClipboard}
                                           style={{backgroundColor: '#cdcdcd'}}>
                                         <i className="fa fa-clipboard library-panel-quick-copy-to-clipboard"></i>
                                     </span>
@@ -128,27 +135,29 @@ class Container extends Component {
                     } else {
                         components.push(
                             <a key={componentName}
-                               className={componentInPreview === componentName ? 'list-group-item active' : 'list-group-item'}
+                               className={'list-group-item'}
                                href="#"
-                               title={componentName}
+                               title={'Copy to clipboard ' + componentName}
                                data-component={componentName}
-                               onClick={this.handlePreviewComponent}>
+                               onClick={this.handleQuickCopyToClipboard}>
                                 <span>{this.makeTitle(componentName)}</span>
-                                <span className="badge library-panel-quick-copy-to-clipboard"
-                                      title="Copy to clipboard"
-                                      data-component={componentName}
-                                      onClick={this.handleQuickCopyToClipboard}>
+                                <span className="badge library-panel-quick-copy-to-clipboard">
                                     <i className="fa fa-clipboard"></i>
                                 </span>
                             </a>
                         );
                     }
                 });
-                let key = '' + ++groupHeaderKey;
+                let key = 'groupKey' + ++groupHeaderKey;
                 if(components.length > 0){
                     let keySuffix = filter ? '12' : '0';
                     let id = 'group' + groupName + counter + keySuffix;
-                    let collapsed = !!filter ? "in" : "";
+                    let collapsed = "";
+                    if(!!filter){
+                        collapsed = "in";
+                    } else if(expandedGroupKeys[key] === true){
+                        collapsed = "in";
+                    }
                     libGroups.push(
                         <div key={key}
                              className="panel panel-default">
@@ -157,17 +166,15 @@ class Container extends Component {
                                  id="headingOne">
                                 <a style={{outline: '0'}}
                                    role="button"
-                                   data-toggle="collapse"
+                                   data-groupkey={key}
                                    href={'#' + id}
-                                   aria-expanded="true"
-                                   aria-controls={id}>
+                                   onClick={this.handleToggleGroup}>
                                     {groupName}
                                 </a>
                             </div>
                             <div id={id}
                                  className={"panel-collapse collapse " + collapsed}
-                                 role="tabpanel"
-                                 aria-labelledby={id}>
+                                 role="tabpanel">
                                 <div className="list-group">
                                     {components}
                                 </div>

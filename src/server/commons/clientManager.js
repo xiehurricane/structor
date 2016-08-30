@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import _ from 'lodash';
-import path from 'path';
+// import _ from 'lodash';
+// import path from 'path';
 import * as client from './client.js';
 import * as config from './configuration.js';
 import {SERVICE_URL} from './configuration.js';
@@ -99,27 +99,27 @@ export function getAvailableGeneratorGenerics(){
     return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }
 
-export function sandboxPrepare(generatorId, version){
-    return client.post(SERVICE_URL + '/sm/gengine/sandbox/prepare?generatorId=' + generatorId + '&version=' + version, {});
-}
-
-export function sandboxReadFiles(sampleId){
-    return client.post(SERVICE_URL + '/sm/gengine/sandbox/read?sampleId=' + sampleId, {});
-}
-
-export function sandboxWriteFiles(sampleId, filesObject){
-    return client.post(SERVICE_URL + '/sm/gengine/sandbox/write?sampleId=' + sampleId, filesObject);
-}
-
-export function sandboxProcess(sampleId, data){
-    return client.post(SERVICE_URL + '/sm/gengine/sandbox/process?sampleId=' + sampleId, data);
-}
-
-export function sandboxPublish(sampleId, generatorKey, forceClone){
-    const screenshotPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk', 'assets', 'img', 'screenshot.png').replace(/\\/g, '/');
-    let publishUrl = SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey + '&projectId=' + config.projectId();
-    if(forceClone === true){
-        publishUrl += '&forceClone=true';
-    }
-    return client.uploadFile(publishUrl, screenshotPath, 'screenshot');
-}
+// export function sandboxPrepare(generatorId, version){
+//     return client.post(SERVICE_URL + '/sm/gengine/sandbox/prepare?generatorId=' + generatorId + '&version=' + version, {});
+// }
+//
+// export function sandboxReadFiles(sampleId){
+//     return client.post(SERVICE_URL + '/sm/gengine/sandbox/read?sampleId=' + sampleId, {});
+// }
+//
+// export function sandboxWriteFiles(sampleId, filesObject){
+//     return client.post(SERVICE_URL + '/sm/gengine/sandbox/write?sampleId=' + sampleId, filesObject);
+// }
+//
+// export function sandboxProcess(sampleId, data){
+//     return client.post(SERVICE_URL + '/sm/gengine/sandbox/process?sampleId=' + sampleId, data);
+// }
+//
+// export function sandboxPublish(sampleId, generatorKey, forceClone){
+//     const screenshotPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk', 'assets', 'img', 'screenshot.png').replace(/\\/g, '/');
+//     let publishUrl = SERVICE_URL + '/sm/gengine/sandbox/publish?sampleId=' + sampleId + '&generatorKey=' + generatorKey + '&projectId=' + config.projectId();
+//     if(forceClone === true){
+//         publishUrl += '&forceClone=true';
+//     }
+//     return client.uploadFile(publishUrl, screenshotPath, 'screenshot');
+// }

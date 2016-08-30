@@ -215,6 +215,41 @@ export function isExisting(filePath){
     });
 }
 
+export function findComponentFilePath(filePath){
+    return new Promise((resolve, reject) => {
+        fs.stat(filePath, (err, stat) => {
+            if(err){
+                reject(err);
+            } else {
+                if(stat.isDirectory()) {
+                    let testFilePath = path.join(filePath, 'index.js');
+                    fs.stat(testFilePath, (err, stat) => {
+                        if(err){
+                            reject(err);
+                        } else {
+                            if(stat.isFile()){
+                                resolve(testFilePath);
+                            } else {
+                                reject(filePath + ' is not a file or a dir');
+                            }
+                        }
+                    });
+                    // Slower then direct reading :-(
+                    // resolve(findComponentFilePath(path.join(filePath, 'index.js')));
+                } else if(stat.isFile()){
+                    if(!filePath.endsWith('.js') || !filePath.endsWith('.jsx')){
+                        resolve(filePath + '.js');
+                    } else {
+                        resolve(filePath);
+                    }
+                } else {
+                    reject(filePath + ' is not a file or a dir');
+                }
+            }
+        });
+    });
+}
+
 export function readDirectoryTree(result, start, callback, testFileNames = undefined) {
 
     // Use lstat to resolve symlink if we are passed a symlink

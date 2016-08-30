@@ -46,7 +46,7 @@ export function getFileAst(fileData){
 
 export function validateSourceCode(fileData){
     try{
-        esprima.parse(fileData, { tolerant: true, jsx: true });
+        // esprima.parse(fileData, { tolerant: true, jsx: true });
     } catch(e){
         throw Error('File is not valid, error: ' + e.message);
     }

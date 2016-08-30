@@ -75,6 +75,14 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     disabled={disabledCommon}
+                    data-func="pasteReplace"
+                    onClick={this.handleButtonClick}
+                    title="Replace selected component with components from clipboard">
+                    <span style={wideButtonLabelStyle}>Replace</span>
+                </button>
+                <button
+                    className="btn btn-default btn-xs"
+                    disabled={disabledCommon}
                     data-func="pasteLast"
                     onClick={this.handleButtonClick}
                     title="Insert components from clipboard into selected component on the last position">
@@ -87,14 +95,6 @@ class Container extends Component {
                     onClick={this.handleButtonClick}
                     title="Append components from clipboard after selected component">
                     <span style={wideButtonLabelStyle}>After</span>
-                </button>
-                <button
-                    className="btn btn-default btn-xs"
-                    disabled={disabledCommon}
-                    data-func="pasteReplace"
-                    onClick={this.handleButtonClick}
-                    title="Replace selected component with components from clipboard">
-                    <span style={wideButtonLabelStyle}>Replace</span>
                 </button>
                 {/*<button
                     className="btn btn-default btn-xs"

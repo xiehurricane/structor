@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     babel = require('gulp-babel');
     uglify = require('gulp-uglify');
-    watch = require('gulp-watch');
+    // watch = require('gulp-watch');
 
 gulp.task('default', function() {
     // place code for your default task here
@@ -20,7 +20,6 @@ gulp.task('clean-server', function(){
 
 gulp.task('build-server-dev', ['clean-server-dev'], function() {
     return gulp.src('../src/server/**/*.js')
-        .pipe(watch('../src/server/**/*.js'))
         .pipe(babel())
         .pipe(gulp.dest('/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate/node_modules/structor/server'));
 });

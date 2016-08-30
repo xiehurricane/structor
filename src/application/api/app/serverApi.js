@@ -117,6 +117,7 @@ export function loadComponentsTree() {
 }
 
 export function loadComponentOptions(componentName, sourceCodeFilePath) {
+    console.log('Loading component source code: ' + sourceCodeFilePath);
     let result = {};
     return invokeStructor('getComponentNotes', {componentName})
         .then(response => {
@@ -124,6 +125,7 @@ export function loadComponentOptions(componentName, sourceCodeFilePath) {
             if (sourceCodeFilePath) {
                 return invokeStructor('getComponentSourceCode', {filePath: sourceCodeFilePath})
                     .then(response => {
+                        console.log('Component source code: ' + response);
                         result.sourceCode = response;
                         return result;
                     });
@@ -134,6 +136,7 @@ export function loadComponentOptions(componentName, sourceCodeFilePath) {
 }
 
 export function writeComponentSource(sourceCodeFilePath, sourceCode) {
+    console.log('Write the source code: ' + sourceCodeFilePath);
     return invokeStructor('writeComponentSourceCode', {filePath: sourceCodeFilePath, sourceCode});
 }
 

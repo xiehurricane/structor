@@ -67,11 +67,10 @@ class Container extends Component {
         });
     }
 
-
     render(){
 
         const {componentModel: {sourceCode, sourceFilePath, sourceProps, sourceText, readmeText, show}, hideModal} = this.props;
-        //console.log('Render ComponentOptionsModal: show ' + show);
+
         const containerStyle={
             marginTop: '1em',
             width: '100%',
@@ -106,10 +105,10 @@ class Container extends Component {
         );
         if(!!sourceCode){
             tabPanes.push(
-                <Tab key={'component'} eventKey={tabPanes.length + 1} title='Component'>
+                <Tab key={'component'} eventKey={tabPanes.length + 1} title='The Source Code'>
                     <div style={containerStyle}>
                         <p><strong>File:&nbsp;</strong><span>{sourceFilePath}</span></p>
-
+                        <p><small>The validation of the source code is not provided (beta version)</small></p>
                         <AceEditor ref='sourceCodeEditor'
                                    sourceName='componentSource'
                                    mode='ace/mode/jsx'
@@ -121,7 +120,6 @@ class Container extends Component {
             );
         }
         if(!!readmeText){
-            //console.log(readmeText);
             tabPanes.push(
                 <Tab key={'readMe'} eventKey={tabPanes.length + 1} title='Read Me'>
                     <div style={{height: '400px', marginTop: '1em', width: '100%', padding: '1em', overflow: 'auto'}}>

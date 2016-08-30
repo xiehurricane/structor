@@ -40,7 +40,7 @@ function* delaySaveComponentSourceCode(){
 }
 
 function* saveComponentSourceCode(options){
-
+    console.log('Save component source code: ', JSON.stringify(options, null, 4));
     try {
         const {key, sourcePropsObj, text, sourceCode, sourceFilePath} = options;
         let node = graphApi.getNode(key);
@@ -59,6 +59,7 @@ function* saveComponentSourceCode(options){
         }
         yield put(actions.saveSourceCodeDone());
     } catch (error) {
+        console.error(error);
         if (error instanceof SagaCancellationException) {
             // do nothing
         } else {
@@ -71,6 +72,7 @@ function* saveComponentSourceCode(options){
 function* saveSourceCode(){
     while(true){
         const { payload } = yield take(actions.SAVE_SOURCE_CODE);
+        console.log(JSON.stringify(payload, null, 4));
         yield put(spinnerActions.started('Saving source code'));
         const saveTask = yield fork(saveComponentSourceCode, payload);
         const delayTask = yield fork(delaySaveComponentSourceCode);

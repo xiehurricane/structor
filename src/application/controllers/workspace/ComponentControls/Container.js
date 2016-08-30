@@ -37,14 +37,20 @@ class Container extends Component {
                     disabled={!currentComponent}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); loadOptions(currentComponent); }}
                     title="Show selected component options">
-                    <span style={buttonLabelStyle} className="fa fa-gears"></span>
+                    <span style={buttonLabelStyle}>
+                        <i className="fa fa-wrench"/>
+                        <span style={{marginLeft: '0.5em'}}>Edit</span>
+                    </span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={!currentComponent}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); loadGenerators(); }}
                     title="Generate the source code for a new component">
-                    <span style={buttonLabelStyle}>New component</span>
+                    <span style={buttonLabelStyle}>
+                        <i className="fa fa-magic"/>
+                        <span style={{marginLeft: '0.5em'}}>New Component</span>
+                    </span>
                 </button>
             </div>
         );

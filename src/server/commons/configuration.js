@@ -63,7 +63,7 @@ function setupProjectPaths(rootDirPath) {
 
         appDirPath: path.join(rootDirPath, 'app').replace(/\\/g, '/'),
 
-        templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
+        // templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
         deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
         deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
         deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js').replace(/\\/g, '/'),
@@ -71,9 +71,7 @@ function setupProjectPaths(rootDirPath) {
         docsReadmeFilePath: path.join(absRoot, 'docs', 'Readme.md').replace(/\\/g, '/'),
         nodeModulesDirPath: path.join(rootDirPath, 'node_modules').replace(/\\/g, '/'),
         deskModelFilePath: path.join(absRoot, 'desk', 'model.json').replace(/\\/g, '/'),
-        deskDirPath: path.join(absRoot, 'desk').replace(/\\/g, '/'),
-        sandboxDirPath: path.join(absRoot, 'sandbox').replace(/\\/g, '/'),
-        sandboxTemplateDirPath: path.join(absRoot, 'sandbox', 'template').replace(/\\/g, '/')
+        deskDirPath: path.join(absRoot, 'desk').replace(/\\/g, '/')
     };
 }
 
@@ -239,6 +237,10 @@ export function serverNodeModulesDirPath() {
     return config.server.paths.nodeModulesDirPath;
 }
 
+export function appDirPath() {
+    return config.project.paths.appDirPath;
+}
+
 export function webpackConfigFilePath() {
     return config.project.paths.webpackConfigFilePath;
 }
@@ -303,10 +305,10 @@ export function projectProxyURL(){
     return config.project.conf.proxyURL;
 }
 
-export function sandboxDirPath(){
-    return config.project.paths.sandboxDirPath;
-}
-
-export function sandboxTemplateDirPath(){
-    return config.project.paths.sandboxTemplateDirPath;
-}
+// export function sandboxDirPath(){
+//     return config.project.paths.sandboxDirPath;
+// }
+//
+// export function sandboxTemplateDirPath(){
+//     return config.project.paths.sandboxTemplateDirPath;
+// }

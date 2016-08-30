@@ -185,12 +185,12 @@ export function saveGenerated(options){
     });
 }
 
-export function exportPages(options){
-    const {model} = options;
-    return exportManager.doGeneration(model).then(generatedObject => {
-        return exportManager.commitGeneration(generatedObject);
-    });
-}
+// export function exportPages(options){
+//     const {model} = options;
+//     return exportManager.doGeneration(model).then(generatedObject => {
+//         return exportManager.commitGeneration(generatedObject);
+//     });
+// }
 
 export function getGeneratorReadme(options){
     const {userId, generatorId} = options;

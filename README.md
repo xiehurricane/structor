@@ -1,4 +1,4 @@
-Structor - visual GUI editor for React.
+Structor - visual editor for React components.
 ----------
 
 [![facebook group](https://img.shields.io/badge/facebook%20group-follow-blue.svg?style=flat)](https://www.facebook.com/groups/structor/)
@@ -9,87 +9,34 @@ Structor - visual GUI editor for React.
 
 <img src="https://github.com/ipselon/structor/blob/master/images/title-background.png" style="width: 100%;"></img>
 
-Structor is a fast and handy tool for the visual construction of User Interface from pre-created components.
+#### What Structor is:
+* **Structor is a visual editor (WYSIWYG editor)** - you may construct a React component of any complexity combining components and styling them right on the page.
+* **Structor is a scaffolding tool** - you may generate scaffolds of different types of React components (dumbs, containers) with different configuration.
+* **Structor is a library tool** - you may find many full-fledged components which can be installed into your project from Structor Market.
+* **Structor is a playground tool** - you may modify the source code and have an instant feedback immediately because of embedded Hot Reloading tools.    
 
-### Introduction
+#### What Structor is not:
 
-* [Structor as playground for React Applications](https://medium.com/@alex_pustovalov/structor-as-a-playground-for-react-applications-49accf4544b8#.auvm78l7v)
-
-### Videos
-
-* [Videos on Structor Market](https://helmetrex.com/videos)
-
-### Existing projects on GitHub
-
-* [material-ui-prepack](https://github.com/ipselon/material-ui-prepack)
-* [bootstrap-prepack](https://github.com/ipselon/bootstrap-prepack)
-* [structor-starter-prepack](https://github.com/ipselon/structor-starter-prepack)
-
-### Articles
-
-* [Using React Router inside of components](https://github.com/ipselon/structor/wiki/Using-React-Router-inside-of-components)
-* [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
-* [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
-* [Troubleshooting](https://github.com/ipselon/structor/wiki/Trobleshooting)
-
-### Requirements
-
-* node.js 5.x
-* npm 3.8.x
+* Structor is not a graphical Web design tool.
+* Structor is not a Web site/Web app/Web pages generator tool.
+* Structor does not modify the source code of your project.
 
 ### Getting started
 
-Structor is a tool which helps to create UI in a Web application. So, the first thing that you need - clone or download one of the existing Web application projects from GitHub.
+Beginning from version 2 Structor should be installed as a local npm module into `react-boilerplate` project. 
 
-___Clone project from GitHub:___  
-* Clone one of existing projects (BTW, you can request your own structure of Structor project with own generators, just [write to us](mailto:support@helmetrex.com)):
-   * `git clone https://github.com/ipselon/bootstrap-prepack.git` for Bootstrap project
-   * `git clone https://github.com/ipselon/material-ui-prepack.git` for Material UI project
-   * `git clone https://github.com/ipselon/structor-starter-prepack.git` for starter project
-* Go to appeared folder:
-   * `cd bootstrap-prepack` for Bootstrap project
-   * `cd material-ui-prepack` for Material UI project
-   * `cd structor-starter-prepack` for starter project
-* Install dependencies: `npm install`
+As far as Structor uses a custom metadata in order to operate the project's components, there is a fork of `react-boilerplate` project genuinely prepared for Structor.
+      
+Please find the instruction of how to install and start working with Structor in compatible fork of the `react-boilerplate` project here: [https://github.com/ipselon/react-boilerplate](https://github.com/ipselon/react-boilerplate);
 
-___Or download & unpack:___  
-* Go to Structor Market [http://helmetrex.com](http://helmetrex.com), choose suitable project.
-* Download package on localhost and unpack it in some empty folder.
-* cd to this folder and run ```npm install``` command.
+### Useful readings
 
-#### Install Stuctor
-If you are going to work in Structor with many projects, it's better to install Structor globally. But if you do not have an access to install globally or your environment has issues with global paths (see [#56](https://github.com/ipselon/structor/issues/56) issue), you can install and run Structor locally.
+* [Structor's component model representation](https://github.com/ipselon/structor/wiki/Structor's-component-model-representation)
+* [Shortcuts](https://github.com/ipselon/structor/wiki/Structor-shortcuts)
 
-**Global installation**
-```
-npm install structor -g
-```
-
-**Local installation**
-```
-npm install structor
-```
-* Add the following line into `package.json` file in ```scripts``` section:
-```
-"structor": "structor"
-```
-
-#### Run Structor
-
-Being in project's folder run from command line:
-* In case Structor installed globally:
-```
-structor
-```
-* In case Structor installed locally:
-```
-npm run structor
-```
-
-##### Tips
+#### Tips
 * To run with different port: ```structor -p <port>```<br/>
-* To specify different project's working directory: ```structor -d <path_to_project_dir>```
-* To in verbose mode: ```structor -v```
+* To run in verbose mode: ```structor -v```
 
 ### License
 Apache License, Version 2.0 (Apache-2.0)

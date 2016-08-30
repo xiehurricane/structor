@@ -22,7 +22,7 @@ import bodyParser from 'body-parser';
 import * as config from './commons/configuration.js';
 
 import * as structorController from './structor/controller.js';
-import * as sandboxController from './sandbox/controller.js';
+// import * as sandboxController from './sandbox/controller.js';
 import * as downloadController from './download/controller.js';
 
 let server = {
@@ -136,9 +136,9 @@ function initStructorController(){
     structorController.setServer(server);
 }
 
-function initSandboxController(){
-    server.app.post('/structor-sandbox', bodyParser.json({limit: '50mb'}), (req, res) => {
-        callControllerMethod(sandboxController, req, res);
-    });
-    sandboxController.setServer(server);
-}
+// function initSandboxController(){
+//     server.app.post('/structor-sandbox', bodyParser.json({limit: '50mb'}), (req, res) => {
+//         callControllerMethod(sandboxController, req, res);
+//     });
+//     sandboxController.setServer(server);
+// }
