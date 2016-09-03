@@ -80,8 +80,8 @@ function* saveGenerated(){
             }
             graphApi.changeModelNodeType(selectedKey, componentName, componentDefaults[0]);
             yield put(clipboardIndicatorActions.removeClipboardKeys());
-            // yield put(libraryPanelActions.loadComponents());
-            // yield put(deskPageActions.setReloadPageRequest());
+            yield put(libraryPanelActions.loadComponents());
+            yield put(deskPageActions.setReloadPageRequest());
             yield put(actions.hide());
         } catch(error) {
             yield put(messageActions.failed('Source code installation has an error. ' + (error.message ? error.message : error)));

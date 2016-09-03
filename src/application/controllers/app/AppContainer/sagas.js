@@ -53,7 +53,6 @@ function* signIn(){
                 if(staySignedIn === true){
                     cookies.setItem("structor-market-token", response.token, 31536e3, "/");
                 }
-                console.log(JSON.stringify(response));
                 yield put(actions.signInDone(response));
                 yield put(signInModalActions.hideModal());
                 yield put(messageActions.success('Signing in to your account has been done successfully.'));
@@ -147,16 +146,12 @@ function* getProjectStatus(){
             yield call(signInByToken);
             const status = yield call(serverApi.getProjectStatus);
             if(status === 'ready-to-go'){
-                console.log('Status is OK');
                 const model = yield call(serverApi.getProjectModel);
-                console.log('getProjectModel is OK');
                 const componentsTree = yield call(serverApi.loadComponentsTree);
-                console.log('loadComponentsTree is OK');
                 yield put(libraryPanelActions.setComponents(componentsTree));
                 yield put(deskPageActions.loadModel(model || {}));
 
                 const projectInfo = yield call(serverApi.getProjectInfo);
-                console.log('getProjectInfo is OK');
                 yield put(actions.setProjectInfo(projectInfo));
 
                 yield put(actions.showDesk());

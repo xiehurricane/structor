@@ -87,8 +87,8 @@ class Container extends Component {
 
     makeTitle(componentName){
         let titleComponentName = componentName;
-        if(titleComponentName.length > 20){
-            titleComponentName = titleComponentName.substr(0, 16) + '...';
+        if(titleComponentName.length > 23){
+            titleComponentName = titleComponentName.substr(0, 20) + '...';
         }
         return titleComponentName;
     }
@@ -124,11 +124,6 @@ class Container extends Component {
                                    data-component={componentName}
                                    onClick={this.handleQuickCopyToClipboard}>
                                     <span>{this.makeTitle(componentName)}</span>
-                                    <span className="badge"
-                                          style={{backgroundColor: '#cdcdcd'}}>
-                                        <i className="fa fa-clipboard library-panel-quick-copy-to-clipboard"></i>
-                                    </span>
-
                                 </a>
                             );
                         }
@@ -141,9 +136,6 @@ class Container extends Component {
                                data-component={componentName}
                                onClick={this.handleQuickCopyToClipboard}>
                                 <span>{this.makeTitle(componentName)}</span>
-                                <span className="badge library-panel-quick-copy-to-clipboard">
-                                    <i className="fa fa-clipboard"></i>
-                                </span>
                             </a>
                         );
                     }
