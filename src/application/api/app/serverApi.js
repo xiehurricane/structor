@@ -124,7 +124,6 @@ export function loadComponentOptions(componentName, sourceCodeFilePath) {
             if (sourceCodeFilePath) {
                 return invokeStructor('getComponentSourceCode', {filePath: sourceCodeFilePath})
                     .then(response => {
-                        console.log('Component source code: ' + response);
                         result.sourceCode = response;
                         return result;
                     });

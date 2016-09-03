@@ -59,7 +59,6 @@ class Container extends Component {
         e.stopPropagation();
         e.preventDefault();
         const key = e.currentTarget.dataset.groupkey;
-        console.log('Toggling group: ' + key);
         let newExpandedGroupKeys = Object.assign({}, this.state.expandedGroupKeys);
         newExpandedGroupKeys[key] = !newExpandedGroupKeys[key];
         this.setState({ expandedGroupKeys: newExpandedGroupKeys });

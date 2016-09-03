@@ -89,11 +89,9 @@ export function initServer(options){
                 }
 
                 server.appServer.listen(portNumber, () => {
-                    console.log('Structor is ready to work');
                     if(status === config.READY){
-                        console.log(`Open address: http://localhost:${portNumber}/structor in the browser.`);
-                    } else if(status === config.EMPTY){
-                        console.log(`Open address: http://localhost:${portNumber}/structor in the browser and download a Structor project from Structor Market.`)
+                        console.log('Structor has been started successfully.');
+                        console.log(`\nOpen in the browser: http://localhost:${portNumber}/structor\n`);
                     }
                 });
 
