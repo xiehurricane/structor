@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import { createStructuredSelector } from 'reselect';
+import * as actions from './actions.js';
 
-export const clipboardMode = state => state.clipboardIndicator.clipboardMode;
+const initialState = {
+};
 
-export const modelSelector = createStructuredSelector({
-    componentModel: state => state.clipboardIndicator
-    //userAccountModel: state => state.appContainer.userAccount,
-    //selectionBreadcrumbsModel: state => state.selectionBreadcrumbs
-    //deskModel: state => state.desk
-});
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    return state;
+}
 

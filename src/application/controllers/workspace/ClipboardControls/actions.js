@@ -21,9 +21,28 @@ import { removeSelectedKeys, setSelectedKeys } from '../SelectionBreadcrumbs/act
 import { removeClipboardKeys, CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_NEW } from '../ClipboardIndicator/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
 
-export const pasteBefore = () => (dispatch, getState) => {
-    const { clipboardIndicator: {clipboardMode}} = getState();
+const setTargetKey = (targetKey, selectedKeys) => {
+    let selectedNode;
+    if(selectedKeys && selectedKeys.length > 0){
+        selectedKeys.forEach(key => {
+            selectedNode = graphApi.getNode(key);
+            if(selectedNode && selectedNode.selected){
+                selectedNode.selected = undefined;
+            }
+        });
+    }
+    let nextGraphNode = graphApi.getNode(targetKey);
+    if(nextGraphNode){
+        nextGraphNode.selected = true;
+    }
+};
+
+export const pasteBefore = (targetKey) => (dispatch, getState) => {
+    const { clipboardIndicator: {clipboardMode}, selectionBreadcrumbs: {selectedKeys}} = getState();
     let resultKeys;
+    if(targetKey){
+        dispatch(setSelectedKeys([targetKey]));
+    }
     dispatch(pushHistory());
     if(clipboardMode === CLIPBOARD_CUT){
         resultKeys = graphApi.cutPasteBeforeOrAfter(false);
@@ -39,9 +58,12 @@ export const pasteBefore = () => (dispatch, getState) => {
     }
 };
 
-export const pasteAfter = () => (dispatch, getState) => {
-    const { clipboardIndicator: {clipboardMode}} = getState();
+export const pasteAfter = (targetKey) => (dispatch, getState) => {
+    const { clipboardIndicator: {clipboardMode}, selectionBreadcrumbs: {selectedKeys}} = getState();
     let resultKeys;
+    if(targetKey){
+        dispatch(setSelectedKeys([targetKey]));
+    }
     dispatch(pushHistory());
     if(clipboardMode === CLIPBOARD_CUT){
         resultKeys = graphApi.cutPasteBeforeOrAfter(true);
@@ -57,9 +79,12 @@ export const pasteAfter = () => (dispatch, getState) => {
     }
 };
 
-export const pasteFirst = () => (dispatch, getState) => {
-    const { clipboardIndicator: {clipboardMode}} = getState();
+export const pasteFirst = (targetKey) => (dispatch, getState) => {
+    const { clipboardIndicator: {clipboardMode}, selectionBreadcrumbs: {selectedKeys}} = getState();
     let resultKeys;
+    if(targetKey){
+        dispatch(setSelectedKeys([targetKey]));
+    }
     dispatch(pushHistory());
     if(clipboardMode === CLIPBOARD_CUT){
         resultKeys = graphApi.cutPasteFirstOrLast(true);
@@ -75,9 +100,12 @@ export const pasteFirst = () => (dispatch, getState) => {
     }
 };
 
-export const pasteLast = () => (dispatch, getState) => {
-    const { clipboardIndicator: {clipboardMode}} = getState();
+export const pasteLast = (targetKey) => (dispatch, getState) => {
+    const { clipboardIndicator: {clipboardMode}, selectionBreadcrumbs: {selectedKeys}} = getState();
     let resultKeys;
+    if(targetKey){
+        dispatch(setSelectedKeys([targetKey]));
+    }
     dispatch(pushHistory());
     if(clipboardMode === CLIPBOARD_CUT){
         resultKeys = graphApi.cutPasteFirstOrLast(false);
@@ -93,9 +121,12 @@ export const pasteLast = () => (dispatch, getState) => {
     }
 };
 
-export const pasteReplace = () => (dispatch, getState) => {
-    const { clipboardIndicator: {clipboardMode}} = getState();
+export const pasteReplace = (targetKey) => (dispatch, getState) => {
+    const { clipboardIndicator: {clipboardMode}, selectionBreadcrumbs: {selectedKeys}} = getState();
     let resultKeys;
+    if(targetKey){
+        dispatch(setSelectedKeys([targetKey]));
+    }
     dispatch(pushHistory());
     if(clipboardMode === CLIPBOARD_CUT){
         resultKeys = graphApi.cutPasteReplace();

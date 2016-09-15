@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-import { createStructuredSelector } from 'reselect';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
+import * as actions from './actions.js';
 
-export const clipboardMode = state => state.clipboardIndicator.clipboardMode;
+export {
+    reducer,
+    mainSaga,
+    models,
+    actions
+}
 
-export const modelSelector = createStructuredSelector({
-    componentModel: state => state.clipboardIndicator
-    //userAccountModel: state => state.appContainer.userAccount,
-    //selectionBreadcrumbsModel: state => state.selectionBreadcrumbs
-    //deskModel: state => state.desk
-});
-
+export default Container;

@@ -13,22 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { bindActionCreators } from 'redux';
-import { setSelectedKey, } from '../SelectionBreadcrumbs/actions.js';
-import {pasteBefore, pasteAfter} from '../ClipboardControls/actions.js'
-import { serverApi, graphApi } from '../../../api';
-import { pushHistory } from '../HistoryControls/actions.js';
-import { updatePage } from '../DeskPage/actions.js';
 
-export const changeText = (newText, selectedKey) => (dispatch, getState) => {
-    let node = graphApi.getNode(selectedKey);
-    if (node) {
-        dispatch(pushHistory());
-        node.modelNode.text = newText;
-        dispatch(updatePage());
-    }
-};
+import { bindActionCreators } from 'redux';
+import {setForCuttingKeys, setForCopyingKeys} from '../ClipboardIndicator/actions.js';
+import {cloneSelected, moveSelected, deleteSelected} from '../SelectionControls/actions.js';
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setSelectedKey, changeText, pasteBefore, pasteAfter
+	setForCuttingKeys, setForCopyingKeys, cloneSelected, moveSelected, deleteSelected
 }, dispatch);

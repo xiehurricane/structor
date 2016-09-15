@@ -17,11 +17,13 @@
 import { createStructuredSelector } from 'reselect';
 
 import { selectedKeysSelector } from '../SelectionBreadcrumbs/selectors.js';
+import { clipboardMode } from '../ClipboardIndicator/selectors.js';
 
 export const modelSelector = createStructuredSelector({
     componentModel: state => state.pageTreeViewPanel,
     deskPageModel: state => state.deskPage,
     currentSelectedKeys: selectedKeysSelector,
+    clipboardMode: clipboardMode,
     deskModel: state => state.desk
 });
 

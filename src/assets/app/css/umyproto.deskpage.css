@@ -294,6 +294,7 @@ body {
 
 .umy-treeview-list {
     line-height: 22px;
+    font-size: 14px;
     border-left: 1px solid #cdcdcd;
     -webkit-padding-start: 0;
     padding: 0 0 0 1em;
@@ -416,4 +417,62 @@ body {
     -webkit-box-shadow: inset 0px -7px 4px 0px rgba(255, 255, 255, 0.64);
     -moz-box-shadow:    inset 0px -7px 4px 0px rgba(255, 255, 255, 0.64);
     box-shadow:         inset 0px -7px 4px 0px rgba(255, 255, 255, 0.64);
+}
+
+.treeview-placeholder-base {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    height: 0;
+}
+
+.treeview-placeholder-line {
+    display: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    height: 0.2em;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    border-right: 1px solid #999;
+    background-color: rgb(240, 173, 78);
+    border-bottom-right-radius: 3px;
+    border-top-right-radius: 3px;
+    top: .6em;
+    left: 1.3em;
+    width: 300px;
+}
+
+.treeview-placeholder {
+    position: absolute;
+    top: -0.7em;
+    left: 0;
+    width: 1.4em;
+    height: 1.4em;
+    padding: 0.3em;
+    z-index: 1000;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.treeview-placeholder:hover {
+    padding: 0.1em;
+}
+
+.treeview-placeholder:hover > .treeview-placeholder-circle {
+    width: 1.2em;
+    height: 1.2em;
+    border: 1px solid #999;
+    background-color: rgb(240, 173, 78);
+}
+.treeview-placeholder:hover > .treeview-placeholder-line {
+    display: block;
+}
+
+.treeview-placeholder-circle {
+    width: .8em;
+    height: .8em;
+    border-radius: 50%;
+    background-color: rgba(240, 173, 78, 0.1);
+    border: 1px solid rgba(205, 205, 205, 0.5);
 }

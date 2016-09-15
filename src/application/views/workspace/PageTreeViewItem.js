@@ -21,22 +21,21 @@ class PageTreeViewItem extends Component {
 
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(e) {
+    handleClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
         if (this.props.onSelect) {
             this.props.onSelect(this.props.itemKey, e.metaKey || e.ctrlKey);
         }
-    }
+    };
 
     render() {
 
         let content = null;
 
-        const { isSelected, isForCutting, isForCopying, itemKey } = this.props;
+        const { isSelected, isForCutting, isForCopying, itemKey, children } = this.props;
 
         let className;
         if(isSelected){
@@ -53,33 +52,46 @@ class PageTreeViewItem extends Component {
         const propsStyle = {margin: '0 0 0 0.5em', fontWeight: '200', cursor: 'pointer'};
         let label = this.props.type;
         let props = printProps(this.props.modelProps);
-
-        if (this.props.children && this.props.children.length > 0) {
+        if (children && children.length > 0) {
             content = (
-                <li id={itemKey} className={className}>
+                <li id={itemKey}
+                    className={className}>
                     <span>{'<'}</span>
-                    <a key={'toplink'} href="#" onClick={this.handleClick} style={linkStyle}>
+                    <a key={'toplink'}
+                       href="#"
+                       onClick={this.handleClick}
+                       style={linkStyle}>
                         <span>{label}</span>
                     </a>
-                    { props ? <span className="text-muted" onClick={this.handleClick} style={propsStyle}>{props}</span> : null }
+                    { props && <span className="text-muted"
+                                    onClick={this.handleClick}
+                                    style={propsStyle}>{props}</span> }
                     <span>{'>'}</span>
-                    {this.props.children}
-                    <span>{'<'}</span>
-                    <a key={'bottomlink'} href="#" onClick={this.handleClick} style={linkStyle}>
+                    {children}
+                    <span>{'</'}</span>
+                    <a key={'bottomlink'}
+                       href="#"
+                       onClick={this.handleClick}
+                       style={linkStyle}>
                         <span>{label}</span>
                     </a>
-                    <span>{' />'}</span>
+                    <span>{'>'}</span>
                 </li>
             );
         } else {
             content = (
-                <li id={itemKey} className={className}>
+                <li id={itemKey}
+                    className={className}>
                     <span>{'<'}</span>
-                    <a href="#" onClick={this.handleClick} style={linkStyle}>
+                    <a href="#"
+                       onClick={this.handleClick}
+                       style={linkStyle}>
                         <span>{label}</span>
                     </a>
-                    { props ? <span className="text-muted" onClick={this.handleClick} style={propsStyle}>{props}</span> : null }
-                    <span>{'/>'}</span>
+                    { props && <span className="text-muted"
+                                     onClick={this.handleClick}
+                                     style={propsStyle}>{props}</span> }
+                    <span>{' />'}</span>
                 </li>
             );
         }

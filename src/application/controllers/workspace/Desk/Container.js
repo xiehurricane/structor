@@ -28,6 +28,7 @@ import PageTreeViewPanel from '../PageTreeViewPanel';
 import ToolbarSelection from '../ToolbarSelection';
 import LibraryPanel from '../LibraryPanel';
 import ComponentOptionsPanel from '../ComponentOptionsPanel';
+import PageTreeViewToolbar from '../PageTreeViewToolbar';
 
 class Container extends Component {
 
@@ -184,11 +185,19 @@ class Container extends Component {
                                 left: '2px',
                                 width: '2em',
                                 height: '2em',
-                                zIndex: '1030'
+                                zIndex: 1030
                             }}
                             onClick={(e) => {togglePageTreeview()}}>
-                        <span className='fa fa-times fa-fw'></span>
+                        <span className='fa fa-times fa-fw'/>
                     </Button>
+                    <PageTreeViewToolbar
+                        style={{
+                            position: 'absolute',
+                            top: '5em',
+                            left: '2px',
+                            zIndex: 1030
+                        }}
+                    />
                     {bottomPanelInner}
                 </div>
             </div>

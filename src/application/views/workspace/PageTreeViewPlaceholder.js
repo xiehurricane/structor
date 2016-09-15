@@ -13,15 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
 
-import { createStructuredSelector } from 'reselect';
+const PageTreeViewPlaceholder = (props) => {
+	let style = {marginLeft: '-1.75em'};
+	if(props.isTopLevelPlace){
+		style.marginLeft = '-.45em';
+	}
+	return (
+		<li	className="treeview-placeholder-base" style={style}>
+			<div className="treeview-placeholder">
+				<div className="treeview-placeholder-line" />
+				<div className="treeview-placeholder-circle" onClick={e => props.onClick(props.itemKey)} />
+			</div>
+		</li>
+	);
+};
 
-export const clipboardMode = state => state.clipboardIndicator.clipboardMode;
-
-export const modelSelector = createStructuredSelector({
-    componentModel: state => state.clipboardIndicator
-    //userAccountModel: state => state.appContainer.userAccount,
-    //selectionBreadcrumbsModel: state => state.selectionBreadcrumbs
-    //deskModel: state => state.desk
-});
-
+export default PageTreeViewPlaceholder;

@@ -44,6 +44,7 @@ import metadataFormReducer from '../controllers/generator/MetadataForm/reducer.j
 import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
 import sourceFilesListReducer from '../controllers/generator/SourceFilesList/reducer.js';
 import proxySetupModalReducer from '../controllers/app/ProxySetupModal/reducer.js';
+import pageTreeViewToolbarReducer from '../controllers/workspace/PageTreeViewToolbar/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -73,7 +74,8 @@ const reducer = combineReducers({
     metadataForm: metadataFormReducer,
     signInModal: signInModalReducer,
     sourceFilesList: sourceFilesListReducer,
-    proxySetupModal: proxySetupModalReducer
+    proxySetupModal: proxySetupModalReducer,
+    pageTreeViewToolbar: pageTreeViewToolbarReducer
 });
 
 export default reducer;
