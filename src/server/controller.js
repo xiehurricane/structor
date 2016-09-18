@@ -22,8 +22,8 @@ import bodyParser from 'body-parser';
 import * as config from './commons/configuration.js';
 
 import * as structorController from './structor/controller.js';
-// import * as sandboxController from './sandbox/controller.js';
-import * as downloadController from './download/controller.js';
+import * as sandboxController from './sandbox/controller.js';
+// import * as downloadController from './download/controller.js';
 
 let server = {
     io: undefined,
@@ -60,7 +60,7 @@ function callControllerMethod(controller, req, res){
                 }
             })
             .catch( err => {
-                let errorMessage = err.message ? err.message : err.toString();
+                let errorMessage = err.message ? err.message : err;
                 res.send({ error: true, errors: [errorMessage] });
             });
     } else {
@@ -98,7 +98,7 @@ export function initServer(options){
                 // initDownloadController();
                 if(status === config.READY){
                     initStructorController();
-                    // initSandboxController();
+                    initSandboxController();
                 }
             }
         }).catch(e => {
@@ -111,7 +111,7 @@ function reinitServer(){
         .then(status => {
             if(status === config.READY){
                 initStructorController();
-                // initSandboxController();
+                initSandboxController();
             } else {
                 throw Error('Server reinitialization should not be provided in empty directory.');
             }
@@ -119,13 +119,13 @@ function reinitServer(){
         });
 }
 
-function initDownloadController(){
-    server.app.post('/structor-project-download', bodyParser.json({limit: '50mb'}), (req, res) => {
-        callControllerMethod(downloadController, req, res);
-    });
-    downloadController.setProjectDirPath(projectDirPath);
-    downloadController.setPostInstallationCallback(reinitServer);
-}
+// function initDownloadController(){
+//     server.app.post('/structor-project-download', bodyParser.json({limit: '50mb'}), (req, res) => {
+//         callControllerMethod(downloadController, req, res);
+//     });
+//     downloadController.setProjectDirPath(projectDirPath);
+//     downloadController.setPostInstallationCallback(reinitServer);
+// }
 
 function initStructorController(){
     server.app.post('/structor-invoke', bodyParser.json({limit: '50mb'}), (req, res) => {
@@ -134,9 +134,9 @@ function initStructorController(){
     structorController.setServer(server);
 }
 
-// function initSandboxController(){
-//     server.app.post('/structor-sandbox', bodyParser.json({limit: '50mb'}), (req, res) => {
-//         callControllerMethod(sandboxController, req, res);
-//     });
-//     sandboxController.setServer(server);
-// }
+function initSandboxController(){
+    server.app.post('/structor-sandbox', bodyParser.json({limit: '50mb'}), (req, res) => {
+        callControllerMethod(sandboxController, req, res);
+    });
+    sandboxController.setServer(server);
+}

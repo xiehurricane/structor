@@ -26,7 +26,7 @@ function* getInfo(userId, generatorId){
         const textInfo = yield call(serverApi.getGeneratorInfo, userId, generatorId);
         yield put(actions.setGeneratorInfo(userId, generatorId, {brief: textInfo}));
     } catch(e){
-        console.warn(e.message ? e.message : e.toString());
+        console.warn(e.message ? e.message : e);
     }
 }
 

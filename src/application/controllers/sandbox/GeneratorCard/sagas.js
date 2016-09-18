@@ -17,27 +17,27 @@ import { fork, take, call, put, race } from 'redux-saga/effects';
 import * as actions from './actions.js';
 import { actions as spinnerActions } from '../../app/AppSpinner/index.js';
 import { actions as messageActions } from '../../app/AppMessage/index.js';
-import { serverApi } from '../../../api';
+import { restApi } from '../../../api/index.js';
 //
 //const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 //
-function* loadComponents(){
+function* uploadScreenshot(){
     while(true){
-        yield take(actions.LOAD_COMPONENTS);
-        yield put(spinnerActions.started('Loading components'));
+        const {payload} = yield take(actions.UPLOAD_SCREENSHOT);
+        yield put(spinnerActions.started('Uploading image'));
         try {
-            const response = yield call(serverApi.loadComponentsTree);
-            yield put(actions.setComponents(response));
 
+            yield call(restApi.uploadScreenshot, payload);
+            yield put(actions.uploadScreenshotDone());
         } catch(error) {
-            yield put(messageActions.failed('Components loading has an error. ' + (error.message ? error.message : error)));
+            yield put(messageActions.failed('Uploading image error. ' + String(error)));
         }
-        yield put(spinnerActions.done('Loading components'));
+        yield put(spinnerActions.done('Uploading image'));
     }
 }
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(loadComponents)];
+    yield [fork(uploadScreenshot)];
 
 };

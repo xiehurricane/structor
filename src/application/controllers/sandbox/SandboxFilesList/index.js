@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../generator/Generator/actions.js';
-import { setGeneratorSample } from '../../sandbox/Sandbox/actions.js';
+import Container from './Container.js';
+import reducer from './reducer.js';
+import mainSaga from './sagas.js';
+import * as models from './selectors.js';
+import * as actions from './actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators, setGeneratorSample
-}, dispatch);
+export {
+    reducer,
+    mainSaga,
+    models,
+    actions
+}
+
+export default Container;

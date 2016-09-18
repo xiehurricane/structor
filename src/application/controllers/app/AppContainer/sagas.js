@@ -34,7 +34,7 @@ function* signInByToken(){
             const userCredentials = yield call(serverApi.initUserCredentialsByToken, tokenFromCookies);
             yield put(actions.signInDone(userCredentials));
         } catch(e){
-            console.warn(e.message ? e.message : e.toString());
+            console.warn(e.message ? e.message : e);
         }
     }
 }

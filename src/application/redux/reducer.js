@@ -45,6 +45,10 @@ import signInModalReducer from '../controllers/app/SignInModal/reducer.js';
 import sourceFilesListReducer from '../controllers/generator/SourceFilesList/reducer.js';
 import proxySetupModalReducer from '../controllers/app/ProxySetupModal/reducer.js';
 import pageTreeViewToolbarReducer from '../controllers/workspace/PageTreeViewToolbar/reducer.js';
+import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
+import generatorCardReducer from '../controllers/sandbox/GeneratorCard/reducer.js';
+import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
+import sandboxFilesListReducer from '../controllers/sandbox/SandboxFilesList/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -75,7 +79,9 @@ const reducer = combineReducers({
     signInModal: signInModalReducer,
     sourceFilesList: sourceFilesListReducer,
     proxySetupModal: proxySetupModalReducer,
-    pageTreeViewToolbar: pageTreeViewToolbarReducer
+    pageTreeViewToolbar: pageTreeViewToolbarReducer,
+    sandbox: sandboxReducer,
+    generatorTemplate: generatorTemplateReducer
 });
 
 export default reducer;

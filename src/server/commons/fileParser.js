@@ -33,20 +33,24 @@ export function traverse(object, visitor) {
     }
 }
 
-export function getFileAst(fileData){
-    //console.log(fileData);
+export function getFileAst(fileData, filePath){
+    // console.log(fileData);
     let result = null;
     try{
         result = esprima.parse(fileData, {tolerant: true, range: true, comment: true, jsx: true});
     } catch(e){
-        throw Error('Can not parse file, error: ' + e.message);
+        if(filePath){
+            throw Error('Can not parse file: ' + filePath + ', error: ' + e.message);
+        } else {
+            throw Error('Can not parse file, error: ' + e.message);
+        }
     }
     return result;
 }
 
 export function validateSourceCode(fileData){
     try{
-        // esprima.parse(fileData, { tolerant: true, jsx: true });
+        esprima.parse(fileData, { tolerant: true, jsx: true });
     } catch(e){
         throw Error('File is not valid, error: ' + e.message);
     }

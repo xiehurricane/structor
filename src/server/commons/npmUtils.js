@@ -1,5 +1,6 @@
 import path from 'path';
 import child_process from 'child_process';
+import * as fileManager from './fileManager.js';
 
 const exec = child_process.exec;
 
@@ -72,6 +73,23 @@ export function getPackageAbsolutePath(packageName, workingDir){
             return path.dirname(result);
         })
         .catch(err => {
+            console.error(err);
+            return undefined;
+        });
+}
+
+export function getPackageVersion(packageName, workingDir){
+    return execute(`node -p "require.resolve('${packageName}/package.json')"`, workingDir)
+        .then(result => {
+            if(result){
+                return fileManager.readJson(result.trim()).then(jsonData => {
+                    return jsonData.version;
+                });
+            }
+            return undefined;
+        })
+        .catch(err => {
+            console.error(err);
             return undefined;
         });
 }

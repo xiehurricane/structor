@@ -62,7 +62,7 @@ export function post(url, requestBody) {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
                         } else if (error) {
-                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
+                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error));
                         } else {
                             if (body.error === true) {
                                 let errorMessage = "Error: ";
@@ -73,6 +73,7 @@ export function post(url, requestBody) {
                                 }
                                 reject(errorMessage.substr(0, errorMessage.length - 2));
                             } else {
+                                console.log('Body: => ', JSON.stringify(body));
                                 resolve(body);
                             }
                         }
@@ -82,7 +83,7 @@ export function post(url, requestBody) {
                 }
             )
         } catch (e) {
-            reject(e.message ? e.message : e.toString());
+            reject(e.message ? e.message : e);
         }
     });
 }
@@ -123,7 +124,7 @@ export function get(url) {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
                         } else if (error) {
-                            reject('Error connection to ' + url + ". " + (error.message ? error.message : error.toString()));
+                            reject('Error connection to ' + url + ". " + (error.message ? error.message : error));
                         } else {
                             resolve(body);
                         }
@@ -133,7 +134,7 @@ export function get(url) {
                 }
             )
         } catch (e) {
-            reject(e.message ? e.message : e.toString());
+            reject(e.message ? e.message : e);
         }
     });
 }
@@ -172,7 +173,7 @@ export function getText(url) {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
                         } else if (error) {
-                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
+                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error));
                         } else {
                             resolve(body);
                         }
@@ -182,7 +183,7 @@ export function getText(url) {
                 }
             )
         } catch (e) {
-            reject(e.message ? e.message : e.toString());
+            reject(e.message ? e.message : e);
         }
     });
 }
@@ -223,7 +224,7 @@ export function download(url, requestBody) {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
                         } else if (error) {
-                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
+                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error));
                         } else {
                             resolve(body);
                         }
@@ -233,7 +234,7 @@ export function download(url, requestBody) {
                 }
             )
         } catch (e) {
-            reject(e.message ? e.message : e.toString());
+            reject(e.message ? e.message : e);
         }
     });
 
@@ -274,7 +275,7 @@ export function downloadGet(url) {
                                 reject('Got error code ' + response.statusCode + '. Error: ' + response.statusMessage);
                             }
                         } else if (error) {
-                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
+                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error));
                         } else {
                             resolve(body);
                         }
@@ -284,7 +285,7 @@ export function downloadGet(url) {
                 }
             )
         } catch (e) {
-            reject(e.message ? e.message : e.toString());
+            reject(e.message ? e.message : e);
         }
     });
 
@@ -329,7 +330,7 @@ export function uploadFile(url, filePath, fieldName) {
                                 reject('Got error code ' + response.statusCode + '. Status: ' + response.statusMessage + '. Message: ' + JSON.stringify(body));
                             }
                         } else if (error) {
-                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error.toString()));
+                            reject('Error connection to ' + url + '. ' + (error.message ? error.message : error));
                         } else {
                             if (body.error === true) {
                                 let errorMessage = "Error: ";
@@ -349,7 +350,7 @@ export function uploadFile(url, filePath, fieldName) {
                 }
             )
         } catch (e) {
-            reject(e.message ? e.message : e.toString());
+            reject(e.message ? e.message : e);
         }
     });
 }

@@ -159,3 +159,11 @@ export function generate(generatorId, version, groupName, componentName, model, 
 export function saveGenerated(groupName, componentName, files, dependencies){
     return invokeStructor('saveGenerated', {groupName, componentName, files, dependencies});
 }
+
+export function readComponentSources(componentName, model){
+    return invokeSandbox('readComponentSources', {componentName, model});
+}
+
+export function publishGenerator(generatorKey, dataObject){
+    return invokeSandbox('publishGenerator', {generatorKey, dataObject});
+}

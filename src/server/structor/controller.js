@@ -174,7 +174,11 @@ export function generate(options){
     const {generatorId, version, groupName, componentName, model, metadata} = options;
     return generatorManager.initGeneratorData(groupName, componentName, model, metadata)
         .then(generatorData => {
-            return clientManager.invokeGeneration(generatorId, version, generatorData);
+            console.log('Generator data: ', JSON.stringify(generatorData));
+            return clientManager.invokeGeneration(generatorId, version, generatorData).then(result => {
+                console.log('Resulting  data: ', JSON.stringify(result));
+                return result;
+            });
         });
 }
 

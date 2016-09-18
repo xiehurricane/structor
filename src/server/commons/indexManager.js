@@ -131,6 +131,7 @@ export function getStructure(ast) {
                 if (values && values.length > 0) {
                     values.forEach(value => {
                         let component = {
+                            group: property.key.name,
                             name: value.key.name
                         };
                         let from = structure.imports[component.name];

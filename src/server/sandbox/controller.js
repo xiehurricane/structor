@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import path from 'path';
+// import path from 'path';
 import express from 'express';
 import multer from 'multer';
 import {isArray} from 'lodash';
-import * as clientManager from '../commons/clientManager.js';
-import * as storageManager from './storageManager.js';
-import * as projectCompiler from './projectCompiler.js';
-import * as generatorManager from './generatorManager.js';
+
 import * as config from '../commons/configuration.js';
+import * as publishManager from './publishManager';
 
 let serverRef;
 
@@ -37,11 +35,11 @@ export function error(options){
 export function setServer(server){
     serverRef = server;
     if(serverRef){
-        const sandboxDeskDirPath = path.join(config.sandboxDirPath(), 'work', '.structor', 'desk').replace(/\\/g, '/');
-        serverRef.app.use('/structor-sandbox-preview', express.static(sandboxDeskDirPath));
+        const sandboxDirPath = config.sandboxDirPath();
+        serverRef.app.use('/structor-sandbox-preview', express.static(sandboxDirPath));
         const screenshotStorage = multer.diskStorage({
             destination: (req, file, cb) => {
-                cb(null, path.join(sandboxDeskDirPath, 'assets', 'img').replace(/\\/g, '/'));
+                cb(null, sandboxDirPath);
             },
             filename: (req, file, cb) => {
                 cb(null, 'screenshot.png');
@@ -55,72 +53,10 @@ export function setServer(server){
     }
 }
 
-export function makeWorkingDirectory(options){
-    const {generatorId, userId} = options;
-    return storageManager.makeWorkingCopy(generatorId, userId);
+export function readComponentSources(options){
+    return publishManager.readComponentSources(options.componentName, options.model);
 }
 
-export function removeWorkingDirectory(options){
-    return storageManager.deleteWorkingCopy();
+export function publishGenerator(options){
+    return publishManager.publishGenerator(options.generatorKey, options.dataObject);
 }
-
-export function compileWorkingDesk(options){
-    return projectCompiler.compileWorkingCopy();
-}
-
-export function getGeneratorSamples(options){
-    return clientManager.getGeneratorSamples();
-}
-
-export function sandboxPrepare(options){
-    return clientManager.sandboxPrepare(options.generatorId, options.version);
-}
-
-export function sandboxReadFiles(options){
-    return clientManager.sandboxReadFiles(options.sampleId);
-}
-
-export function sandboxWriteFiles(options){
-    return clientManager.sandboxWriteFiles(options.sampleId, options.filesObject);
-}
-
-export function sandboxGenerate(options){
-    const {sampleId, metadata, model} = options;
-    const groupName = 'TestGroup';
-    const componentName = 'TestComponent';
-    return generatorManager.initGeneratorData(groupName, componentName, model, metadata)
-        .then(generatorData => {
-            return clientManager.sandboxProcess(sampleId, generatorData);
-        })
-        .then(generatorData => {
-            const {files} = generatorData;
-            const defaultModelFileName = componentName + '.json';
-            files.forEach(fileObject => {
-                if(fileObject.outputFileName === defaultModelFileName){
-                    try{
-                        generatorData.defaultModel = JSON.parse(fileObject.sourceCode);
-                    } catch(e){
-                        console.error('Sandbox default model source code parsing: ' + e);
-                    }
-                }
-            });
-            if(!generatorData.defaultModel || !isArray(generatorData.defaultModel) || generatorData.defaultModel.length <= 0){
-                generatorData.defaultModel = [{
-                    type: componentName
-                }];
-            }
-            return generatorData;
-        });
-}
-
-export function saveSandboxGenerated(options){
-    const {files, dependencies} = options;
-    return generatorManager.installDependencies(dependencies).then(() => {
-        return generatorManager.saveGenerated(files);
-    });
-}
-
-export function sandboxPublish(options){
-    return clientManager.sandboxPublish(options.sampleId, options.generatorKey, options.forceClone);
-}
-

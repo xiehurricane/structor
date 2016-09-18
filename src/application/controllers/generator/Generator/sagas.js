@@ -56,6 +56,7 @@ function* generate(){
         yield put(spinnerActions.started('Generating the source code'));
         try {
             const generatedData = yield call(serverApi.generate, generatorId, version, groupName, componentName, modelNode, metaData);
+            console.log(JSON.stringify(generatedData));
             yield put(actions.setGeneratedData(generatedData));
             yield put(actions.stepToStage(actions.STAGE3));
         } catch(error) {

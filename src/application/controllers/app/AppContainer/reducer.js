@@ -98,9 +98,15 @@ export default (state = initialState, action = {}) => {
         });
     }
 
-    if(type === actions.HIDE_GENERATOR){
+    if(type === actions.HIDE_GENERATOR || type === actions.HIDE_SANDBOX){
         return Object.assign({}, state, {
             workspaceMode: 'desk'
+        });
+    }
+
+    if(type === actions.SHOW_SANDBOX){
+        return Object.assign({}, state, {
+            workspaceMode: 'sandbox'
         });
     }
 

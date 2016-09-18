@@ -15,10 +15,15 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../generator/Generator/actions.js';
-import { setGeneratorSample } from '../../sandbox/Sandbox/actions.js';
+
+import { publishGeneratorSample } from '../Sandbox/actions.js';
+
+export const UPLOAD_SCREENSHOT = "GeneratorCard/UPLOAD_SCREENSHOT";
+export const UPLOAD_SCREENSHOT_DONE = "GeneratorCard/UPLOAD_SCREENSHOT_DONE";
+
+export const uploadScreenshot = (formData) => ({type: UPLOAD_SCREENSHOT, payload: formData});
+export const uploadScreenshotDone = () => ({type: UPLOAD_SCREENSHOT_DONE});
 
 export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators, setGeneratorSample
+    uploadScreenshot, publishGeneratorSample
 }, dispatch);

@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-import { bindActionCreators } from 'redux';
-import { loadOptions } from '../ComponentOptionsModal/actions.js';
-import { loadGenerators } from '../../generator/Generator/actions.js';
-import { setGeneratorSample } from '../../sandbox/Sandbox/actions.js';
+import * as actions from './actions.js';
 
-export const containerActions = (dispatch) => bindActionCreators({
-    loadOptions, loadGenerators, setGeneratorSample
-}, dispatch);
+const initialState = {
+    stage: actions.STAGE1
+};
+
+export default (state = initialState, action = {}) => {
+
+    const {type, payload} = action;
+
+    if(type === actions.STEP_TO_STAGE){
+        return Object.assign({}, state, {
+            stage: payload
+        });
+    }
+
+    return state;
+}
+

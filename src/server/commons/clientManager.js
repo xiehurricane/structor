@@ -15,7 +15,7 @@
  */
 
 // import _ from 'lodash';
-// import path from 'path';
+import path from 'path';
 import * as client from './client.js';
 import * as config from './configuration.js';
 import {SERVICE_URL} from './configuration.js';
@@ -95,6 +95,22 @@ export function getAvailableGeneratorsList() {
 export function getAvailableGeneratorGenerics(){
     if (config.projectId()) {
         return client.get(SERVICE_URL + '/sm/public/generator/generics?projectId=' + config.projectId());
+    }
+    return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
+}
+
+export function publishFiles(generatorKey, data){
+    console.log('Generator key: ', generatorKey);
+    if (config.projectId()) {
+        return client.post(SERVICE_URL + '/sm/gengine/publish?generatorKey=' + generatorKey + "&projectId=" + config.projectId(), data)
+            .then(generatorId => {
+                if(generatorId !== '-1'){
+                    const screenshotPath = path.join(config.sandboxDirPath(), 'screenshot.png').replace(/\\/g, '/');
+                    return client.uploadFile(SERVICE_URL + '/sm/gengine/uploadScreenshot?generatorId=' + generatorId, screenshotPath, 'screenshot')
+                } else {
+                    throw Error('Server could not save generator: ', generatorKey);
+                }
+            });
     }
     return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }

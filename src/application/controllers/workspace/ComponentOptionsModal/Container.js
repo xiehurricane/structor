@@ -108,7 +108,6 @@ class Container extends Component {
                 <Tab key={'component'} eventKey={tabPanes.length + 1} title='The Source Code'>
                     <div style={containerStyle}>
                         <p><strong>File:&nbsp;</strong><span>{sourceFilePath}</span></p>
-                        <p><small>The validation of the source code is not provided (beta version)</small></p>
                         <AceEditor ref='sourceCodeEditor'
                                    sourceName='componentSource'
                                    mode='ace/mode/jsx'

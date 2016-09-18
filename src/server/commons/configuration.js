@@ -22,7 +22,8 @@ export const SERVICE_DIR = '.structor';
 export const READY = 'ready-to-go';
 export const EMPTY = 'dir-is-empty';
 
-export const SERVICE_URL = 'https://helmetrex.com';
+// export const SERVICE_URL = 'https://helmetrex.com';
+export const SERVICE_URL = 'http://localhost';
 
 export const STRUCTOR_URLS = [
     '/structor',
@@ -61,6 +62,9 @@ function setupProjectPaths(rootDirPath) {
         docsComponentsDirPath: path.join(absRoot, 'docs', 'components').replace(/\\/g, '/'),
 
         appDirPath: path.join(rootDirPath, 'app').replace(/\\/g, '/'),
+        appAssetsDirPath: path.join(rootDirPath, 'app', 'assets').replace(/\\/g, '/'),
+
+        sandboxDirPath: path.join(absRoot, 'sandbox').replace(/\\/g, '/'),
 
         // templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
         deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
@@ -304,10 +308,10 @@ export function projectProxyURL(){
     return config.project.conf.proxyURL;
 }
 
-// export function sandboxDirPath(){
-//     return config.project.paths.sandboxDirPath;
-// }
-//
-// export function sandboxTemplateDirPath(){
-//     return config.project.paths.sandboxTemplateDirPath;
-// }
+export function sandboxDirPath(){
+    return config.project.paths.sandboxDirPath;
+}
+
+export function appAssetsDirPath(){
+    return config.project.paths.appAssetsDirPath;
+}
