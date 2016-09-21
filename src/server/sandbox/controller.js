@@ -21,6 +21,7 @@ import {isArray} from 'lodash';
 
 import * as config from '../commons/configuration.js';
 import * as publishManager from './publishManager';
+import * as clientManager from '../commons/clientManager.js';
 
 let serverRef;
 
@@ -54,9 +55,13 @@ export function setServer(server){
 }
 
 export function readComponentSources(options){
-    return publishManager.readComponentSources(options.componentName, options.model);
+    return publishManager.readComponentSources(options.componentName, options.model, options.readmeText);
 }
 
 export function publishGenerator(options){
     return publishManager.publishGenerator(options.generatorKey, options.dataObject);
+}
+
+export function removeGenerator(options){
+    return clientManager.removeGenerator(options.generatorId);
 }

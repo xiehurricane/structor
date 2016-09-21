@@ -28,6 +28,7 @@ class Container extends Component {
     constructor(props) {
         super(props);
         this.handleOnSelect = this.handleOnSelect.bind(this);
+        this.handleOnDelete = this.handleOnDelete.bind(this);
         this.handleExpand = this.handleExpand.bind(this);
         this.state = {
             isExpanded: false
@@ -46,9 +47,18 @@ class Container extends Component {
     handleOnSelect(e){
         e.preventDefault();
         e.stopPropagation();
-        const { generatorId, pregenerate } = this.props;
+        const { generatorId, generatorKey, pregenerate } = this.props;
         const version = e.currentTarget.dataset.version;
-        pregenerate(generatorId, version);
+        pregenerate(generatorId, generatorKey, version);
+    }
+
+    handleOnDelete(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(confirm('This operation is undoable. Please confirm the generator deleting from the market.')){
+            const { generatorId, removeGenerator } = this.props;
+            removeGenerator(generatorId);
+        }
     }
 
     handleExpand(e){
@@ -86,6 +96,7 @@ class Container extends Component {
             readmeUrl = window.serviceUrl + '/generator?key=' + generatorKey + '&userId=' + userId + '&generatorId=' + generatorId;
         }
         let selectButton = null;
+        let deleteButton = null;
         if(versions){
             const versionsList = versions.split(',');
             let menuItems = [];
@@ -110,6 +121,17 @@ class Container extends Component {
                     </SplitButton>
                 );
             }
+        }
+        if(accountUserId === userId){
+            deleteButton = (
+                <Button
+                    id="deleteButton"
+                    onClick={this.handleOnDelete}
+                    title="Generate"
+                    bsStyle="default" bsSize="xs">
+                    Delete
+                </Button>
+            );
         }
         const closeButtonStyle = {
             position: 'absolute',
@@ -140,7 +162,8 @@ class Container extends Component {
                     }
                     <h5 style={{margin : "0px", position: 'relative', padding: '3px', backgroundColor: '#f5f5f5', borderRadius: '3px'}}>
                         {selectButton}
-                        <GeneratorKeyTitleView style={{marginLeft: '1em'}} generatorKey={generatorKey} />
+                        <GeneratorKeyTitleView style={{marginLeft: '1em', marginRight: '1em'}} generatorKey={generatorKey} />
+                        {deleteButton}
                     </h5>
                     <Grid fluid={ true }>
                         <Row>

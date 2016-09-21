@@ -73,7 +73,7 @@ export function getPackageAbsolutePath(packageName, workingDir){
             return path.dirname(result);
         })
         .catch(err => {
-            console.error(err);
+            // console.error(err);
             return undefined;
         });
 }
@@ -89,7 +89,7 @@ export function getPackageVersion(packageName, workingDir){
             return undefined;
         })
         .catch(err => {
-            console.error(err);
+            // console.error(err);
             return undefined;
         });
 }

@@ -160,10 +160,14 @@ export function saveGenerated(groupName, componentName, files, dependencies){
     return invokeStructor('saveGenerated', {groupName, componentName, files, dependencies});
 }
 
-export function readComponentSources(componentName, model){
-    return invokeSandbox('readComponentSources', {componentName, model});
+export function readComponentSources(componentName, model, readmeText){
+    return invokeSandbox('readComponentSources', {componentName, model, readmeText});
 }
 
 export function publishGenerator(generatorKey, dataObject){
     return invokeSandbox('publishGenerator', {generatorKey, dataObject});
+}
+
+export function removeGenerator(generatorId){
+    return invokeSandbox('removeGenerator', {generatorId});
 }

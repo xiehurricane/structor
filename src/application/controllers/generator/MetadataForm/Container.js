@@ -15,6 +15,7 @@
  */
 
 import validator from 'validator';
+import {isEmpty} from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
@@ -42,13 +43,13 @@ class Container extends Component {
         e.preventDefault();
         this.props.startGeneration(this.refs.groupNameInput.getValue(),
             this.refs.componentNameInput.getValue(),
-            this.refs.metadataEditor.getSourceCode());
+            this.refs.metadataEditor ? this.refs.metadataEditor.getSourceCode() : undefined);
     }
 
     render() {
 
         const { componentModel: {selectedGenerator, groupName, componentName, metaData}, libraryPanelModel: {groupsList, componentsList} } = this.props;
-        const metaHelpText = marked(selectedGenerator.metaHelp);
+        const metaHelpText = selectedGenerator.metaHelp !== 'NONE' ? marked(selectedGenerator.metaHelp) : null;
         const cellBoxStyle = {
             display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'
         };
@@ -69,8 +70,9 @@ class Container extends Component {
                 )
             });
         }
-        return (
-            <div>
+        let content = null;
+        if(metaHelpText && !isEmpty(metaData)){
+            content = (
                 <Grid fluid={ true }>
                     <Row style={ { position: 'relative'} }>
                         <Col
@@ -142,6 +144,64 @@ class Container extends Component {
                         </Col>
                     </Row>
                 </Grid>
+            );
+        } else {
+            content = (
+                <Grid fluid={ true }>
+                    <Row style={ { position: 'relative'} }>
+                        <Col
+                            xs={ 6 }
+                            md={ 6 }
+                            sm={ 6 }
+                            lg={ 6 }
+                            xsOffset={3}
+                            mdOffset={3}
+                            smOffset={3}
+                            lgOffset={3}>
+                            <div style={cellBoxStyle}>
+                                <div style={{width: '70%', minWidth: '200px'}}>
+                                    <form onSubmit={this.handleOnSubmit}>
+                                        <label htmlFor="groupNameInput">Component group</label>
+                                        <InputTextStateful
+                                            validateFunc={this.validateName}
+                                            placeholder="Enter group name"
+                                            id="groupNameInput"
+                                            ref="groupNameInput"
+                                            type="text"
+                                            list="groups"
+                                            value={groupName}
+                                            autoComplete="on"/>
+                                        <datalist id="groups">
+                                            {groupDataOptions}
+                                        </datalist>
+                                        <label htmlFor="componentNameInput">Component name</label>
+                                        <InputTextStateful
+                                            validateFunc={this.validateName}
+                                            placeholder="Enter component name"
+                                            id="componentNameInput"
+                                            ref="componentNameInput"
+                                            type="text"
+                                            list="components"
+                                            value={componentName}
+                                            autoComplete="on"/>
+                                        <datalist id="components">
+                                            {componentsDataOptions}
+                                        </datalist>
+                                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                                            <Button type="submit" bsStyle="primary">Generate source code</Button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </Col>
+                    </Row>
+                </Grid>
+            );
+        }
+        return (
+            <div>
+                {content}
             </div>
         );
     }

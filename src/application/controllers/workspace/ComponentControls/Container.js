@@ -26,7 +26,7 @@ class Container extends Component {
     }
 
     render(){
-        const { currentComponent, loadOptions, loadGenerators, setGeneratorSample } = this.props;
+        const { currentComponent, loadOptionsAndShowModal, loadGenerators, setGeneratorSample } = this.props;
         const buttonLabelStyle = {
             margin: '0 0.5em'
         };
@@ -35,7 +35,7 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     disabled={!currentComponent}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); loadOptions(currentComponent); }}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); loadOptionsAndShowModal(currentComponent); }}
                     title="Show selected component options">
                     <span style={buttonLabelStyle}>
                         <i className="fa fa-wrench"/>

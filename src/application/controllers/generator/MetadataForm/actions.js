@@ -25,7 +25,7 @@ export const SET_COMPONENT_METADATA = "MetadataForm/SET_COMPONENT_METADATA";
 export const setSelectedGenerator = (generatorData) => ({type: SET_SELECTED_GENERATOR, payload: generatorData});
 export const startGeneration = (groupName, componentName, metaData) => (dispatch, getState) => {
     try{
-        let metaDataObject = JSON.parse(metaData);
+        let metaDataObject = metaData ? JSON.parse(metaData) : {};
         dispatch(generate(groupName, componentName, metaDataObject));
         dispatch({type: SET_COMPONENT_METADATA, payload: {groupName, componentName, metaData: metaDataObject}});
     } catch(e){

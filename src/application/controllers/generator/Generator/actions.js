@@ -33,6 +33,7 @@ export const SET_GENERATED_DATA = "Generator/SET_GENERATED_DATA";
 export const PREGENERATE = "Generator/PREGENERATE";
 export const GENERATE = "Generator/GENERATE";
 export const SAVE_GENERATED = "Generator/SAVE_GENERATED";
+export const REMOVE_GENERATOR = "Generator/REMOVE_GENERATOR";
 
 export const stepToStage = (stage) => ({type: STEP_TO_STAGE, payload: stage});
 export const loadGenerators = (options) => (dispatch, getState) => {
@@ -44,14 +45,14 @@ export const loadGenerators = (options) => (dispatch, getState) => {
 };
 export const setGeneratedData = (generatedData) => ({type: SET_GENERATED_DATA, payload: generatedData});
 
-export const pregenerate = (generatorId, version) => (dispatch, getState) => {
+export const pregenerate = (generatorId, generatorKey, version) => (dispatch, getState) => {
     const { selectionBreadcrumbs: {selectedKeys}} = getState();
     if(selectedKeys && selectedKeys.length === 1){
         const selectedNode = graphApi.getNode(selectedKeys[0]);
         if (selectedNode) {
             const {modelNode} = selectedNode;
             if(modelNode){
-                dispatch({type: PREGENERATE, payload:{generatorId, version, modelNode}});
+                dispatch({type: PREGENERATE, payload:{generatorId, generatorKey, version, modelNode}});
             }
         }
     }
@@ -114,6 +115,11 @@ export const hide = () => (dispatch, getState) => {
     dispatch(stepToStage(STAGE1));
     dispatch(hideGenerator());
 };
+
+export const removeGenerator = (generatorId) => (dispatch, getState) => {
+    dispatch({type: REMOVE_GENERATOR, payload:{generatorId}});
+};
+
 
 export const containerActions = (dispatch) => bindActionCreators({
     hide, stepToStage, showSignIn

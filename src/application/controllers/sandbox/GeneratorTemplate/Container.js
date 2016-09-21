@@ -127,12 +127,13 @@ class Container extends Component {
             key = fileObject.filePath;
             active = key === activeTemplate;
             templateItemsList.push(
-                <ListGroupItem href="#"
-                               key={key}
-                               style={{position: 'relative'}}
-                               active={active}
-                               data-tmpl={key}
-                               onClick={this.handleChangeTemplateText}>
+                <ListGroupItem
+                    href="#"
+                    key={key}
+                    style={{position: 'relative'}}
+                    active={active}
+                    data-tmpl={key}
+                    onClick={this.handleChangeTemplateText}>
                     {fileObject.nestedDir && <span>{fileObject.nestedDir + '/'}</span>}
                     <span>{fileObject.fileName}</span>
                     { active ? null :
@@ -170,9 +171,9 @@ class Container extends Component {
                                     defaultValue={componentGroup + '.' + componentName}
                                     ref="generatorKeyInput"
                                     type="text"
-                                    placeholder="Top.Group[.Group].Name"
+                                    placeholder="Group[.Group].Name"
                                     label="Generator key"
-                                    help="Only numeric and characters from US-ASCII alphabet are accepted. Example: Top.Group.Name"
+                                    help="Only numeric and characters from US-ASCII alphabet are accepted. Example: Group.ComponentName"
                                 />
                                 <div style={cellBoxStyle}>
                                     <Button
@@ -208,7 +209,8 @@ class Container extends Component {
                                 sm={ 6 }
                                 lg={ 6 }>
                                 <div style={cellBoxStyle}>
-                                    <div style={{width: '100%', height: '100%', paddingTop: '2em'}}>
+                                    <div style={{width: '100%', height: '100%'}}>
+                                        <label>Readme:</label>
                                         <Tabs
                                             activeKey={this.state.activeReadmeTabKey}
                                             animation={false}

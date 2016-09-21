@@ -52,6 +52,8 @@ export function post(url, requestBody) {
                                     .catch(err => {
                                         reject(err);
                                     });
+                            } else if (response.statusCode === 413) {
+                                reject('The files content is too large. Make sure that overall size of posted files is less than 1M.');
                             } else if (response.statusCode === 403) {
                                 reject('User account is not signed in. Requested operation is forbidden. Please sign in to Structor Market.');
                             } else if (response.statusCode === 401) {
@@ -73,7 +75,6 @@ export function post(url, requestBody) {
                                 }
                                 reject(errorMessage.substr(0, errorMessage.length - 2));
                             } else {
-                                console.log('Body: => ', JSON.stringify(body));
                                 resolve(body);
                             }
                         }

@@ -18,6 +18,7 @@ import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import { hideSandbox, showGenerator } from '../../app/AppContainer/actions.js';
 import { graphApi } from '../../../api';
+import { showModal as showSignIn } from '../../app/SignInModal/actions.js';
 
 export const STAGE1 = 'STAGE1';
 export const STAGE2 = 'STAGE2';
@@ -34,7 +35,8 @@ export const setGeneratorSample = (componentObject) => (dispatch, getState) => {
     const selectedNode = graphApi.getNode(componentObject.key);
     dispatch({type: SET_GENERATOR_SAMPLE, payload: {
         componentName: componentObject.componentName,
-        model: selectedNode.modelNode
+        model: selectedNode.modelNode,
+        sourceFilePath: selectedNode.sourceFilePath
     }});
 };
 
@@ -44,5 +46,5 @@ export const hide = () => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    hide, stepToStage, showGenerator
+    hide, stepToStage, showGenerator, showSignIn
 }, dispatch);

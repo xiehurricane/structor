@@ -29,6 +29,7 @@ const delay = ms => new Promise(resolve => setTimeout(() => resolve('timed out')
 
 function* signInByToken(){
     let tokenFromCookies = cookies.getItem("structor-market-token");
+    // console.log('Got token from coockies: ', tokenFromCookies);
     if (tokenFromCookies) {
         try{
             const userCredentials = yield call(serverApi.initUserCredentialsByToken, tokenFromCookies);

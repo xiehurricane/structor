@@ -34,8 +34,10 @@ export function invokeGeneration(generatorId, version, data) {
 
 export function initUserCredentialsByToken(token) {
     client.setAuthenticationToken(token);
+    // console.log('Set token: ', token);
     return client.get(SERVICE_URL + '/sm/user/profile-full')
         .then(userAccount => {
+            // console.log('User profile full: ', JSON.stringify(userAccount));
             return Object.assign({}, userAccount, {token});
         })
         .catch(err => {
@@ -100,17 +102,26 @@ export function getAvailableGeneratorGenerics(){
 }
 
 export function publishFiles(generatorKey, data){
-    console.log('Generator key: ', generatorKey);
     if (config.projectId()) {
         return client.post(SERVICE_URL + '/sm/gengine/publish?generatorKey=' + generatorKey + "&projectId=" + config.projectId(), data)
-            .then(generatorId => {
-                if(generatorId !== '-1'){
+            .then(generatorObject => {
+                if(generatorObject.generatorId !== '-1'){
                     const screenshotPath = path.join(config.sandboxDirPath(), 'screenshot.png').replace(/\\/g, '/');
-                    return client.uploadFile(SERVICE_URL + '/sm/gengine/uploadScreenshot?generatorId=' + generatorId, screenshotPath, 'screenshot')
+                    return client.uploadFile(SERVICE_URL + '/sm/gengine/uploadScreenshot?generatorId=' + generatorObject.generatorId, screenshotPath, 'screenshot')
+                        .then(() => {
+                            return generatorObject;
+                        });
                 } else {
                     throw Error('Server could not save generator: ', generatorKey);
                 }
             });
+    }
+    return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
+}
+
+export function removeGenerator(generatorId){
+    if (config.projectId()) {
+        return client.post(SERVICE_URL + '/sm/gengine/removeGenerator?generatorId=' + generatorId, {});
     }
     return Promise.reject('Current project\'s configuration does not have projectId field. It seems project is not compatible with Structor\'s version.');
 }

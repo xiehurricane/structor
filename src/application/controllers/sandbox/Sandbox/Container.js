@@ -52,9 +52,15 @@ class Container extends Component {
         }
     }
 
+    handleOnSignIn(e){
+        e.stopPropagation();
+        e.preventDefault();
+        this.props.showSignIn();
+    }
+
     render(){
 
-        const { componentModel: {stage}, hide, showGenerator } = this.props;
+        const { componentModel: {stage}, hide, showGenerator, userAccount } = this.props;
         const toolbarLabelStyle = {
             margin: '0 1em'
         };
@@ -89,6 +95,15 @@ class Container extends Component {
             toolbar = (
                 <ButtonGroup bsSize="xs">
                     {closeButton}
+                    {userAccount.userId ?
+                        null :
+                        <Button bsStyle="warning"
+                                onClick={this.handleOnSignIn}>
+                            <span style={toolbarLabelStyle}>
+                                Sign in to market
+                            </span>
+                        </Button>
+                    }
                 </ButtonGroup>
             );
             header = (<h4 className="text-center">Component files</h4>);

@@ -19,8 +19,8 @@ import * as actions from './actions.js';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function* closeSuccessMessage(key){
-    yield call(delay, 3000);
+function* closeSuccessMessage(key, timeout){
+    yield call(delay, timeout);
     yield put(actions.close(key));
 }
 
@@ -28,6 +28,6 @@ function* closeSuccessMessage(key){
 export default function* mainSaga() {
     while(true){
         const { payload } = yield take(actions.SUCCESS);
-        yield fork(closeSuccessMessage, payload.timestamp);
+        yield fork(closeSuccessMessage, payload.timestamp, payload.timeout);
     }
 };

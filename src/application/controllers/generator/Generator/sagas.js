@@ -30,12 +30,13 @@ import { serverApi, graphApi, coockiesApi } from '../../../api';
 
 function* pregenerate(){
     while(true){
-        const {payload: {generatorId, version, model}} = yield take(actions.PREGENERATE);
+        const {payload: {generatorId, generatorKey, version, model}} = yield take(actions.PREGENERATE);
         yield put(spinnerActions.started('Retrieving metadata'));
         try {
             const pregeneratedData = yield call(serverApi.pregenerate, generatorId, version, undefined, undefined, model);
             yield put(metadataFormActions.setSelectedGenerator({
                 generatorId,
+                generatorKey,
                 version,
                 metaData: pregeneratedData.metaData,
                 metaHelp: pregeneratedData.metaHelp
@@ -56,13 +57,30 @@ function* generate(){
         yield put(spinnerActions.started('Generating the source code'));
         try {
             const generatedData = yield call(serverApi.generate, generatorId, version, groupName, componentName, modelNode, metaData);
-            console.log(JSON.stringify(generatedData));
+            // console.log(JSON.stringify(generatedData));
             yield put(actions.setGeneratedData(generatedData));
             yield put(actions.stepToStage(actions.STAGE3));
         } catch(error) {
             yield put(messageActions.failed('The source code generation has an error. ' + (error.message ? error.message : error)));
         }
         yield put(spinnerActions.done('Generating the source code'));
+    }
+}
+
+function* remove(){
+    while(true){
+        const {payload: {generatorId}} = yield take(actions.REMOVE_GENERATOR);
+        yield put(spinnerActions.started('Removing generator from the market'));
+        try {
+            yield call(serverApi.removeGenerator, generatorId);
+            let generatorsList = yield call(serverApi.getAvailableGeneratorsList);
+            const recentGenerators = coockiesApi.getRecentGenerators();
+            yield put(generatorListActions.setGenerators(generatorsList, recentGenerators));
+            yield put(appContainerActions.showGenerator());
+        } catch(error) {
+            yield put(messageActions.failed(error.message ? error.message : error));
+        }
+        yield put(spinnerActions.done('Removing generator from the market'));
     }
 }
 
@@ -93,20 +111,10 @@ function* saveGenerated(){
 
 function* loadGenerators(){
     while(true){
-        const {payload: options} = yield take(actions.LOAD_GENERATORS);
+        yield take(actions.LOAD_GENERATORS);
         yield put(spinnerActions.started('Loading generators'));
         try {
-            let generatorsList;
-            if(options){
-                const {isOnlyGenerics} = options;
-                if(isOnlyGenerics){
-                    generatorsList = yield call(serverApi.getAvailableGeneratorGenerics);
-                } else {
-                    generatorsList = yield call(serverApi.getAvailableGeneratorsList);
-                }
-            } else {
-                generatorsList = yield call(serverApi.getAvailableGeneratorsList);
-            }
+            let generatorsList = yield call(serverApi.getAvailableGeneratorsList);
             const recentGenerators = coockiesApi.getRecentGenerators();
             yield put(generatorListActions.setGenerators(generatorsList, recentGenerators));
             yield put(appContainerActions.showGenerator());
@@ -122,5 +130,6 @@ export default function* mainSaga() {
     yield fork(loadGenerators);
     yield fork(pregenerate);
     yield fork(generate);
+    yield fork(remove);
     yield fork(saveGenerated);
 };

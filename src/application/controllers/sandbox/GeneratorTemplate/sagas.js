@@ -40,9 +40,9 @@ function* publishGenerator(){
 		const {payload:{generatorKey, dataObject}} = yield take(actions.PUBLISH_GENERATOR);
 		yield put(spinnerActions.started('Publishing generator'));
 		try {
-			yield call(serverApi.publishGenerator, generatorKey, dataObject);
+			const {generatorId, dirNamePath} = yield call(serverApi.publishGenerator, generatorKey, dataObject);
 			yield put(appContainerActions.hideSandbox());
-			yield put(messageActions.success('Generator has been published successfully.'));
+			yield put(messageActions.success('Generator has been published successfully. Please find generator by key: "' + dirNamePath + '"', 20000));
 		} catch(error) {
 			yield put(messageActions.failed('Generator publishing has an error. ' + (error.message ? error.message : error)));
 		}

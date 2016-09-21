@@ -22,6 +22,8 @@ import { started, done } from '../../app/AppSpinner/actions.js';
 import { success, failed, timeout, close} from '../../app/AppMessage/actions.js';
 
 export const LOAD_OPTIONS = "ComponentOptionsModal/LOAD_OPTIONS";
+export const LOAD_OPTIONS_AND_SHOW_MODAL = "ComponentOptionsModal/LOAD_OPTIONS_AND_SHOW_MODAL";
+export const SET_OPTIONS = "ComponentOptionsModal/SET_OPTIONS";
 export const SAVE_SOURCE_CODE = "ComponentOptionsModal/SAVE_SOURCE_CODE";
 export const SAVE_SOURCE_CODE_DONE = "ComponentOptionsModal/SAVE_SOURCE_CODE_DONE";
 export const SAVE_SOURCE_CODE_TIMEOUT = "ComponentOptionsModal/SAVE_SOURCE_CODE_TIMEOUT";
@@ -29,15 +31,16 @@ export const HIDE_MODAL = "ComponentOptionsModal/HIDE_MODAL";
 export const SHOW_MODAL = "ComponentOptionsModal/SHOW_MODAL";
 
 export const loadOptions = (componentObject) => ({type: LOAD_OPTIONS, payload: componentObject});
+export const loadOptionsAndShowModal = (componentObject) => ({type: LOAD_OPTIONS_AND_SHOW_MODAL, payload: componentObject});
 export const saveSourceCodeDone = () => ({type: SAVE_SOURCE_CODE_DONE});
 export const saveSourceCodeTimeout = () => ({type: SAVE_SOURCE_CODE_TIMEOUT});
 export const hideModal = () => ({type: HIDE_MODAL});
+export const showModal = () => ({type: SHOW_MODAL});
 
-export const showModal = (componentObject) => (dispatch, getState) => {
+export const setOptions = (componentObject) => (dispatch, getState) => {
     const {key, sourceFilePath, props, text, componentName, sourceCode, readmeText} = componentObject;
     dispatch({
-        type: SHOW_MODAL,
-        payload: {
+        type: SET_OPTIONS, payload: {
             selectedKey: key,
             sourceCode: sourceCode,
             sourceFilePath: sourceFilePath,

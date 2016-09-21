@@ -42,6 +42,15 @@ export default (state = initialState, action = {}) => {
     }
 
     if(type === actions.SET_SELECTED_GENERATOR){
+        let groupName;
+        let componentName;
+        if(payload.generatorKey){
+            let keyParts = payload.generatorKey.split('.');
+            if(keyParts.length >= 2){
+                groupName = keyParts[keyParts.length - 2];
+                componentName = keyParts[keyParts.length - 1];
+            }
+        }
         return Object.assign({}, state, {
             selectedGenerator:{
                 id: payload.generatorId,
@@ -49,6 +58,8 @@ export default (state = initialState, action = {}) => {
                 metaData: payload.metaData,
                 metaHelp: payload.metaHelp
             },
+            groupName,
+            componentName,
             metaData: payload.metaData
         });
     }

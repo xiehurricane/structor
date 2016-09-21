@@ -26,14 +26,15 @@ import { serverApi } from '../../../api';
 
 function* prepareGeneratorSample(){
     while(true){
-        const {payload:{componentName, model}} = yield take(actions.SET_GENERATOR_SAMPLE);
+        const {payload:{componentName, model, sourceFilePath}} = yield take(actions.SET_GENERATOR_SAMPLE);
         yield put(spinnerActions.started('Preparing generator sample'));
         try {
-            const generatorTemplate = yield call(serverApi.readComponentSources, componentName, model);
+            const {readmeText} = yield call(serverApi.loadComponentOptions, componentName, sourceFilePath);
+            const generatorTemplate = yield call(serverApi.readComponentSources, componentName, model, readmeText);
             yield put(generatorTemplateActions.setTemplate(generatorTemplate));
             yield put(appContainerActions.showSandbox());
         } catch(error) {
-            yield put(messageActions.failed('Generator sample preparing has an error. ' + (error.message ? error.message : error)));
+            yield put(messageActions.failed(error.message ? error.message : error));
         }
         yield put(spinnerActions.done('Preparing generator sample'));
     }

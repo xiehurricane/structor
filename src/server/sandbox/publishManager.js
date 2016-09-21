@@ -22,22 +22,31 @@ import * as clientManager from '../commons/clientManager.js';
 import * as config from '../commons/configuration.js';
 import * as fileParser from '../commons/fileParser.js';
 import * as npmUtils from '../commons/npmUtils.js';
+import * as modelParser from '../commons/modelParser.js';
 
-export function readComponentSources(componentName, model){
+export function readComponentSources(componentName, model, readmeText){
     return indexManager.initIndex()
         .then(indexObj => {
-            let found = undefined;
-            if (indexObj.groups) {
-                forOwn(indexObj.groups, (value, prop) => {
-                    if(!found){
-                        const {components} = value;
-                        if (components && components.length > 0) {
-                            found = components.find(i => i.name === componentName);
-                        }
+            return checkModel(model, componentName)
+                .then(invalidModelComponents => {
+                    if(invalidModelComponents.length > 0){
+                        throw Error('Component model includes other components: \n\n' +
+                            JSON.stringify(invalidModelComponents, null, 4)
+                            + '\n\n Published component is allowed to include only HTML components in composition.')
                     }
+                    let found = undefined;
+                    if (indexObj.groups) {
+                        forOwn(indexObj.groups, (value, prop) => {
+                            if(!found){
+                                const {components} = value;
+                                if (components && components.length > 0) {
+                                    found = components.find(i => i.name === componentName);
+                                }
+                            }
+                        });
+                    }
+                    return found;
                 });
-            }
-            return found;
         })
         .then(component => {
             if(!component){
@@ -109,7 +118,7 @@ export function readComponentSources(componentName, model){
                         .then(validDeps => {
                             return {
                                 fileObjects,
-                                readme: 'Not implemented yet',
+                                readme: readmeText,
                                 componentName: component.name,
                                 componentGroup: component.group,
                                 componentDirPath: componentDirPath,
@@ -122,9 +131,9 @@ export function readComponentSources(componentName, model){
         });
 }
 
-export function publishGenerator(generatorKey, dataObject){
+export function publishGenerator(generatorKey, dataObject) {
     const {globalImport} = dataObject;
-    if(globalImport && globalImport.fileName){
+    if (globalImport && globalImport.fileName) {
         const globalImportFilePath = path.join(config.appAssetsDirPath(), globalImport.fileName);
         return fileManager.readFile(globalImportFilePath)
             .catch(e => {
@@ -132,9 +141,9 @@ export function publishGenerator(generatorKey, dataObject){
             })
             .then(fileData => {
                 dataObject.globalImport.sourceCode = fileData;
-                if(path.extname(globalImportFilePath) === '.js'){
+                if (path.extname(globalImportFilePath) === '.js') {
                     let imports = findImports(fileData, globalImportFilePath);
-                    if(imports.invalidImports.length > 0 || imports.validImports.length > 0){
+                    if (imports.invalidImports.length > 0 || imports.validImports.length > 0) {
                         throw Error('Invalid imports \n' +
                             JSON.stringify(imports.invalidImports, null, 4) +
                             '\n' +
@@ -201,7 +210,8 @@ function checkDependencies(deps){
                                 name: dep, version: version
                             });
                         } else {
-                            throw Error('Can not find module ' + dep + ' in node_modules. Published component has to import from own dir or installed npm modules.');
+                            throw Error('Can not find module "' + dep + '" in node_modules. ' +
+                                'It seems the component is trying to import another component. Published component must import from own directory or from npm modules only.');
                         }
                     })
             );
@@ -209,5 +219,24 @@ function checkDependencies(deps){
     }
     return Promise.all(tasks).then(() => {
         return validDeps;
+    });
+}
+
+function checkModel(model, componentName){
+    return indexManager.initIndex().then(indexObj => {
+        let invalidComponents = [];
+        let componentMap = modelParser.getModelComponentMap(model);
+        if (indexObj.groups) {
+            forOwn(indexObj.groups, (value, prop) => {
+                if (value.components && value.components.length > 0) {
+                    value.components.forEach(componentInIndex => {
+                        if (componentMap[componentInIndex.name] && componentInIndex.name !== componentName) {
+                            invalidComponents.push(componentInIndex.name);
+                        }
+                    });
+                }
+            });
+        }
+        return invalidComponents;
     });
 }
