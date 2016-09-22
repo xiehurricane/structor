@@ -60,7 +60,7 @@ class Container extends Component {
         const {sourceCodeEditor, sourcePropsEditor, sourceTextInput} = this.refs;
         const sourceCode = sourceCodeEditor ? sourceCodeEditor.getSourceCode() : undefined;
         const sourceProps = sourcePropsEditor ? sourcePropsEditor.getSourceCode() : "{}";
-        const sourceText = sourceTextInput ? sourceTextInput.getValue() : undefined;
+        const sourceText = sourceTextInput ? sourceTextInput.value : undefined;
         submitChanges({sourceCode, sourceProps, sourceText});
         this.setState({
             activeTabKey: 1

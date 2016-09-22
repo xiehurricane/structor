@@ -29,7 +29,7 @@ class ProxyInput extends Component {
     }
 
     getUrlValue(){
-        return this.refs.inputElement.getValue();
+        return this.refs.inputElement.value;
     }
     
     handleClearUrlValue(e){
@@ -42,7 +42,7 @@ class ProxyInput extends Component {
     
     handleChangeUrlValue(e){
         this.setState({
-            urlValue: this.refs.inputElement.getValue()
+            urlValue: this.refs.inputElement.value
         });
     }
 
