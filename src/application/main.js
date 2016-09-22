@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-'use strict';
-
 import 'babel-polyfill';
 
 import '../assets/bootstrap/css/custom/bootstrap.css';

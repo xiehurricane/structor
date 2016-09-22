@@ -49,13 +49,13 @@ class Container extends Component {
 
             <Modal show={componentModel.show}
                    onHide={hideModal}
-                   dialogClassName='umy-modal-overlay'
+                   dialogClassName="umy-modal-overlay umy-modal-middlesize"
                    backdrop={true}
                    keyboard={true}
-                   bsSize='small'
-                   ref='dialog'
+                   bsSize="large"
+                   ref="dialog"
                    animation={true}>
-                <Modal.Header closeButton={true} aria-labelledby='contained-modal-title'>
+                <Modal.Header closeButton={false} aria-labelledby='contained-modal-title'>
                     <Modal.Title id='contained-modal-title'>Proxy URL settings</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

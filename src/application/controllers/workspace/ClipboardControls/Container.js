@@ -107,7 +107,7 @@ class Container extends Component {
             </div>
         );
         return (
-            <div {...this.props}>
+            <div style={this.props.style}>
                 {controlGroup}
             </div>
         );

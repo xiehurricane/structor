@@ -84,7 +84,10 @@ class Container extends Component {
                             <div style={cellBoxStyle}>
                                 <div style={{width: '70%', minWidth: '200px'}}>
                                     <form onSubmit={this.handleOnSubmit}>
-                                        <label htmlFor="groupNameInput">Component group</label>
+                                        <label htmlFor="groupNameInput"
+                                               className="form-label">
+                                            Component group
+                                        </label>
                                         <InputTextStateful
                                             validateFunc={this.validateName}
                                             placeholder="Enter group name"
@@ -97,7 +100,10 @@ class Container extends Component {
                                         <datalist id="groups">
                                             {groupDataOptions}
                                         </datalist>
-                                        <label htmlFor="componentNameInput">Component name</label>
+                                        <label htmlFor="componentNameInput"
+                                               className="form-label">
+                                            Component name
+                                        </label>
                                         <InputTextStateful
                                             validateFunc={this.validateName}
                                             placeholder="Enter component name"
@@ -161,7 +167,10 @@ class Container extends Component {
                             <div style={cellBoxStyle}>
                                 <div style={{width: '70%', minWidth: '200px'}}>
                                     <form onSubmit={this.handleOnSubmit}>
-                                        <label htmlFor="groupNameInput">Component group</label>
+                                        <label htmlFor="groupNameInput"
+                                               className="form-label">
+                                            Component group
+                                        </label>
                                         <InputTextStateful
                                             validateFunc={this.validateName}
                                             placeholder="Enter group name"
@@ -174,7 +183,10 @@ class Container extends Component {
                                         <datalist id="groups">
                                             {groupDataOptions}
                                         </datalist>
-                                        <label htmlFor="componentNameInput">Component name</label>
+                                        <label htmlFor="componentNameInput"
+                                               className="form-label">
+                                            Component name
+                                        </label>
                                         <InputTextStateful
                                             validateFunc={this.validateName}
                                             placeholder="Enter component name"

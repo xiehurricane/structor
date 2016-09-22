@@ -32,7 +32,7 @@ class Container extends Component {
             margin: '0 0.5em'
         };
         return (
-            <div {...this.props} className="btn-group" role="group">
+            <div style={this.props.style} className="btn-group" role="group">
                 <button
                     key="addPageButton"
                     className="btn btn-default btn-xs"

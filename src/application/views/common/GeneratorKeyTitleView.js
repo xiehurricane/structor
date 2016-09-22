@@ -41,9 +41,9 @@ class GeneratorKeyTitleView extends Component {
                     );
                 }
             }
-            return <span {...this.props}>{partsItems}</span>;
+            return <span style={this.props.style}>{partsItems}</span>;
         } else {
-            return <span {...this.props}>{generatorKey}</span>
+            return <span style={this.props.style}>{generatorKey}</span>
         }
     }
 }

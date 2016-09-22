@@ -62,7 +62,7 @@ class Container extends Component {
         const { cloneSelected, deleteSelected } = this.props;
         const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
         const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } = this.props;
-        const { loadOptions } = this.props;
+        const { loadOptionsAndShowModal } = this.props;
         loadPage();
         this.contentDocument = domNode.contentDocument;
         this.contentWindow = domNode.contentWindow;
@@ -93,7 +93,7 @@ class Container extends Component {
 
                 page.bindToState('onLoadOptions', (key, isModifier) => {
                     const { currentComponent } = this.props;
-                    loadOptions(currentComponent);
+                    loadOptionsAndShowModal(currentComponent);
                 });
 
                 page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]); });
@@ -344,7 +344,7 @@ class Container extends Component {
     }
 
     render(){
-        return (<iframe {...this.props} src="/structor-deskpage" />);
+        return (<iframe style={this.props.style} src="/structor-deskpage" />);
     }
 
 }

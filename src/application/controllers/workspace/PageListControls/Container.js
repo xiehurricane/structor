@@ -59,7 +59,7 @@ class Container extends Component {
             } );
         }
         return (
-            <div  {...this.props} className="btn-group" role="group">
+            <div style={this.props.style} className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
                     onClick={(e) => {
@@ -86,10 +86,10 @@ class Container extends Component {
                 <div className="btn-group" role="group">
                     <button className="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                         &nbsp;&nbsp;
-                        <span className="caret"></span>
+                        <span className="caret"/>
                         &nbsp;&nbsp;
                     </button>
-                    <ul className="dropdown-menu" role="menu" style={{overflowY: 'auto', maxHeight: '12em'}}>
+                    <ul className="dropdown-menu" role="menu" style={{overflowY: 'auto', maxHeight: '30em'}}>
                         <li role="presentation" className="dropdown-header">Switch to:</li>
                         {pagesList}
                     </ul>

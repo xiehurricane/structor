@@ -33,7 +33,7 @@ class Container extends Component {
         };
         if(selectedKeys){
             return (
-                <div {...this.props} className="btn-group" role="group">
+                <div style={this.props.style} className="btn-group" role="group">
                     <button
                         className="btn btn-default btn-xs"
                         disabled={selectedKeys.length <= 0}

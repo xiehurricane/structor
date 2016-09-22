@@ -43,9 +43,11 @@ export default (state = initialState, action = {}) => {
     }
 
     if(type === actions.SHOW_MODAL){
-        let newState = Object.assign({}, state, { ...payload, show: true});
-        //console.log(JSON.stringify(newState, null, 4));
-        return newState;
+        return Object.assign({}, state, {show: true});
+    }
+
+    if(type === actions.SET_OPTIONS){
+        return Object.assign({}, state, { ...payload });
     }
 
     return state;

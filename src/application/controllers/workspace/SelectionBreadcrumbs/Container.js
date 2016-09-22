@@ -99,7 +99,7 @@ class Container extends Component {
                             <span style={labelStyle}
                                   onClick={() => {removeSelectedKeys()}}>
                                 <i className="fa fa-times-circle fa-fw"
-                                   style={{opacity: '0.6'}}></i>
+                                   style={{opacity: '0.6'}}/>
                                 <span>Selected on page:&nbsp;</span>
                                 <strong>
                                     {(rootItem.modelNode.pageName ? rootItem.modelNode.pagePath : 'Unknown')}
@@ -171,7 +171,7 @@ class Container extends Component {
                         } else {
                             if(childrenMenuItems.length > 0){
                                 content.push(
-                                    <li key={i} active={true} >
+                                    <li key={i} >
 
                                     <span key={'menuMore'}
                                           className="dropdown"
@@ -190,7 +190,7 @@ class Container extends Component {
                                 );
                             } else {
                                 content.push(
-                                    <li key={i} active={true} >
+                                    <li key={i} >
                                     <span style={activeStyle}
                                           data-key={item.key}
                                           title={item.modelNode.type}
@@ -204,7 +204,7 @@ class Container extends Component {
                         }
                     }
                     content = (
-                        <ol key='breadcrumb' className='breadcrumb' {...this.props}>
+                        <ol key='breadcrumb' className='breadcrumb' style={this.props.style}>
                             {content}
                         </ol>
                     );
@@ -216,7 +216,7 @@ class Container extends Component {
                           style={labelStyle}
                           onClick={() => {removeSelectedKeys()}}>
                         <i className="fa fa-times-circle fa-fw"
-                           style={{opacity: '0.6'}}></i>
+                           style={{opacity: '0.6'}}/>
                         <span>Selected:&nbsp;&nbsp;</span>
                     </span>
                 );
@@ -236,7 +236,7 @@ class Container extends Component {
                                   onMouseLeave={this.handleRemoveHighlightSelectedKey}
                                   onClick={this.handleRemoveSelectedKey}>
                                 <i className="fa fa-times-circle fa-fw"
-                                   style={{opacity: '0.6'}}></i>
+                                   style={{opacity: '0.6'}}/>
                                 {componentTitle}
                             </span>
                         );
@@ -260,7 +260,7 @@ class Container extends Component {
                                        onMouseLeave={this.handleRemoveHighlightSelectedKey}
                                        onClick={this.handleRemoveSelectedKey}>
                                         <i className="fa fa-times-circle fa-fw"
-                                           style={{fontSize: '10px', opacity: '0.5'}}></i>
+                                           style={{fontSize: '10px', opacity: '0.5'}}/>
                                         {graphNode.modelNode.type}
                                     </a>
                                 </li>
@@ -284,7 +284,7 @@ class Container extends Component {
                     );
                 }
                 content = (
-                    <div {...this.props}>
+                    <div style={this.props.style}>
                         {content}
                     </div>
 
@@ -293,7 +293,7 @@ class Container extends Component {
         }
         if(!content){
             content = (
-                <div {...this.props}>
+                <div style={this.props.style}>
                     <span style={labelStyle}>Nothing is selected</span>
                 </div>
 

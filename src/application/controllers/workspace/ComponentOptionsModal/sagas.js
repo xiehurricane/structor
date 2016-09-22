@@ -140,5 +140,5 @@ function* loadOptions(){
 
 // main saga
 export default function* mainSaga() {
-    yield [fork(loadOptions), fork(saveSourceCode)];
+    yield [fork(saveSourceCode), fork(loadOptionsAndShowModal)];
 };

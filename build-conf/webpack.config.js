@@ -16,12 +16,24 @@ module.exports = [
             loaders: [
                 { test: /\.js$/, exclude: /node_modules/, loader: 'babel',
                     query: {
-                        cacheDirectory: true,
-                        presets: ['react', 'es2015-webpack', 'stage-0'],
-                        plugins: ['transform-object-assign']
+                        presets: [
+                            [
+                                "es2015",
+                                {
+                                    "modules": false
+                                }
+                            ],
+                            "react",
+                            "stage-0"
+                        ],
+                        plugins: [
+                            "transform-react-remove-prop-types",
+                            "transform-react-constant-elements",
+                            "transform-object-assign"
+                        ]
                     }
                 },
-                { test: /\.css$/, exclude: /node_modules/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
+                { test: /\.css$/, exclude: /node_modules/, loader: ExtractTextPlugin.extract({fallbackLoader: 'style-loader', loader: 'css-loader'}) },
                 { test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)([\?]?.*)$/, exclude: /node_modules/, loader: 'url-loader' }
             ]
         },

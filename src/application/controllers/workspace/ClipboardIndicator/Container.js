@@ -118,7 +118,7 @@ class Container extends Component {
             }
         }
         return (
-            <div {...this.props}>
+            <div style={this.props.style}>
                 <div style={containerStyle}>
                     <span style={typeLabelStyle}
                           onClick={() => {removeClipboardKeys();}}

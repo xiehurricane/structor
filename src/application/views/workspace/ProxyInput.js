@@ -48,21 +48,29 @@ class ProxyInput extends Component {
 
     render() {
         return (
-            <Input 
-                ref="inputElement"
-                value={this.state.urlValue}
-                type="text"
-                label={ this.props.label} 
-                placeholder="Enter value"
-                addonBefore="URL:"
-                onChange={this.handleChangeUrlValue}
-                buttonAfter={ <Button 
-                                onClick={this.handleClearUrlValue}
-                                bsStyle="default">
-                                <span className={ 'fa fa-times'}></span>
-                              </Button> 
-                }>
-            </Input>
+            <div>
+                <label htmlFor="inputElement">{this.props.label}</label>
+                <div className="input-group">
+                    <span className="input-group-addon">
+                        URL:
+                    </span>
+                    <input
+                        ref="inputElement"
+                        value={this.state.urlValue}
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter value"
+                        onChange={this.handleChangeUrlValue}>
+                    </input>
+                    <span className="input-group-btn">
+                        <button
+                            className="btn btn-default"
+                            onClick={this.handleClearUrlValue}>
+                            <span className="fa fa-times"/>
+                        </button>
+                    </span>
+                </div>
+            </div>
         );
     }
 

@@ -20,7 +20,7 @@ import validator from 'validator';
 import marked from 'marked';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
-import { Modal, Tabs, Tab, Button, Input } from 'react-bootstrap';
+import { Modal, Tabs, Tab, Button } from 'react-bootstrap';
 import AceEditor from '../../../views/workspace/AceEditor.js';
 
 class Container extends Component {
@@ -82,8 +82,7 @@ class Container extends Component {
             tabPanes.push(
                 <Tab key={'text'} eventKey={tabPanes.length + 1} title='Text'>
                     <div style={containerStyle}>
-                        <Input
-                            type="textarea"
+                        <textarea
                             placeholder="Enter text"
                             defaultValue={sourceText ? sourceText : ""}
                             ref="sourceTextInput"

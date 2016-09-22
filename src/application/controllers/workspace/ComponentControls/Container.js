@@ -31,7 +31,7 @@ class Container extends Component {
             margin: '0 0.5em'
         };
         return (
-            <div {...this.props} className="btn-group" role="group">
+            <div style={this.props.style} className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
                     disabled={!currentComponent}
@@ -49,17 +49,17 @@ class Container extends Component {
                     title="Generate the source code for a new component">
                     <span style={buttonLabelStyle}>
                         <i className="fa fa-magic"/>
-                        <span style={{marginLeft: '0.5em'}}>New Component</span>
+                        <span style={{marginLeft: '0.5em'}}>New component</span>
                     </span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
                     disabled={!currentComponent || !currentComponent.sourceFilePath}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); setGeneratorSample(currentComponent); }}
-                    title="Generate the source code for a new component">
+                    title="Publish the source code of the component">
                     <span style={buttonLabelStyle}>
-                        <i className="fa fa-magic"/>
-                        <span style={{marginLeft: '0.5em'}}>Publish Component</span>
+                        <i className="fa fa-cloud-upload"/>
+                        <span style={{marginLeft: '0.5em'}}>Publish</span>
                     </span>
                 </button>
             </div>

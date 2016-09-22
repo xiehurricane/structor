@@ -92,7 +92,7 @@ class AceEditor extends Component {
 
     render() {
         return (
-            <div ref="editorElement" {...this.props}></div>
+            <div ref="editorElement" style={this.props.style}></div>
         );
     }
 

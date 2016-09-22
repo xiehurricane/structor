@@ -46,9 +46,7 @@ import sourceFilesListReducer from '../controllers/generator/SourceFilesList/red
 import proxySetupModalReducer from '../controllers/app/ProxySetupModal/reducer.js';
 import pageTreeViewToolbarReducer from '../controllers/workspace/PageTreeViewToolbar/reducer.js';
 import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
-import generatorCardReducer from '../controllers/sandbox/GeneratorCard/reducer.js';
 import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
-import sandboxFilesListReducer from '../controllers/sandbox/SandboxFilesList/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,

@@ -30,7 +30,7 @@ class Container extends Component {
         const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
         const { setForCuttingKeys, setForCopyingKeys, cloneSelected, moveSelected, deleteSelected } = this.props;
         return (
-            <div {...this.props}>
+            <div style={this.props.style}>
                 <div className="btn-group-vertical btn-group-xs">
                     <button
                         className="btn btn-default"

@@ -151,7 +151,7 @@ class Container extends Component {
         //     overflow: 'hidden'
         // };
         return (
-            <div ref={me => this.panel = me} {...this.props}>
+            <div ref={me => this.panel = me}>
                 <Panel>
                     { isRecentPanel ?
                         <i style={closeButtonStyle}

@@ -26,7 +26,7 @@ class CheckboxStateful extends Component {
         const {value} = this.state;
         return (
             <input
-                {...this.props}
+                style={this.props.style}
                 ref="inputElement"
                 type="checkbox"
                 checked={value}

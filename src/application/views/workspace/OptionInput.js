@@ -154,7 +154,7 @@ class OptionInput extends Component {
                     <span
                         style={{position: 'absolute', top: '0.5em', left: '-1em', cursor: 'pointer'}}
                         className="fa fa-trash-o"
-                        onClick={this.handleDelete}></span>
+                        onClick={this.handleDelete}/>
                 </div>
             );
 
@@ -171,12 +171,12 @@ class OptionInput extends Component {
                     <span
                         style={{position: 'absolute', top: '0.5em', left: '-1em', cursor: 'pointer'}}
                         className="fa fa-trash-o"
-                        onClick={this.handleDelete}></span>
+                        onClick={this.handleDelete}/>
                 </div>
             );
         }
         return (
-            <div {...this.props}>
+            <div style={this.props.style}>
                 <p style={{marginBottom: '3px'}}>{label}</p>
                 {element}
             </div>

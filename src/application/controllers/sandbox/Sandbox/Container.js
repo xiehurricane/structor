@@ -15,17 +15,13 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions, STAGE1, STAGE2, STAGE3, STAGE4 } from './actions.js';
 
 import { ButtonGroup, Button } from 'react-bootstrap';
 
-//import GeneratorSampleList from '../GeneratorSampleList';
 import GeneratorTemplate from '../GeneratorTemplate';
-// import SandboxFilesList from '../SandboxFilesList';
-// import GeneratorCard from '../GeneratorCard';
 
 class Container extends Component {
 

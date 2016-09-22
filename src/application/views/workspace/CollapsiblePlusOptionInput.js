@@ -75,7 +75,7 @@ class CollapsiblePlusOptionInput extends Component {
         });
 
         return (
-            <div {...this.props}>
+            <div style={this.props.style}>
                 <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <button role="button"
                             style={{margin: '0 1em'}}

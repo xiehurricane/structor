@@ -34,7 +34,7 @@ class InputTextStateful extends Component {
     }
     handleOnChange() {
         this.setState({
-            value: this.refs.inputElement.getValue()
+            value: this.refs.inputElement.value
         });
     }
     getValue(){
@@ -46,20 +46,23 @@ class InputTextStateful extends Component {
     validate(value){
         const {validateFunc} = this.props;
         if(validateFunc){
-            return validateFunc(value) ? 'success' : 'error';
+            return validateFunc(value) ? 'has-success' : 'has-error';
         }
     }
     render() {
         const {value} = this.state;
-        const {validateFunc} = this.props;
         return (
-            <Input
-                {...this.props}
-                bsStyle={this.validate(value)}
-                ref="inputElement"
-                hasFeedback={!!validateFunc}
-                value={ value }
-                onChange={ this.handleOnChange }/>
+            <div className={'form-group ' + this.validate(value)}>
+                <input
+                    style={this.props.style}
+                    ref="inputElement"
+                    className="form-control"
+                    value={ value }
+                    list={this.props.list}
+                    autoComplete={this.props.autoComplete}
+                    placeholder={this.props.placeholder}
+                    onChange={ this.handleOnChange }/>
+            </div>
         );
     }
 }
@@ -69,7 +72,10 @@ InputTextStateful.defaultProps = {
 };
 InputTextStateful.propTypes = {
     value: PropTypes.any,
-    validateFunc: PropTypes.func
+    validateFunc: PropTypes.func,
+    list: PropTypes.string,
+    autoComplete: PropTypes.string,
+    placeholder: PropTypes.string
 };
 
 export default InputTextStateful;

@@ -21,10 +21,15 @@ const PageTreeViewPlaceholder = (props) => {
 		style.marginLeft = '-.45em';
 	}
 	return (
-		<li	className="treeview-placeholder-base" style={style}>
+		<li
+			className="treeview-placeholder-base"
+	  		style={style}
+		  	title="Paste component from clipboard">
 			<div className="treeview-placeholder">
 				<div className="treeview-placeholder-line" />
-				<div className="treeview-placeholder-circle" onClick={e => props.onClick(props.itemKey)} />
+				<div
+					className="treeview-placeholder-circle"
+					onClick={e => props.onClick(props.itemKey)} />
 			</div>
 		</li>
 	);

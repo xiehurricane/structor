@@ -20,7 +20,7 @@ import { forOwn, isObject } from 'lodash';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
-import { Button, Input } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 class Container extends Component {
 

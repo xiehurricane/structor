@@ -28,6 +28,7 @@ class Container extends Component {
         super(props);
         this.handleClose = this.handleClose.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.handleSelectTab = this.handleSelectTab.bind(this);
     }
 
     handleClose(e){
@@ -42,6 +43,9 @@ class Container extends Component {
         const { componentModel, change } = this.props;
         const options = this.refs.formPageName.getOptions();
         change(options, componentModel.mode);
+    }
+
+    handleSelectTab(eventKey){
     }
 
     render(){
@@ -68,7 +72,10 @@ class Container extends Component {
                    ref='dialog'
                    animation={true}>
                 <Modal.Body>
-                    <Tabs id="pageOptionsModal" activeKey={1}>
+                    <Tabs
+                        id="pageOptionsModal"
+                        activeKey={1}
+                        onSelect={this.handleSelectTab}>
                         {tabPanes}
                     </Tabs>
                 </Modal.Body>

@@ -21,29 +21,23 @@ import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 
 import marked from 'marked';
-import { ListGroup, ListGroupItem, Tabs, Tab, Input } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Tabs, Tab } from 'react-bootstrap';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 import { AceEditor } from '../../../views';
 
 const depsHelp = marked(`
-##### Describe npm packages which should be installed into project
+##### Specified file will be included as a global include for all components in Structor. File must be placed into app/assets directory. Allowed file types: JS, CSS.
+##### NPM packages which are imported in this file along with discovered packages will be automatically installed as dependency packages during component installation from Structor Market. 
 
-* \`packages\` - list of npm packages where \`name\` is a name of package and \`version\` is an exact version if needed (can be empty).
+##### Example: file used for all Material UI components:
+
+\`\`\`
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+\`\`\`
 
 `);
 
-const depsExample =
-`{
-  "packages":[
-    {
-      "name": "react-widgets",
-      "version": ""
-    },
-    {
-      "name": "moment"
-    }
-  ]
-}`;
 
 class Container extends Component {
 
@@ -98,9 +92,9 @@ class Container extends Component {
         e.preventDefault();
         const {publishGenerator} = this.props;
         const options = {
-            generatorKey: this.refs.generatorKeyInput.getValue(),
+            generatorKey: this.refs.generatorKeyInput.value,
             readme: this.refs.readmeEditor.getSourceCode(),
-            globalImport: this.refs.globalImportInput.getValue()
+            globalImport: this.refs.globalImportInput.value
         };
         publishGenerator(options);
     }
@@ -151,6 +145,8 @@ class Container extends Component {
 
         return (
             <Tabs
+                id="mainContainer"
+                aria-labelledby="mainContainer"
                 activeKey={this.state.activeTopTabKey}
                 animation={false}
                 onSelect={this.handleTopTabSelect}>
@@ -167,14 +163,15 @@ class Container extends Component {
                                 md={ 6 }
                                 sm={ 6 }
                                 lg={ 6 }>
-                                <Input
+                                <label>Generator key</label>
+                                <input
                                     defaultValue={componentGroup + '.' + componentName}
                                     ref="generatorKeyInput"
                                     type="text"
+                                    className="form-control"
                                     placeholder="Group[.Group].Name"
-                                    label="Generator key"
-                                    help="Only numeric and characters from US-ASCII alphabet are accepted. Example: Group.ComponentName"
                                 />
+                                <small>Only numeric and characters from US-ASCII alphabet are accepted. Example: Group.ComponentName</small>
                                 <div style={cellBoxStyle}>
                                     <Button
                                         bsStyle="primary"
@@ -185,7 +182,7 @@ class Container extends Component {
                                 <form
                                     ref="uploadForm"
                                     method="POST"
-                                    enctype="multipart/form-data"
+                                    encType="multipart/form-data"
                                     style={{width: '100%'}}>
                                     <label>Screenshot</label>
                                     <input
@@ -212,6 +209,8 @@ class Container extends Component {
                                     <div style={{width: '100%', height: '100%'}}>
                                         <label>Readme:</label>
                                         <Tabs
+                                            id="childContainer"
+                                            aria-labelledby="childContainer"
                                             activeKey={this.state.activeReadmeTabKey}
                                             animation={false}
                                             onSelect={this.handleReadmeTabSelect}>
@@ -303,23 +302,17 @@ class Container extends Component {
                                 lg={ 6 }>
                                 <div style={cellBoxStyle}>
                                     <div style={{width: '100%', paddingTop: '2em'}}>
-                                        <div dangerouslySetInnerHTML={{__html: depsHelp }}></div>
-                                        <Input
+                                        <label htmlFor="globalImportInput">Global import file</label>
+                                        <input
+                                            id="globalImportInput"
                                             ref="globalImportInput"
                                             type="text"
+                                            className="form-control"
                                             placeholder="File name in app/assets dir"
-                                            label="Global import file"
-                                            help="Enter a file name which should be imported only once. File must be in app/assets dir."
                                         />
+                                        <div dangerouslySetInnerHTML={{__html: depsHelp }}></div>
                                     </div>
                                 </div>
-                                <p>Example:</p>
-                                <div style={cellBoxStyle}>
-                                    <div style={{width: '100%'}}>
-                                        <code style={{padding: '0px'}}><pre style={{fontSize: '10px'}}>{depsExample}</pre></code>
-                                    </div>
-                                </div>
-
                             </Col>
                             <Col
                                 xs={ 12 }
@@ -328,7 +321,7 @@ class Container extends Component {
                                 lg={ 6 }>
                                 <div style={cellBoxStyle}>
                                     <div style={{width: '100%', height: '100%', paddingTop: '2em'}}>
-                                        <small>Source code preview</small>
+                                        <label>Discovered NPM packages in the source code:</label>
                                         <div ref="sourceDependenciesPane">
                                         <pre><code>
                                             {JSON.stringify(dependencies, null, 4)}
