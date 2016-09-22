@@ -5,8 +5,7 @@ module.exports = [
     {
         name: "browser",
         entry: {
-            main: './src/application/main.js',
-            //docs: './src/client/src/docs.js',
+            main: './src/application/main.js'
         },
         output: {
             path: './static',
@@ -27,8 +26,6 @@ module.exports = [
                             "stage-0"
                         ],
                         plugins: [
-                            "transform-react-remove-prop-types",
-                            "transform-react-constant-elements",
                             "transform-object-assign"
                         ]
                     }
