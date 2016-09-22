@@ -55,6 +55,7 @@ class InputTextStateful extends Component {
             <div className={'form-group ' + this.validate(value)}>
                 <input
                     style={this.props.style}
+                    type={this.props.type}
                     ref="inputElement"
                     className="form-control"
                     value={ value }
@@ -68,11 +69,13 @@ class InputTextStateful extends Component {
 }
 InputTextStateful.defaultProps = {
     value: '',
-    validateFunc: undefined
+    validateFunc: undefined,
+    type: 'text'
 };
 InputTextStateful.propTypes = {
     value: PropTypes.any,
     validateFunc: PropTypes.func,
+    type: PropTypes.string,
     list: PropTypes.string,
     autoComplete: PropTypes.string,
     placeholder: PropTypes.string
