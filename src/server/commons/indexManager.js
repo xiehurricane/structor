@@ -159,7 +159,9 @@ function resolveAbsoluteSourcePath(indexObj) {
                         tasks.push(
                             fileManager.findComponentFilePath(path.join(config.appDirPath(), component.source))
                                 .then(componentFilePath => {
-                                    component.absoluteSource = componentFilePath;
+                                    if(componentFilePath){
+                                        component.absoluteSource = componentFilePath.replace(/\\/g, '/');
+                                    }
                                 })
                                 .catch(error => {
                                 })
