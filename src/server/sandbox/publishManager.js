@@ -56,6 +56,7 @@ export function readComponentSources(componentName, model, readmeText){
                 throw Error(`The source code of ${componentName} component is not found`);
             }
             const componentDirPath = path.dirname(component.absoluteSource);
+            console.log('Component dir path: ', componentDirPath);
             let isContainer = false;
             return fileManager.readDirectoryFiles(componentDirPath)
                 .then(found => {
@@ -72,9 +73,11 @@ export function readComponentSources(componentName, model, readmeText){
                                         let fileName = path.basename(filePath);
                                         let extName = path.extname(fileName);
                                         if(extName === '.js' || extName === '.css'){
+                                            console.log('Found file with dir path: ', dirPath);
                                             let nestedDir = undefined;
                                             if(dirPath !== componentDirPath){
                                                 nestedDir = dirPath.replace(componentDirPath + '/', '');
+                                                console.log('Nested dir path: ', nestedDir);
                                             }
                                             _fileObjects.push({
                                                 dirPath: dirPath,
