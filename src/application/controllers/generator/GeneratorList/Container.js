@@ -31,7 +31,7 @@ class Container extends Component {
         super(props);
         this.state = {
             activePage: 1,
-            itemsPerPage: 10
+            itemsPerPage: 7
         };
         this.handleChangeCatalog = this.handleChangeCatalog.bind(this);
         this.handleChangeBackCatalog = this.handleChangeBackCatalog.bind(this);
@@ -54,6 +54,9 @@ class Container extends Component {
             } else {
                 this.groupsHistory = [];
             }
+            this.setState({
+                activePage: 1
+            });
             this.props.setFilter({
                 groupKey: newGroupKey,
                 groupName: newGroupName,
@@ -68,6 +71,9 @@ class Container extends Component {
         if(this.groupsHistory.length > 0){
             const { groupKey, groupName, groupNameBack } = this.groupsHistory.pop();
             if(groupKey){
+                this.setState({
+                    activePage: 1
+                });
                 this.props.setFilter({
                     groupKey,
                     groupName,
@@ -83,9 +89,9 @@ class Container extends Component {
         }
     }
 
-    handlePageSelect(event, selectedEvent){
+    handlePageSelect(eventKey){
         this.setState({
-            activePage: parseInt(selectedEvent.eventKey)
+            activePage: parseInt(eventKey)
         });
     }
 
@@ -166,7 +172,16 @@ class Container extends Component {
                                 <span style={{margin: '0 1em 0 0'}}>
                                     <span className="fa fa-chevron-right" />
                                 </span>
-                                <span>{catalog.dirName}</span>
+                                {catalog.dirName === "Scaffolds" ?
+                                    <span>
+                                        <strong className="text-danger">{catalog.dirName}</strong>
+                                        &nbsp;&nbsp;
+                                        <span className="text-muted">(Generic Components)</span>
+                                    </span>
+
+                                    :
+                                    <span>{catalog.dirName}</span>
+                                }
                                 <span className="badge" style={{backgroundColor: '#fff', color: '#555'}}>
                                     <span>{childGeneratorGroupCount}</span>
                                 </span>
@@ -192,9 +207,7 @@ class Container extends Component {
                     if(pageCount > 0 && parseInt(generatorGroup.files.length % itemsPerPage) > 0){
                         pageCount += 1;
                     }
-
                 }
-
             }
         }
 
@@ -235,7 +248,15 @@ class Container extends Component {
                                     <ListGroup>
                                         {headGroupItems}
                                         <ListGroupItem active={true}>
-                                            <span>{groupName}</span>
+                                            {groupName === "Scaffolds" ?
+                                                <span>
+                                                    <strong>{groupName}</strong>
+                                                    &nbsp;&nbsp;
+                                                    <span>(Generic Components)</span>
+                                                </span>
+                                                :
+                                                <span>{groupName}</span>
+                                            }
                                             <span className="badge">
                                                 <span>{generatorGroupCount}</span>
                                             </span>
