@@ -15,7 +15,7 @@
  */
 
 import { bindActionCreators } from 'redux';
-import { HtmlComponents, previewGraphApi, graphApi } from '../../../api';
+import { HtmlComponents, previewGraphApi, graphApi, utils } from '../../../api';
 import { success, failed} from '../../app/AppMessage/actions.js';
 import { updateMarked, updatePage } from '../DeskPage/actions.js';
 import { setSelectedKey } from '../SelectionBreadcrumbs/actions.js';
@@ -78,88 +78,68 @@ export const quickCopyToClipboard = (componentName) => (dispatch, getState) => {
     }
 };
 
-export const quickBefore = (componentName) => (dispatch, getState) => {
-    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
-    if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
-        if(variantModel){
-            dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, false);
-            dispatch(setSelectedKey(newSelectedKey));
-            dispatch(updatePage());
-        } else {
-            console.error('Quick add before: model for variant key was not found');
-        }
+export const quickBefore = (componentNames) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap} } = getState();
+    const variantModel = getVariantModel(defaultVariantMap, componentNames);
+    if(variantModel){
+        dispatch(pushHistory());
+        const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, false);
+        dispatch(setSelectedKey(newSelectedKey));
+        dispatch(updatePage());
     } else {
-        dispatch(failed('Component ' + componentName + ' was not found.'))
+        console.error('Quick add before: model for variant key was not found');
     }
 };
 
-export const quickAfter = (componentName) => (dispatch, getState) => {
-    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
-    if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
-        if(variantModel){
-            dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, true);
-            dispatch(setSelectedKey(newSelectedKey));
-            dispatch(updatePage());
-        } else {
-            console.error('Quick add after: model for variant key was not found');
-        }
+export const quickAfter = (componentNames) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap} } = getState();
+    const variantModel = getVariantModel(defaultVariantMap, componentNames);
+    if(variantModel){
+        dispatch(pushHistory());
+        const newSelectedKey = graphApi.quickBeforeOrAfter(variantModel, true);
+        dispatch(setSelectedKey(newSelectedKey));
+        dispatch(updatePage());
     } else {
-        dispatch(failed('Component ' + componentName + ' was not found.'))
+        console.error('Quick add after: model for variant key was not found');
     }
 };
 
-export const quickFirst = (componentName) => (dispatch, getState) => {
-    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
-    if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
-        if(variantModel){
-            dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, true);
-            dispatch(setSelectedKey(newSelectedKey));
-            dispatch(updatePage());
-        } else {
-            console.error('Quick add as first: model for variant key was not found');
-        }
+export const quickFirst = (componentNames) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap} } = getState();
+    const variantModel = getVariantModel(defaultVariantMap, componentNames);
+    if(variantModel){
+        dispatch(pushHistory());
+        const newSelectedKey = graphApi.quickFirstOrLast(variantModel, true);
+        dispatch(setSelectedKey(newSelectedKey));
+        dispatch(updatePage());
     } else {
-        dispatch(failed('Component ' + componentName + ' was not found.'))
+        console.error('Quick add as first: model for variant key was not found');
     }
 };
 
-export const quickLast = (componentName) => (dispatch, getState) => {
-    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
-    if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
-        if(variantModel){
-            dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickFirstOrLast(variantModel, false);
-            dispatch(setSelectedKey(newSelectedKey));
-            dispatch(updatePage());
-        } else {
-            console.error('Quick add as first: model for variant key was not found');
-        }
+export const quickLast = (componentNames) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap} } = getState();
+    const variantModel = getVariantModel(defaultVariantMap, componentNames);
+    if(variantModel){
+        dispatch(pushHistory());
+        const newSelectedKey = graphApi.quickFirstOrLast(variantModel, false);
+        dispatch(setSelectedKey(newSelectedKey));
+        dispatch(updatePage());
     } else {
-        dispatch(failed('Component ' + componentName + ' was not found.'))
+        console.error('Quick add as first: model for variant key was not found');
     }
 };
 
-export const quickReplace = (componentName) => (dispatch, getState) => {
-    const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
-    if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
-        if(variantModel){
-            dispatch(pushHistory());
-            const newSelectedKey = graphApi.quickReplace(variantModel);
-            dispatch(setSelectedKey(newSelectedKey));
-            dispatch(updatePage());
-        } else {
-            console.error('Quick replace: model for variant key was not found');
-        }
+export const quickReplace = (componentNames) => (dispatch, getState) => {
+    const { libraryPanel: {defaultVariantMap} } = getState();
+    const variantModel = getVariantModel(defaultVariantMap, componentNames);
+    if(variantModel){
+        dispatch(pushHistory());
+        const newSelectedKey = graphApi.quickReplace(variantModel);
+        dispatch(setSelectedKey(newSelectedKey));
+        dispatch(updatePage());
     } else {
-        dispatch(failed('Component ' + componentName + ' was not found.'))
+        console.error('Quick replace: model for variant key was not found');
     }
 };
 
@@ -184,18 +164,35 @@ export const containerActions = (dispatch) => bindActionCreators({
     previewComponent, quickCopyToClipboard
 }, dispatch);
 
-function getVariantModel(defaultVariantMap, componentName){
-    let defaultVariant = defaultVariantMap[componentName];
-    let variantKey;
-    if(defaultVariant && defaultVariant.key){
-        variantKey = defaultVariant.key;
-    } else {
-        const variants = previewGraphApi.getVariantKeys(componentName);
-        if(variants && variants.length > 0){
-            variantKey = variants[0];
-        } else {
-            console.error('Quick add before: none of model variants is found for ' + componentName);
-        }
+function getVariantModel(defaultVariantMap, componentNames){
+    let variantModel = null;
+    if(componentNames && componentNames.length > 0){
+        let variantKey;
+        let defaultVariant;
+        let variants;
+        let prevModel;
+        componentNames.forEach(componentName => {
+            defaultVariant = defaultVariantMap[componentName];
+            if(defaultVariant && defaultVariant.key){
+                variantKey = defaultVariant.key;
+            } else {
+                variants = previewGraphApi.getVariantKeys(componentName);
+                if(variants && variants.length > 0){
+                    variantKey = variants[0];
+                } else {
+                    console.error('Quick add before: none of model variants is found for ' + componentName);
+                }
+            }
+            if(variantKey){
+                let model = utils.fulex(previewGraphApi.getModelForVariant(variantKey));
+                if(prevModel){
+                    prevModel.children = [model];
+                } else {
+                    variantModel = model;
+                }
+                prevModel = model;
+            }
+        });
     }
-    return previewGraphApi.getModelForVariant(variantKey);
+    return variantModel;
 }

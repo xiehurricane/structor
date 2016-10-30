@@ -1,7 +1,7 @@
 {
   "name": "structor",
   "version": "2.1.3",
-  "description": "An advanced visual editor for React components",
+  "description": "Structor: React UI Builder",
   "main": "structor.js",
   "scripts": {
     "build-server": "gulp --gulpfile ./build-conf/gulpfile.js build-server",

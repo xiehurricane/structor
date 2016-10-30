@@ -50,34 +50,23 @@ class Container extends Component {
 
     render(){
         const { componentModel, deskPageModel, hideModal } = this.props;
-        let tabPanes = [];
-        tabPanes.push(
-            <Tab key={tabPanes.length + 1}
-                 eventKey={tabPanes.length + 1}
-                 title={componentModel.mode === ADD_NEW ? 'Add new page' : 'Page options'}>
-                <PageComponentForm
-                    ref="formPageName"
-                    pageName={componentModel.mode === ADD_NEW ? 'NewPage' : deskPageModel.currentPageName}
-                    pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath}/>
-            </Tab>
-        );
-
         return (
             <Modal show={componentModel.show}
                    onHide={hideModal}
-                   dialogClassName='umy-modal-overlay'
+                   dialogClassName='umy-modal-overlay umy-modal-middlesize'
                    backdrop={true}
                    keyboard={true}
                    bsSize='large'
                    ref='dialog'
                    animation={true}>
+                <Modal.Header closeButton={false} aria-labelledby='contained-modal-title'>
+                    <Modal.Title id='contained-modal-title'>Page options</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
-                    <Tabs
-                        id="pageOptionsModal"
-                        activeKey={1}
-                        onSelect={this.handleSelectTab}>
-                        {tabPanes}
-                    </Tabs>
+                    <PageComponentForm
+                        ref="formPageName"
+                        pageName={componentModel.mode === ADD_NEW ? 'NewPage' : deskPageModel.currentPageName}
+                        pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.handleClose}>Cancel</Button>

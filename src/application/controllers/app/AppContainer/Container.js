@@ -28,6 +28,7 @@ import SignInModal from '../SignInModal';
 import Generator from '../../generator/Generator';
 import Sandbox from '../../sandbox/Sandbox';
 import ProxySetupModal from '../ProxySetupModal';
+import QuickAppendModal from '../../workspace/QuickAppendModal';
 
 class Container extends Component {
 
@@ -53,6 +54,7 @@ class Container extends Component {
                         <ComponentOptionsModal />
                         <SignInModal />
                         <ProxySetupModal />
+                        <QuickAppendModal />
                     </div>
                 </div>
             );

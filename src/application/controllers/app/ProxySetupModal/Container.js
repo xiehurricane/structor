@@ -17,7 +17,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
-import { containerActions, CHANGE_OPTIONS, ADD_NEW, DUPLICATE } from './actions.js';
+import { containerActions } from './actions.js';
 
 import { Modal, Button } from 'react-bootstrap';
 import { ProxyInput } from '../../../views';

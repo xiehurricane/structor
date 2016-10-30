@@ -47,6 +47,7 @@ import proxySetupModalReducer from '../controllers/app/ProxySetupModal/reducer.j
 import pageTreeViewToolbarReducer from '../controllers/workspace/PageTreeViewToolbar/reducer.js';
 import sandboxReducer from '../controllers/sandbox/Sandbox/reducer.js';
 import generatorTemplateReducer from '../controllers/sandbox/GeneratorTemplate/reducer.js';
+import quickAppendModalReducer from '../controllers/workspace/QuickAppendModal/reducer.js';
 
 const reducer = combineReducers({
     appContainer: appContainerReducer,
@@ -79,7 +80,8 @@ const reducer = combineReducers({
     proxySetupModal: proxySetupModalReducer,
     pageTreeViewToolbar: pageTreeViewToolbarReducer,
     sandbox: sandboxReducer,
-    generatorTemplate: generatorTemplateReducer
+    generatorTemplate: generatorTemplateReducer,
+    quickAppendModal: quickAppendModalReducer,
 });
 
 export default reducer;

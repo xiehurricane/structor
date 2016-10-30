@@ -65,7 +65,7 @@ export const change = (options, mode) => (dispatch, getState) => {
                 }
                 dispatch(hideModal());
             } else {
-                dispatch(failed('There is already the page with equal name or path.'))
+                dispatch(failed('There is already the page with equal path.'))
             }
         } else if (mode === DUPLICATE) {
             let existingPages;
@@ -79,11 +79,10 @@ export const change = (options, mode) => (dispatch, getState) => {
                 }
                 dispatch(hideModal());
             } else {
-                dispatch(failed('There is already the page with equal name or path.'))
+                dispatch(failed('There is already the page with equal path.'))
             }
         }
     }
-
 };
 
 export const containerActions = (dispatch) => bindActionCreators({

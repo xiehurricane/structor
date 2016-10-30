@@ -25,7 +25,8 @@ import { cloneSelected, deleteSelected } from '../SelectionControls/actions.js';
 import { loadOptionsAndShowModal } from '../ComponentOptionsModal/actions.js';
 import { pushHistory, popHistory } from '../HistoryControls/actions.js';
 import { loadComponents, setDefaultVariant, hidePreviewComponent, selectVariant } from '../LibraryPanel/actions.js';
-import { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } from '../LibraryPanel/actions.js';
+// import { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } from '../LibraryPanel/actions.js';
+import { showModal as showQuickAppend } from '../QuickAppendModal/actions.js';
 
 export const SET_PAGES = "DeskPage/SET_PAGES";
 export const RELOAD_PAGE = "DeskPage/RELOAD_PAGE";
@@ -176,6 +177,6 @@ export const containerActions = (dispatch) => bindActionCreators({
     pasteFirst, pasteLast, pasteReplace,
     cloneSelected, deleteSelected,
     setDefaultVariant, hidePreviewComponent, selectVariant,
-    quickBefore, quickAfter, quickFirst, quickLast, quickReplace,
+    showQuickAppend,
     popHistory
 }, dispatch);

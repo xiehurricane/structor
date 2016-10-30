@@ -15,7 +15,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import validator from 'validator';
+import { uniqueId } from 'lodash';
 import { Panel } from 'react-bootstrap';
 
 class PageComponentForm extends Component {
@@ -23,33 +23,20 @@ class PageComponentForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pageName: this.props.pageName,
             pagePath: this.props.pagePath,
             pageTitle: this.props.pageTitle
         };
-        this.validatePageName = this.validatePageName.bind(this);
         this.validatePagePath = this.validatePagePath.bind(this);
-        this.handlePageNameChange = this.handlePageNameChange.bind(this);
         this.handlePagePathChange = this.handlePagePathChange.bind(this);
-        //this.handlePageTitleChange = this.handlePageTitleChange.bind(this);
     }
 
     getOptions() {
         return {
-            pageName: this.state.pageName,
+            pageName: uniqueId('Page'),
             pagePath: this.state.pagePath,
             pageTitle: this.state.pageTitle,
             makeIndexRoute: this.refs.pageIndexCheckbox.checked
         };
-    }
-
-    validatePageName() {
-        const { pageName } = this.state;
-        if (pageName && pageName.length > 0 && validator.isAlphanumeric(pageName)) {
-            return 'has-success';
-        } else {
-            return 'has-error';
-        }
     }
 
     validatePagePath() {
@@ -61,32 +48,19 @@ class PageComponentForm extends Component {
         }
     }
 
-    handlePageNameChange() {
-        this.setState({
-            pageName: this.refs.pageNameInput.value
-        });
-    }
-
     handlePagePathChange() {
         this.setState({
             pagePath: this.refs.pagePathInput.value
         });
     }
 
-    //handlePageTitleChange() {
-    //    this.setState({
-    //        pageTitle: this.refs.pageTitleInput.value
-    //    });
-    //}
-
     render() {
-
         return (
-            <table style={{width: '100%', height: '400px'}}>
+            <table style={{width: '100%'}}>
                 <tbody>
                 <tr>
-                    <td style={{width: '20%'}}></td>
-                    <td style={{height: '100%', verticalAlign: 'middle'}}>
+                    <td style={{width: '1em'}} />
+                    <td style={{height: '100%', verticalAlign: 'top'}}>
                         <div className={'form-group ' + this.validatePagePath()}>
                             <label htmlFor='pagePathElement'>Route path:</label>
                             <input id='pagePathElement'
@@ -107,42 +81,18 @@ class PageComponentForm extends Component {
                                 <span>&nbsp;&nbsp;make index route</span>
                             </label>
                         </div>
-                        <div className={'form-group ' + this.validatePageName()}>
-                            <label htmlFor='pageNameElement'>Component name:</label>
-                            <input id='pageNameElement'
-                                   ref='pageNameInput'
-                                   className="form-control input-sm"
-                                   type="text"
-                                   placeholder='Component name'
-                                   value={this.state.pageName}
-                                   onChange={this.handlePageNameChange}
-                                />
-                        </div>
-                        {/*<div className={'form-group'}>
-                            <label htmlFor='pageTitleElement'>Page title:</label>
-                            <input id='pageTitleElement'
-                                   ref='pageTitleInput'
-                                   className="form-control input-sm"
-                                   type="text"
-                                   placeholder='Title value'
-                                   value={this.state.pageTitle}
-                                   onChange={this.handlePageTitleChange}
-                                />
-                        </div>*/}
                         <Panel>
                             <p>Route path possible values:</p>
                             <p><strong>/hello </strong><small>// matches /hello</small></p>
                             <p><strong>/hello/:name </strong><small>// matches /hello/michael and /hello/ryan</small></p>
                         </Panel>
                     </td>
-                    <td style={{width: '20%'}}></td>
+                    <td style={{width: '1em'}} />
                 </tr>
                 </tbody>
             </table>
         );
-
     }
-
 }
 
 export default PageComponentForm;

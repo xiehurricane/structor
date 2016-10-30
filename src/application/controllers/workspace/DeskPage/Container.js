@@ -20,8 +20,9 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
+import { modeMap } from '../QuickAppendModal/actions.js';
 
-import { utilsStore, graphApi, previewGraphApi } from '../../../api/index.js';
+import { graphApi} from '../../../api/index.js';
 import { CLIPBOARD_CUT } from '../ClipboardControls/actions.js';
 
 let lastWaitTimer = undefined;
@@ -60,8 +61,8 @@ class Container extends Component {
         const { setForCuttingKeys, setForCopyingKeys } = this.props;
         const { pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace } = this.props;
         const { cloneSelected, deleteSelected } = this.props;
-        const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
-        const { quickBefore, quickAfter, quickFirst, quickLast, quickReplace } = this.props;
+        // const { setDefaultVariant, hidePreviewComponent, selectVariant } = this.props;
+        const { showQuickAppend } = this.props;
         const { loadOptionsAndShowModal } = this.props;
         loadPage();
         this.contentDocument = domNode.contentDocument;
@@ -96,16 +97,59 @@ class Container extends Component {
                     loadOptionsAndShowModal(currentComponent);
                 });
 
-                page.bindToState('onCut', (key, isModifier) => { setForCuttingKeys([key]); });
-                page.bindToState('onCopy', (key, isModifier) => { setForCopyingKeys([key]); });
-                page.bindToState('onClone', (key, isModifier) => { cloneSelected(); });
-                page.bindToState('onDelete', (key, isModifier) => { deleteSelected(); });
+                page.bindToState('onCut', (key, isModifier) => {
+                    setForCuttingKeys([key]);
+                });
+                page.bindToState('onCopy', (key, isModifier) => {
+                    setForCopyingKeys([key]);
+                });
+                page.bindToState('onClone', (key, isModifier) => {
+                    cloneSelected();
+                });
+                page.bindToState('onDelete', (key, isModifier) => {
+                    deleteSelected();
+                });
 
-                page.bindToState('onBefore', (key, isModifier) => { pasteBefore(key); });
-                page.bindToState('onAfter', (key, isModifier) => { pasteAfter(key); });
-                page.bindToState('onFirst', (key, isModifier) => { pasteFirst(key); });
-                page.bindToState('onLast', (key, isModifier) => { pasteLast(key); });
-                page.bindToState('onReplace', (key, isModifier) => { pasteReplace(key); });
+                page.bindToState('onBefore', (key, isModifier) => {
+                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    if(clipboardKeys && clipboardKeys.length > 0){
+                        pasteBefore(key);
+                    } else {
+                        showQuickAppend(modeMap.addBefore);
+                    }
+                });
+                page.bindToState('onAfter', (key, isModifier) => {
+                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    if(clipboardKeys && clipboardKeys.length > 0){
+                        pasteAfter(key);
+                    } else {
+                        showQuickAppend(modeMap.addAfter);
+                    }
+                });
+                page.bindToState('onFirst', (key, isModifier) => {
+                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    if(clipboardKeys && clipboardKeys.length > 0){
+                        pasteFirst(key);
+                    } else {
+                        showQuickAppend(modeMap.insertFirst);
+                    }
+                });
+                page.bindToState('onLast', (key, isModifier) => {
+                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    if(clipboardKeys && clipboardKeys.length > 0){
+                        pasteLast(key);
+                    } else {
+                        showQuickAppend(modeMap.insertLast);
+                    }
+                });
+                page.bindToState('onReplace', (key, isModifier) => {
+                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    if(clipboardKeys && clipboardKeys.length > 0){
+                        pasteReplace(key);
+                    } else {
+                        showQuickAppend(modeMap.replace);
+                    }
+                });
                 //page.bindToState('onWrap', (key, isModifier) => { pasteWrap(key); });
 
                 page.bindToState('isMultipleSelection', () => {
@@ -119,8 +163,9 @@ class Container extends Component {
                 });
 
                 page.bindToState('isClipboardEmpty', () => {
-                    const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
-                    return !clipboardKeys || clipboardKeys.length <= 0;
+                    // const { clipboardIndicatorModel: {clipboardKeys} } = this.props;
+                    // return !clipboardKeys || clipboardKeys.length <= 0;
+                    return false;
                 });
 
                 //page.bindToState('isAvailableToWrap', key => {
@@ -128,32 +173,32 @@ class Container extends Component {
                 //    return clipboardKeys && selectedKeys && clipboardKeys.length === 1 && selectedKeys.length === 1;
                 //});
 
-                page.bindToState('setDefaultVariant', (componentName, key) => {
-                    setDefaultVariant(componentName, key);
-                });
-                page.bindToState('selectVariant', (key) => { selectVariant(key); });
-                page.bindToState('hidePreview', () => { hidePreviewComponent() });
+                // page.bindToState('setDefaultVariant', (componentName, key) => {
+                //     setDefaultVariant(componentName, key);
+                // });
+                // page.bindToState('selectVariant', (key) => { selectVariant(key); });
+                // page.bindToState('hidePreview', () => { hidePreviewComponent() });
 
-                page.bindToState('getComponentsList', () => {
-                    const { libraryPanelModel: {componentsList}} = this.props;
-                    return componentsList;
-                });
+                // page.bindToState('getComponentsList', () => {
+                //     const { libraryPanelModel: {componentsList}} = this.props;
+                //     return componentsList;
+                // });
 
-                page.bindToState('quickBefore', (componentName, selectedKey) => {
-                    quickBefore(componentName, selectedKey);
-                });
-                page.bindToState('quickAfter', (componentName, selectedKey) => {
-                    quickAfter(componentName, selectedKey);
-                });
-                page.bindToState('quickFirst', (componentName, selectedKey) => {
-                    quickFirst(componentName, selectedKey);
-                });
-                page.bindToState('quickLast', (componentName, selectedKey) => {
-                    quickLast(componentName, selectedKey);
-                });
-                page.bindToState('quickReplace', (componentName, selectedKey) => {
-                    quickReplace(componentName, selectedKey);
-                });
+                // page.bindToState('quickBefore', (componentName, selectedKey) => {
+                //     showQuickAppend(modeMap.addBefore);
+                // });
+                // page.bindToState('quickAfter', (componentName, selectedKey) => {
+                //     showQuickAppend(modeMap.addAfter);
+                // });
+                // page.bindToState('quickFirst', (componentName, selectedKey) => {
+                //     showQuickAppend(modeMap.insertFirst);
+                // });
+                // page.bindToState('quickLast', (componentName, selectedKey) => {
+                //     showQuickAppend(modeMap.insertLast);
+                // });
+                // page.bindToState('quickReplace', (componentName, selectedKey) => {
+                //     showQuickAppend(modeMap.replace);
+                // });
                 //page.bindToState('quickWrap', (componentName, selectedKey) => {
                 //    quickWrap(componentName, selectedKey);
                 //});
