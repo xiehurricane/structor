@@ -15,10 +15,11 @@
  */
 import { bindActionCreators } from 'redux';
 import { setSelectedKey, } from '../SelectionBreadcrumbs/actions.js';
-import {pasteBefore, pasteAfter} from '../ClipboardControls/actions.js'
+import { pasteBefore, pasteAfter } from '../ClipboardControls/actions.js'
 import { serverApi, graphApi } from '../../../api';
 import { pushHistory } from '../HistoryControls/actions.js';
 import { updatePage } from '../DeskPage/actions.js';
+import { showModal as showQuickAppend } from '../QuickAppendModal/actions.js';
 
 export const changeText = (newText, selectedKey) => (dispatch, getState) => {
     let node = graphApi.getNode(selectedKey);
@@ -30,5 +31,5 @@ export const changeText = (newText, selectedKey) => (dispatch, getState) => {
 };
 
 export const containerActions = (dispatch) => bindActionCreators({
-    setSelectedKey, changeText, pasteBefore, pasteAfter
+    setSelectedKey, changeText, pasteBefore, pasteAfter, showQuickAppend
 }, dispatch);

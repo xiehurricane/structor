@@ -20,6 +20,7 @@ import { updateMarked, updatePage } from '../DeskPage/actions.js';
 import { removeSelectedKeys, setSelectedKeys } from '../SelectionBreadcrumbs/actions.js';
 import { removeClipboardKeys, CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_NEW } from '../ClipboardIndicator/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
+import { showModal as showQuickAppend } from '../QuickAppendModal/actions.js';
 
 const setTargetKey = (targetKey, selectedKeys) => {
     let selectedNode;
@@ -161,5 +162,5 @@ export const pasteReplace = (targetKey) => (dispatch, getState) => {
 //};
 
 export const containerActions = (dispatch) => bindActionCreators({
-    pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace
+    pasteBefore, pasteAfter, pasteFirst, pasteLast, pasteReplace, showQuickAppend
 }, dispatch);

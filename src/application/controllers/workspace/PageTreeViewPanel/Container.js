@@ -24,6 +24,7 @@ import { graphApi } from '../../../api';
 import { PageTreeViewItem, PageTreeViewItemText } from '../../../views/index.js';
 import PageTreeViewPlaceholder from '../../../views/workspace/PageTreeViewPlaceholder.js';
 import {CLIPBOARD_EMPTY} from '../ClipboardIndicator/actions.js';
+import { modeMap } from '../QuickAppendModal/actions.js';
 
 var scrollToSelected = function($frameWindow, key){
     setTimeout((function(_frameWindow){
@@ -52,6 +53,7 @@ class Container extends Component{
         super(props);
         this.shouldScroll = true;
         this.scrollToSelected = this.scrollToSelected.bind(this);
+        this.handleChangeText = this.handleChangeText.bind(this);
     }
 
     componentDidMount() {
@@ -81,7 +83,7 @@ class Container extends Component{
         );
     }
 
-    scrollToSelected(){
+    scrollToSelected() {
         if(this.shouldScroll === true){
             const selectedKeys = this.props.currentSelectedKeys;
             if(selectedKeys && selectedKeys.length > 0){
@@ -90,11 +92,32 @@ class Container extends Component{
         }
     }
 
+    handlePlaceholderClick = (type) => (nodeKey) => {
+        const {clipboardMode, pasteAfter, pasteBefore, showQuickAppend} = this.props;
+        if(clipboardMode !== CLIPBOARD_EMPTY){
+            if(type === 'pasteAfter') {
+                pasteAfter();
+            } else if(type === 'pasteBefore') {
+                pasteBefore();
+            }
+        } else {
+            if(type === 'pasteAfter') {
+                showQuickAppend(modeMap.addAfter, nodeKey);
+            } else if(type === 'pasteBefore') {
+                showQuickAppend(modeMap.addBefore, nodeKey);
+            }
+        }
+    };
+
+    handleChangeText(text, nodeKey) {
+        this.props.changeText(text, nodeKey);
+    };
+
     buildNode = (graphNode) => {
 
         let inner = [];
         const modelNode = graphNode.modelNode;
-        const {clipboardMode, pasteAfter, pasteBefore, changeText, setSelectedKey} = this.props;
+        const {clipboardMode, pasteAfter, pasteBefore, setSelectedKey} = this.props;
 
         let innerProps = [];
         if(graphNode.props){
@@ -106,21 +129,19 @@ class Container extends Component{
         if(graphNode.children && graphNode.children.length > 0){
             graphNode.children.forEach(node => {
                 children.push(this.buildNode(node));
-                if(clipboardMode !== CLIPBOARD_EMPTY){
-                    children.push(
-                        <PageTreeViewPlaceholder
-                            key={'treeItemPlaceholder' + node.key}
-                            itemKey={node.key}
-                            onClick={pasteAfter} />
-                    );
-                }
+                children.push(
+                    <PageTreeViewPlaceholder
+                        key={'treeItemPlaceholder' + node.key}
+                        itemKey={node.key}
+                        onClick={this.handlePlaceholderClick('pasteAfter')} />
+                );
             });
         } else if(modelNode.text !== undefined) {
             inner.push(
                 <PageTreeViewItemText
                     itemKey={graphNode.key}
                     key={'text' + graphNode.key}
-                    onChangeText={(text) => {changeText(text, graphNode.key);}}
+                    onChangeText={this.handleChangeText}
                     textValue={modelNode.text} />
             )
         }
@@ -131,11 +152,11 @@ class Container extends Component{
                     key={'list' + graphNode.key}
                     className={graphNode.selected ? 'umy-treeview-list-selected' : 'umy-treeview-list'}>
                     {innerProps}
-                    {clipboardMode !== CLIPBOARD_EMPTY && graphNode.children && graphNode.children.length > 0 &&
+                    {graphNode.children && graphNode.children.length > 0 &&
                         <PageTreeViewPlaceholder
                             key={'firstItemPlaceholder' + graphNode.children[0].key}
                             itemKey={graphNode.children[0].key}
-                            onClick={pasteBefore} />
+                            onClick={this.handlePlaceholderClick('pasteBefore')} />
                     }
                     {children}
                 </ul>
@@ -159,7 +180,7 @@ class Container extends Component{
 
     render() {
 
-        const { deskPageModel, clipboardMode } = this.props;
+        const { deskPageModel } = this.props;
         const pageGraph = graphApi.getWrappedModelByPagePath(deskPageModel.currentPagePath);
 
         let style = {
@@ -176,27 +197,25 @@ class Container extends Component{
             let length = pageGraph.children.length;
             pageGraph.children.forEach((child, index) => {
                 listItems.push(this.buildNode(child));
-                if(clipboardMode !== CLIPBOARD_EMPTY){
-                    listItems.push(
-                        <PageTreeViewPlaceholder
-                            key={'treeItemPlaceholder' + child.key}
-                            isTopLevelPlace={true}
-                            itemKey={child.key}
-                            onClick={this.props.pasteAfter} />
-                    );
-                }
+                listItems.push(
+                    <PageTreeViewPlaceholder
+                        key={'treeItemPlaceholder' + child.key}
+                        isTopLevelPlace={true}
+                        itemKey={child.key}
+                        onClick={this.handlePlaceholderClick('pasteAfter')} />
+                );
             });
         }
 
         return (
             <div ref="panelElement" style={style}>
                 <ul className='umy-treeview-list' style={{border: 0}}>
-                    {clipboardMode !== CLIPBOARD_EMPTY && pageGraph.children.length > 0 &&
+                    {pageGraph.children.length > 0 &&
                         <PageTreeViewPlaceholder
                             key={'firstItemPlaceholder'}
                             isTopLevelPlace={true}
                             itemKey={pageGraph.children[0].key}
-                            onClick={this.props.pasteBefore} />
+                            onClick={this.handlePlaceholderClick('pasteBefore')} />
                     }
                    {listItems}
                 </ul>

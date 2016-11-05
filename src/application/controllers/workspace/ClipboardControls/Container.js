@@ -20,6 +20,7 @@ import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
 import { CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_EMPTY, CLIPBOARD_NEW } from '../ClipboardIndicator/actions.js';
 import { graphApi } from '../../../api/index.js';
+import { modeMap } from '../QuickAppendModal/actions.js';
 
 class Container extends Component {
 
@@ -31,9 +32,34 @@ class Container extends Component {
     handleButtonClick(e){
         e.preventDefault();
         e.stopPropagation();
-        const func = this.props[e.currentTarget.dataset.func];
-        if(func){
-            func();
+        const { clipboardIndicatorModel: {clipboardKeys}} = this.props;
+        const { showQuickAppend} = this.props;
+        const funcSignature = e.currentTarget.dataset.func;
+        if(clipboardKeys.length <= 0){
+            switch(funcSignature) {
+                case 'pasteBefore':
+                    showQuickAppend(modeMap.addBefore);
+                    break;
+                case 'pasteAfter':
+                    showQuickAppend(modeMap.addAfter);
+                    break;
+                case 'pasteFirst':
+                    showQuickAppend(modeMap.insertFirst);
+                    break;
+                case 'pasteLast':
+                    showQuickAppend(modeMap.insertLast);
+                    break;
+                case 'pasteReplace':
+                    showQuickAppend(modeMap.replace);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            const func = this.props[e.currentTarget.dataset.func];
+            if(func){
+                func();
+            }
         }
     }
 
@@ -42,13 +68,14 @@ class Container extends Component {
         const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
 
         const wideButtonLabelStyle = {
-            margin: '0 0.5em'
+            margin: '0 0.5em',
+            fontSize: '11px'
         };
 
-        let disabledCommon =
-            (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
-            || clipboardKeys.length <= 0
-            || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
+        // let disabledCommon =
+        //     (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
+        //     || clipboardKeys.length <= 0
+        //     || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
         //let disabledSingle =
         //    (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
         //    || clipboardKeys.length !== 1
@@ -58,43 +85,48 @@ class Container extends Component {
             <div className="btn-group" role="group">
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={disabledCommon}
                     data-func="pasteBefore"
                     onClick={this.handleButtonClick}
-                    title="Append components from clipboard before selected component">
-                    <span style={wideButtonLabelStyle}>Before</span>
+                    title="Append components before selected component">
+                    <span style={wideButtonLabelStyle} >
+                        <i className="umy-icon-append-before" />
+                    </span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={disabledCommon}
                     data-func="pasteFirst"
                     onClick={this.handleButtonClick}
-                    title="Insert components from clipboard into selected component on the first position">
-                    <span style={wideButtonLabelStyle}>First</span>
+                    title="Insert components into selected component as the first child">
+                    <span style={wideButtonLabelStyle}>
+                        <i className="umy-icon-insert-first" />
+                    </span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={disabledCommon}
                     data-func="pasteReplace"
                     onClick={this.handleButtonClick}
-                    title="Replace selected component with components from clipboard">
-                    <span style={wideButtonLabelStyle}>Replace</span>
+                    title="Replace selected component">
+                    <span style={wideButtonLabelStyle}>
+                        <i className="umy-icon-replace" />
+                    </span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={disabledCommon}
                     data-func="pasteLast"
                     onClick={this.handleButtonClick}
-                    title="Insert components from clipboard into selected component on the last position">
-                    <span style={wideButtonLabelStyle}>Last</span>
+                    title="Insert components into selected component as the last child">
+                    <span style={wideButtonLabelStyle}>
+                        <i className="umy-icon-insert-last" />
+                    </span>
                 </button>
                 <button
                     className="btn btn-default btn-xs"
-                    disabled={disabledCommon}
                     data-func="pasteAfter"
                     onClick={this.handleButtonClick}
-                    title="Append components from clipboard after selected component">
-                    <span style={wideButtonLabelStyle}>After</span>
+                    title="Append components after selected component">
+                    <span style={wideButtonLabelStyle}>
+                        <i className="umy-icon-append-after" />
+                    </span>
                 </button>
                 {/*<button
                     className="btn btn-default btn-xs"
