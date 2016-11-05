@@ -71,7 +71,9 @@ class Container extends Component {
             paddingLeft: '5px',
             paddingBottom: '10px',
             border: '1px solid #DBDBDB',
-            borderRadius: '3px'
+            borderRadius: '3px',
+            height: '100%',
+            overflow: 'auto',
         };
 
         let panelContent = null;
@@ -92,7 +94,7 @@ class Container extends Component {
                             optionInputs.push(
                                 <OptionInput
                                     key={pathTo + key}
-                                    style={{marginTop: '0.5em', padding: '0 1em 0 1em'}}
+                                    style={{marginTop: '0.5em', padding: '0 0.5em 0 1em'}}
                                     valueObject={valueObject}
                                     path={pathTo}
                                     onDeleteValue={this.handleDeleteOption}
