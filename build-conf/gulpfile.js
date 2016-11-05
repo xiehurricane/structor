@@ -11,7 +11,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('clean-server-dev', function(){
-    return del(['/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate/node_modules/structor/server'], {force: true});
+    return del(['/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate-test/node_modules/structor/server'], {force: true});
 });
 
 gulp.task('clean-server', function(){
@@ -21,7 +21,7 @@ gulp.task('clean-server', function(){
 gulp.task('build-server-dev', ['clean-server-dev'], function() {
     return gulp.src('../src/server/**/*.js')
         .pipe(babel())
-        .pipe(gulp.dest('/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate/node_modules/structor/server'));
+        .pipe(gulp.dest('/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate-test/node_modules/structor/server'));
 });
 
 gulp.task('build-server', ['clean-server'], function() {

@@ -9,7 +9,7 @@ module.exports = [
         },
         output: {
             // path: './static',
-            path: '/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate/node_modules/structor/static',
+            path: '/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate-test/node_modules/structor/static',
             filename: '[name].js'
         },
         devtool: 'inline-source-map',

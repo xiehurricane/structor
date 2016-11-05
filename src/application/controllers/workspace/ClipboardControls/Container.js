@@ -86,6 +86,7 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     data-func="pasteBefore"
+                    disabled={!selectedKeys || selectedKeys.length <= 0}
                     onClick={this.handleButtonClick}
                     title="Append components before selected component">
                     <span style={wideButtonLabelStyle} >
@@ -95,6 +96,7 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     data-func="pasteFirst"
+                    disabled={!selectedKeys || selectedKeys.length <= 0}
                     onClick={this.handleButtonClick}
                     title="Insert components into selected component as the first child">
                     <span style={wideButtonLabelStyle}>
@@ -103,6 +105,7 @@ class Container extends Component {
                 </button>
                 <button
                     className="btn btn-default btn-xs"
+                    disabled={!selectedKeys || selectedKeys.length <= 0}
                     data-func="pasteReplace"
                     onClick={this.handleButtonClick}
                     title="Replace selected component">
@@ -113,6 +116,7 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     data-func="pasteLast"
+                    disabled={!selectedKeys || selectedKeys.length <= 0}
                     onClick={this.handleButtonClick}
                     title="Insert components into selected component as the last child">
                     <span style={wideButtonLabelStyle}>
@@ -122,6 +126,7 @@ class Container extends Component {
                 <button
                     className="btn btn-default btn-xs"
                     data-func="pasteAfter"
+                    disabled={!selectedKeys || selectedKeys.length <= 0}
                     onClick={this.handleButtonClick}
                     title="Append components after selected component">
                     <span style={wideButtonLabelStyle}>
