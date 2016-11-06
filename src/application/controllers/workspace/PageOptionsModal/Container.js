@@ -62,16 +62,23 @@ class Container extends Component {
                 <Modal.Header closeButton={false} aria-labelledby='contained-modal-title'>
                     <Modal.Title id='contained-modal-title'>Page options</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <PageComponentForm
-                        ref="formPageName"
-                        pageName={componentModel.mode === ADD_NEW ? 'NewPage' : deskPageModel.currentPageName}
-                        pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath}/>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.handleClose}>Cancel</Button>
-                    <Button onClick={this.handleSave} bsStyle="primary">Save changes</Button>
-                </Modal.Footer>
+                <form onSubmit={this.handleSave}>
+                    <Modal.Body>
+                            <PageComponentForm
+                                ref="formPageName"
+                                pageName={componentModel.mode === ADD_NEW ? 'NewPage' : deskPageModel.currentPageName}
+                                pagePath={componentModel.mode === ADD_NEW ? '/new-page' : deskPageModel.currentPagePath}/>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.handleClose}>Cancel</Button>
+                        <Button
+                            onClick={this.handleSave}
+                            bsStyle="primary"
+                            type="submit">
+                            Save changes
+                        </Button>
+                    </Modal.Footer>
+                </form>
             </Modal>
         );
     }
