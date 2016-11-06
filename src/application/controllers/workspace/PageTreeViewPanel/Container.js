@@ -96,9 +96,9 @@ class Container extends Component{
         const {clipboardMode, pasteAfter, pasteBefore, showQuickAppend} = this.props;
         if(clipboardMode !== CLIPBOARD_EMPTY){
             if(type === 'pasteAfter') {
-                pasteAfter();
+                pasteAfter(nodeKey);
             } else if(type === 'pasteBefore') {
-                pasteBefore();
+                pasteBefore(nodeKey);
             }
         } else {
             if(type === 'pasteAfter') {
