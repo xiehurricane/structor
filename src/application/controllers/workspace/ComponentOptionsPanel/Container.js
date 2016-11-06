@@ -16,11 +16,10 @@
 
 import {set, forOwn, isObject} from 'lodash';
 import React, { Component, PropTypes } from 'react';
+import { Tabs, Tab } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
-
-import { Panel, PanelGroup } from 'react-bootstrap';
 
 import OptionInput from '../../../views/workspace/OptionInput.js';
 import CollapsiblePlusOptionInput from '../../../views/workspace/CollapsiblePlusOptionInput.js';
@@ -32,6 +31,7 @@ class Container extends Component {
         this.handleAddNewProp = this.handleAddNewProp.bind(this);
         this.handleChangeOption = this.handleChangeOption.bind(this);
         this.handleDeleteOption = this.handleDeleteOption.bind(this);
+        this.handleSelectTab = this.handleSelectTab.bind(this);
     }
 
     handleAddNewProp(options){
@@ -60,9 +60,15 @@ class Container extends Component {
         deleteOption(currentComponent, path);
     }
 
+    handleSelectTab(eventKey){
+        if(eventKey){
+            this.props.setActiveTab(eventKey);
+        }
+    }
+
     render() {
 
-        const { currentComponent} = this.props;
+        const { currentComponent, activeTab } = this.props;
 
         let style = {
             width: '100%',
@@ -80,7 +86,7 @@ class Container extends Component {
 
         if(currentComponent){
 
-            const {key, sourceFilePath, componentName, props, text} = currentComponent;
+            const {key, props} = currentComponent;
 
             let optionInputs = [];
 
@@ -109,7 +115,7 @@ class Container extends Component {
                     optionInputs.push(
                         <OptionInput
                             key={pathTo + key}
-                            style={{marginTop: '0.5em', padding: '0 1em 0 1em'}}
+                            style={{marginTop: '0.5em', padding: '0 0.5em 0 1em'}}
                             valueObject={valueObject}
                             path={pathTo}
                             onDeleteValue={this.handleDeleteOption}
@@ -118,18 +124,43 @@ class Container extends Component {
                 }
             });
 
+            let tabPanes = [];
+            tabPanes.push(
+                <Tab
+                    key="properties"
+                    eventKey={tabPanes.length + 1}
+                    title="Properties">
+                        <div style={{position: 'relative', marginTop: '1em'}}>
+                            <CollapsiblePlusOptionInput
+                                style={{width: '100%', zIndex: '1030', marginBottom: '0.5em'}}
+                                onCommit={this.handleAddNewProp}/>
+                        </div>
+                        {optionInputs}
+                </Tab>
+            );
+            tabPanes.push(
+                <Tab
+                    key="quickProperties"
+                    eventKey={tabPanes.length + 1}
+                    title="Quick props">
+                    <div style={{width: '100%', overflow: 'auto', marginTop: '1em'}}>
+                        <div style={{width: '196px', height: '50px', backgroundColor: '#cdcdcd'}}>
+
+                        </div>
+                        <p><span>Props:</span></p>
+                        <pre style={{fontSize: '10px'}}>{JSON.stringify(props, null, 2)}</pre>
+                    </div>
+                </Tab>
+            );
+
             panelContent = (
                 <div style={style}>
-                    <div style={{position: 'relative'}}>
-                        {/*<div style={{width: '100%', overflow: 'auto'}}>
-                            <p><span>Props:</span></p>
-                            <pre style={{fontSize: '10px'}}>{JSON.stringify(props, null, 2)}</pre>
-                        </div>*/}
-                        <CollapsiblePlusOptionInput
-                            style={{width: '100%', zIndex: '1030', marginBottom: '0.5em'}}
-                            onCommit={this.handleAddNewProp}/>
-                    </div>
-                    {optionInputs}
+                    <Tabs
+                        id="componentOptionsTabs"
+                        onSelect={this.handleSelectTab}
+                        activeKey={activeTab}>
+                        {tabPanes}
+                    </Tabs>
                 </div>
             );
         } else {

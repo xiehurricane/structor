@@ -18,8 +18,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
-import { CLIPBOARD_COPY, CLIPBOARD_CUT, CLIPBOARD_EMPTY, CLIPBOARD_NEW } from '../ClipboardIndicator/actions.js';
-import { graphApi } from '../../../api/index.js';
 import { modeMap } from '../QuickAppendModal/actions.js';
 
 class Container extends Component {
@@ -64,22 +62,12 @@ class Container extends Component {
     }
 
     render(){
-        const { clipboardIndicatorModel: {clipboardMode, clipboardKeys}} = this.props;
         const { selectionBreadcrumbsModel: {selectedKeys}} = this.props;
 
         const wideButtonLabelStyle = {
             margin: '0 0.5em',
             fontSize: '11px'
         };
-
-        // let disabledCommon =
-        //     (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
-        //     || clipboardKeys.length <= 0
-        //     || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
-        //let disabledSingle =
-        //    (clipboardMode === CLIPBOARD_CUT && selectedKeys.length !== 1)
-        //    || clipboardKeys.length !== 1
-        //    || (clipboardMode === CLIPBOARD_CUT && !graphApi.isCutPasteAvailable(selectedKeys[0]));
 
         let controlGroup = (
             <div className="btn-group" role="group">
@@ -133,14 +121,6 @@ class Container extends Component {
                         <i className="umy-icon-append-after" />
                     </span>
                 </button>
-                {/*<button
-                    className="btn btn-default btn-xs"
-                    disabled={disabledSingle}
-                    data-func="pasteWrap"
-                    onClick={this.handleButtonClick}
-                    title="Wrap selected component with single component from clipboard">
-                    <span style={wideButtonLabelStyle}>Wrap</span>
-                </button>*/}
             </div>
         );
         return (

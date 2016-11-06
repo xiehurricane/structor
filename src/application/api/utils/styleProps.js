@@ -16,7 +16,11 @@
 
 const prefix = 'style.';
 
+let stylePropsList = undefined;
+
 const names = [
+    'alignContent',
+    'alignItems',
     'background',
     'backgroundAttachment',
     'backgroundColor',
@@ -33,6 +37,7 @@ const names = [
     'borderLeftColor',
     'borderLeftStyle',
     'borderLeftWidth',
+    'borderRadius',
     'borderRight',
     'borderRightColor',
     'borderRightStyle',
@@ -49,12 +54,16 @@ const names = [
     'cursor',
     'display',
     'filter',
+    'flexDirection',
+    'flexFlow',
+    'flexWrap',
     'font',
     'fontFamily',
     'fontSize',
     'fontVariant',
     'fontWeight',
     'height',
+    'justifyContent',
     'left',
     'letterSpacing',
     'lineHeight',
@@ -98,9 +107,11 @@ const names = [
 ];
 
 export function getStylePropList(){
-    let result = [];
-    names.forEach(name => {
-        result.push(prefix + name);
-    });
-    return result;
+    if(!stylePropsList){
+        stylePropsList = [];
+        names.forEach(name => {
+            stylePropsList.push(prefix + name);
+        });
+    }
+    return stylePropsList;
 }
