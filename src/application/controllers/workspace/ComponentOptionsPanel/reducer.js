@@ -17,12 +17,18 @@
 import * as actions from './actions.js';
 
 const initialState = {
-    pathInProps: undefined
+    activeTab: 1,
 };
 
 export default (state = initialState, action = {}) => {
 
     const {type, payload} = action;
+
+    if(type === actions.SET_ACTIVE_TAB){
+        return Object.assign({}, state, {
+            activeTab: payload
+        });
+    }
 
     return state;
 }

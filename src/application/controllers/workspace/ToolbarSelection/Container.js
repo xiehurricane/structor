@@ -20,9 +20,8 @@ import { modelSelector } from './selectors.js';
 
 import SelectionControls from '../SelectionControls';
 import ClipboardControls from '../ClipboardControls';
-import ClipboardIndicator from '../ClipboardIndicator';
 import HistoryControls from '../HistoryControls';
-import ComponentControls from '../ComponentControls';
+import SelectionBreadcrumbs from '../SelectionBreadcrumbs';
 
 class Container extends Component {
 
@@ -57,14 +56,18 @@ class Container extends Component {
             margin: '0px 0px 0px 0.5em'
         };
 
+        const breadCrumbsStyle = {
+            padding: '0px',
+            margin: '0px 0.5em 0 0.5em'
+        };
+
         return (
             <div style={this.props.style}>
                 <div style={containerStyle}>
                     <HistoryControls style={controlsGroupStyle} />
-                    <ComponentControls style={controlsGroupStyle} />
-                    <ClipboardControls style={controlsGroupStyle} />
+                    <SelectionBreadcrumbs style={breadCrumbsStyle} />
                     <SelectionControls style={controlsGroupStyle} />
-                    <ClipboardIndicator style={controlsGroupStyle} />
+                    <ClipboardControls style={controlsGroupStyle} />
                 </div>
             </div>
         );

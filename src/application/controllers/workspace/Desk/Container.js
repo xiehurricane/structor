@@ -71,20 +71,12 @@ class Container extends Component {
 
         let bottomPanelStyle = {
             position: 'absolute',
-            left: 'calc(4em + ' + leftPanelWidth +'px)',
-            right: '5px',
-            bottom: '0px',
-            height: bottomPanelHeight + "px"
-        };
-
-        let rightPanelStyle = {
-            position: 'absolute',
-            top: '0px',
+            left: '0px',
+            // left: 'calc(4em + ' + leftPanelWidth +'px)',
             right: '0px',
-            bottom: '5px',
-            width: rightPanelWidth + "px",
-            paddingLeft: '5px',
-            overflow: 'auto'
+            bottom: '0px',
+            height: bottomPanelHeight + "px",
+            padding: '0 0 5px 0',
         };
 
         let topComponent = null;
@@ -116,26 +108,39 @@ class Container extends Component {
             topPanelHeight = 0.3;
         }
 
+        let rightPanelStyle = {
+            position: 'absolute',
+            top: topPanelHeight + 'em',
+            right: '0px',
+            bottom: '0px',
+            width: rightPanelWidth + "px",
+            // paddingLeft: '5px',
+            overflow: 'hidden',
+            padding: '0 5px 5px 0',
+        };
+
         let bodyContainerStyle = {
             position: 'absolute',
             top: topPanelHeight + 'em',
             left: 'calc(4em + ' + leftPanelWidth + 'px)',
             //bottom: 'calc(5px + ' + bottomPanelHeight + 'px)',
-            bottom: bottomPanelHeight + 'px',
+            // bottom: bottomPanelHeight + 'px',
+            bottom: '0px',
             overflow: 'hidden',
-            right: '5px'
+            // right: '5px'
+            right: 'calc(5px + ' + rightPanelWidth + 'px)',
         };
 
         let bodyStyle = {
             position: 'absolute',
             top: '0px',
             left: '0px',
-            //bottom: 'calc(5px + ' + bottomPanelHeight + 'px)',
+            right: '0px',
+            bottom: 'calc(' + bottomPanelHeight + 'px + 5px)',
             overflowX: 'auto',
             overflowY: 'hidden',
-            bottom: '0px',
             WebkitOverflowScrolling: 'touch',
-            right: rightPanelWidth + 'px'
+            border : '1px solid #000000',
         };
 
         let iframeWidth = componentModel.iframeWidth;
@@ -145,14 +150,14 @@ class Container extends Component {
             //marginRight = 'calc((100% - ' + iframeWidth + ')/2)';
         }
         let iframeStyle = {
-            "height" : "calc(100% - 5px)",
-            //"height" : "100%",
-            "width" : iframeWidth,
-            "minWidth" : "320px",
-            "margin" : "0px",
+            // "height" : "calc(100% - 5px)",
+            height : '100%',
+            width : iframeWidth,
+            minWidth : '320px',
+            margin : '0px',
             //"marginRight": marginRight,
-            "padding" : "0px",
-            "border" : "1px solid #000000"
+            padding : '0px',
+            border : '0'
         };
 
         //let pageFrame = (<div style={iframeStyle} ></div>);
@@ -163,43 +168,55 @@ class Container extends Component {
         return (
             <div style={{width: '100%', height: '100%'}}>
                 {leftBar}
-                <div style={leftPanelStyle}>
-                    {leftPanelInner}
-                </div>
+                {leftPanelWidth > 0 ?
+                    <div style={leftPanelStyle}>
+                        {leftPanelInner}
+                    </div>
+                    :
+                    null
+                }
                 {topComponent}
                 {breadcrumbsComponent}
                 <div style={bodyContainerStyle}>
                     <div style={bodyStyle}>
                         {pageFrame}
                     </div>
+                    {bottomPanelHeight > 0 ?
+                        <div style={bottomPanelStyle}>
+                            <Button bsSize='xsmall'
+                                    style={{
+                                        padding: '0.2em',
+                                        position: 'absolute',
+                                        top: '2px',
+                                        left: '2px',
+                                        width: '2em',
+                                        height: '2em',
+                                        zIndex: 1030
+                                    }}
+                                    onClick={(e) => {togglePageTreeview()}}>
+                                <span className='fa fa-times fa-fw'/>
+                            </Button>
+                            <PageTreeViewToolbar
+                                style={{
+                                    position: 'absolute',
+                                    top: '5em',
+                                    left: '2px',
+                                    zIndex: 1030
+                                }}
+                            />
+                            {bottomPanelInner}
+                        </div>
+                        :
+                        null
+                    }
+                </div>
+                {rightPanelWidth > 0 ?
                     <div style={rightPanelStyle}>
                         {rightPanelInner}
                     </div>
-                </div>
-                <div style={bottomPanelStyle}>
-                    <Button bsSize='xsmall'
-                            style={{
-                                padding: '0.2em',
-                                position: 'absolute',
-                                top: '2px',
-                                left: '2px',
-                                width: '2em',
-                                height: '2em',
-                                zIndex: 1030
-                            }}
-                            onClick={(e) => {togglePageTreeview()}}>
-                        <span className='fa fa-times fa-fw'/>
-                    </Button>
-                    <PageTreeViewToolbar
-                        style={{
-                            position: 'absolute',
-                            top: '5em',
-                            left: '2px',
-                            zIndex: 1030
-                        }}
-                    />
-                    {bottomPanelInner}
-                </div>
+                    :
+                    null
+                }
             </div>
         )
     }

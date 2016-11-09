@@ -42,7 +42,7 @@ class PageTreeViewItemText extends Component {
     }
 
     handleBlur(e){
-        this.props.onChangeText(e.target.value);
+        this.props.onChangeText(e.target.value, this.props.itemKey);
         this.setState({
             isEditable: false
         });

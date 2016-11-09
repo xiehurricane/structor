@@ -16,6 +16,7 @@
 
 import { bindActionCreators } from 'redux';
 import {quickBefore, quickAfter, quickFirst, quickLast, quickReplace} from '../LibraryPanel/actions.js';
+import {setSelectedKeys} from '../SelectionBreadcrumbs/actions.js'
 
 export const modeMap = {
     addBefore: {type: 'addBefore', label: 'Add before selected component'},
@@ -30,9 +31,15 @@ export const SHOW_MODAL = "QuickAppendModal/SHOW_MODAL";
 export const SUBMIT = "QuickAppendModal/SUBMIT";
 
 export const hideModal = () => ({type: HIDE_MODAL});
-export const showModal = (appendMode) => ({type: SHOW_MODAL, payload: appendMode});
+
+export const showModal = (appendMode, targetKey)  => (dispatch, getState) => {
+    if(targetKey){
+        dispatch(setSelectedKeys([targetKey]));
+    }
+    dispatch({type: SHOW_MODAL, payload: appendMode});
+};
+
 export const submit = (componentTuple, appendMode) => (dispatch, getState) => {
-    console.log('Component tuple: ', componentTuple, JSON.stringify(appendMode));
     const componentNames = componentTuple.split('.');
     if(appendMode.type === modeMap.addBefore.type){
         dispatch(quickBefore(componentNames));

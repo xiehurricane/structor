@@ -16,7 +16,6 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import validator from 'validator';
 import marked from 'marked';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';

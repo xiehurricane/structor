@@ -13,26 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react';
+import React, {Component} from 'react';
 
-const PageTreeViewPlaceholder = (props) => {
-	let style = {marginLeft: '-1.75em'};
-	if(props.isTopLevelPlace){
-		style.marginLeft = '-.45em';
+class PageTreeViewPlaceholder extends Component {
+
+	constructor(props) {
+		super(props);
+		this.handleClick = this.handleClick.bind(this);
 	}
-	return (
-		<li
-			className="treeview-placeholder-base"
-	  		style={style}
-		  	title="Paste component from clipboard">
-			<div className="treeview-placeholder">
-				<div className="treeview-placeholder-line" />
-				<div
-					className="treeview-placeholder-circle"
-					onClick={e => props.onClick(props.itemKey)} />
-			</div>
-		</li>
-	);
-};
+
+	handleClick(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		const {onClick, itemKey} = this.props;
+		if(onClick){
+			onClick(itemKey);
+		}
+	};
+
+	render() {
+		let style = {marginLeft: '-1.75em'};
+		if(this.props.isTopLevelPlace){
+			style.marginLeft = '-.45em';
+		}
+		return (
+			<li
+				className="treeview-placeholder-base"
+				style={style}
+				title="Paste component from clipboard">
+				<div className="treeview-placeholder">
+					<div className="treeview-placeholder-line" />
+					<div
+						className="treeview-placeholder-circle"
+						onClick={this.handleClick} />
+				</div>
+			</li>
+		);
+	}
+}
 
 export default PageTreeViewPlaceholder;

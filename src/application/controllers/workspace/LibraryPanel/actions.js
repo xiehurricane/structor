@@ -66,7 +66,7 @@ export const selectVariant = (variant) => (dispatch, getState) => {
 export const quickCopyToClipboard = (componentName) => (dispatch, getState) => {
     const { libraryPanel: {defaultVariantMap, componentsList} } = getState();
     if(componentsList && componentsList.indexOf(componentName) >= 0){
-        const variantModel = getVariantModel(defaultVariantMap, componentName);
+        const variantModel = getVariantModel(defaultVariantMap, [componentName]);
         if(variantModel){
             dispatch(setForNew(variantModel));
             dispatch(success(componentName + ' was copied to clipboard'));

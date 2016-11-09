@@ -18,7 +18,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { modelSelector } from './selectors.js';
 import { containerActions } from './actions.js';
-import { ADD_NEW, DUPLICATE } from '../PageOptionsModal/actions.js';
 
 class Container extends Component {
 
@@ -26,51 +25,80 @@ class Container extends Component {
         super(props);
     }
 
+    handleButtonClick = (type) => (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const { setForCuttingKeys, setForCopyingKeys, cloneSelected, moveSelected, deleteSelected } = this.props;
+        const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
+        switch(type) {
+            case 'copy':
+                setForCopyingKeys(selectedKeys);
+                break;
+            case 'cut':
+                setForCuttingKeys(selectedKeys);
+                break;
+            case 'duplicate':
+                cloneSelected();
+                break;
+            case 'moveUp':
+                moveSelected(true);
+                break;
+            case 'moveDown':
+                moveSelected(false);
+                break;
+            case 'delete':
+                deleteSelected();
+                break;
+
+            default:
+                break;
+        }
+    };
+
     render(){
         const { selectionBreadcrumbsModel: {selectedKeys} } = this.props;
-        const { setForCuttingKeys, setForCopyingKeys, cloneSelected, moveSelected, deleteSelected } = this.props;
         return (
             <div style={this.props.style}>
                 <div className="btn-group-vertical btn-group-xs">
                     <button
                         className="btn btn-default"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setForCopyingKeys(selectedKeys); }}
+                        onClick={this.handleButtonClick('copy')}
                         title="Copy selected components to clipboard">
                         <span className="fa fa-clipboard" />
                     </button>
                     <button
                         className="btn btn-default"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setForCuttingKeys(selectedKeys); }}
+                        onClick={this.handleButtonClick('cut')}
                         title="Cut selected components to clipboard">
                         <span className="fa fa-scissors" />
                     </button>
                     <button
                         className="btn btn-default"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); cloneSelected(); }}
+                        onClick={this.handleButtonClick('duplicate')}
                         title="Clone selected components">
                         <span className="fa fa-clone" />
                     </button>
                     <button
                         className="btn btn-default"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); moveSelected(true); }}
+                        onClick={this.handleButtonClick('moveUp')}
                         title="Move up selected components within their parents">
                         <span className="fa fa-arrow-up" />
                     </button>
                     <button
                         className="btn btn-default"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); moveSelected(false); }}
+                        onClick={this.handleButtonClick('moveDown')}
                         title="Move down selected components within their parents">
                         <span className="fa fa-arrow-down" />
                     </button>
                     <button
-                        className="btn btn-default"
+                        className="btn btn-warning"
                         disabled={selectedKeys.length <= 0}
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteSelected(); }}
+                        onClick={this.handleButtonClick('delete')}
                         title="Delete selected components">
                         <span className="fa fa-trash-o" />
                     </button>
@@ -78,7 +106,6 @@ class Container extends Component {
             </div>
         );
     }
-
 }
 
 export default connect(modelSelector, containerActions)(Container);
