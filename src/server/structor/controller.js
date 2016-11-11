@@ -57,7 +57,7 @@ function initServer(){
         }));
         serverRef.app.use(rewrite('/structor-deskpage/*', '/structor-desk/index.html'));
         serverRef.app.use('/structor-desk', express.static(config.deskDirPath()));
-        
+
     }
 }
 
@@ -189,12 +189,14 @@ export function saveGenerated(options){
     });
 }
 
-// export function exportPages(options){
-//     const {model} = options;
-//     return exportManager.doGeneration(model).then(generatedObject => {
-//         return exportManager.commitGeneration(generatedObject);
-//     });
-// }
+export function exportPages(options){
+    const {model} = options;
+    console.log("---导出");
+    return exportManager.doGeneration(model).then(generatedObject => {
+        console.log("---d导出generatedObject:",generatedObject);
+        return exportManager.commitGeneration(generatedObject);
+    });
+}
 
 export function getGeneratorReadme(options){
     const {userId, generatorId} = options;

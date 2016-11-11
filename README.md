@@ -23,10 +23,10 @@ Structor - visual editor for React components.
 
 ### Getting started
 
-Beginning from version 2 Structor should be installed as a local npm module into `react-boilerplate` project. 
+Beginning from version 2 Structor should be installed as a local npm module into `react-boilerplate` project.
 
 As far as Structor uses a custom metadata in order to operate the project's components, there is a fork of `react-boilerplate` project genuinely prepared for Structor.
-      
+
 Please find the instruction of how to install and start working with Structor in compatible fork of the `react-boilerplate` project here: [https://github.com/ipselon/react-boilerplate](https://github.com/ipselon/react-boilerplate);
 
 ### Useful readings
@@ -40,3 +40,37 @@ Please find the instruction of how to install and start working with Structor in
 
 ### License
 Apache License, Version 2.0 (Apache-2.0)
+
+Click + Shift allows to make a real mouse click in edit mode, just like in live preview mode.
+
+Delete selected component on the page
+Del or Backspace windows
+Del or Backspace mac os
+
+Undo
+Ctrl + Z windows
+⌘ + Z mac os x
+
+Cut selected component into clipboard
+Ctrl + X windows
+⌘ + X mac os x
+
+Copy selected component into clipboard
+Ctrl + C windows
+⌘ + C mac os x
+
+Duplicate selected component
+Ctrl + D windows
+⌘ + D mac os x
+
+Paste from clipboard after selected component
+Ctrl + V windows
+⌘ + V mac os x
+
+Paste from clipboard before selected component
+Ctrl + A windows
+⌘ + A mac os x
+
+Paste from clipboard into selected component as first element
+Ctrl + I windows
+⌘ + I mac os x

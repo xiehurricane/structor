@@ -17,7 +17,9 @@
 import {forOwn, isObject} from 'lodash';
 import { invokeStructor, invokeSandbox, invokeDownload } from './restApi.js';
 import HtmlComponents, {getSortedHtmlComponents} from '../utils/HtmlComponents.js';
+import bows from 'bows';
 
+const log = bows('serverApi');
 //
 // export function getProjectList(){
 //     return invokeDownload('getProjectList', {});
@@ -56,7 +58,9 @@ export function saveProjectModel(model) {
 }
 
 export function exportProjectModel(model){
+    log('导出 调用API saveProjectModel 参数：model')
     return invokeStructor('saveProjectModel', {model: model}).then(() => {
+        log('导出 调用API exportPages 参数：model')
         return invokeStructor('exportPages', {model: model});
     });
 }

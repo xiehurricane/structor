@@ -11,7 +11,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('clean-server-dev', function(){
-    return del(['/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate-test/node_modules/structor/server'], {force: true});
+    return del(['/Users/jadexie/Desktop/Hxgy/Frontend/react-boilerplate/node_modules/structor/server'], {force: true});
 });
 
 gulp.task('clean-server', function(){
@@ -21,7 +21,7 @@ gulp.task('clean-server', function(){
 gulp.task('build-server-dev', ['clean-server-dev'], function() {
     return gulp.src('../src/server/**/*.js')
         .pipe(babel())
-        .pipe(gulp.dest('/Volumes/Development/projects/structor/structor-github-boilerplates/react-boilerplate/react-boilerplate-test/node_modules/structor/server'));
+        .pipe(gulp.dest('/Users/jadexie/Desktop/Hxgy/Frontend/react-boilerplate/node_modules/structor/server'));
 });
 
 gulp.task('build-server', ['clean-server'], function() {
@@ -45,4 +45,3 @@ gulp.task('build-client-less', ['clean-client-less'], function() {
         .pipe(autoprefixer({cascade: false, browsers: ['last 2 versions']}))
         .pipe(gulp.dest(config.dest, {overwrite: true}));
 });
-

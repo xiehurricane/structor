@@ -65,7 +65,7 @@ function setupProjectPaths(rootDirPath) {
 
         sandboxDirPath: path.join(absRoot, 'sandbox').replace(/\\/g, '/'),
 
-        // templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
+        templatesDirPath: path.join(absRoot, 'templates').replace(/\\/g, '/'),
         deskSourceDirPath: path.join(absRoot, 'src').replace(/\\/g, '/'),
         deskPageFilePath: path.join(absRoot, 'src', 'PageForDesk.js').replace(/\\/g, '/'),
         deskEntryPointFilePath: path.join(absRoot, 'src', 'default.js').replace(/\\/g, '/'),

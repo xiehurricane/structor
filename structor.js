@@ -41,7 +41,7 @@ if(argv['p']){
     }
 }
 
-var workingDir = process.cwd();
+var workingDir = process.cwd();//Current directory当前目录
 if(argv['d']){
     if(path.isAbsolute(argv['d'])){
         workingDir = argv['d'];
@@ -51,5 +51,6 @@ if(argv['d']){
 }
 
 var debugMode = argv['v'];
-
+//上面设置参数
+//
 controller.initServer({ serverDir: __dirname, projectDir: workingDir, portNumber: portNumber, debugMode: debugMode, io: io });

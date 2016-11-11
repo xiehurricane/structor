@@ -35,16 +35,17 @@ export function invokeGeneration(generatorId, version, data) {
 export function initUserCredentialsByToken(token) {
     client.setAuthenticationToken(token);
     // console.log('Set token: ', token);
-    return client.get(SERVICE_URL + '/sm/user/profile-full')
-        .then(userAccount => {
-            // console.log('User profile full: ', JSON.stringify(userAccount));
-            return Object.assign({}, userAccount, {token});
-        })
-        .catch(err => {
-            console.error(err);
-            console.log('Authentication token is invalid or was expired');
-            return {};
-        });
+    return {data:{}};
+    // return client.get(SERVICE_URL + '/sm/user/profile-full')
+    //     .then(userAccount => {
+    //         // console.log('User profile full: ', JSON.stringify(userAccount));
+    //         return Object.assign({}, userAccount, {token});
+    //     })
+    //     .catch(err => {
+    //         console.error(err);
+    //         console.log('Authentication token is invalid or was expired');
+    //         return {};
+    //     });
 }
 
 export function initUserCredentials(username, password) {

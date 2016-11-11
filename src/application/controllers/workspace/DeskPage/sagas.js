@@ -20,6 +20,9 @@ import * as actions from './actions.js';
 import * as spinnerActions from '../../app/AppSpinner/actions.js';
 import * as messageActions from '../../app/AppMessage/actions.js';
 import { pushHistory } from '../HistoryControls/actions.js';
+import bows from 'bows';
+
+const log = bows('deskSaga')
 
 function* preserveModel(){
     while(true){
@@ -32,9 +35,11 @@ function* preserveModel(){
 function* exportModel(){
     while(true){
         yield take(actions.EXPORT_MODEL);
+        log('actions.EXPORT_MODEL导出');
         yield put(spinnerActions.started('Exporting the project model'));
         try{
             const model = graphApi.getModel();
+            log('导出model：',model);
             yield call(serverApi.exportProjectModel, model);
             yield put(messageActions.success('Project model has been exported successfully.'));
         } catch(e){

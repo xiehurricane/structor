@@ -92,6 +92,7 @@ export function createProjectDataObject(projectModel, destDirPath, indexObj) {
 export function doGeneration(projectModel) {
 
     const projectConfig = config.getProjectConfig();
+    // console.log('projectConfig:',projectConfig);
     if (!_.has(projectConfig, 'conf.paths.exportDirPath')) {
         return Promise.reject('Wrong project configuration. \'paths.exportDirPath\' field is missing.');
     }
@@ -166,6 +167,7 @@ export function commitGeneration(generatedObj) {
 
     let sequence = Promise.resolve();
 
+    console.log("----导出路径：", generatedObj.outputDirPath);
     sequence = sequence.then(() => {
         return fileManager.removeFile(generatedObj.outputDirPath);
     });
@@ -175,6 +177,7 @@ export function commitGeneration(generatedObj) {
             return fileManager.ensureFilePath(page.pageOutputFilePath)
                 .then(() => {
                     const ext = path.extname(page.pageOutputFilePath);
+                    console.log("----每页导出路径：", page.pageOutputFilePath);
                     return fileManager.writeFile(
                         page.pageOutputFilePath,
                         page.pageSourceCode,

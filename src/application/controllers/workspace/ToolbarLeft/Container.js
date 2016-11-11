@@ -60,15 +60,15 @@ class Container extends Component {
                         </a>
                         <ul className="dropdown-menu" role="menu">
                             <li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); saveProject(); } }>
-                                <span className="fa fa-save fa-fw" />&nbsp;Save project</a>
+                                <span className="fa fa-save fa-fw" />&nbsp;保存</a>
                             </li>
-                            {/*<li className="divider" />*/}
-                            {/*<li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); exportModel(); } }>*/}
-                                {/*<span className="fa fa-gift fa-fw" />&nbsp;Export project</a>*/}
-                            {/*</li>*/}
+                            <li className="divider" />
+                            <li><a href="#" onClick={ (e) => { e.preventDefault(); e.stopPropagation(); exportModel(); } }>
+                                <span className="fa fa-gift fa-fw" />&nbsp;从工具中导出</a>
+                            </li>
                             <li className="divider" />
                             <li><a href="#" onClick={(e) => { e.preventDefault(); e.stopPropagation(); proxyShowModal(); } }>
-                                <span className="fa fa-gears fa-fw" />&nbsp;Proxy settings</a>
+                                <span className="fa fa-gears fa-fw" />&nbsp;项目端口设置</a>
                             </li>
                             {/*
                             <li className="divider" />
@@ -148,4 +148,3 @@ class Container extends Component {
 }
 
 export default connect(modelSelector, containerActions)(Container);
-
